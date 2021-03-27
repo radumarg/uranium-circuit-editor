@@ -3,7 +3,7 @@
   <b-container fluid="xs" class="h-100" style="background-color: #374048;">
     <b-row>
       <div>
-        <b-sidebar id="sidebar-right" :title="gateName" right shadow>
+        <b-sidebar id="sidebar-right" :title="gateName" width="360px" right shadow>
           <div class="px-3 py-2" id="sidebar-right-div">
             <b-img :src="gateImage" width="280px" height="auto" fluid thumbnail></b-img>
             <br/><br/>

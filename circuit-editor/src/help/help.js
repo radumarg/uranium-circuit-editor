@@ -306,7 +306,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-u3") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ u3 as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ u3, as:</div> <br/> \
         <table class='matrix' > \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -334,7 +334,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-u2") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ u2 as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ u2, as:</div> <br/> \
         1/√2&nbsp;<table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -362,7 +362,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-hadamard") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ hadamard as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ hadamard, as:</div> <br/> \
         <div style='font-size: 13px;'>1/√2&nbsp;</div></div><table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -390,7 +390,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-pauli-x") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-x as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-x, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -418,7 +418,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-pauli-y") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-y as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-y, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -446,7 +446,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-pauli-z") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-z as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-z, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -474,7 +474,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-rx-theta") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ rx-theta as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ rx-theta, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -502,7 +502,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-ry-theta") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ ry-theta as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ ry-theta, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -530,7 +530,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-rz-theta") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ rz-theta as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ rz-theta, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -558,7 +558,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-s") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ ctrl-s as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ ctrl-s, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -586,7 +586,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-s-dagger") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ s-dagger as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ s-dagger, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -614,7 +614,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-u1") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ u1 as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ u1, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -642,7 +642,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-t") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ t as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ t, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -670,7 +670,7 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         </table>";
     } else if (gateName == "ctrl-t-dagger") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ t-dagger as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ t-dagger, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -1059,28 +1059,28 @@ export function retriveGateMatrixHtml(gateName) {
         </table>";
     } else if (gateName == "pauli-x-root") {
         return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <div style='font-size:13px;'>exp(i&nbsp;π/t)</div> \
+        <div style='font-size:13px;'>exp(i&nbsp;π/2t)</div> \
         <table class='matrix'> \
         <tr>\
-            <td style='padding: 5px; text-align: center;'>cos(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/2t)</td>\
         </tr>\
         <tr>\
-            <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>cos(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
         </tr>\
         </table>";
     } else if (gateName == "pauli-y-root") {
         return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <div style='font-size:13px;'>exp(i&nbsp;π/t)</div> \
+        <div style='font-size:13px;'>exp(i&nbsp;π/2t)</div> \
         <table class='matrix'> \
         <tr>\
-            <td style='padding: 5px; text-align: center;'>cos(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>-&nbsp;sin(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>-&nbsp;sin(π/2t)</td>\
         </tr>\
         <tr>\
-            <td style='padding: 5px; text-align: center;'>-&nbsp;sin(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>cos(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
         </tr>\
         </table>";
     } else if (gateName == "pauli-z-root") {
@@ -1092,33 +1092,33 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         <tr>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>exp(i2π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(iπ/t)</td>\
         </tr>\
         </table>";
     } else if (gateName == "pauli-x-root-dagger") {
         return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <div style='font-size:13px;'>exp(-i&nbsp;π/t)</div> \
+        <div style='font-size:13px;'>exp(-i&nbsp;π/2t)</div> \
         <table class='matrix'> \
         <tr>\
-            <td style='padding: 5px; text-align: center;'>cos(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/2t)</td>\
         </tr>\
         <tr>\
-            <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>cos(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
         </tr>\
         </table>";
     } else if (gateName == "pauli-y-root-dagger") {
         return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <div style='font-size:13px;'>exp(-i&nbsp;π/t)</div> \
+        <div style='font-size:13px;'>exp(-i&nbsp;π/2t)</div> \
         <table class='matrix'> \
         <tr>\
-            <td style='padding: 5px; text-align: center;'>cos(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>&nbsp;sin(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>-&nbsp;sin(π/2t)</td>\
         </tr>\
         <tr>\
-            <td style='padding: 5px; text-align: center;'>&nbsp;sin(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>cos(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>&nbsp;sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
         </tr>\
         </table>";
     } else if (gateName == "pauli-z-root-dagger") {
@@ -1130,11 +1130,11 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         <tr>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>exp(-i2π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(-iπ/t)</td>\
         </tr>\
         </table>";
     } else if (gateName == "ctrl-pauli-x-root") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-x-root as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-x-root, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -1151,18 +1151,18 @@ export function retriveGateMatrixHtml(gateName) {
         <tr>\
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>exp(i&nbsp;π/t)&nbsp;cos(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>-i&nbsp;exp(i&nbsp;π/t)&nbsp;sin(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(iπ/2t)&nbsp;cos(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>-i&nbsp;exp(iπ/2t)&nbsp;sin(π/2t)</td>\
         </tr>\
         <tr>\
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>-i&nbsp;exp(i&nbsp;π/t)&nbsp;sin(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>exp(i&nbsp;π/t)&nbsp;cos(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>-i&nbsp;exp(iπ/2t)&nbsp;sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(iπ/2t)&nbsp;cos(π/2t)</td>\
         </tr>\
         </table>";
     } else if (gateName == "ctrl-pauli-y-root") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-y-root as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-y-root, as:</div> <br/> \
         <table class='matrix' > \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -1179,18 +1179,18 @@ export function retriveGateMatrixHtml(gateName) {
         <tr>\
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>exp(i&nbsp;π/t)&nbsp;cos(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>-exp(i&nbsp;π/t)&nbsp;sin(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(iπ/2t)&nbsp;cos(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>-exp(iπ/2t)&nbsp;sin(π/2t)</td>\
         </tr>\
         <tr>\
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>-exp(i&nbsp;π/t)&nbsp;sin(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>exp(i&nbsp;π/t)&nbsp;cos(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(iπ/2t)&nbsp;sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(iπ/2t)&nbsp;cos(π/2t)</td>\
         </tr>\
         </table>";
     } else if (gateName == "ctrl-pauli-z-root") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-z-root as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-z-root, as:</div> <br/> \
         <table class='matrix' > \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -1214,11 +1214,11 @@ export function retriveGateMatrixHtml(gateName) {
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>exp(i2π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(iπ/t)</td>\
         </tr>\
         </table>";
     } else if (gateName == "ctrl-pauli-x-root-dagger") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-x-root-dagger as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-x-root-dagger, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -1235,18 +1235,18 @@ export function retriveGateMatrixHtml(gateName) {
         <tr>\
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>exp(-i&nbsp;π/t)&nbsp;cos(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>i&nbsp;exp(-i&nbsp;π/t)&nbsp;sin(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(-iπ/2t)&nbsp;cos(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>i&nbsp;exp(-iπ/2t)&nbsp;sin(π/2t)</td>\
         </tr>\
         <tr>\
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>i&nbsp;exp(-i&nbsp;π/t)&nbsp;sin(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>exp(-i&nbsp;π/t)&nbsp;cos(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>i&nbsp;exp(-iπ/2t)&nbsp;sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(-iπ/2t)&nbsp;cos(π/2t)</td>\
         </tr>\
         </table>";
     } else if (gateName == "ctrl-pauli-y-root-dagger") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-y-root-dagger as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-y-root-dagger, as:</div> <br/> \
         <table class='matrix' > \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -1263,18 +1263,18 @@ export function retriveGateMatrixHtml(gateName) {
         <tr>\
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>exp(-i&nbsp;π/t)&nbsp;cos(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>-exp(-i&nbsp;π/t)&nbsp;sin(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(-iπ/2t)&nbsp;cos(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>-exp(-iπ/2t)&nbsp;sin(π/2t)</td>\
         </tr>\
         <tr>\
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>-exp(-i&nbsp;π/t)&nbsp;sin(π/t)</td>\
-            <td style='padding: 5px; text-align: center;'>exp(-i&nbsp;π/t)&nbsp;cos(π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(-iπ/2t)&nbsp;sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(-iπ/2t)&nbsp;cos(π/2t)</td>\
         </tr>\
         </table>";
     } else if (gateName == "ctrl-pauli-z-root-dagger") {
-        return "<div style='text-align: left;'> For the usual case where the control state is |1⟩, the matrix representation of this gate can be calculated via the this formula |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-z-root as:</div> <br/> \
+        return "<div style='text-align: left;'> For the case where the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-z-root, as:</div> <br/> \
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>1</td>\
@@ -1298,7 +1298,7 @@ export function retriveGateMatrixHtml(gateName) {
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>exp(-i2π/t)</td>\
+            <td style='padding: 5px; text-align: center;'>exp(-iπ/t)</td>\
         </tr>\
         </table>";
     } else if (gateName == "measure-x") {
