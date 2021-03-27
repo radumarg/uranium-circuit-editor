@@ -1,0 +1,53 @@
+
+- Install Rust programming language (https://www.rust-lang.org/).
+
+- Install Node.js JavaScript runtime for working on circuit editor (https://nodejs.org/en/). 
+
+- Install Vue.js JavaScript UI framework for working on circuit editor (https://vuejs.org/). 
+
+- Vue CLI:
+
+npm install -g @vue/cli
+
+- Install Vuex state management pattern + library for Vue.js for working on circuit editor (https://vuex.vuejs.org/). 
+
+npm install vuex 
+
+- Install Vue Material: frontend framework for Vue (https://vuematerial.io/): 
+
+npm install vue-material --save 
+
+- Install Bootstrap, a CSS framework for working on circuit editor (https://getbootstrap.com/): 
+
+npm install bootstrap 
+
+- Install Popper.js for dropdowns (and components based on dropdown), tooltips, and popovers (https://popper.js.org/): 
+
+npm i @popperjs/core 
+
+- Install BootstrapVue front-end CSS library for working on circuit editor (https://bootstrap-vue.js.org/): 
+
+npm install bootstrap-vue 
+
+- Install js-yaml javascript library for translating json to yaml for circuit.
+
+npm install js-yaml 
+
+- Install html-to-image, a library for generating images from html.
+
+npm install html-to-image 
+
+FOLLOWING ARE NOT USED, TODO: review and remove
+
+- To transform an SVG image into a Data URL, we will need an appropriate webpack loader in our bundler. 
+The most common webpack loader for this is svg-url-loader (https://github.com/bhovhannes/svg-url-loader):
+
+npm install svg-url-loader
+
+- The html-webpack-plugin generates an HTML file for your application by injecting automatically all your generated bundle via Webpack:
+
+npm install html-webpack-plugin
+
+- Install webpack (latest version of webpack causes build to fail):
+
+npm install webpack@^4.44.0 --save-dev

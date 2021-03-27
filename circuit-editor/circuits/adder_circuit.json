@@ -1,0 +1,152 @@
+{
+  "steps": [
+    {
+      "index": 8,
+      "gates": [
+        {
+          "name": "measure-z",
+          "target": 3
+        },
+        {
+          "name": "measure-z",
+          "target": 4
+        },
+        {
+          "name": "measure-z",
+          "target": 9
+        },
+        {
+          "name": "measure-z",
+          "target": 10
+        }
+      ]
+    },
+    {
+      "index": 7,
+      "gates": [
+        {
+          "name": "toffoli",
+          "target": 4,
+          "control": 2,
+          "control2": 3
+        },
+        {
+          "name": "toffoli",
+          "target": 10,
+          "control": 8,
+          "control2": 9
+        }
+      ]
+    },
+    {
+      "index": 6,
+      "gates": [
+        {
+          "name": "toffoli",
+          "target": 4,
+          "control": 0,
+          "control2": 2
+        },
+        {
+          "name": "toffoli",
+          "target": 10,
+          "control": 6,
+          "control2": 8
+        }
+      ]
+    },
+    {
+      "index": 5,
+      "gates": [
+        {
+          "name": "toffoli",
+          "target": 4,
+          "control": 0,
+          "control2": 1
+        },
+        {
+          "name": "toffoli",
+          "target": 10,
+          "control": 6,
+          "control2": 7
+        }
+      ]
+    },
+    {
+      "index": 4,
+      "gates": [
+        {
+          "name": "ctrl-pauli-x",
+          "target": 3,
+          "control": 2
+        },
+        {
+          "name": "ctrl-pauli-x",
+          "target": 9,
+          "control": 8
+        }
+      ]
+    },
+    {
+      "index": 3,
+      "gates": [
+        {
+          "name": "ctrl-pauli-x",
+          "target": 3,
+          "control": 1
+        },
+        {
+          "name": "ctrl-pauli-x",
+          "target": 9,
+          "control": 7
+        }
+      ]
+    },
+    {
+      "index": 2,
+      "gates": [
+        {
+          "name": "ctrl-pauli-x",
+          "target": 3,
+          "control": 0
+        },
+        {
+          "name": "ctrl-pauli-x",
+          "target": 9,
+          "control": 6
+        }
+      ]
+    },
+    {
+      "index": 1,
+      "gates": [
+        {
+          "name": "ctrl-pauli-x",
+          "target": 7,
+          "control": 6
+        }
+      ]
+    },
+    {
+      "index": 0,
+      "gates": [
+        {
+          "name": "pauli-x",
+          "target": 0
+        },
+        {
+          "name": "pauli-x",
+          "target": 2
+        },
+        {
+          "name": "hadamard",
+          "target": 6
+        },
+        {
+          "name": "hadamard",
+          "target": 8
+        }
+      ]
+    }
+  ]
+}

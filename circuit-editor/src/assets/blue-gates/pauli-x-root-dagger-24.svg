@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="46" height="46" xmlns="http://www.w3.org/2000/svg">
+  <g transform="matrix(1, 0, 0, 1, 23.0, 23.0)">
+    <rect x="-22" y="-22" width="44" height="44" style="opacity:1; fill:none; stroke: cornflowerblue; stroke-width:2; stroke-opacity:1;"/>
+    <text x="-21.0" y="16" style="font-size: 29px; font-weight: bold; fill: cornflowerblue; white-space: pre;">X</text>
+    <text x="-14" y="-5" style="font-size: 13px; font-weight: bold; fill: cornflowerblue; white-space: pre;">-1/2</text>
+    <text x="7.0" y="-9" style="font-size: 13px; font-weight: bold; fill: cornflowerblue; white-space: pre;">24</text>
+  </g>
+</svg>

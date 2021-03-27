@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="46" height="46" xmlns="http://www.w3.org/2000/svg">
+  <g transform="matrix(1, 0, 0, 1, 23.0, 23.0)">
+    <circle cx="0" cy="0" r="1.7" stroke="slategray" fill="slategray" />
+    <line x1="-23" y1="0" x2="23" y2="0" style="stroke:slategray;stroke-width:1" />
+  </g>
+</svg>

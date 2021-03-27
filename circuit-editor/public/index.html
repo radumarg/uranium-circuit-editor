@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <style>
+      html, body {
+        width: 100%; 
+        height: 100%;
+      } 
+    </style>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1.0, user-scalable=no">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Roboto:400,500,700,400italic|Material+Icons">
+    <title><%= htmlWebpackPlugin.options.title %></title>
+  </head>
+  <body style="width: 100%; height: 100%;">
+    <noscript>
+      <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled. Please enable it to continue.</strong>
+    </noscript>
+    <div id="app"></div>
+    <!-- built files will be auto injected -->
+  </body>
+  <script>
+    window.onload = function() {
+      // Firefox 1.0+
+      var isFirefox = typeof InstallTrigger !== 'undefined';
+      // Internet Explorer 6-11
+      var isIE = /*@cc_on!@*/false || !!document.documentMode;
+      if (isIE) {
+        alert("Due to limited SVG support the Circuit Editor will not work correctly in Internet Explorer. Please use Chrome, Opera or Edge.")
+      } else if (isFirefox){
+        alert("Due to limited SVG support the Circuit Editor will not work correctly in Firefox. Please use Chrome, Opera or Edge.")
+      }
+    };
+  </script>
+</html>

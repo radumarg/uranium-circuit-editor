@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="46" height="72" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <circle cx="22" cy="5" r="4" stroke="darkorchid" fill="darkorchid" />
+    <line x1="22" y1="4" x2="22" y2="27" style="stroke:darkorchid;stroke-width:2; stroke-opacity:1;" />
+    <rect x="1" y="27" width="44.0" height="44" style="opacity:1; fill:none; stroke:darkorchid; stroke-width:2; stroke-opacity:1;"/>
+    <text x="8.5" y="57" style="font-size: 30px; font-weight: bold; fill: darkorchid; white-space: pre;">U<tspan baseline-shift="sub" style="font-size: 16px;">1</tspan></text>
+  </g>
+</svg>
