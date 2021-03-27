@@ -1,1 +1,5 @@
-This is a quantum computing circuit editor written in JavaScript with Vue.js. In order run in development mode please follow instructions in the the README file found in circuit_editor folder. The editor is deployed live at this url: https://www.transilvania-quantum.org/uranium 
+This is a quantum computing circuit editor written in JavaScript with Vue.js. 
+
+In order run in development mode, please follow instructions in the the README file found in circuit-editor folder. 
+
+The editor is deployed live at: https://www.transilvania-quantum.org/uranium 
