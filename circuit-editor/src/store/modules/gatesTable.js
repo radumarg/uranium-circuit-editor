@@ -302,8 +302,7 @@ export function retrieveRowsInGatesTable(circuitState) {
     window.separatorCellSize = 10;
   }
 
-  // I want the size of editor to as least as gates pallete size
-  let rows = Math.max(getNumberOfRowsThatFit(), 46);
+  let rows = getNumberOfRowsThatFit();
   let columns = getNumberOfColumnsThatFit();
 
   // I need to know the initial size of the screen

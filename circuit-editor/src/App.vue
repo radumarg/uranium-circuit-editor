@@ -1,6 +1,6 @@
 <template>
   
-  <b-container fluid="xs" class="h-100" style="background-color: #374048;">
+  <b-container fluid="xs" class="h-100" style="background-color: #374048; overflow: hidden; ">
     <b-row>
       <div>
         <b-sidebar id="sidebar-right" :title="gateName" width="360px" right shadow>
@@ -21,7 +21,7 @@
         </b-sidebar>
       </div>
     </b-row>
-    <b-row no-gutters align-v="center" class="bordered-box">
+    <b-row no-gutters align-v="center" class="bordered-box" style="border-right: solid 0.5em #374048;">
        <b-col cols="12" md="auto">
           <Logo />
         </b-col>
@@ -111,9 +111,9 @@ export default {
 
 .bordered-box {
     background-color: #374048;
-    border-left: solid 0.3em #374048;
-    border-right: solid 0.3em #374048;
-    border-bottom: solid 0.02em #374048;
+    border-left: solid 0.1em #374048;
+    border-right: solid 0.1em #374048;
+    border-bottom: solid 0.1em #374048;
     width: auto;
 }
 

@@ -4,7 +4,7 @@
       <tr>
         <td>
           <a href="/uranium/">
-            <img src="../assets/uranium.png" draggable="false" style="width:255px;height:auto;" alt="Uranium Logo" />
+            <img src="../assets/uranium.png" draggable="false" style="width:auto;height:80px;" alt="Uranium Logo" />
           </a>
         </td>
       </tr>
@@ -28,7 +28,9 @@ table {
 th,
 td {
   border: 1px solid #374048;
-  padding: 10px;
+  padding: 7px;
+  width: 297px;
+  height: 80px;
 }
 img {
   display: inline-block;

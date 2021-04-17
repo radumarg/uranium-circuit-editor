@@ -1,5 +1,5 @@
 <template>
-  <div id="gates-pallete" style="min-height: 1180px;">
+  <div class="gates-pallete" id="gates-pallete">
     <table id="gates-pallete-table">
         <tr>
             <td v-on:click="gateSelected" id="pauli-x"> 
@@ -330,6 +330,14 @@ export default {
 </script>
 
 <style scoped>
+
+.gates-pallete {
+  overflow: scroll;
+  max-height: calc( 100vh - 96px );
+  width: 100%;
+  height: 100%;
+}
+
 img {
   width: 40px;
   height: auto;
@@ -337,11 +345,12 @@ img {
   margin-left: auto;
   margin-right: auto;
 }
+
 table {
   text-align: center;
-  background-color: #374048;
+  background-color: #374048; 
   table-layout: fixed;
-  height: calc(100vh - 85px);
+  height: calc(100vh - 96px);
 
   /* disable selection on mouse drag over */
   -webkit-touch-callout: none;
@@ -351,6 +360,7 @@ table {
   -ms-user-select: none;
   user-select: none;
 }
+
 th,
 td {
   border: 1px solid whitesmoke;
@@ -358,4 +368,5 @@ td {
   width: 67px;
   height: 67px;
 }
+
 </style>

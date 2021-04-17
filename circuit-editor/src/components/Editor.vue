@@ -336,6 +336,7 @@ export default {
 </script>
 
 <style scoped>
+
 .circuit-editor {
   position: absolute;
   overflow: scroll;
