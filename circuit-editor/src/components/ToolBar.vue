@@ -6,7 +6,7 @@
         <md-tooltip md-direction="left">Get Help</md-tooltip>
       </md-button>
       <md-button class="md-raised md-primary md-help-button" v-on:click="showChangeQbitsStepsModal()">
-        +/-
+        ±
         <md-tooltip md-direction="left">Change number of Steps/Qbits</md-tooltip>
       </md-button>
       <md-button class="md-raised md-primary md-button-undo-redo" v-on:click="undo()">
@@ -55,7 +55,9 @@
 
       <table style="table-layout:fixed;">
         <tr>
-          <td colspan="3"></td>
+          <td colspan="3" valign="top">
+            <font style="font-size:12px;color:gray;">High end unused qubits will be ignored.</font>
+          </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleCloseHover">
               <b-icon v-if="closeIsHovered" v-on:click="hideModal()" v-b-tooltip.hover title="Close dialog" icon="x-square" style="color: #7952b3; float: right;" font-scale="1.6"></b-icon>
@@ -66,7 +68,7 @@
         <tr>
           <td width="35px"></td>
           <td v-b-tooltip.hover width="80px" style="padding: 5px;">Qbits:</td>
-          <td width="100px" style="padding: 5px;"> 
+          <td width="110px" style="padding: 5px;"> 
             <b-form-input @keyup.enter.native="handleSave()" v-model="qbitsNew" placeholder="qbits" type="number" id="qbits-new" style="width:80px;"></b-form-input>
           </td>
           <td width="30px"></td>
@@ -74,7 +76,7 @@
         <tr>
           <td width="35px"></td>
           <td v-b-tooltip.hover width="80px" style="padding: 5px;">Steps:</td>
-          <td width="100px" style="padding: 5px;"> 
+          <td width="110px" style="padding: 5px;"> 
             <b-form-input @keyup.enter.native="handleSave()" v-model="stepsNew" placeholder="steps" type="number" id="steps" style="width:80px;"></b-form-input>
           </td>
           <td width="30px"></td>

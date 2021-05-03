@@ -3,7 +3,7 @@
     <table>
       <tr>
         <td>
-          <a href="/uranium/">
+          <a href="javascript:history.back()">
             <img src="../assets/uranium.png" draggable="false" style="width:auto;height:80px;" alt="Uranium Logo" />
           </a>
         </td>
