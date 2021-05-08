@@ -14,7 +14,7 @@ Vue.use(MdToolbar)
 Vue.use(MdTooltip)
 
 // Bootstrap-Vue
-import { IconsPlugin, ImagePlugin, FormInputPlugin, FormSelectPlugin, LayoutPlugin, ModalPlugin, SidebarPlugin, TooltipPlugin, VBHoverPlugin } from 'bootstrap-vue'
+import { IconsPlugin, ImagePlugin, FormInputPlugin, FormSelectPlugin, LayoutPlugin, ModalPlugin, SidebarPlugin, TabsPlugin, TooltipPlugin, VBHoverPlugin } from 'bootstrap-vue'
 import 'bootstrap/dist/css/bootstrap.css'
 import 'bootstrap-vue/dist/bootstrap-vue.css'
 
@@ -25,6 +25,7 @@ Vue.use(FormSelectPlugin)
 Vue.use(LayoutPlugin)
 Vue.use(ModalPlugin)
 Vue.use(SidebarPlugin)
+Vue.use(TabsPlugin)
 Vue.use(TooltipPlugin)
 Vue.use(VBHoverPlugin)
 Vue.use(VueCookies)

@@ -15,7 +15,7 @@ npm install vuex
 
 - Install Vue Material: frontend framework for Vue (https://vuematerial.io/): 
 
-npm install vue-material --save 
+npm install vue-material 
 
 - Install Bootstrap, a CSS framework for working on circuit editor (https://getbootstrap.com/): 
 
@@ -37,17 +37,10 @@ npm install js-yaml
 
 npm install html-to-image 
 
-FOLLOWING ARE NOT USED, TODO: review and remove
+- Install https://jscharting.com/ javascript charts library
 
-- To transform an SVG image into a Data URL, we will need an appropriate webpack loader in our bundler. 
-The most common webpack loader for this is svg-url-loader (https://github.com/bhovhannes/svg-url-loader):
+npm install jscharting
 
-npm install svg-url-loader
+- Install vue packege to work with jscharting javascript charts
 
-- The html-webpack-plugin generates an HTML file for your application by injecting automatically all your generated bundle via Webpack:
-
-npm install html-webpack-plugin
-
-- Install webpack (latest version of webpack causes build to fail):
-
-npm install webpack@^4.44.0 --save-dev
+npm i -D jscharting-vue

@@ -34,7 +34,7 @@
          <GatesPallete /> 
         </b-col>
         <b-col class="bordered-box">
-          <Editor />
+          <Circuit />
         </b-col>
     </b-row>
   </b-container>    
@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import Editor from "./components/Editor";
+import Circuit from "./components/Circuit";
 import GatesPallete from "./components/GatesPallete";
 import Logo from "./components/Logo";
 import ToolBar from "./components/ToolBar";
@@ -52,7 +52,7 @@ export default {
   name: "App",
   components: {
     Logo,
-    Editor,
+    Circuit,
     GatesPallete,
     ToolBar,
   },
