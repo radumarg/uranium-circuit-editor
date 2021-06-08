@@ -1,6 +1,19 @@
 let qubits = 15.0;
 let maxState = 2.0 ** qubits;
 
+function toState (dec, totalLength) {
+
+    // only works for postive numbers
+    let state = dec.toString(2);
+    
+    let output = "";
+    for (let i = 0; i < totalLength - state.length; ++i){
+        output = "0".concat(output);
+    }
+    
+    return output.concat(state);
+}
+
 export function getStateVector (circuitState) {
 
     let stateVector = [];
@@ -36,31 +49,45 @@ export function getTopEntriesStateVector(stateVector) {
         return [];
     }
 
+    let qubits = 0;
+    if (stateVector.length > 0) {
+        qubits = Math.log2(stateVector.length);
+    }
+
     stateVector.sort(function(a, b){return (b.y - a.y)});
-    let topEntries = stateVector.slice(0, Math.min(16, stateVector.length));
+    let topEntries = stateVector.slice(0, Math.min(20, stateVector.length));
+
+    let result = [];
+
     let probability = 0.0;
     for (let i = 0; i < topEntries.length; i++){
         probability += topEntries[i].y;
-    }
-    if (probability < 1){
-        topEntries.push({ x: "everything else", y: (1.0 - probability) })
+        result.push({ x: toState(i, qubits), y: topEntries[i].y })
     }
 
-    return topEntries;
+    if (probability < 1){
+        result.push({ x: "everything else", y: (1.0 - probability) })
+    }
+
+    return result;
 }
 
 export function getBinnedStateVector(fullStateVector, min, max, numberOfBins) {
     
     let binnedStateVector = [];
+    let qubits = 0;
+    if (fullStateVector.length > 0) {
+        qubits = Math.log2(fullStateVector.length);
+    }
 
     if (fullStateVector != undefined) {
 
         if ((max - min) <= numberOfBins){
             for (let i = min; i < max; i++) {
                 if (fullStateVector.length > 0) {
-                    binnedStateVector.push({ x: i.toString(), y: fullStateVector[i].y });
+                    binnedStateVector.push({ x: toState(i, qubits), y: fullStateVector[i].y });
                 } else {
-                    binnedStateVector.push({ x: i.toString(), y: 0.0 }); 
+                    binnedStateVector.push({ x: toState(i, qubits), y: 0.0 }); 
                 }
             }
         } else {
@@ -71,8 +98,7 @@ export function getBinnedStateVector(fullStateVector, min, max, numberOfBins) {
                     accumulator += fullStateVector[i].y;
                 }
                 if ((i > min) && ((i - min) % binWidth == 0)){
-                    let middle = Math.floor(i - binWidth / 2.0);
-                    binnedStateVector.push({ x: middle.toString(), y: accumulator });
+                    binnedStateVector.push({ x: toState(i, qubits), y: accumulator });
                     accumulator = 0.0;
                 }
             }
