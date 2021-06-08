@@ -55,7 +55,7 @@ export function getBinnedStateVector(fullStateVector, min, max, numberOfBins) {
 
     if (fullStateVector != undefined) {
 
-        if ((max - min) < numberOfBins){
+        if ((max - min) <= numberOfBins){
             for (let i = min; i < max; i++) {
                 if (fullStateVector.length > 0) {
                     binnedStateVector.push({ x: i.toString(), y: fullStateVector[i].y });
