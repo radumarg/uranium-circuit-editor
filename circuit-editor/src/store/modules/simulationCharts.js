@@ -65,7 +65,7 @@ export function getBinnedStateVector(fullStateVector, min, max, numberOfBins) {
             }
         } else {
             let accumulator = 0.0;
-            let binWidth = Math.round((max - min) / numberOfBins);
+            let binWidth = Math.ceil((max - min) / numberOfBins);
             for (let i = min; i < max; i++) {
                 if (fullStateVector.length > 0) {
                     accumulator += fullStateVector[i].y;

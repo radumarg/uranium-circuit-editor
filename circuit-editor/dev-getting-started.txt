@@ -41,10 +41,20 @@ npm install html-to-image
 
 npm install jscharting
 
-- Install vue packege to work with jscharting javascript charts
+- Install vue package to work with jscharting javascript charts
 
 npm i -D jscharting-vue
 
-- Added typscript to vue application:
+- Needed to compile Rust code to webassembly: https://github.com/rustwasm/wasm-pack
 
-vue add typescript
+npm install --save-dev wasm-tool/wasm-pack-plugin
+
+- Install this command line tool for working with webassembly Rust projects: https://rustwasm.github.io/wasm-pack/installer/
+
+- Install this tool needed by wasm-pack: https://github.com/cargo-generate/cargo-generate
+
+cargo install cargo-generate
+
+- Install text-encoding: https://www.npmjs.com/package/text-encoding
+
+npm install text-encoding

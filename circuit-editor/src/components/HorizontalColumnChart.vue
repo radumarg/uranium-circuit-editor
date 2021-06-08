@@ -99,7 +99,7 @@ export default {
             if (yRange[1] > 0.0){
                let min = this.$data.minRange;
                let max = this.$data.maxRange;
-               let mid = min + max / 2.0;
+               let mid = (min + max) / 2.0;
                let delta = max - min;
                this.$data.minRange = Math.floor(min + yRange[0] * delta / numberOfBins);
                this.$data.maxRange = Math.ceil(min + yRange[1] * delta / numberOfBins);
