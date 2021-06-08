@@ -3,11 +3,11 @@
       <b-row class="justify-content-center h-100" style="background-color:white;" align-v="center" align-h="center">
          <b-col></b-col>
          <b-col>
-            <div id="spinnerContainerPie" style="display:block;">
+            <div id="spinnerContainerColumns" style="display:block;">
                <b-spinner variant="primary" label="Loading ..." style="width:450px; height:450px;"></b-spinner>
             </div>
-            <div id="chartContainerPie" class="chartDiv" style="display:none;">
-               <JSCharting :options="chartOptions" id="pieChart"></JSCharting>
+            <div id="chartContainerColumns" class="chartDiv" style="display:none;">
+               <JSCharting :options="chartOptions" id="columnChart"></JSCharting>
             </div>
          </b-col>
          <b-col></b-col>
@@ -22,19 +22,30 @@
 // Vue-js plugin: https://github.com/jscharting/jscharting-vue/blob/master/README.md
 
 import JSCharting from 'jscharting-vue';
+import { mapGetters } from "vuex";
+import { JSC } from 'jscharting-vue';
+import { getBinnedStateVector } from "../store/modules/simulationCharts.js";
 
 export default {
-   name: 'pieChart',
+   name: 'columnChart',
    data() {
       return {
          chartOptions: {
-            type: 'pie',
+            type: 'vertical column',
+            axisToZoom: "x",
             toolbar: {
                items: {
+                  RESET: {
+                     position: 'inside top left',
+                     margin_top: 15,
+                     margin_left: 20,
+                     width: 58,
+                     height: 33,
+                     events_click: this.reset
+                  },
                   export: {
                      position: 'inside top left',
                      margin_top: 15,
-                     margin_left: 15,
                      width: 54,
                      height: 33,
                      outline: { color: 'rgb(123,123,123)' },
@@ -101,50 +112,107 @@ export default {
                   name: 'Probability',
                   points: []
                }
-            ]
-         }
+            ],
+            events_selection: this.selectionHandler, 
+         },
+         stateVector: undefined,
+         minRange: undefined, 
+         maxRange: undefined,
+         qubits: 0,
+         defaultNumberOfBins: 128,
       }
    },
    methods: {
-      updateData(topEntriesStateVector) {
+      ...mapGetters("circuitEditorModule/", ["getMaximumQbitIndex"]),
+      updateData(binnedStateVector) {
          this.$data.chartOptions = {
-            type: 'pie',
             series: [
                {
-                  name: 'Probability',
-                  points: topEntriesStateVector
+                  points: binnedStateVector,
+                  color: "#448AFF"
                }
-            ]
+            ],
          };
       },
       showSpinner: function () {
-         let chartDiv = document.getElementById("chartContainerPie");
+         let chartDiv = document.getElementById("chartContainerColumns");
          chartDiv.style.display = "none";
-         let spinnerDiv = document.getElementById("spinnerContainerPie");
+         let spinnerDiv = document.getElementById("spinnerContainerColumns");
          spinnerDiv.style.display = "block";
       },
-      showChart: function (topEntriesStateVector, width, height) {
-         let element = document.getElementById("pieChart");
+      showChart: function (stateVector, width, height) {
+         
+         // save state vector
+         this.$data.stateVector = [...stateVector];
+
+         // reset plot range if number of qubits has changed
+         let maxQubitIndex = this.getMaximumQbitIndex();
+         if (maxQubitIndex == -1) {
+            this.$data.minRange = 0;
+            this.$data.maxRange = 1024;
+            this.$data.qubits = 0;
+         } else if (this.$data.qubits != maxQubitIndex + 1){
+            this.$data.minRange = 0;
+            this.$data.maxRange = this.$data.stateVector.length;
+            this.$data.qubits = maxQubitIndex + 1;
+         }
+
+         // update plot
+         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateVector.length);
+         this.updateData(getBinnedStateVector(this.$data.stateVector, this.$data.minRange, this.$data.maxRange, numberOfBins));
+
+         // adjust chart size
+         let element = document.getElementById("columnChart");
          element.style.width = parseInt(width - 150) + "px";
          element.style.height = parseInt(height - 150) + "px";
 
-         this.updateData(topEntriesStateVector);
-         let spinnerDiv = document.getElementById("spinnerContainerPie");
+         //show chart
+         let spinnerDiv = document.getElementById("spinnerContainerColumns");
          spinnerDiv.style.display = "none";
-         let chartDiv = document.getElementById("chartContainerPie");
-         chartDiv.style.display = "block";         
+         let chartDiv = document.getElementById("chartContainerColumns");
+         chartDiv.style.display = "block";
+      },
+      selectionHandler(ev) { 
+         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateVector.length);
+         if (this.$data.maxRange - this.$data.minRange > numberOfBins)
+         {
+            var yRange = JSC.sortBy(ev.xAxis);
+            yRange[0] = Math.max(0.0, yRange[0]);
+            yRange[1] = Math.max(0.0, yRange[1]);
+            if (yRange[1] > 0.0){
+               let min = this.$data.minRange;
+               let max = this.$data.maxRange;
+               let mid = min + max / 2.0;
+               let delta = max - min;
+               this.$data.minRange = Math.floor(min + yRange[0] * delta / numberOfBins);
+               this.$data.maxRange = Math.ceil(min + yRange[1] * delta / numberOfBins);
+               if (this.$data.maxRange - this.$data.minRange < numberOfBins){
+                  this.$data.minRange = Math.floor(mid - numberOfBins / 2.0);
+                  this.$data.maxRange = Math.ceil(mid + numberOfBins / 2.0);
+               }
+               this.updateData(getBinnedStateVector(this.$data.stateVector, this.$data.minRange, this.$data.maxRange, numberOfBins));
+            }
+         }
+         return false; 
+      },
+      reset(){ 
+         this.$data.minRange = 0;
+         this.$data.maxRange = this.$data.stateVector.length;
+         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateVector.length);
+         this.updateData(getBinnedStateVector(this.$data.stateVector, 0, this.$data.stateVector.length, numberOfBins));
       },
    },
    options: {
       responsive: true,
       maintainAspectRatio: false,
+      mutable: true,
    },
    components: {
       JSCharting
    },
    created() {
       this.$root.$on('showSpinners', () => {this.showSpinner()});
-      this.$root.$on('showPieChart', (topEntriesStateVector, width, height) => {this.showChart(topEntriesStateVector, width, height)});
+      this.$root.$on('showColumnChart', (stateVector, width, height) => {this.showChart(stateVector, width, height)});
    },
 }
 </script>

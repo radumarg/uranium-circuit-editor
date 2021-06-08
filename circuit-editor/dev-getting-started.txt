@@ -44,3 +44,7 @@ npm install jscharting
 - Install vue packege to work with jscharting javascript charts
 
 npm i -D jscharting-vue
+
+- Added typscript to vue application:
+
+vue add typescript

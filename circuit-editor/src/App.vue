@@ -22,15 +22,15 @@
       </div>
     </b-row>
     <b-row no-gutters align-v="center" class="bordered-box" style="border-right: solid 0.5em #374048;">
-       <b-col cols="12" md="auto">
-          <Logo />
-        </b-col>
-       <b-col> 
-         <ToolBar /> 
-        </b-col>
+      <b-col cols="12" md="auto">
+        <Logo />
+      </b-col>
+      <b-col> 
+        <ToolBar /> 
+      </b-col>
     </b-row>
      <b-row no-gutters>
-       <b-col cols="12" md="auto" class="bordered-box"> 
+        <b-col cols="12" md="auto" class="bordered-box"> 
          <GatesPallete /> 
         </b-col>
         <b-col class="bordered-box">

@@ -18,14 +18,16 @@
         <md-tooltip md-direction="left">Redo</md-tooltip>
       </md-button>
 
-      <div class="md-toolbar-offset" id="theme">
-        <md-radio class="md-primary" v-model="lightTheme" :value="true" v-on:change="switchTheme()">Light Theme</md-radio>
-        <md-radio class="md-primary" v-model="lightTheme" :value="false" v-on:change="switchTheme()">Dark Theme</md-radio>
+      <div class="md-toolbar-offset" id="gate-colors">
+        <md-checkbox class="md-primary" v-model="lightTheme" v-on:change="switchTheme()">Light Theme</md-checkbox>
       </div>
 
       <div class="md-toolbar-offset" id="gate-colors">
-        <md-radio class="md-primary" v-model="colorGates" :value="true" v-on:change="switchGateColors()">Colors</md-radio>
-        <md-radio class="md-primary" v-model="colorGates" :value="false" v-on:change="switchGateColors()">Blues</md-radio>
+        <md-checkbox class="md-primary" v-model="colorGates" v-on:change="switchGateColors()">Color Gates</md-checkbox>
+      </div>
+
+      <div class="md-toolbar-offset" id="simulation-mode">
+        <md-checkbox class="md-primary" v-model="liveSimulation" v-on:change="switchSimulationMode()">Live Simulation</md-checkbox>
       </div>
 
       <div class="md-toolbar-section-end">
@@ -39,7 +41,7 @@
         </md-button>
         <md-button class="md-raised md-primary" v-on:click="saveFile()">
           Save
-          <md-tooltip md-direction="left">Save Circuit to Disk</md-tooltip>
+          <md-tooltip md-direction="left">Save Circuit</md-tooltip>
         </md-button>
         <md-button class="md-raised md-primary" v-on:click="saveImages()">
           Image
@@ -111,6 +113,7 @@ export default {
     return {
       lightTheme: Vue.$cookies.get("light-theme") !== 'false',
       colorGates: Vue.$cookies.get("colored-gates") !== 'false',
+      liveSimulation: Vue.$cookies.get("live-simulation") === 'true',
       closeIsHovered: false,
       saveIsHovered:  false,
       qbitsNew: 0,
@@ -129,6 +132,7 @@ export default {
           mutation.type == 'circuitEditorModule/removeStep'){
         this.history.push(JSON.stringify(state));
         this.historyUnRoll = [];
+        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
       }      
     });
   },
@@ -244,6 +248,9 @@ export default {
       this.emptyCircuit();
       this.history = [];
       this.historyUnRoll = [];
+      let state = this.getCircuitState();
+      this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
+      this.$root.$emit("circuitModifiedFromMenu");
     },
     switchTheme: function(){
       Vue.$cookies.set('light-theme', this.lightTheme);
@@ -256,6 +263,10 @@ export default {
       this.$root.$emit("switchGateColors");
       this.refreshCircuit();
     },
+    switchSimulationMode: function(){
+      Vue.$cookies.set('live-simulation', this.liveSimulation);
+      this.$root.$emit("switchToLiveSimulationMode", this.liveSimulation);
+    },
     commitCircuitState: function(event) {
       const yaml = require('js-yaml');
       var contents = event.target.result;
@@ -265,6 +276,8 @@ export default {
       window.gatesTable.rows = Math.max(2 * qbits + 2, window.initialRows);
       window.gatesTable.columns = Math.max(2 * steps + 2, window.initialColumns);
       this.updateCircuit(jsonObj);
+      this.$root.$emit("triggerSimulationRun", jsonObj);
+      this.$root.$emit("circuitModifiedFromMenu");
     }
   }
 };
