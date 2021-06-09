@@ -30,7 +30,6 @@
     "@vue/cli-plugin-eslint": "^4.5.11",
     "@vue/cli-plugin-vuex": "^4.5.11",
     "@vue/cli-service": "^4.5.11",
-    "@wasm-tool/wasm-pack-plugin": "github:wasm-tool/wasm-pack-plugin",
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
@@ -51,7 +50,10 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {},
+    "globals": {
+      "globalThis": false
+    }
   },
   "browserslist": [
     "> 1%",

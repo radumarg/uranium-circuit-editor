@@ -62,7 +62,7 @@ export default {
             ],
          };
       },
-      runSimulation: function (circuitState) {
+      runSimulation: async function (circuitState) {
          if (this.$data.liveSimulation == true) {
             let maxQubitIndex = this.getMaximumQbitIndex();
             if (maxQubitIndex == -1){
@@ -71,7 +71,7 @@ export default {
                this.$data.maxRange = 1024;
                this.$data.qubits = 0;
             } else if (maxQubitIndex < 20){
-               let stateVector = getStateVector(circuitState);
+               let stateVector = await getStateVector(circuitState);
                this.$data.stateVector = [...stateVector];
                if (this.$data.qubits != maxQubitIndex + 1){
                   this.$data.minRange = 0;

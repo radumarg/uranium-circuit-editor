@@ -1,7 +1,6 @@
-let qubits = 15.0;
-let maxState = 2.0 ** qubits;
+import init, { simulate } from '../../wasm/moara_js/moara_js.js'
 
-function toState (dec, totalLength) {
+function toState(dec, totalLength) {
 
     // only works for postive numbers
     let state = dec.toString(2);
@@ -14,29 +13,19 @@ function toState (dec, totalLength) {
     return output.concat(state);
 }
 
-export function getStateVector (circuitState) {
-
+export async function getStateVector(circuitState) {
     let stateVector = [];
 
     if (circuitState != undefined) {
+        let serializedCircuit = JSON.stringify(circuitState);
+        
+        await init('../../wasm/moara_js/moara_js_bg.wasm');
+        //let circ = '{"steps": [{"index": 2,"gates": []},{"index": 1,"gates": [{"name": "ctrl-pauli-x","target": 1,"control": 0}]},{"index": 0,"gates": [{"name": "hadamard","target": 0}]}]}';
+        
+        let simulationResult = simulate(serializedCircuit, 1024);
 
-        for (let i = 0; i < maxState; i++) {
-            stateVector.push({ x: i.toString(), y: 0.0 });
-        }
-
-        let remainingProbability = 1.0;
-        while (remainingProbability > 0) {
-            let stateIndex = Math.floor(Math.random() * maxState);
-            let prob = Math.random() * remainingProbability / 4;
-            let updatedProbability = stateVector[stateIndex].y + prob;
-            stateVector[stateIndex] = { x: stateIndex.toString(), y: updatedProbability }
-            remainingProbability -= prob;
-
-            if (remainingProbability < 0.0000000001){
-                let updatedProbability = stateVector[0].y + remainingProbability;
-                stateVector[0] = { x: stateIndex.toString(), y: updatedProbability }
-                break;
-            }
+        for (let i = 0; i < simulationResult.length; i++) {
+            stateVector[i] = { x: i, y: simulationResult[i] };
         }
     }
 
