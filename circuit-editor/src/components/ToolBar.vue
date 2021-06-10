@@ -1,6 +1,6 @@
 <template>
   <div id="toolbar">
-    <md-toolbar style="background-color: lightslategrey" class="rounded mb-0">
+    <md-toolbar style="background-color: lightslategrey;" class="rounded mb-0">
       <md-button v-b-toggle.sidebar-right class="md-raised md-primary md-help-button">
         ?
         <md-tooltip md-direction="left">Get Help</md-tooltip>
@@ -18,15 +18,9 @@
         <md-tooltip md-direction="left">Redo</md-tooltip>
       </md-button>
 
-      <div class="md-toolbar-offset" id="gate-colors">
+      <div class="md-toolbar-offset" style="font-size: 15px; color: white; font-weight: bold;">
         <md-checkbox class="md-primary" v-model="lightTheme" v-on:change="switchTheme()">Light Theme</md-checkbox>
-      </div>
-
-      <div class="md-toolbar-offset" id="gate-colors">
         <md-checkbox class="md-primary" v-model="colorGates" v-on:change="switchGateColors()">Color Gates</md-checkbox>
-      </div>
-
-      <div class="md-toolbar-offset" id="simulation-mode">
         <md-checkbox class="md-primary" v-model="liveSimulation" v-on:change="switchSimulationMode()">Live Simulation</md-checkbox>
       </div>
 
