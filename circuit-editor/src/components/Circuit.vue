@@ -2,11 +2,18 @@
 
   <b-container fluid="xs" class="h-100">
 
-    <!-- <button @click="greet">Greet me</button> -->
+    <b-container fluid="xs" class="h-100" :style="{display: liveSimulation ? 'block' : 'none'}" id="splittedEditor">
+      <b-row no-gutters class="h-100">
+        <b-col><Editor id="editor1"/></b-col>
+        <b-col cols="3">
+          <HorizontalColumnChart />
+        </b-col>
+      </b-row>
+    </b-container>
 
     <b-tabs content-class="mt-1" :style="{display: !liveSimulation ? 'block' : 'none'}" id="tabbedEditor">
       <b-tab title="Circuit" ref="circuitTab">
-        <Editor id="editor" style="height:calc(100% - 48px)"/>
+        <Editor id="editor2" style="height:calc(100% - 48px)"/>
       </b-tab>
       <b-tab title="Column Chart" v-on:click="onTabChanged" class="single-tab">
         <VerticalColumnChart />
@@ -15,15 +22,6 @@
         <PieChart />
       </b-tab>
     </b-tabs>
-
-    <b-container fluid="xs" class="h-100" :style="{display: liveSimulation ? 'block' : 'none'}" id="splittedEditor">
-      <b-row no-gutters class="h-100">
-        <b-col><Editor /></b-col>
-        <b-col cols="3">
-          <HorizontalColumnChart />
-        </b-col>
-      </b-row>
-    </b-container>
 
   </b-container>
 
