@@ -1,7 +1,7 @@
 <template>
   <div v-on:click="showModal()">
 
-    <img :src="gateImageSrcEditor" :title="title" :name="name" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
+    <img :src="gateImageSrcEditor" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
     <b-modal ref="modal-dialog" size="sm"  centered hide-footer hide-header>
 
@@ -92,6 +92,7 @@
 <script>
 import { mapActions } from 'vuex';
 import SingleBitGate from "./SingleBitGate";
+import { createDragImageGhost } from "../store/modules/utils.js";
 export default {
   name: "ControlledSingleBitGate",
   extends: SingleBitGate,
@@ -171,6 +172,12 @@ export default {
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControl", this.control);
       event.dataTransfer.setData("controlstate", this.controlstate);
+      let dragImageGhost = createDragImageGhost(target);  
+      event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
+    },
+    dragEnd: function() {
+      let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
+      document.body.removeChild(dragImageGhost);
     },
     updatePopupGateIamge(){
       var img = document.getElementById("popup-gate-image");
