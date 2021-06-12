@@ -6,12 +6,11 @@ export function createDragImageGhost (targetImage) {
     fakeGhost.src = targetImage.src;
 
     if (Vue.$cookies.get("light-theme") == 'true'){
-        if (Vue.$cookies.get("color-gates") == 'true'){
+        if (Vue.$cookies.get("colored-gates") == 'true'){
             fakeGhost.style.backgroundColor = "ghostwhite";
         } else {
             fakeGhost.style.backgroundColor = "white";
         }
-    
     } else {
         fakeGhost.style.backgroundColor = "#374048";
     }
