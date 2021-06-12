@@ -21,6 +21,7 @@ export default {
          chartOptions: {
             type: 'horizontal column',
             axisToZoom: "x",
+            legend_visible: false,
             toolbar: {
                items: {
                   RESET: {

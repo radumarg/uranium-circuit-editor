@@ -1,6 +1,6 @@
 <template>
   <div class="circuit-editor" id="circuit-editor-canvas">
-    <table id="gatesTable" ref="gatesTable" cellspacing="0" cellpadding="0">
+    <table ref="gatesTable" cellspacing="0" cellpadding="0">
       <div v-for="row in getRowsInGatesTable" v-bind:key="row">
         <tr>
           <td
@@ -317,18 +317,17 @@ export default {
   ]),
   created() {
     this.$root.$on("switchThemeLight", boolFlag => {
-      var table = document.getElementById("gatesTable");
       if (boolFlag) {
         if(window.useColoredGates){
-          table.style.backgroundColor = "ghostwhite";
-          table.style.borderTopColor = "ghostwhite";
+          this.$refs["gatesTable"].style.backgroundColor = "ghostwhite";
+          this.$refs["gatesTable"].style.borderTopColor = "ghostwhite";
         } else {
-          table.style.backgroundColor = "white";
-          table.style.borderTopColor = "white";
+          this.$refs["gatesTable"].style.backgroundColor = "white";
+          this.$refs["gatesTable"].style.borderTopColor = "white";
         }
       } else {
-        table.style.backgroundColor = "#374048";
-        table.style.borderTopColor = "#374048";
+        this.$refs["gatesTable"].style.backgroundColor = "#374048";
+        this.$refs["gatesTable"].style.borderTopColor = "#374048";
       }
     });
   },
