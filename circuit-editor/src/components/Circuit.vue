@@ -73,7 +73,7 @@ export default {
       if (this.$data.lastSimulatedCircuit !== JSON.stringify(circuitState)){
         this.$data.lastSimulatedCircuit = JSON.stringify(circuitState);        
         this.$root.$emit("showSpinners");
-        var element = document.getElementById("editor");
+        var element = document.getElementById("editor2");
         var positionInfo = element.getBoundingClientRect();
         setTimeout(this.triggerSimulationJob, 1000, circuitState, positionInfo);
       } 
