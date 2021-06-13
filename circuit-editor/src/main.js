@@ -40,9 +40,9 @@ let useColoreGates = Vue.$cookies.get('colored-gates');
 if (useColoreGates == null){
   Vue.$cookies.set('colored-gates', 'true');
 }
-let useLightTheme = Vue.$cookies.get('light-theme');
-if (useLightTheme == null){
-  Vue.$cookies.set('light-theme', 'true');
+let useDarkTheme = Vue.$cookies.get('dark-theme');
+if (useDarkTheme == null){
+  Vue.$cookies.set('dark-theme', 'false');
 }
 
 new Vue({

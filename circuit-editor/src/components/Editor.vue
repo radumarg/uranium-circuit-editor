@@ -317,8 +317,12 @@ export default {
     "getRowsInGatesTable"
   ]),
   created() {
-    this.$root.$on("switchThemeLight", boolFlag => {
+    this.$root.$on("switchThemeDark", boolFlag => {
       if (boolFlag) {
+        this.$refs["gatesTable"].style.backgroundColor = "#374048";
+        this.$refs["gatesTable"].style.borderTopColor = "#374048";
+        this.$refs["gatesTable"].style.borderBottom = "solid 0.45em #374048";
+      } else {
         if(Vue.$cookies.get('colored-gates') === 'true'){
           this.$refs["gatesTable"].style.backgroundColor = "ghostwhite";
           this.$refs["gatesTable"].style.borderTopColor = "ghostwhite";
@@ -328,10 +332,6 @@ export default {
           this.$refs["gatesTable"].style.borderTopColor = "white";
           this.$refs["gatesTable"].style.borderBottom = "solid 0.45em white";
         }
-      } else {
-        this.$refs["gatesTable"].style.backgroundColor = "#374048";
-        this.$refs["gatesTable"].style.borderTopColor = "#374048";
-        this.$refs["gatesTable"].style.borderBottom = "solid 0.45em #374048";
       }
     });
   },

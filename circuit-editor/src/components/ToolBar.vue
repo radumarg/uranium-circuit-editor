@@ -18,10 +18,22 @@
         <md-tooltip md-direction="left">Redo</md-tooltip>
       </md-button>
 
-      <div class="md-toolbar-offset" style="font-size: 15px; color: white; font-weight: bold;">
-        <md-checkbox class="md-primary" v-model="lightTheme" v-on:change="switchTheme()">Light Theme</md-checkbox>
-        <md-checkbox class="md-primary" v-model="colorGates" v-on:change="switchGateColors()">Color Gates</md-checkbox>
-        <md-checkbox class="md-primary" v-model="liveSimulation" v-on:change="switchSimulationMode()">Live Simulation</md-checkbox>
+      <div class="md-toolbar-offset">
+        <table>
+          <tr>
+            <td>
+              <md-checkbox class="md-primary" v-model="darkTheme" v-on:change="switchTheme()">Dark Theme</md-checkbox>
+            </td>
+            <td>
+              <md-checkbox class="md-primary" v-model="liveSimulation" v-on:change="switchSimulationMode()">Live Simulation</md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <md-checkbox class="md-primary" v-model="colorGates" v-on:change="switchGateColors()">Color Gates</md-checkbox>
+            </td>
+          </tr>
+        </table>
       </div>
 
       <div class="md-toolbar-section-end">
@@ -105,8 +117,8 @@ export default {
   name: "ToolBar",
   data() {
     return {
-      lightTheme: Vue.$cookies.get("light-theme") !== 'false',
-      colorGates: Vue.$cookies.get("colored-gates") !== 'false',
+      darkTheme: Vue.$cookies.get("dark-theme") === 'true',
+      colorGates: Vue.$cookies.get("colored-gates") === 'true',
       liveSimulation: Vue.$cookies.get("live-simulation") === 'true',
       closeIsHovered: false,
       saveIsHovered:  false,
@@ -131,8 +143,8 @@ export default {
     });
   },
   mounted() {
-    let lightTheme = (Vue.$cookies.get("light-theme") != 'false')
-    this.$root.$emit("switchThemeLight", lightTheme);
+    let darkTheme = (Vue.$cookies.get("dark-theme") === 'true')
+    this.$root.$emit("switchThemeDark", darkTheme);
   },
   beforeDestroy() {
     this.unsubscribe();
@@ -247,12 +259,12 @@ export default {
       this.$root.$emit("circuitModifiedFromMenu");
     },
     switchTheme: function(){
-      Vue.$cookies.set('light-theme', this.lightTheme);
-      this.$root.$emit("switchThemeLight", this.lightTheme);
+      Vue.$cookies.set('dark-theme', this.darkTheme);
+      this.$root.$emit("switchThemeDark", this.darkTheme);
     },
     switchGateColors: function(){
       Vue.$cookies.set('colored-gates', this.colorGates);
-      this.$root.$emit("switchThemeLight", this.lightTheme);
+      this.$root.$emit("switchThemeDark", this.darkTheme);
       this.$root.$emit("switchGateColors");
       this.refreshCircuit();
     },
@@ -306,5 +318,14 @@ export default {
   height: 35px;
   max-height: 35px;
 }
+
+.md-checkbox{
+  height: 20px; 
+  margin: 5px;
+  font-size: 14px;
+  color: white;
+  font-weight: bold;
+}
+
 </style>
 

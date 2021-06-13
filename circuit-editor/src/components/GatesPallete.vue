@@ -296,15 +296,15 @@ export default {
     };
   },
   created() {
-    this.$root.$on("switchThemeLight", (boolFlag) => {
+    this.$root.$on("switchThemeDark", (boolFlag) => {
       var cells = document.getElementById("gates-pallete").getElementsByTagName("td");
       if (boolFlag) {
-        for(let i = 0; i < cells.length; i++) {
-          cells[i].style.borderColor = "ghostwhite";
-        }
-      } else {
         for(let i = 0; i < cells.length; i++) { 
           cells[i].style.borderColor = "lightslategray";
+        }
+      } else {
+        for(let i = 0; i < cells.length; i++) {
+          cells[i].style.borderColor = "ghostwhite";
         }
       }
     })
