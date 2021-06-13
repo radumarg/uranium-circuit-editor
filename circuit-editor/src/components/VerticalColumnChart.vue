@@ -159,10 +159,6 @@ export default {
 
          // update plot
          let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateVector.length);
-         if (this.$data.stateVector.length == 0){
-            // needed to show empty plot
-            numberOfBins = this.$data.defaultNumberOfBins;
-         }
          this.updateData(getBinnedStateVector(this.$data.stateVector, this.$data.minRange, this.$data.maxRange, numberOfBins));
 
          // adjust chart size

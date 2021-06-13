@@ -1,4 +1,4 @@
-let qubits = 15.0;
+let qubits = 5.0;
 let maxState = 2.0 ** qubits;
 
 function toState (dec, totalLength) {
@@ -81,6 +81,11 @@ export function getBinnedStateVector(fullStateVector, min, max, numberOfBins) {
     }
 
     if (fullStateVector != undefined) {
+
+        if (fullStateVector.length == 0) {
+            // display empty graph if state vector is empty
+            numberOfBins = 32;
+        }
 
         if ((max - min) <= numberOfBins){
             for (let i = min; i < max; i++) {
