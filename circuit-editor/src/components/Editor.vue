@@ -322,13 +322,16 @@ export default {
         if(Vue.$cookies.get('colored-gates') === 'true'){
           this.$refs["gatesTable"].style.backgroundColor = "ghostwhite";
           this.$refs["gatesTable"].style.borderTopColor = "ghostwhite";
+          this.$refs["gatesTable"].style.borderBottom = "solid 0.45em ghostwhite";
         } else {
           this.$refs["gatesTable"].style.backgroundColor = "white";
           this.$refs["gatesTable"].style.borderTopColor = "white";
+          this.$refs["gatesTable"].style.borderBottom = "solid 0.45em white";
         }
       } else {
         this.$refs["gatesTable"].style.backgroundColor = "#374048";
         this.$refs["gatesTable"].style.borderTopColor = "#374048";
+        this.$refs["gatesTable"].style.borderBottom = "solid 0.45em #374048";
       }
     });
   },
@@ -351,10 +354,8 @@ export default {
 
 table {
   background-color: ghostwhite;
-  border: 0px solid #374048;
+  border: 0px;
   border-spacing: 0px;
-  border-top: solid 0.4em ghostwhite;
-  border-bottom: solid 0.45em ghostwhite;
   table-layout: fixed;
   text-align: center;
 }
