@@ -1,4 +1,4 @@
-import init, { simulate } from '../../wasm/moara_js/moara_js.js'
+import init, { get_probabilities } from './wasm/moara_js.js'
 
 function toState(dec, totalLength) {
 
@@ -18,14 +18,11 @@ export async function getStateVector(circuitState) {
 
     if (circuitState != undefined) {
         let serializedCircuit = JSON.stringify(circuitState);
-        
-        await init('../../wasm/moara_js/moara_js_bg.wasm');
-        //let circ = '{"steps": [{"index": 2,"gates": []},{"index": 1,"gates": [{"name": "ctrl-pauli-x","target": 1,"control": 0}]},{"index": 0,"gates": [{"name": "hadamard","target": 0}]}]}';
-        
-        let simulationResult = simulate(serializedCircuit, 1024);
+        await init('./wasm/moara_js_bg.wasm');
+        let probabilities = get_probabilities(serializedCircuit);
 
-        for (let i = 0; i < simulationResult.length; i++) {
-            stateVector[i] = { x: i, y: simulationResult[i] };
+        for (let i = 0; i < probabilities.length; i++) {
+            stateVector[i] = { x: i, y: probabilities[i] };
         }
     }
 

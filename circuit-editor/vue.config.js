@@ -6,8 +6,8 @@ module.exports = {
   },
   devServer: {
     contentBase: [
-      path.join(__dirname, './src/wasm/moara_js'),
+      path.join(__dirname, './src/store/modules/wasm/'),
     ],
-    contentBasePublicPath: '/wasm/moara_js'
+    contentBasePublicPath: '/wasm'
   },
 };
