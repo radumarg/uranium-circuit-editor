@@ -251,7 +251,6 @@ export default {
       this.$root.$emit("switchThemeLight", this.lightTheme);
     },
     switchGateColors: function(){
-      window.useColoredGates = this.colorGates;
       Vue.$cookies.set('colored-gates', this.colorGates);
       this.$root.$emit("switchThemeLight", this.lightTheme);
       this.$root.$emit("switchGateColors");

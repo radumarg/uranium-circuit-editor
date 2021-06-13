@@ -82,6 +82,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { mapActions } from 'vuex';
 import SingleBitGate from "./SingleBitGate";
 import { createDragImageGhost } from "../store/modules/utils.js";
@@ -98,7 +99,7 @@ export default {
   },
   computed: {
     gateImageSource: function() {
-      if (window.useColoredGates){
+      if (Vue.$cookies.get('colored-gates') === 'true'){
         return require("../assets/colored-gates/sqrt-swap.svg");
       } else {
         return require("../assets/blue-gates/sqrt-swap.svg");

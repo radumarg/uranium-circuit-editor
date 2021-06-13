@@ -42,6 +42,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import Circuit from "./components/Circuit";
 import GatesPallete from "./components/GatesPallete";
 import Logo from "./components/Logo";
@@ -81,7 +82,7 @@ export default {
         this.gateImage = require("./assets/uranium.png");
       } else{
         this.gateName = gateName;
-        if (window.useColoredGates){
+        if (Vue.$cookies.get('colored-gates') === 'true'){
           if (gateName.includes("ctrl-")){
             this.gateImage = require("./assets/colored-gates/" + gateName + "-1.svg");     
           } else if (gateName == "toffoli") { 

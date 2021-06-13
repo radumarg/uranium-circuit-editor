@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 /* Holds information necessary to diplay a cell in gates table */
 class GatesTableCell {
   constructor(row, column) {
@@ -622,7 +624,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           gatesTableRowState.cells[column].gate = gate.name;
           // I want all elements in circuit to update when 
           // switching from colored to blue gates:
-          gatesTableRowState.cells[column].key = window.useColoredGates;
+          gatesTableRowState.cells[column].key = Vue.$cookies.get('colored-gates');
           gatesTableRowState.cells[column].tooltip = "";
           gatesTableRowState.cells[column].img = gate.name.replace("ctrl-", "");
           if (gate.name == "toffoli") gatesTableRowState.cells[column].img = "pauli-x";

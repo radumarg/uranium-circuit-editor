@@ -106,6 +106,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { mapActions } from 'vuex';
 import ControlledSingleBitGate from "./ControlledSingleBitGate";
 import { createDragImageGhost } from "../store/modules/utils.js";
@@ -141,7 +142,7 @@ export default {
   computed: {
     gateImageSrcPopup: function() {
       if (this.name) {
-        if (window.useColoredGates){
+        if (Vue.$cookies.get('colored-gates') === 'true'){
           return require("../assets/colored-gates/" + this.name + "-" + this.controlstate + "-" + this.controlstate2 + ".svg");
         } else {
           return require("../assets/blue-gates/" + this.name + "-" + this.controlstate + "-" + this.controlstate2 + ".svg");
@@ -219,7 +220,7 @@ export default {
     },
     updatePopupGateIamge(){
       var img = document.getElementById("popup-gate-image");
-      if (window.useColoredGates){
+      if (Vue.$cookies.get('colored-gates') === 'true'){
           img.src = require("../assets/colored-gates/" + this.name + "-" + this.controlstateNew + "-" + this.controlstateNew2 + ".svg");
         } else {
           img.src = require("../assets/blue-gates/" + this.name + "-" + this.controlstateNew + "-" + this.controlstateNew2 + ".svg");

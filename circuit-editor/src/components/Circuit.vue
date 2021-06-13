@@ -101,11 +101,6 @@ export default {
     switchToEditorTab: function(){
       this.$refs.circuitTab.activate();
     },
-    async greet() {
-      const wasm = import("/home/radu/Work/uranium-circuit-editor/circuit-editor/wasm/pkg");
-      const greet = (await wasm).greet;
-      greet();
-    },
   },
   created() {
       this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.adjustView(simulatingLive)});

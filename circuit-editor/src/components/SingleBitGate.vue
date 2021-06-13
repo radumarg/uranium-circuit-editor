@@ -74,6 +74,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import { createDragImageGhost } from "../store/modules/utils.js";
 export default {
@@ -101,7 +102,7 @@ export default {
   computed: {
     gateImageSrcEditor: function() {
       if (this.img) {
-        if (window.useColoredGates){
+        if (Vue.$cookies.get('colored-gates') === 'true'){
           return require("../assets/colored-gates/" + this.img + ".svg");
         } else {
           return require("../assets/blue-gates/" + this.img + ".svg");
@@ -112,7 +113,7 @@ export default {
     },
     gateImageSrcPopup: function() {
       if (this.name) {
-        if (window.useColoredGates){
+        if (Vue.$cookies.get('colored-gates') === 'true'){
           return require("../assets/colored-gates/" + this.name + ".svg");
         } else {
           return require("../assets/blue-gates/" + this.name + ".svg");

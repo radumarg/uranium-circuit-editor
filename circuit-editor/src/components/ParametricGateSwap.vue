@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { mapActions } from 'vuex';
 import GateSwap from "./GateSwap";
 import { createDragImageGhost } from "../store/modules/utils.js";
@@ -106,7 +107,7 @@ export default {
   },
   computed: {
     gateImageSource: function() {
-      if (window.useColoredGates){
+      if (Vue.$cookies.get('colored-gates') === 'true'){
         return require("../assets/colored-gates/swap-phi.svg");
       } else {
         return require("../assets/blue-gates/swap-phi.svg");

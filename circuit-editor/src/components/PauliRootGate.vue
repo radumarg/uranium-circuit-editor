@@ -90,6 +90,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import SingleBitGate from "./SingleBitGate";
 import { createDragImageGhost } from "../store/modules/utils.js";
 export default {
@@ -115,7 +116,7 @@ export default {
   computed: {
     gateImageSrcEditor: function() {
       if (this.img) {
-        if (window.useColoredGates){
+        if (Vue.$cookies.get('colored-gates') === 'true'){
           if (this.root.includes("1/2^")){
              let k = parseInt(this.root.replace("1/2^", ""));
              if (k >= 2 && k <= 35){

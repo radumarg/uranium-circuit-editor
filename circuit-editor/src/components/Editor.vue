@@ -232,6 +232,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { mapGetters } from "vuex";
 import EmptyCell from "./EmptyCell";
 import ZeroState from "./ZeroState";
@@ -318,7 +319,7 @@ export default {
   created() {
     this.$root.$on("switchThemeLight", boolFlag => {
       if (boolFlag) {
-        if(window.useColoredGates){
+        if(Vue.$cookies.get('colored-gates') === 'true'){
           this.$refs["gatesTable"].style.backgroundColor = "ghostwhite";
           this.$refs["gatesTable"].style.borderTopColor = "ghostwhite";
         } else {

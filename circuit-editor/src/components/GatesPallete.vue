@@ -312,7 +312,7 @@ export default {
       var cells = document.getElementById("gates-pallete").getElementsByTagName("td");
       for(let i = 0; i < cells.length; i++) {
         let img = cells[i].childNodes[0];
-        if (window.useColoredGates){
+        if (Vue.$cookies.get('colored-gates') === 'true'){
           if (img.title.includes("ctrl-")){
             img.src = require("../assets/colored-gates/" + img.title + "-1.svg");     
           } else if (img.title == "toffoli") { 

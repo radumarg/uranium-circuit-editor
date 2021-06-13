@@ -38,15 +38,11 @@ Vue.config.productionTip = false;
 // Setup cookies in case no cookie is set
 let useColoreGates = Vue.$cookies.get('colored-gates');
 if (useColoreGates == null){
-  Vue.$cookies.set('colored-gates', true);
-  window.useColoredGates = true;
-} else {
-  window.useColoredGates = useColoreGates;
+  Vue.$cookies.set('colored-gates', 'true');
 }
-
 let useLightTheme = Vue.$cookies.get('light-theme');
 if (useLightTheme == null){
-  Vue.$cookies.set('light-theme', true);
+  Vue.$cookies.set('light-theme', 'true');
 }
 
 new Vue({

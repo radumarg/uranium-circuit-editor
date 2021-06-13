@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import ControlVerticalTransitionCellBase from "./ControlVerticalTransitionCellBase";
 export default {
   name: "VerticalTransitionCellLong",
@@ -14,7 +15,7 @@ export default {
   },
   computed: {
     gateImageSource: function() {
-      if (window.useColoredGates){
+      if (Vue.$cookies.get('colored-gates') === 'true'){
         return require("../assets/colored-gates/" + this.name + ".svg");
       } else {
         return require("../assets/blue-gates/" + this.name + ".svg");
@@ -24,7 +25,7 @@ export default {
   methods: {
     handleDragLeave() {
       var image = window.document.getElementById(this.id);
-      if (window.useColoredGates){
+      if (Vue.$cookies.get('colored-gates') === 'true'){
         image.src = require("../assets/colored-gates/" + this.name + ".svg");
       } else {
         image.src = require("../assets/blue-gates/" + this.name + ".svg");
