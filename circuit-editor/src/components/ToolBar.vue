@@ -112,7 +112,7 @@ import { mapActions, mapGetters } from 'vuex';
 import * as htmlToImage from 'html-to-image';
 import { getNoQbits, getNoSteps} from "../store/modules/gatesTable.js";
 import {save_circuit} from "../store/modules/circuitSaveAndRetrieve.js";
-
+import { getNumberOfRowsThatFit, getNumberOfColumnsThatFit } from "../store/modules/gatesTable.js";
 export default {
   name: "ToolBar",
   data() {
@@ -191,9 +191,18 @@ export default {
     handleSaveStepsAndQbits: function(){
       let qbitsNew = Math.max(this.getMaximumQbitIndex() + 1, this.$data.qbitsNew);
       let stepsNew = Math.max(this.getMaximumStepIndex() + 1, this.$data.stepsNew);
+      let qubitsThatFitScreen = getNumberOfRowsThatFit() / 2;
+      let stepsThatFitScreen = getNumberOfColumnsThatFit() / 2;
       let newrows = 2 * qbitsNew;
       let newcolumns = 2 * stepsNew;
       if (newrows != window.gatesTable.rows || newcolumns != window.gatesTable.columns){
+        if (qbitsNew < qubitsThatFitScreen || stepsNew < stepsThatFitScreen) {
+          if (!confirm("Unused higher end steps and qubits are simply being ignored. \
+While you are allowed to reduce the number of steps or qubits under the area of circuit that fits your display, \
+it does not make much sense doing that unless you intend to save the circuit as an SVG image next. Do you want to continue?")) {
+           return;
+          }
+        }
         window.gatesTable.rows = newrows;
         window.gatesTable.columns = newcolumns;
         this.$refs['change-steps-qubits-dialog'].hide();
