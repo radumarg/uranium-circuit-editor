@@ -1,0 +1,15 @@
+{
+  "name": "moara_js",
+  "collaborators": [
+    "Sorin Bolos <sorinalbolos@yahoo.com>"
+  ],
+  "version": "0.1.0",
+  "files": [
+    "moara_js_bg.wasm",
+    "moara_js.js",
+    "moara_js.d.ts"
+  ],
+  "module": "moara_js.js",
+  "types": "moara_js.d.ts",
+  "sideEffects": false
+}

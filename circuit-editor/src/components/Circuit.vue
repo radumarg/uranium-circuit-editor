@@ -75,11 +75,11 @@ export default {
         this.$root.$emit("showSpinners");
         var element = document.getElementById("editor2");
         var positionInfo = element.getBoundingClientRect();
-        setTimeout(this.triggerSimulationJob, 1000, circuitState, positionInfo);
+        this.triggerSimulationJob(circuitState, positionInfo); 
       } 
     },
-    triggerSimulationJob: function(circuitState, positionInfo){
-      let stateVector = getStateVector(circuitState);
+    triggerSimulationJob:  async function(circuitState, positionInfo){
+      let stateVector = await getStateVector(circuitState);
       this.$root.$emit("showColumnChart", stateVector, positionInfo.width, positionInfo.height);
       this.$root.$emit("showPieChart", getTopEntriesStateVector(stateVector), positionInfo.width, positionInfo.height);
     },
