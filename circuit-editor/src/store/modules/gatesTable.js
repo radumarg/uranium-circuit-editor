@@ -329,7 +329,7 @@ export function retrieveRowsInGatesTable(circuitState) {
   // decrease except when a new circuit is created. Here we adjust
   // no of rows and columns if more qbits or steps were added to circuit.
   window.gatesTable.rows = Math.max(2 * qbits + 2, window.gatesTable.rows);
-  window.gatesTable.columns = Math.max(2 * steps + 2, window.gatesTable.columns);
+  window.gatesTable.columns = Math.max(2 * steps + 2, window.gatesTable.columns + 2);
   
   return window.gatesTable.rows;
 }
