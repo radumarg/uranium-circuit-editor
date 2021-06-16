@@ -13,6 +13,7 @@ import { mapGetters } from "vuex";
 import JSCharting from 'jscharting-vue';
 import { JSC } from 'jscharting-vue';
 import { getStateVector, getBinnedStateVector} from "../store/modules/simulationCharts.js";
+//import { max } from 'jscharting';
 
 export default {
    name: 'columnChart',
@@ -21,6 +22,7 @@ export default {
          chartOptions: {
             type: 'horizontal column',
             axisToZoom: "x",
+            yAxis_label_text: "Probability",
             legend_visible: false,
             toolbar: {
                items: {
@@ -40,6 +42,11 @@ export default {
                   points: []
                }
             ],
+            yAxis: {
+               scale: {
+                  range: { min: 0}
+               }
+            },
             events_selection: this.selectionHandler, 
          },
          stateVector: undefined,

@@ -33,6 +33,8 @@ export default {
          chartOptions: {
             type: 'vertical column',
             axisToZoom: "x",
+            xAxis_label_text: "Quantum State",
+            yAxis_label_text: "Probability",
             toolbar: {
                items: {
                   RESET: {
@@ -113,6 +115,11 @@ export default {
                   points: []
                }
             ],
+            yAxis: {
+               scale: {
+                  range: { min: 0}
+               }
+            },
             events_selection: this.selectionHandler, 
          },
          stateVector: undefined,
