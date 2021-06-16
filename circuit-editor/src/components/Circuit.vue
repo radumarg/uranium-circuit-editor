@@ -97,6 +97,8 @@ export default {
       } else {
         splittedEditor.style.display = "none";
       }
+
+      this.$refs.circuitTab.activate();
     },
     switchToEditorTab: function(){
       this.$refs.circuitTab.activate();
