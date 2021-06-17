@@ -44,6 +44,10 @@ let useDarkTheme = Vue.$cookies.get('dark-theme');
 if (useDarkTheme == null){
   Vue.$cookies.set('dark-theme', 'false');
 }
+let liveSimulation = Vue.$cookies.get('live-simulation');
+if (liveSimulation == null){
+  Vue.$cookies.set('live-simulation', 'true');
+}
 
 new Vue({
   store,
