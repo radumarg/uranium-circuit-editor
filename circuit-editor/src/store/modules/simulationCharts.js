@@ -83,15 +83,20 @@ export function getBinnedStateVector(fullStateVector, min, max, numberOfBins) {
             }
         } else {
             let accumulator = 0.0;
+            let istart = 0;
             let binWidth = Math.ceil((max - min) / numberOfBins);
             for (let i = min; i < max; i++) {
                 if (fullStateVector.length > 0) {
                     accumulator += fullStateVector[i].y;
                 }
                 if ((i > min) && ((i - min) % binWidth == 0)){
-                    binnedStateVector.push({ x: toState(i, qubits), y: accumulator });
+                    binnedStateVector.push({ x: toState(istart, qubits) + '/' + toState(i, qubits), y: accumulator });
                     accumulator = 0.0;
+                    istart = i + 1;
                 }
+            }
+            if (accumulator > 0){
+                binnedStateVector.push({ x: toState(istart, qubits) + '/' + toState(max - 1,  qubits), y: accumulator });
             }
         }
     }
