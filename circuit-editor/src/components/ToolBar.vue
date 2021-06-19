@@ -32,6 +32,9 @@
             <td>
               <md-checkbox class="md-primary" v-model="colorGates" v-on:change="switchGateColors()">Color Gates</md-checkbox>
             </td>
+            <td>
+              <md-checkbox class="md-primary" v-model="statesAreShownInBase2" v-on:change="switchLegendBase()">Base-2 States</md-checkbox>
+            </td>
           </tr>
         </table>
       </div>
@@ -120,6 +123,7 @@ export default {
       darkTheme: Vue.$cookies.get("dark-theme") === 'true',
       colorGates: Vue.$cookies.get("colored-gates") === 'true',
       liveSimulation: Vue.$cookies.get("live-simulation") === 'true',
+      statesAreShownInBase2: Vue.$cookies.get("legend-base") === '2',
       closeIsHovered: false,
       saveIsHovered:  false,
       qbitsNew: 0,
@@ -276,6 +280,13 @@ it does not make much sense doing that unless you intend to save the circuit as 
       this.$root.$emit("switchThemeDark", this.darkTheme);
       this.$root.$emit("switchGateColors");
       this.refreshCircuit();
+    },
+    switchLegendBase: function(){
+      if (this.statesAreShownInBase2 == true){
+        Vue.$cookies.set('legend-base', '2');
+      } else {
+        Vue.$cookies.set('legend-base', '10');
+      }
     },
     switchSimulationMode: function(){
       Vue.$cookies.set('live-simulation', this.liveSimulation);

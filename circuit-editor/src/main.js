@@ -48,6 +48,10 @@ let liveSimulation = Vue.$cookies.get('live-simulation');
 if (liveSimulation == null){
   Vue.$cookies.set('live-simulation', 'true');
 }
+let legendBase = Vue.$cookies.get('legend-base');
+if (legendBase == null){
+  Vue.$cookies.set('legendBase', '2');
+}
 
 new Vue({
   store,

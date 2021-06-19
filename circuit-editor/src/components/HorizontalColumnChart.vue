@@ -102,6 +102,8 @@ export default {
          if (this.$data.maxRange - this.$data.minRange > numberOfBins)
          {
             var yRange = JSC.sortBy(ev.xAxis);
+            yRange[0] = Math.floor(yRange[0]);
+            yRange[1] = Math.ceil(yRange[1]);
             yRange[0] = Math.max(0.0, yRange[0]);
             yRange[1] = Math.max(0.0, yRange[1]);
             if (yRange[1] > 0.0){

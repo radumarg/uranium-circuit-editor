@@ -1,15 +1,20 @@
+import Vue from 'vue';
 import init, { get_probabilities } from './wasm/moara_js.js'
 
-function toState(dec, totalLength) {
+function toState(dec, totalLength, base) {
+
+    if (base === '10'){
+        return dec.toString();
+    } 
 
     // only works for postive numbers
     let state = dec.toString(2);
-    
+
     let output = "";
     for (let i = 0; i < totalLength - state.length; ++i){
         output = "0".concat(output);
     }
-    
+
     return output.concat(state);
 }
 
@@ -66,6 +71,8 @@ export function getBinnedStateVector(fullStateVector, min, max, numberOfBins) {
         qubits = Math.log2(fullStateVector.length);
     }
 
+    let quantumStatesBase = Vue.$cookies.get('legend-base');
+    
     if (fullStateVector != undefined) {
 
         if (fullStateVector.length == 0) {
@@ -76,9 +83,9 @@ export function getBinnedStateVector(fullStateVector, min, max, numberOfBins) {
         if ((max - min) <= numberOfBins){
             for (let i = min; i < max; i++) {
                 if (fullStateVector.length > 0) {
-                    binnedStateVector.push({ x: toState(i, qubits), y: fullStateVector[i].y });
+                    binnedStateVector.push({ x: toState(i, qubits, quantumStatesBase), y: fullStateVector[i].y });
                 } else {
-                    binnedStateVector.push({ x: toState(i, qubits), y: 0.0 }); 
+                    binnedStateVector.push({ x: toState(i, qubits, quantumStatesBase), y: 0.0 }); 
                 }
             }
         } else {
@@ -90,13 +97,13 @@ export function getBinnedStateVector(fullStateVector, min, max, numberOfBins) {
                     accumulator += fullStateVector[i].y;
                 }
                 if ((i > min) && ((i - min) % binWidth == 0)){
-                    binnedStateVector.push({ x: toState(istart, qubits) + '/' + toState(i, qubits), y: accumulator });
+                    binnedStateVector.push({ x: toState(istart, qubits, quantumStatesBase) + '/' + toState(i, qubits, quantumStatesBase), y: accumulator });
                     accumulator = 0.0;
                     istart = i + 1;
                 }
             }
             if (accumulator > 0){
-                binnedStateVector.push({ x: toState(istart, qubits) + '/' + toState(max - 1,  qubits), y: accumulator });
+                binnedStateVector.push({ x: toState(istart, qubits, quantumStatesBase) + '/' + toState(max - 1,  qubits, quantumStatesBase), y: accumulator });
             }
         }
     }
