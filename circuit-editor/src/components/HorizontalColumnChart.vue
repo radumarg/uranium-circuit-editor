@@ -143,6 +143,7 @@ export default {
    },
    created() {
       this.$root.$on('triggerSimulationRun', (circuitState) => {this.runSimulation(circuitState)});
+      this.$root.$on('switchLegendBase', () => {this.runSimulation(this.$store.state.circuitEditorModule)});
       this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.updateView(simulatingLive)});
    },
 }

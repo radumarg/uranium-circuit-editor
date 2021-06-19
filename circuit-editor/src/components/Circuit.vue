@@ -107,6 +107,7 @@ export default {
   created() {
       this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.adjustView(simulatingLive)});
       this.$root.$on('circuitModifiedFromMenu', () => {this.switchToEditorTab()});
+      this.$root.$on('switchLegendBase', () => {this.switchToEditorTab(); this.$data.lastSimulatedCircuit = null;});
    },
 };
 </script>

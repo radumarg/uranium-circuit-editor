@@ -33,7 +33,7 @@
               <md-checkbox class="md-primary" v-model="colorGates" v-on:change="switchGateColors()">Color Gates</md-checkbox>
             </td>
             <td>
-              <md-checkbox class="md-primary" v-model="statesAreShownInBase2" v-on:change="switchLegendBase()">Base-2 States</md-checkbox>
+              <md-checkbox class="md-primary" v-model="statesAreShownInBase2" v-on:change="switchLegendBase()">Base 2 States</md-checkbox>
             </td>
           </tr>
         </table>
@@ -287,6 +287,7 @@ it does not make much sense doing that unless you intend to save the circuit as 
       } else {
         Vue.$cookies.set('legend-base', '10');
       }
+      this.$root.$emit("switchLegendBase");
     },
     switchSimulationMode: function(){
       Vue.$cookies.set('live-simulation', this.liveSimulation);
