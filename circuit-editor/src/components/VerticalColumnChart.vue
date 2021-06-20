@@ -123,6 +123,7 @@ export default {
                  label_style_fontWeight: 'norma',
                  gridLine_color: ['crimson', 0.1]
                },
+               formatString: 'F6',
             },
             events_selection: this.selectionHandler, 
          },

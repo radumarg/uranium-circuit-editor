@@ -45,11 +45,8 @@ export default {
             yAxis: {
                scale: {
                   range: { min: 0},
-                  defaultTick: {
-                     label_style_fontWeight: 'normal',
-                     gridLine_color: ['crimson', 0.1]
-                  }
                },
+               formatString: 'F6',
             },
             events_selection: this.selectionHandler, 
          },
