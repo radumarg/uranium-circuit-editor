@@ -200,16 +200,16 @@ export function seatsAreTaken(circuitState, reallocatableQbits, proposedQbits, s
             }
             // get range of qbits affected when displaying this gate
             let qbits = [target, target2, control, control2].filter(
-              (qbit) => Boolean(qbit)
+              (qbit) => (qbit != null)
             );
-
+            
             let qmin = Math.min(...qbits);
             let qmax = Math.max(...qbits);
             let qminExisting = reallocatableQbits ? Math.min(...reallocatableQbits) : null;
             let qmaxExisting = reallocatableQbits ? Math.max(...reallocatableQbits) : null;
             let qminProposed = Math.min(...proposedQbits);
             let qmaxProposed = Math.max(...proposedQbits);
-
+            
             for (let q = qminProposed; q <= qmaxProposed; q++) {
               if (reallocatableQbits && (qminExisting <= q) && (q <= qmaxExisting)) {
                 // we know this seat can be allocated to a new gate
