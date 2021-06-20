@@ -91,17 +91,18 @@ export default {
                         layout: 'vertical',
                         margin: 0,
                         fill: 'rgb(255,255,255)',
-                        outline: { color: 'rgb(123,123,123)' }
+                        outline: { color: 'rgb(123,123,123)' },
                      }
                   },
                }
             },
+            yAxis_formatString: 'F6',
             series: [
                {
                   name: 'Probability',
                   points: []
                }
-            ]
+            ],
          }
       }
    },
