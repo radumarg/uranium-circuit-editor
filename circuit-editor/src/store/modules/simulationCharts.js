@@ -18,8 +18,8 @@ function toState(dec, totalLength, base) {
     return output.concat(state);
 }
 
-export async function getStateVector(circuitState) {
-    let stateVector = [];
+export async function getStateProbabilities(circuitState) {
+    let stateProbabilities = [];
 
     if (circuitState != undefined) {
         let serializedCircuit = JSON.stringify(circuitState);
@@ -27,26 +27,26 @@ export async function getStateVector(circuitState) {
         let probabilities = get_probabilities(serializedCircuit);
 
         for (let i = 0; i < probabilities.length; i++) {
-            stateVector[i] = { x: i, y: probabilities[i] };
+            stateProbabilities[i] = { x: i, y: probabilities[i] };
         }
     }
 
-    return stateVector;
+    return stateProbabilities;
 }
 
-export function getTopEntriesStateVector(stateVector) {
+export function getTopEntriesStateProbabilities(stateProbabilities) {
 
-    if (stateVector === undefined){
+    if (stateProbabilities === undefined){
         return [];
     }
 
     let qubits = 0;
-    if (stateVector.length > 0) {
-        qubits = Math.log2(stateVector.length);
+    if (stateProbabilities.length > 0) {
+        qubits = Math.log2(stateProbabilities.length);
     }
 
-    stateVector.sort(function(a, b){return (b.y - a.y)});
-    let topEntries = stateVector.slice(0, Math.min(20, stateVector.length));
+    stateProbabilities.sort(function(a, b){return (b.y - a.y)});
+    let topEntries = stateProbabilities.slice(0, Math.min(20, stateProbabilities.length));
 
     let result = [];
 
@@ -63,29 +63,31 @@ export function getTopEntriesStateVector(stateVector) {
     return result;
 }
 
-export function getBinnedStateVector(fullStateVector, min, max, numberOfBins) {
+export function getBinnedProbabilities(fullStateProbabilities, min, max, numberOfBins) {
     
-    let binnedStateVector = [];
+    let binnedStateProbabilities = [];
     let qubits = 0;
-    if (fullStateVector.length > 0) {
-        qubits = Math.log2(fullStateVector.length);
+    let maxProbability = 0;
+    if (fullStateProbabilities.length > 0) {
+        qubits = Math.log2(fullStateProbabilities.length);
     }
 
     let quantumStatesBase = Vue.$cookies.get('legend-base');
     
-    if (fullStateVector != undefined) {
+    if (fullStateProbabilities != undefined) {
 
-        if (fullStateVector.length == 0) {
+        if (fullStateProbabilities.length == 0) {
             // display empty graph if state vector is empty
             numberOfBins = 32;
         }
 
         if ((max - min) <= numberOfBins){
             for (let i = min; i < max; i++) {
-                if (fullStateVector.length > 0) {
-                    binnedStateVector.push({ x: toState(i, qubits, quantumStatesBase), y: fullStateVector[i].y });
+                if (fullStateProbabilities.length > 0) {
+                    binnedStateProbabilities.push({ x: toState(i, qubits, quantumStatesBase), y: fullStateProbabilities[i].y });
+                    maxProbability = Math.max(maxProbability, fullStateProbabilities[i].y);
                 } else {
-                    binnedStateVector.push({ x: toState(i, qubits, quantumStatesBase), y: 0.0 }); 
+                    binnedStateProbabilities.push({ x: toState(i, qubits, quantumStatesBase), y: 0.0 }); 
                 }
             }
         } else {
@@ -93,20 +95,22 @@ export function getBinnedStateVector(fullStateVector, min, max, numberOfBins) {
             let istart = 0;
             let binWidth = Math.ceil((max - min) / numberOfBins);
             for (let i = min; i < max; i++) {
-                if (fullStateVector.length > 0) {
-                    accumulator += fullStateVector[i].y;
+                if (fullStateProbabilities.length > 0) {
+                    accumulator += fullStateProbabilities[i].y;
                 }
                 if ((i > min) && ((i - min) % binWidth == 0)){
-                    binnedStateVector.push({ x: toState(istart, qubits, quantumStatesBase) + '/' + toState(i, qubits, quantumStatesBase), y: accumulator });
+                    binnedStateProbabilities.push({ x: toState(istart, qubits, quantumStatesBase) + '/' + toState(i, qubits, quantumStatesBase), y: accumulator });
+                    maxProbability = Math.max(maxProbability, accumulator);
                     accumulator = 0.0;
                     istart = i + 1;
                 }
             }
             if (accumulator > 0){
-                binnedStateVector.push({ x: toState(istart, qubits, quantumStatesBase) + '/' + toState(max - 1,  qubits, quantumStatesBase), y: accumulator });
+                binnedStateProbabilities.push({ x: toState(istart, qubits, quantumStatesBase) + '/' + toState(max - 1,  qubits, quantumStatesBase), y: accumulator });
+                maxProbability = Math.max(maxProbability, accumulator);
             }
         }
     }
 
-    return binnedStateVector;
+    return [binnedStateProbabilities, maxProbability];
 }

@@ -106,13 +106,13 @@ export default {
       }
    },
    methods: {
-      updateData(topEntriesStateVector) {
+      updateData(topEntriesStateProbabilities) {
          this.$data.chartOptions = {
             type: 'pie',
             series: [
                {
                   name: 'Probability',
-                  points: topEntriesStateVector
+                  points: topEntriesStateProbabilities
                }
             ]
          };
@@ -123,12 +123,12 @@ export default {
          let spinnerDiv = document.getElementById("spinnerContainerPie");
          spinnerDiv.style.display = "block";
       },
-      showChart: function (topEntriesStateVector, width, height) {
+      showChart: function (topEntriesStateProbabilities, width, height) {
          let element = document.getElementById("pieChart");
          element.style.width = parseInt(width - 150) + "px";
          element.style.height = parseInt(height - 150) + "px";
 
-         this.updateData(topEntriesStateVector);
+         this.updateData(topEntriesStateProbabilities);
          let spinnerDiv = document.getElementById("spinnerContainerPie");
          spinnerDiv.style.display = "none";
          let chartDiv = document.getElementById("chartContainerPie");
@@ -144,7 +144,7 @@ export default {
    },
    created() {
       this.$root.$on('showSpinners', () => {this.showSpinner()});
-      this.$root.$on('showPieChart', (topEntriesStateVector, width, height) => {this.showChart(topEntriesStateVector, width, height)});
+      this.$root.$on('showPieChart', (topEntriesStateProbabilities, width, height) => {this.showChart(topEntriesStateProbabilities, width, height)});
    },
 }
 </script>

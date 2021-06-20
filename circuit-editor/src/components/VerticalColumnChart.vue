@@ -24,7 +24,7 @@
 import JSCharting from 'jscharting-vue';
 import { mapGetters } from "vuex";
 import { JSC } from 'jscharting-vue';
-import { getBinnedStateVector } from "../store/modules/simulationCharts.js";
+import { getBinnedProbabilities } from "../store/modules/simulationCharts.js";
 
 export default {
    name: 'columnChart',
@@ -117,12 +117,16 @@ export default {
             ],
             yAxis: {
                scale: {
-                  range: { min: 0}
-               }
+                  range: { min: 0},
+               },
+               defaultTick: {
+                 label_style_fontWeight: 'norma',
+                 gridLine_color: ['crimson', 0.1]
+               },
             },
             events_selection: this.selectionHandler, 
          },
-         stateVector: undefined,
+         stateProbabilities: undefined,
          minRange: undefined, 
          maxRange: undefined,
          qubits: 0,
@@ -131,14 +135,21 @@ export default {
    },
    methods: {
       ...mapGetters("circuitEditorModule/", ["getMaximumQbitIndex"]),
-      updateData(binnedStateVector) {
+      updateData(probabilitiesDTO) {
+         const [binnedStateProbabilities, maxProbability] = probabilitiesDTO;
          this.$data.chartOptions = {
             series: [
                {
-                  points: binnedStateVector,
+                  points: binnedStateProbabilities,
                   color: "#448AFF"
                }
             ],
+            yAxis: {
+               scale: {
+                  range: { min: 0, max: maxProbability * 1.2},
+                  interval: maxProbability/10.0,
+               }
+            },
          };
       },
       showSpinner: function () {
@@ -147,10 +158,10 @@ export default {
          let spinnerDiv = document.getElementById("spinnerContainerColumns");
          spinnerDiv.style.display = "block";
       },
-      showChart: function (stateVector, width, height) {
+      showChart: function (stateProbabilities, width, height) {
          
          // save state vector
-         this.$data.stateVector = [...stateVector];
+         this.$data.stateProbabilities = [...stateProbabilities];
 
          // reset plot range if number of qubits has changed
          let maxQubitIndex = this.getMaximumQbitIndex();
@@ -160,13 +171,13 @@ export default {
             this.$data.qubits = 0;
          } else if (this.$data.qubits != maxQubitIndex + 1){
             this.$data.minRange = 0;
-            this.$data.maxRange = this.$data.stateVector.length;
+            this.$data.maxRange = this.$data.stateProbabilities.length;
             this.$data.qubits = maxQubitIndex + 1;
          }
 
          // update plot
-         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateVector.length);
-         this.updateData(getBinnedStateVector(this.$data.stateVector, this.$data.minRange, this.$data.maxRange, numberOfBins));
+         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateProbabilities.length);
+         this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, this.$data.minRange, this.$data.maxRange, numberOfBins));
 
          // adjust chart size
          let element = document.getElementById("columnChart");
@@ -180,7 +191,7 @@ export default {
          chartDiv.style.display = "block";
       },
       selectionHandler(ev) { 
-         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateVector.length);
+         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateProbabilities.length);
          if (this.$data.maxRange - this.$data.minRange > numberOfBins)
          {
             var yRange = JSC.sortBy(ev.xAxis);
@@ -199,16 +210,16 @@ export default {
                   this.$data.minRange = Math.floor(mid - numberOfBins / 2.0);
                   this.$data.maxRange = Math.ceil(mid + numberOfBins / 2.0);
                }
-               this.updateData(getBinnedStateVector(this.$data.stateVector, this.$data.minRange, this.$data.maxRange, numberOfBins));
+               this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, this.$data.minRange, this.$data.maxRange, numberOfBins));
             }
          }
          return false; 
       },
       reset(){ 
          this.$data.minRange = 0;
-         this.$data.maxRange = this.$data.stateVector.length;
-         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateVector.length);
-         this.updateData(getBinnedStateVector(this.$data.stateVector, 0, this.$data.stateVector.length, numberOfBins));
+         this.$data.maxRange = this.$data.stateProbabilities.length;
+         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateProbabilities.length);
+         this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, 0, this.$data.stateProbabilities.length, numberOfBins));
       },
    },
    options: {
@@ -221,7 +232,7 @@ export default {
    },
    created() {
       this.$root.$on('showSpinners', () => {this.showSpinner()});
-      this.$root.$on('showColumnChart', (stateVector, width, height) => {this.showChart(stateVector, width, height)});
+      this.$root.$on('showColumnChart', (stateProbabilities, width, height) => {this.showChart(stateProbabilities, width, height)});
    },
 }
 </script>

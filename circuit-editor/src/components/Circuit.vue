@@ -34,7 +34,7 @@ import Editor from "./Editor";
 import HorizontalColumnChart from "./HorizontalColumnChart";
 import VerticalColumnChart from "./VerticalColumnChart";
 import PieChart from "./PieChart";
-import { getStateVector, getTopEntriesStateVector } from "../store/modules/simulationCharts.js";
+import { getStateProbabilities, getTopEntriesStateProbabilities } from "../store/modules/simulationCharts.js";
 
 export default {
   name: "App",
@@ -79,9 +79,9 @@ export default {
       } 
     },
     triggerSimulationJob:  async function(circuitState, positionInfo){
-      let stateVector = await getStateVector(circuitState);
-      this.$root.$emit("showColumnChart", stateVector, positionInfo.width, positionInfo.height);
-      this.$root.$emit("showPieChart", getTopEntriesStateVector(stateVector), positionInfo.width, positionInfo.height);
+      let stateProbabilities = await getStateProbabilities(circuitState);
+      this.$root.$emit("showColumnChart", stateProbabilities, positionInfo.width, positionInfo.height);
+      this.$root.$emit("showPieChart", getTopEntriesStateProbabilities(stateProbabilities), positionInfo.width, positionInfo.height);
     },
     adjustView: function(simulatingLive){
       let tabbedEditor = document.getElementById("tabbedEditor");

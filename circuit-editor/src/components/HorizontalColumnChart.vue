@@ -12,7 +12,7 @@ import Vue from 'vue';
 import { mapGetters } from "vuex";
 import JSCharting from 'jscharting-vue';
 import { JSC } from 'jscharting-vue';
-import { getStateVector, getBinnedStateVector} from "../store/modules/simulationCharts.js";
+import { getStateProbabilities, getBinnedProbabilities} from "../store/modules/simulationCharts.js";
 //import { max } from 'jscharting';
 
 export default {
@@ -44,12 +44,16 @@ export default {
             ],
             yAxis: {
                scale: {
-                  range: { min: 0}
-               }
+                  range: { min: 0},
+                  defaultTick: {
+                     label_style_fontWeight: 'normal',
+                     gridLine_color: ['crimson', 0.1]
+                  }
+               },
             },
             events_selection: this.selectionHandler, 
          },
-         stateVector: undefined,
+         stateProbabilities: undefined,
          minRange: undefined, 
          maxRange: undefined,
          tooManyQubitsAlertShown: false,
@@ -60,45 +64,52 @@ export default {
    },
    methods: {
       ...mapGetters("circuitEditorModule/", ["getMaximumQbitIndex"]),
-      updateData(binnedStateVector) {
+      updateData(probabilitiesDTO) {
+         const [binnedStateProbabilities, maxProbability] = probabilitiesDTO;
          this.$data.chartOptions = {
             series: [
                {
-                  points: binnedStateVector,
+                  points: binnedStateProbabilities,
                   color: "#448AFF"
                }
             ],
+            yAxis: {
+               scale: {
+                  range: { min: 0, max: maxProbability * 1.01},
+                  interval: maxProbability/5.0,
+               }
+            },
          };
       },
       runSimulation: async function (circuitState) {
          if (this.$data.liveSimulation == true) {
             let maxQubitIndex = this.getMaximumQbitIndex();
             if (maxQubitIndex == -1){
-               this.$data.stateVector = [];
+               this.$data.stateProbabilities = [];
                this.$data.minRange = 0;
                this.$data.maxRange = 1024;
                this.$data.qubits = 0;
             } else if (maxQubitIndex < 20){
-               let stateVector = await getStateVector(circuitState);
-               this.$data.stateVector = [...stateVector];
+               let stateProbabilities = await getStateProbabilities(circuitState);
+               this.$data.stateProbabilities = [...stateProbabilities];
                if (this.$data.qubits != maxQubitIndex + 1){
                   this.$data.minRange = 0;
-                  this.$data.maxRange = this.$data.stateVector.length;
+                  this.$data.maxRange = this.$data.stateProbabilities.length;
                }
             } else {
                if (!this.$data.tooManyQubitsAlertShown) {
                   this.$data.tooManyQubitsAlertShown = true;
                   alert("At most 20 qubits can be simulated in live simulation mode! We suggest to uncheck the live simulation checkbox or reduce the number of qubits.");
                }
-               this.$data.stateVector = [];   
+               this.$data.stateProbabilities = [];   
             }
             this.$data.qubits = maxQubitIndex + 1;
-            let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateVector.length);
-            this.updateData(getBinnedStateVector(this.$data.stateVector, this.$data.minRange, this.$data.maxRange, numberOfBins));
+            let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateProbabilities.length);
+            this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, this.$data.minRange, this.$data.maxRange, numberOfBins));
          }        
       },
       selectionHandler(ev) { 
-         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateVector.length);
+         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateProbabilities.length);
          if (this.$data.maxRange - this.$data.minRange > numberOfBins)
          {
             var yRange = JSC.sortBy(ev.xAxis);
@@ -117,16 +128,16 @@ export default {
                   this.$data.minRange = Math.floor(mid - numberOfBins / 2.0);
                   this.$data.maxRange = Math.ceil(mid + numberOfBins / 2.0);
                }
-               this.updateData(getBinnedStateVector(this.$data.stateVector, this.$data.minRange, this.$data.maxRange, numberOfBins));
+               this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, this.$data.minRange, this.$data.maxRange, numberOfBins));
             }
          }
          return false; 
       }, 
       reset(){ 
          this.$data.minRange = 0;
-         this.$data.maxRange = this.$data.stateVector.length;
-         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateVector.length);
-         this.updateData(getBinnedStateVector(this.$data.stateVector, 0, this.$data.stateVector.length, numberOfBins));
+         this.$data.maxRange = this.$data.stateProbabilities.length;
+         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateProbabilities.length);
+         this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, 0, this.$data.stateProbabilities.length, numberOfBins));
    },
       updateView(simulatingLive){
          this.$data.liveSimulation = simulatingLive;
