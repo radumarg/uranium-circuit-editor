@@ -162,7 +162,7 @@ export default {
       showChart: function (stateProbabilities, width, height) {
          
          // save state vector
-         this.$data.stateProbabilities = [...stateProbabilities];
+         this.$data.stateProbabilities = stateProbabilities;
 
          // reset plot range if number of qubits has changed
          let maxQubitIndex = this.getMaximumQbitIndex();

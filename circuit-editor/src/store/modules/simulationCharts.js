@@ -19,19 +19,14 @@ function toState(dec, totalLength, base) {
 }
 
 export async function getStateProbabilities(circuitState) {
-    let stateProbabilities = [];
 
     if (circuitState != undefined) {
         let serializedCircuit = JSON.stringify(circuitState);
         await init('./wasm/moara_js_bg.wasm');
-        let probabilities = get_probabilities(serializedCircuit);
-
-        for (let i = 0; i < probabilities.length; i++) {
-            stateProbabilities[i] = { x: i, y: probabilities[i] };
-        }
+        return get_probabilities(serializedCircuit);
     }
 
-    return stateProbabilities;
+    return []
 }
 
 export function getTopEntriesStateProbabilities(stateProbabilities) {
@@ -45,15 +40,15 @@ export function getTopEntriesStateProbabilities(stateProbabilities) {
         qubits = Math.log2(stateProbabilities.length);
     }
 
-    stateProbabilities.sort(function(a, b){return (b.y - a.y)});
+    stateProbabilities.sort(function(a, b){return (b - a)});
     let topEntries = stateProbabilities.slice(0, Math.min(20, stateProbabilities.length));
 
     let result = [];
 
     let probability = 0.0;
     for (let i = 0; i < topEntries.length; i++){
-        probability += topEntries[i].y;
-        result.push({ x: toState(i, qubits), y: topEntries[i].y })
+        probability += topEntries[i];
+        result.push({ x: toState(i, qubits), y: topEntries[i] })
     }
 
     if (probability < 1){
@@ -84,8 +79,8 @@ export function getBinnedProbabilities(fullStateProbabilities, min, max, numberO
         if ((max - min) <= numberOfBins){
             for (let i = min; i < max; i++) {
                 if (fullStateProbabilities.length > 0) {
-                    binnedStateProbabilities.push({ x: toState(i, qubits, quantumStatesBase), y: fullStateProbabilities[i].y });
-                    maxProbability = Math.max(maxProbability, fullStateProbabilities[i].y);
+                    binnedStateProbabilities.push({ x: toState(i, qubits, quantumStatesBase), y: fullStateProbabilities[i] });
+                    maxProbability = Math.max(maxProbability, fullStateProbabilities[i]);
                 } else {
                     binnedStateProbabilities.push({ x: toState(i, qubits, quantumStatesBase), y: 0.0 }); 
                 }
@@ -96,7 +91,7 @@ export function getBinnedProbabilities(fullStateProbabilities, min, max, numberO
             let binWidth = Math.ceil((max - min) / numberOfBins);
             for (let i = min; i < max; i++) {
                 if (fullStateProbabilities.length > 0) {
-                    accumulator += fullStateProbabilities[i].y;
+                    accumulator += fullStateProbabilities[i];
                 }
                 if ((i > min) && ((i - min) % binWidth == 0)){
                     binnedStateProbabilities.push({ x: toState(istart, qubits, quantumStatesBase) + '/' + toState(i, qubits, quantumStatesBase), y: accumulator });

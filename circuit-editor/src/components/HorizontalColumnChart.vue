@@ -13,7 +13,6 @@ import { mapGetters } from "vuex";
 import JSCharting from 'jscharting-vue';
 import { JSC } from 'jscharting-vue';
 import { getStateProbabilities, getBinnedProbabilities} from "../store/modules/simulationCharts.js";
-//import { max } from 'jscharting';
 
 export default {
    name: 'columnChart',
@@ -88,7 +87,7 @@ export default {
                this.$data.qubits = 0;
             } else if (maxQubitIndex < 20){
                let stateProbabilities = await getStateProbabilities(circuitState);
-               this.$data.stateProbabilities = [...stateProbabilities];
+               this.$data.stateProbabilities = stateProbabilities;
                if (this.$data.qubits != maxQubitIndex + 1){
                   this.$data.minRange = 0;
                   this.$data.maxRange = this.$data.stateProbabilities.length;
