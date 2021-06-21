@@ -31,6 +31,8 @@ export async function getStateProbabilities(circuitState) {
 
 export function getTopEntriesStateProbabilities(stateProbabilities) {
 
+    const ENTRIES = 20;
+
     if (stateProbabilities === undefined){
         return [];
     }
@@ -40,12 +42,22 @@ export function getTopEntriesStateProbabilities(stateProbabilities) {
         qubits = Math.log2(stateProbabilities.length);
     }
 
-    stateProbabilities.sort(function(a, b){return (b - a)});
-    let topEntries = stateProbabilities.slice(0, Math.min(20, stateProbabilities.length));
+    let topEntries = [... stateProbabilities.slice(0, Math.min(ENTRIES, stateProbabilities.length))];
+    topEntries.sort(function(a, b){return (b - a)});
+    if (stateProbabilities.length > ENTRIES){
+        for (let i = ENTRIES; i < stateProbabilities.length; i++){
+            let min = Math.min(...topEntries);
+            if (stateProbabilities[i] >= min){
+                topEntries.push(stateProbabilities[i]);
+                topEntries.sort(function(a, b){return (b - a)});
+                topEntries = topEntries.slice(0, ENTRIES);
+            }
+        }
+    }
 
     let result = [];
-
     let probability = 0.0;
+
     for (let i = 0; i < topEntries.length; i++){
         probability += topEntries[i];
         result.push({ x: toState(i, qubits), y: topEntries[i] })
