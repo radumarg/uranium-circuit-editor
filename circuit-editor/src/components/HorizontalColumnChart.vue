@@ -115,16 +115,7 @@ export default {
 
             yRange[0] = Math.max(0.0, yRange[0]);
             yRange[1] = Math.max(0.0, yRange[1]);
-
-            // assume the user really wanted to select 
-            // the range starting from 0
-            if (yRange[0] <= 2) {
-               yRange[0] = 0;
-            }
-            if (yRange[1] >= numberOfBins - 2){
-               yRange[0] = numberOfBins;
-            }
-
+            
             if (yRange[1] > 0.0){
                let min = this.$data.minRange;
                let max = this.$data.maxRange;
