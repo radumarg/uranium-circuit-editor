@@ -109,21 +109,28 @@ export default {
          if (this.$data.maxRange - this.$data.minRange > numberOfBins)
          {
             var yRange = JSC.sortBy(ev.xAxis);
+
             yRange[0] = Math.floor(yRange[0]);
             yRange[1] = Math.ceil(yRange[1]);
+
             yRange[0] = Math.max(0.0, yRange[0]);
             yRange[1] = Math.max(0.0, yRange[1]);
+
+            // assume the user really wanted to select 
+            // the range starting from 0
+            if (yRange[0] <= 2) {
+               yRange[0] = 0;
+            }
+            if (yRange[1] >= numberOfBins - 2){
+               yRange[0] = numberOfBins;
+            }
+
             if (yRange[1] > 0.0){
                let min = this.$data.minRange;
                let max = this.$data.maxRange;
-               let mid = (min + max) / 2.0;
                let delta = max - min;
                this.$data.minRange = Math.floor(min + yRange[0] * delta / numberOfBins);
                this.$data.maxRange = Math.ceil(min + yRange[1] * delta / numberOfBins);
-               if (this.$data.maxRange - this.$data.minRange < numberOfBins){
-                  this.$data.minRange = Math.floor(mid - numberOfBins / 2.0);
-                  this.$data.maxRange = Math.ceil(mid + numberOfBins / 2.0);
-               }
                this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, this.$data.minRange, this.$data.maxRange, numberOfBins));
             }
          }

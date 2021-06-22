@@ -72,52 +72,63 @@ export function getTopEntriesStateProbabilities(stateProbabilities) {
 
 export function getBinnedProbabilities(fullStateProbabilities, min, max, numberOfBins) {
     
+    if (fullStateProbabilities == undefined){
+        return [[], 0]
+    }
+    
     let binnedStateProbabilities = [];
     let qubits = 0;
     let maxProbability = 0;
     if (fullStateProbabilities.length > 0) {
         qubits = Math.log2(fullStateProbabilities.length);
     }
-
-    let quantumStatesBase = Vue.$cookies.get('legend-base');
     
-    if (fullStateProbabilities != undefined) {
+    let quantumStatesBase = Vue.$cookies.get('legend-base');
 
-        if (fullStateProbabilities.length == 0) {
-            // display empty graph if state vector is empty
-            numberOfBins = 32;
-        }
+    let binWidth = Math.round((max - min) / numberOfBins); 
+    let binsBeforeMiddle = Math.floor(numberOfBins/2.0);
+    let middle = Math.floor((max + min)/2.0);
 
-        if ((max - min) <= numberOfBins){
-            for (let i = min; i < max; i++) {
-                if (fullStateProbabilities.length > 0) {
-                    binnedStateProbabilities.push({ x: toState(i, qubits, quantumStatesBase), y: fullStateProbabilities[i] });
-                    maxProbability = Math.max(maxProbability, fullStateProbabilities[i]);
-                } else {
-                    binnedStateProbabilities.push({ x: toState(i, qubits, quantumStatesBase), y: 0.0 }); 
-                }
+    if ((max - min) <= numberOfBins) {
+        min = Math.max(middle - binsBeforeMiddle, 0);
+        max = min + numberOfBins;
+        binWidth = 1;
+    } else {       
+        min = Math.max(middle - binsBeforeMiddle * binWidth, 0);
+        max = min + numberOfBins * binWidth;
+    }
+    
+    if (fullStateProbabilities.length == 0) {
+        // display empty graph if state vector is empty
+        numberOfBins = 2;
+        min = 0;
+        max = 2;
+        binWidth = 1;
+    }
+    
+    let accumulator = 0.0;
+    let istart = 0;
+    for (let i = min; i < max; i++) {
+    
+        if (fullStateProbabilities.length > 0)
+            accumulator += fullStateProbabilities[i];
+
+        if ((i > min || (max - min) == numberOfBins) && ((i - min) % binWidth == 0)){
+            let label = toState(istart, qubits, quantumStatesBase) + '/' + toState(i, qubits, quantumStatesBase);
+            if (Math.round(binWidth) == 1) {
+                label = toState(i, qubits, quantumStatesBase);
             }
-        } else {
-            let accumulator = 0.0;
-            let istart = 0;
-            let binWidth = Math.ceil((max - min) / numberOfBins);
-            for (let i = min; i < max; i++) {
-                if (fullStateProbabilities.length > 0) {
-                    accumulator += fullStateProbabilities[i];
-                }
-                if ((i > min) && ((i - min) % binWidth == 0)){
-                    binnedStateProbabilities.push({ x: toState(istart, qubits, quantumStatesBase) + '/' + toState(i, qubits, quantumStatesBase), y: accumulator });
-                    maxProbability = Math.max(maxProbability, accumulator);
-                    accumulator = 0.0;
-                    istart = i + 1;
-                }
-            }
-            if (accumulator > 0){
-                binnedStateProbabilities.push({ x: toState(istart, qubits, quantumStatesBase) + '/' + toState(max - 1,  qubits, quantumStatesBase), y: accumulator });
-                maxProbability = Math.max(maxProbability, accumulator);
-            }
+            binnedStateProbabilities.push({ x: label, y: accumulator });
+            maxProbability = Math.max(maxProbability, accumulator);
+            accumulator = 0.0;
+            istart = i + 1;
         }
     }
+    if (accumulator > 0){
+        binnedStateProbabilities.push({ x: toState(istart, qubits, quantumStatesBase) + '/' + toState(max - 1,  qubits, quantumStatesBase), y: accumulator });
+        maxProbability = Math.max(maxProbability, accumulator);
+    }
+
 
     return [binnedStateProbabilities, maxProbability];
 }
