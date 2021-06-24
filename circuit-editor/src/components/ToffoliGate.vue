@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -55,7 +55,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Control qubit" width="100px" style="padding: 5px;">Control:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="controlNew" placeholder="control" type="number" id="control-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="controlNew" placeholder="control" type="number" id="control-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -71,7 +71,7 @@
           <td></td>
           <td v-b-tooltip.hover title="2nd Control Qubit" width="100px" style="padding: 5px;">Control<sub>2</sub>:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="controlNew2" placeholder="control2" type="number" id="control-new-2" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="controlNew2" placeholder="control2" type="number" id="control-new-2" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>

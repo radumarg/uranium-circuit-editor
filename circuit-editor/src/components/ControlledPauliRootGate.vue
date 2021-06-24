@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -55,7 +55,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Control qubit" width="100px" style="padding: 5px;">Control:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="controlNew" placeholder="control" type="number" id="control-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="controlNew" placeholder="control" type="number" id="control-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -71,7 +71,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Root parametrized as 1/t" width="100px" style="padding: 5px;">Root&nbsp;(t):</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="rootNewT" placeholder="" type="number" id="root-new-t" v-on:change="resetRootK()" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="rootNewT" placeholder="" type="number" id="root-new-t" v-on:change="resetRootK()" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -79,7 +79,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Root parametrized as 1/2^k" width="100px" style="padding: 5px;">Root&nbsp;(k): <br/>(t = 2^k)</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="rootNewK" placeholder="" type="number" id="root-new-k" v-on:change="resetRootT()" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="rootNewK" placeholder="" type="number" id="root-new-k" v-on:change="resetRootT()" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>

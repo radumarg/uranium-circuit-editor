@@ -287,7 +287,7 @@ class GatesTable {
 
 export function getNumberOfRowsThatFit() {
   let availableHeight = window.innerHeight;
-  let rows = 2 * Math.floor((availableHeight - 80) / (window.cellSize + window.separatorCellSize));
+  let rows = 2 * Math.floor((availableHeight - 70) / (window.cellSize + window.separatorCellSize));
   return rows;
 }
 

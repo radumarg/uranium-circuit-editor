@@ -62,8 +62,8 @@ export default {
         return;
       }
 
-      if (maxQubitIndex > 27) {
-        alert("Cannot simulate more than 28 qubits!");
+      if (maxQubitIndex > 26) {
+        alert("Cannot simulate more than 27 qubits!");
         this.$root.$emit("showColumnChart", []);
         this.$root.$emit("showPieChart", []);
         return;

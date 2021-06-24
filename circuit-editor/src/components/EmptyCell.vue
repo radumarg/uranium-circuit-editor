@@ -599,7 +599,7 @@ export default {
       return success;
     },
     findBestFitForControlledGate: function (dto, qbit, step, existingQbits) {
-      dto["control"] = parseInt(qbit) + 1;
+      dto["control"] = parseInt(qbit) - 1;
       let proposedQbits = [
         dto["qbit"],
         dto["qbit2"],
@@ -607,14 +607,14 @@ export default {
         dto["control2"],
       ].filter((qbit) => Boolean(qbit) || qbit == 0);
       if (
-        seatsAreTaken(
+        (dto["control"] < 0) || seatsAreTaken(
           this.$store.state.circuitEditorModule,
           existingQbits,
           proposedQbits,
           step
         )
       ) {
-        dto["control"] = parseInt(qbit) - 1;
+        dto["control"] = parseInt(qbit) + 1;
         proposedQbits = [
           dto["qbit"],
           dto["qbit2"],
@@ -697,15 +697,15 @@ export default {
     },
     findBestFitForToffoliGate: function (dto, qbit, step, existingQbits) {
       dto["qbit"] = parseInt(qbit);
-      dto["control"] = dto["qbit"] + 1;
-      dto["control2"] = dto["qbit"] + 2;
+      dto["control"] = dto["qbit"] - 1;
+      dto["control2"] = dto["qbit"] - 2;
       let proposedQbits = [
         dto["qbit"],
         dto["control"],
         dto["control2"],
       ].filter((qbit) => Boolean(qbit) || qbit == 0);
       if (
-        seatsAreTaken(
+        (dto["control"] < 0) || (dto["control2"] < 0) || seatsAreTaken(
           this.$store.state.circuitEditorModule,
           existingQbits,
           proposedQbits,
@@ -722,15 +722,15 @@ export default {
         if (
           (dto["control"] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
         ) {
-          dto["control"] = dto["qbit"] - 1;
-          dto["control2"] = dto["qbit"] - 2;
+          dto["control"] = dto["qbit"] + 1;
+          dto["control2"] = dto["qbit"] + 2;
           proposedQbits = [
           dto["qbit"],
           dto["control"],
           dto["control2"],
         ].filter((qbit) => Boolean(qbit) || qbit == 0);
           if (
-            (dto["control"] < 0) || (dto["control2"] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
+            seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
           ) {
             alert(
               "Cannot allocate both two control qubits!"
@@ -925,40 +925,40 @@ export default {
     },
     findBestFitForFredkinGate: function (dto, qbit, step, existingQbits) {
       dto["qbit"] = parseInt(qbit);
-      dto["qbit2"] = dto["qbit"] + 1;
-      dto["control"] = dto["qbit"] + 2;
+      dto["qbit2"] = dto["qbit"] - 1;
+      dto["control"] = dto["qbit"] - 2;
       let proposedQbits = [
         dto["qbit"],
         dto["qbit2"],
         dto["control"],
       ].filter((qbit) => Boolean(qbit) || qbit == 0);
       if (
-        seatsAreTaken(
+        (dto["qbit2"] < 0) || (dto["control"] < 0) || seatsAreTaken(
           this.$store.state.circuitEditorModule,
           existingQbits,
           proposedQbits,
           step
         )
       ) {
-        dto["qbit2"] = dto["qbit"] - 1;
-        dto["control"] = dto["qbit"] + 1;
+        dto["qbit2"] = dto["qbit"] + 1;
+        dto["control"] = dto["qbit"] - 1;
         proposedQbits = [
           dto["qbit"],
           dto["qbit2"],
           dto["control"],
         ].filter((qbit) => Boolean(qbit) || qbit == 0);
         if (
-          (dto["qbit2"] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
+          (dto["control"] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
         ) {
-          dto["qbit2"] = dto["qbit"] - 1;
-          dto["control"] = dto["qbit"] - 2;
+          dto["qbit2"] = dto["qbit"] + 1;
+          dto["control"] = dto["qbit"] + 2;
           proposedQbits = [ 
           dto["qbit"],
           dto["qbit2"],
           dto["control"],
         ].filter((qbit) => Boolean(qbit) || qbit == 0);
           if (
-            ((dto["qbit2"] < 0) || (dto["control"] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step))
+            seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
           ) {
             alert(
               "Cannot allocate both the control and the target bit!"

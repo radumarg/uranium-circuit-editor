@@ -80,7 +80,7 @@
           <td width="35px"></td>
           <td v-b-tooltip.hover width="80px" style="padding: 5px;">Qbits:</td>
           <td width="110px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="qbitsNew" placeholder="qbits" type="number" id="qbits-new" style="width:80px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="qbitsNew" placeholder="qbits" type="number" id="qbits-new" style="width:80px;"></b-form-input>
           </td>
           <td width="30px"></td>
         </tr>
@@ -88,7 +88,7 @@
           <td width="35px"></td>
           <td v-b-tooltip.hover width="80px" style="padding: 5px;">Steps:</td>
           <td width="110px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="stepsNew" placeholder="steps" type="number" id="steps" style="width:80px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="stepsNew" placeholder="steps" type="number" id="steps" style="width:80px;"></b-form-input>
           </td>
           <td width="30px"></td>
         </tr>
@@ -268,6 +268,8 @@ it does not make much sense doing that unless you intend to save the circuit as 
       this.history = [];
       this.historyUnRoll = [];
       let state = this.getCircuitState();
+      window.gatesTable.rows = window.initialRows;
+      window.gatesTable.columns = window.initialColumns;
       this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
       this.$root.$emit("circuitModifiedFromMenu");
     },

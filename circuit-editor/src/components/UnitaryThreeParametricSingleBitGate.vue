@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -55,7 +55,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Theta:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="thetaNew" placeholder="theta" type="number" id="theta-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="thetaNew" placeholder="theta" type="number" id="theta-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -63,7 +63,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Phi:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="phiNew" placeholder="phi" type="number" id="phi-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="phiNew" placeholder="phi" type="number" id="phi-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -71,7 +71,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Lambda:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="lambdaNew" placeholder="lambda" type="number" id="lambda-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="lambdaNew" placeholder="lambda" type="number" id="lambda-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>

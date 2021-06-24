@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target Qbit:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -55,7 +55,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Classic Bit:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="bitNew" placeholder="bit" type="number" id="bit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="bitNew" placeholder="bit" type="number" id="bit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
