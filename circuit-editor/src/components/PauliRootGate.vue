@@ -119,7 +119,7 @@ export default {
         if (Vue.$cookies.get('colored-gates') === 'true'){
           if (this.root.includes("1/2^")){
              let k = parseInt(this.root.replace("1/2^", ""));
-             if (k >= 2 && k <= 35){
+             if (k >= 0 && k <= 35){
                return require("../assets/colored-gates/" + this.img + "-" + k + ".svg");
              } else {
                return require("../assets/colored-gates/" + this.img + ".svg");
