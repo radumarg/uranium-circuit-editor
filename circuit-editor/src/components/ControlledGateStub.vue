@@ -1,11 +1,12 @@
 <template>
   <div>
-    <img :src="gateImageSource" @dragstart="dragStart" alt="Controlled Gates Stubs" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;" />
+    <img :src="gateImageSource" @dragend="dragEnd" @dragstart="dragStart" alt="Controlled Gates Stubs" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;" />
   </div>
 </template>
 
 <script>
-
+import Vue from 'vue';
+import { createDragImageGhost } from "../store/modules/utils.js";
 export default {
   name: "ControlledGateStub",
   props: {
@@ -27,7 +28,7 @@ export default {
   },
   computed: {
     gateImageSource: function() {
-      if (window.useColoredGates){
+      if (Vue.$cookies.get('colored-gates') === 'true'){
         return require("../assets/colored-gates/" + this.name + ".svg");
       } else {
         return require("../assets/blue-gates/" + this.name + ".svg");
@@ -64,8 +65,15 @@ export default {
       if (this.root != null && this.root !== undefined){
         event.dataTransfer.setData("root", this.root);
       }
-    }
-  },
+      const target = event.target;
+      let dragImageGhost = createDragImageGhost(target);  
+      event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
+    },
+    dragEnd: function() {
+      let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
+      document.body.removeChild(dragImageGhost);
+    },
+  }
 };
 </script>
 

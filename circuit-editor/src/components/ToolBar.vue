@@ -1,6 +1,6 @@
 <template>
   <div id="toolbar">
-    <md-toolbar style="background-color: lightslategrey" class="rounded mb-0">
+    <md-toolbar style="background-color: lightslategrey;" class="rounded mb-0">
       <md-button v-b-toggle.sidebar-right class="md-raised md-primary md-help-button">
         ?
         <md-tooltip md-direction="left">Get Help</md-tooltip>
@@ -18,14 +18,25 @@
         <md-tooltip md-direction="left">Redo</md-tooltip>
       </md-button>
 
-      <div class="md-toolbar-offset" id="theme">
-        <md-radio class="md-primary" v-model="lightTheme" :value="true" v-on:change="switchTheme()">Light Theme</md-radio>
-        <md-radio class="md-primary" v-model="lightTheme" :value="false" v-on:change="switchTheme()">Dark Theme</md-radio>
-      </div>
-
-      <div class="md-toolbar-offset" id="gate-colors">
-        <md-radio class="md-primary" v-model="colorGates" :value="true" v-on:change="switchGateColors()">Colors</md-radio>
-        <md-radio class="md-primary" v-model="colorGates" :value="false" v-on:change="switchGateColors()">Blues</md-radio>
+      <div class="md-toolbar-offset">
+        <table>
+          <tr>
+            <td>
+              <md-checkbox class="md-primary" v-model="darkTheme" v-on:change="switchTheme()">Dark Theme</md-checkbox>
+            </td>
+            <td>
+              <md-checkbox class="md-primary" v-model="liveSimulation" v-on:change="switchSimulationMode()">Live Simulation</md-checkbox>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <md-checkbox class="md-primary" v-model="colorGates" v-on:change="switchGateColors()">Color Gates</md-checkbox>
+            </td>
+            <td>
+              <md-checkbox class="md-primary" v-model="statesAreShownInBase2" v-on:change="switchLegendBase()">Base 2 States</md-checkbox>
+            </td>
+          </tr>
+        </table>
       </div>
 
       <div class="md-toolbar-section-end">
@@ -39,7 +50,7 @@
         </md-button>
         <md-button class="md-raised md-primary" v-on:click="saveFile()">
           Save
-          <md-tooltip md-direction="left">Save Circuit to Disk</md-tooltip>
+          <md-tooltip md-direction="left">Save Circuit</md-tooltip>
         </md-button>
         <md-button class="md-raised md-primary" v-on:click="saveImages()">
           Image
@@ -69,7 +80,7 @@
           <td width="35px"></td>
           <td v-b-tooltip.hover width="80px" style="padding: 5px;">Qbits:</td>
           <td width="110px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="qbitsNew" placeholder="qbits" type="number" id="qbits-new" style="width:80px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="qbitsNew" placeholder="qbits" type="number" id="qbits-new" style="width:80px;"></b-form-input>
           </td>
           <td width="30px"></td>
         </tr>
@@ -77,7 +88,7 @@
           <td width="35px"></td>
           <td v-b-tooltip.hover width="80px" style="padding: 5px;">Steps:</td>
           <td width="110px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="stepsNew" placeholder="steps" type="number" id="steps" style="width:80px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="stepsNew" placeholder="steps" type="number" id="steps" style="width:80px;"></b-form-input>
           </td>
           <td width="30px"></td>
         </tr>
@@ -104,13 +115,15 @@ import { mapActions, mapGetters } from 'vuex';
 import * as htmlToImage from 'html-to-image';
 import { getNoQbits, getNoSteps} from "../store/modules/gatesTable.js";
 import {save_circuit} from "../store/modules/circuitSaveAndRetrieve.js";
-
+import { getNumberOfRowsThatFit, getNumberOfColumnsThatFit } from "../store/modules/gatesTable.js";
 export default {
   name: "ToolBar",
   data() {
     return {
-      lightTheme: Vue.$cookies.get("light-theme") !== 'false',
-      colorGates: Vue.$cookies.get("colored-gates") !== 'false',
+      darkTheme: Vue.$cookies.get("dark-theme") === 'true',
+      colorGates: Vue.$cookies.get("colored-gates") === 'true',
+      liveSimulation: Vue.$cookies.get("live-simulation") === 'true',
+      statesAreShownInBase2: Vue.$cookies.get("legend-base") === '2',
       closeIsHovered: false,
       saveIsHovered:  false,
       qbitsNew: 0,
@@ -129,12 +142,13 @@ export default {
           mutation.type == 'circuitEditorModule/removeStep'){
         this.history.push(JSON.stringify(state));
         this.historyUnRoll = [];
+        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
       }      
     });
   },
   mounted() {
-    let lightTheme = (Vue.$cookies.get("light-theme") != 'false')
-    this.$root.$emit("switchThemeLight", lightTheme);
+    let darkTheme = (Vue.$cookies.get("dark-theme") === 'true')
+    this.$root.$emit("switchThemeDark", darkTheme);
   },
   beforeDestroy() {
     this.unsubscribe();
@@ -181,9 +195,18 @@ export default {
     handleSaveStepsAndQbits: function(){
       let qbitsNew = Math.max(this.getMaximumQbitIndex() + 1, this.$data.qbitsNew);
       let stepsNew = Math.max(this.getMaximumStepIndex() + 1, this.$data.stepsNew);
+      let qubitsThatFitScreen = getNumberOfRowsThatFit() / 2;
+      let stepsThatFitScreen = getNumberOfColumnsThatFit() / 2;
       let newrows = 2 * qbitsNew;
       let newcolumns = 2 * stepsNew;
       if (newrows != window.gatesTable.rows || newcolumns != window.gatesTable.columns){
+        if (qbitsNew < qubitsThatFitScreen || stepsNew < stepsThatFitScreen) {
+          if (!confirm("Unused higher end steps and qubits are simply being ignored. \
+While you are allowed to reduce the number of steps or qubits under the area of circuit that fits your display, \
+it does not make much sense doing that unless you intend to save the circuit as an SVG image next. Do you want to continue?")) {
+           return;
+          }
+        }
         window.gatesTable.rows = newrows;
         window.gatesTable.columns = newcolumns;
         this.$refs['change-steps-qubits-dialog'].hide();
@@ -244,17 +267,33 @@ export default {
       this.emptyCircuit();
       this.history = [];
       this.historyUnRoll = [];
+      let state = this.getCircuitState();
+      window.gatesTable.rows = window.initialRows;
+      window.gatesTable.columns = window.initialColumns;
+      this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
+      this.$root.$emit("circuitModifiedFromMenu");
     },
     switchTheme: function(){
-      Vue.$cookies.set('light-theme', this.lightTheme);
-      this.$root.$emit("switchThemeLight", this.lightTheme);
+      Vue.$cookies.set('dark-theme', this.darkTheme);
+      this.$root.$emit("switchThemeDark", this.darkTheme);
     },
     switchGateColors: function(){
-      window.useColoredGates = this.colorGates;
       Vue.$cookies.set('colored-gates', this.colorGates);
-      this.$root.$emit("switchThemeLight", this.lightTheme);
+      this.$root.$emit("switchThemeDark", this.darkTheme);
       this.$root.$emit("switchGateColors");
       this.refreshCircuit();
+    },
+    switchLegendBase: function(){
+      if (this.statesAreShownInBase2 == true){
+        Vue.$cookies.set('legend-base', '2');
+      } else {
+        Vue.$cookies.set('legend-base', '10');
+      }
+      this.$root.$emit("switchLegendBase");
+    },
+    switchSimulationMode: function(){
+      Vue.$cookies.set('live-simulation', this.liveSimulation);
+      this.$root.$emit("switchToLiveSimulationMode", this.liveSimulation);
     },
     commitCircuitState: function(event) {
       const yaml = require('js-yaml');
@@ -265,6 +304,8 @@ export default {
       window.gatesTable.rows = Math.max(2 * qbits + 2, window.initialRows);
       window.gatesTable.columns = Math.max(2 * steps + 2, window.initialColumns);
       this.updateCircuit(jsonObj);
+      this.$root.$emit("triggerSimulationRun", jsonObj);
+      this.$root.$emit("circuitModifiedFromMenu");
     }
   }
 };
@@ -300,5 +341,14 @@ export default {
   height: 35px;
   max-height: 35px;
 }
+
+.md-checkbox{
+  height: 20px; 
+  margin: 5px;
+  font-size: 14px;
+  color: white;
+  font-weight: bold;
+}
+
 </style>
 

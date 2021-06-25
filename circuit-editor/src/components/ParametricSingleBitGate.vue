@@ -1,7 +1,7 @@
 <template>
   <div v-on:click="showModal()">
 
-    <img :src="gateImageSrcEditor" :title="title" :name="name" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
+    <img :src="gateImageSrcEditor" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
     <b-modal ref="modal-dialog" size="sm"  centered hide-footer hide-header>
 
@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -55,7 +55,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Theta:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model="thetaNew" placeholder="theta" type="number" id="theta-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="thetaNew" placeholder="theta" type="number" id="theta-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -84,6 +84,7 @@
 <script>
 import { mapActions } from 'vuex';
 import SingleBitGate from "./SingleBitGate";
+import { createDragImageGhost } from "../store/modules/utils.js";
 export default {
   name: "ParametricSingleBitGate",
   extends: SingleBitGate,
@@ -126,7 +127,13 @@ export default {
       event.dataTransfer.setData("originalQbit", this.qbit);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("theta", this.theta);
-    }
+      let dragImageGhost = createDragImageGhost(target);  
+      event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
+    },
+    dragEnd: function() {
+      let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
+      document.body.removeChild(dragImageGhost);
+    },
   },
 }
 </script>

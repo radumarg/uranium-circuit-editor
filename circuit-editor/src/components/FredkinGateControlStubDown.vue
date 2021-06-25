@@ -1,11 +1,12 @@
 <template>
   <div>
-    <img :src="gateImageSource" @dragstart="dragStart" alt="Controlled bit for Fredkin gate" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;" />
+    <img :src="gateImageSource" @dragend="dragEnd" @dragstart="dragStart" alt="Controlled bit for Fredkin gate" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;" />
   </div>
 </template>
 
 <script>
-
+import Vue from 'vue';
+import { createDragImageGhost } from "../store/modules/utils.js";
 export default {
   name: "FredkinGateControlStubDown",
   props: {
@@ -21,7 +22,7 @@ export default {
   },
   computed: {
     gateImageSource: function() {
-      if (window.useColoredGates){
+      if (Vue.$cookies.get('colored-gates') === 'true'){
         return require("../assets/colored-gates/ctrl-swap-stub-down-1.svg");
       } else {
         return require("../assets/blue-gates/ctrl-swap-stub-down-1.svg");
@@ -38,7 +39,14 @@ export default {
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControl", this.control);
       event.dataTransfer.setData("controlstate", this.controlstate);
-    }
+      const target = event.target;
+      let dragImageGhost = createDragImageGhost(target);  
+      event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
+    },
+    dragEnd: function() {
+      let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
+      document.body.removeChild(dragImageGhost);
+    },
   },
 };
 </script>

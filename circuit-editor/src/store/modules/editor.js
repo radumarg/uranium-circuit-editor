@@ -42,7 +42,7 @@ export const circuitEditorModule = {
       return maxStep;
     },
     getMaximumQbitIndex: () => {
-      let maxQbit = 0;
+      let maxQbit = -1;
       let state = circuitEditorModule.state;
       if (Object.prototype.hasOwnProperty.call(state, "steps")) {
         for (let i = 0; i < state.steps.length; i++) {

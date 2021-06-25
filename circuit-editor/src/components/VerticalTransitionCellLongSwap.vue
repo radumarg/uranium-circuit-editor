@@ -5,6 +5,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import TwoTargetQubitVerticalTransitionCellBase from "./TwoTargetQubitVerticalTransitionCellBase";
 export default {
   name: "VerticalTransitionCellLongSwapOrFredkin",
@@ -12,7 +13,7 @@ export default {
   methods: {
     handleDragLeave() {
       var image = window.document.getElementById(this.id);
-      if (window.useColoredGates){
+      if (Vue.$cookies.get('colored-gates') === 'true'){
         image.src = require("../assets/colored-gates/swap-line-long.svg");
       } else {
         image.src = require("../assets/blue-gates/swap-line-long.svg");
@@ -21,7 +22,7 @@ export default {
   },
   computed: {
     gateImageSource: function() {
-      if (window.useColoredGates){
+      if (Vue.$cookies.get('colored-gates') === 'true'){
         return require("../assets/colored-gates/swap-line-long.svg");
       } else {
         return require("../assets/blue-gates/swap-line-long.svg");

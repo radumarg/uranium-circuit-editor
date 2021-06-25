@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 /* Holds information necessary to diplay a cell in gates table */
 class GatesTableCell {
   constructor(row, column) {
@@ -198,16 +200,16 @@ export function seatsAreTaken(circuitState, reallocatableQbits, proposedQbits, s
             }
             // get range of qbits affected when displaying this gate
             let qbits = [target, target2, control, control2].filter(
-              (qbit) => Boolean(qbit)
+              (qbit) => (qbit != null)
             );
-
+            
             let qmin = Math.min(...qbits);
             let qmax = Math.max(...qbits);
             let qminExisting = reallocatableQbits ? Math.min(...reallocatableQbits) : null;
             let qmaxExisting = reallocatableQbits ? Math.max(...reallocatableQbits) : null;
             let qminProposed = Math.min(...proposedQbits);
             let qmaxProposed = Math.max(...proposedQbits);
-
+            
             for (let q = qminProposed; q <= qmaxProposed; q++) {
               if (reallocatableQbits && (qminExisting <= q) && (q <= qmaxExisting)) {
                 // we know this seat can be allocated to a new gate
@@ -285,7 +287,7 @@ class GatesTable {
 
 export function getNumberOfRowsThatFit() {
   let availableHeight = window.innerHeight;
-  let rows = 2 * Math.floor((availableHeight - 80) / (window.cellSize + window.separatorCellSize));
+  let rows = 2 * Math.floor((availableHeight - 70) / (window.cellSize + window.separatorCellSize));
   return rows;
 }
 
@@ -319,12 +321,6 @@ export function retrieveRowsInGatesTable(circuitState) {
     window.gatesTable = new GatesTable(rows, columns);
   }
 
-  // Depending of window size, number of rows and columns can increase
-  // but will never decrease except when a new circuit is created.
-  // Here we adjust no of rows and columns if window is enlarged.
-  window.gatesTable.rows = Math.max(rows, window.gatesTable.rows);
-  window.gatesTable.columns = Math.max(columns, window.gatesTable.columns);
-
   let steps = getNoSteps(circuitState);
   let qbits = getNoQbits(circuitState);
 
@@ -333,8 +329,8 @@ export function retrieveRowsInGatesTable(circuitState) {
   // decrease except when a new circuit is created. Here we adjust
   // no of rows and columns if more qbits or steps were added to circuit.
   window.gatesTable.rows = Math.max(2 * qbits + 2, window.gatesTable.rows);
-  window.gatesTable.columns = Math.max(2 * steps + 2, window.gatesTable.columns);
-
+  window.gatesTable.columns = Math.max(2 * steps + 2, window.gatesTable.columns + 2);
+  
   return window.gatesTable.rows;
 }
 
@@ -507,7 +503,16 @@ function setupEmptyCells(gatesTableRowState, inputRow) {
         gatesTableRowState.cells[column].name = "zero-state";
         gatesTableRowState.cells[column].height = window.cellSize;
         gatesTableRowState.cells[column].width = window.cellSize;
-        gatesTableRowState.cells[column].tooltip = `qubit: ${getQbitFromRow(inputRow)}`
+        let qubitNumber = getQbitFromRow(inputRow) + 1;
+        if (qubitNumber == 1){
+          gatesTableRowState.cells[column].tooltip = `qubit: 1st`
+        } else if (qubitNumber == 2) {
+          gatesTableRowState.cells[column].tooltip = `qubit: 2nd`
+        } else  if (qubitNumber == 3) {
+          gatesTableRowState.cells[column].tooltip = `qubit: 3rd`
+        } else {
+          gatesTableRowState.cells[column].tooltip = `qubit: ${qubitNumber}th`
+        }
       } else {
         gatesTableRowState.cells[column].name = "vertical-transition-cell-rectangle";
         gatesTableRowState.cells[column].height = window.separatorCellSize;
@@ -622,7 +627,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           gatesTableRowState.cells[column].gate = gate.name;
           // I want all elements in circuit to update when 
           // switching from colored to blue gates:
-          gatesTableRowState.cells[column].key = window.useColoredGates;
+          gatesTableRowState.cells[column].key = Vue.$cookies.get('colored-gates');
           gatesTableRowState.cells[column].tooltip = "";
           gatesTableRowState.cells[column].img = gate.name.replace("ctrl-", "");
           if (gate.name == "toffoli") gatesTableRowState.cells[column].img = "pauli-x";

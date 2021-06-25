@@ -17,6 +17,8 @@
     "html-webpack-plugin": "^4.5.1",
     "jquery": "^3.5.1",
     "js-yaml": "^3.14.1",
+    "jscharting": "^3.0.3-beta",
+    "text-encoding": "^0.7.0",
     "vue": "^2.6.12",
     "vue-cookies": "^1.7.4",
     "vue-material": "^1.0.0-beta-15",
@@ -31,6 +33,7 @@
     "babel-eslint": "^10.1.0",
     "eslint": "^6.7.2",
     "eslint-plugin-vue": "^6.2.2",
+    "jscharting-vue": "^2.0.0-beta.2",
     "svg-url-loader": "^7.1.1",
     "vue-template-compiler": "^2.6.12",
     "webpack": "^4.46.0"
@@ -47,7 +50,10 @@
     "parserOptions": {
       "parser": "babel-eslint"
     },
-    "rules": {}
+    "rules": {},
+    "globals": {
+      "globalThis": false
+    }
   },
   "browserslist": [
     "> 1%",

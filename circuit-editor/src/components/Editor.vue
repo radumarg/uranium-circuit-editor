@@ -1,6 +1,6 @@
 <template>
   <div class="circuit-editor" id="circuit-editor-canvas">
-    <table id="gatesTable" ref="gatesTable" cellspacing="0" cellpadding="0">
+    <table ref="gatesTable" id="gatesTable" cellspacing="0" cellpadding="0">
       <div v-for="row in getRowsInGatesTable" v-bind:key="row">
         <tr>
           <td
@@ -232,6 +232,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import { mapGetters } from "vuex";
 import EmptyCell from "./EmptyCell";
 import ZeroState from "./ZeroState";
@@ -316,19 +317,21 @@ export default {
     "getRowsInGatesTable"
   ]),
   created() {
-    this.$root.$on("switchThemeLight", boolFlag => {
-      var table = document.getElementById("gatesTable");
+    this.$root.$on("switchThemeDark", boolFlag => {
       if (boolFlag) {
-        if(window.useColoredGates){
-          table.style.backgroundColor = "ghostwhite";
-          table.style.borderTopColor = "ghostwhite";
-        } else {
-          table.style.backgroundColor = "white";
-          table.style.borderTopColor = "white";
-        }
+        this.$refs["gatesTable"].style.backgroundColor = "#374048";
+        this.$refs["gatesTable"].style.borderTopColor = "#374048";
+        this.$refs["gatesTable"].style.borderBottom = "solid 0.45em #374048";
       } else {
-        table.style.backgroundColor = "#374048";
-        table.style.borderTopColor = "#374048";
+        if(Vue.$cookies.get('colored-gates') === 'true'){
+          this.$refs["gatesTable"].style.backgroundColor = "ghostwhite";
+          this.$refs["gatesTable"].style.borderTopColor = "ghostwhite";
+          this.$refs["gatesTable"].style.borderBottom = "solid 0.45em ghostwhite";
+        } else {
+          this.$refs["gatesTable"].style.backgroundColor = "white";
+          this.$refs["gatesTable"].style.borderTopColor = "white";
+          this.$refs["gatesTable"].style.borderBottom = "solid 0.45em white";
+        }
       }
     });
   },
@@ -342,14 +345,17 @@ export default {
   overflow: scroll;
   width: 100%;
   height: 100%;
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 table {
   background-color: ghostwhite;
-  border: 0px solid #374048;
+  border: 0px;
   border-spacing: 0px;
-  border-top: solid 0.4em ghostwhite;
-  border-bottom: solid 0.45em ghostwhite;
   table-layout: fixed;
   text-align: center;
 }

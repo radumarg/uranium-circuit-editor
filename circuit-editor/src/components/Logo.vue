@@ -3,7 +3,7 @@
     <table>
       <tr>
         <td>
-          <a href="javascript:history.back()">
+          <a href="https://uranium.transilvania-quantum.org/">
             <img src="../assets/uranium.png" draggable="false" style="width:auto;height:80px;" alt="Uranium Logo" />
           </a>
         </td>

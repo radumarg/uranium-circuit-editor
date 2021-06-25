@@ -5,7 +5,7 @@
 </template>
 
 <script>
-
+import Vue from 'vue';
 export default {
   name: "VerticalTransitionCellShort",
   props: {
@@ -13,7 +13,7 @@ export default {
   },
   computed: {
     gateImageSource: function() {
-      if (window.useColoredGates){
+      if (Vue.$cookies.get('colored-gates') === 'true'){
         return require("../assets/colored-gates/" + this.name + ".svg");
       } else {
         return require("../assets/blue-gates/" + this.name + ".svg");

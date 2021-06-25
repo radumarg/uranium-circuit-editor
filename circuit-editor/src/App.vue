@@ -22,19 +22,19 @@
       </div>
     </b-row>
     <b-row no-gutters align-v="center" class="bordered-box" style="border-right: solid 0.5em #374048;">
-       <b-col cols="12" md="auto">
-          <Logo />
-        </b-col>
-       <b-col> 
-         <ToolBar /> 
-        </b-col>
+      <b-col cols="12" md="auto">
+        <Logo />
+      </b-col>
+      <b-col> 
+        <ToolBar /> 
+      </b-col>
     </b-row>
      <b-row no-gutters>
-       <b-col cols="12" md="auto" class="bordered-box"> 
+        <b-col cols="12" md="auto" class="bordered-box"> 
          <GatesPallete /> 
         </b-col>
         <b-col class="bordered-box">
-          <Editor />
+          <Circuit />
         </b-col>
     </b-row>
   </b-container>    
@@ -42,7 +42,8 @@
 </template>
 
 <script>
-import Editor from "./components/Editor";
+import Vue from 'vue';
+import Circuit from "./components/Circuit";
 import GatesPallete from "./components/GatesPallete";
 import Logo from "./components/Logo";
 import ToolBar from "./components/ToolBar";
@@ -52,7 +53,7 @@ export default {
   name: "App",
   components: {
     Logo,
-    Editor,
+    Circuit,
     GatesPallete,
     ToolBar,
   },
@@ -81,7 +82,7 @@ export default {
         this.gateImage = require("./assets/uranium.png");
       } else{
         this.gateName = gateName;
-        if (window.useColoredGates){
+        if (Vue.$cookies.get('colored-gates') === 'true'){
           if (gateName.includes("ctrl-")){
             this.gateImage = require("./assets/colored-gates/" + gateName + "-1.svg");     
           } else if (gateName == "toffoli") { 

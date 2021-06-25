@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="46" height="46" xmlns="http://www.w3.org/2000/svg">
+  <g transform="matrix(1, 0, 0, 1, 23.0, 23.0)">
+    <rect x="-22" y="-22" width="44" height="44" style="opacity:1; fill:none; stroke: #0080FF; stroke-width:2; stroke-opacity:1;"/>
+    <text x="-12.0" y="9" style="font-size: 30px; font-weight: bold; fill: #0080FF; white-space: pre;">X</text>
+  </g>
+</svg>
