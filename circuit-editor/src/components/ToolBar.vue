@@ -67,7 +67,6 @@
       <table style="table-layout:fixed;">
         <tr>
           <td colspan="3" valign="top">
-            <font style="font-size:12px;color:gray;">High end unused qubits will be ignored.</font>
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleCloseHover">

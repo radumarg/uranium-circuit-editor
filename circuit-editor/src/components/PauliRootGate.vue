@@ -148,13 +148,18 @@ export default {
     handleSave: function(){
       let qbitOld = this.qbit;
       let rootOld = this.root;
+      let newRoot = this.getRoot();
+      if (newRoot == '1/0') {
+        alert("Root (t) cannot be 0!")
+        return;
+      }
       let promise = this.repositionSimpleGateInCircuit({
         'step': this.step, 
         'qbit': this.qbit, 
         'root': this.root,
         'name': this.name, 
         'qbitNew': this.$data.qbitNew, 
-        'rootNew': this.getRoot(),
+        'rootNew': newRoot,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -193,8 +198,11 @@ export default {
     getRoot(){
       if (this.$data.rootNewT){
         return "1/" + this.$data.rootNewT;
-      } else if (this.$data.rootNewK){
+      } else if (this.$data.rootNewK != null){
+        this.$data.rootNewK = Math.round(this.$data.rootNewK);
         return "1/2^" + this.$data.rootNewK;
+      } else {
+        return null;
       }
     },
     getTRoot(){
@@ -209,7 +217,7 @@ export default {
     },
     getKRoot(){
       if (this.root == 1){
-        return null;
+        return 0;
       }
       if (this.root.includes("1/2^")){
         return this.root.replace("1/2^", "");

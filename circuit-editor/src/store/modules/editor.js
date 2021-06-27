@@ -92,7 +92,7 @@ export const circuitEditorModule = {
     },
     insertGateInCircuit: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
-        let singleBitGates = ["hadamard", "identity", "pauli-x", "pauli-y", "pauli-z", "sqrt-not", "t", "t-dagger", "s", "s-dagger", "measure-x", "measure-y", "measure-z"];
+        let singleBitGates = ["hadamard", "identity", "pauli-x", "pauli-y", "pauli-z", "sqrt-not", "t", "t-dagger", "s", "s-dagger"];
         let pauliRootGates = ["pauli-x-root", "pauli-y-root", "pauli-z-root", "pauli-x-root-dagger", "pauli-y-root-dagger", "pauli-z-root-dagger"]
         let parametricSingleBitGates = ["rx-theta", "ry-theta", "rz-theta"];
         let unitarySingleBitGates = ["u1"];
@@ -162,7 +162,7 @@ export const circuitEditorModule = {
           } else if (unitaryThreeParamGates.includes(name)) {
             dto = { "step": step, "qbit": qbit, "name": name, "theta": 0, "phi": 0, "lambda": 0 };
           } else if (measureGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name, "bit": 0 };
+            dto = { "step": step, "qbit": qbit, "name": name, "bit": qbit };
           } else if (controlledSingleBitGates.includes(name)) {
             dto = { "step": step, "qbit": qbit, "name": name, "control": control, "controlstate": 1 };
           } else if (controlledPauliRootGates.includes(name)) {
