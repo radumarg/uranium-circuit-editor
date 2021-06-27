@@ -57,10 +57,11 @@ export function getTopEntriesStateProbabilities(stateProbabilities) {
 
     let result = [];
     let probability = 0.0;
+    let quantumStatesBase = Vue.$cookies.get('legend-base');
 
     for (let i = 0; i < topEntries.length; i++){
         probability += topEntries[i];
-        result.push({ x: toState(i, qubits), y: topEntries[i] })
+        result.push({ x: toState(i, qubits, quantumStatesBase), y: topEntries[i] })
     }
 
     if (probability < 1){
