@@ -629,6 +629,9 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           // switching from colored to blue gates:
           gatesTableRowState.cells[column].key = Vue.$cookies.get('colored-gates');
           gatesTableRowState.cells[column].tooltip = "";
+          if (gate.name == "sqrt-swap" || gate.name == "swap-phi" || gate.name == "iswap"){
+            gatesTableRowState.cells[column].tooltip += `${gate.name} `
+          }
           gatesTableRowState.cells[column].img = gate.name.replace("ctrl-", "");
           if (gate.name == "toffoli") gatesTableRowState.cells[column].img = "pauli-x";
 
