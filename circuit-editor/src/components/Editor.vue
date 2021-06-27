@@ -183,7 +183,7 @@
               <ControlledUnitaryThreeParametricSingleBitGate :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name.includes('ctrl') && cell.name.includes('stub')">
-              <ControlledGateStub :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :control2="cell.control2" :controlstate2="cell.controlstate2" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledGateStub :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :control2="cell.control2" :controlstate2="cell.controlstate2" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="!cell.name.includes('ctrl') && cell.name.includes('pauli') && cell.name.includes('root')">
               <PauliRootGate :qbit="cell.qbit" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
