@@ -109,7 +109,7 @@
 import Vue from 'vue';
 import { mapActions } from 'vuex';
 import ControlledSingleBitGate from "./ControlledSingleBitGate";
-import { createDragImageGhost } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
 export default {
   name: "ToffoliGate",
   extends: ControlledSingleBitGate,
@@ -201,6 +201,7 @@ export default {
       this.$refs['modal-dialog'].hide();
     },
     dragStart: function(event) {
+      hideTooltips();
       const target = event.target;
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");

@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import JQuery from 'jquery';
 
 export function createDragImageGhost (targetImage) {
 
@@ -26,4 +27,9 @@ export function createDragImageGhost (targetImage) {
     //fakeGhost.style.opacity = "0.5"; 
 
     return fakeGhost;
+}
+
+export function hideTooltips(){ 
+    JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");
+    window.toolTipsAreShown = false;
 }

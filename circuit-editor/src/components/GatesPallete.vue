@@ -249,7 +249,7 @@
 
 <script>
 import Vue from 'vue';
-import { createDragImageGhost } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
 export default {
   methods: {
     gateSelected: function (event) {
@@ -280,6 +280,7 @@ export default {
       }
     },
     dragStart: function(event) {
+      hideTooltips();
       const target = event.target;
       event.dataTransfer.setData("gateName", target.title);
       let dragImageGhost = createDragImageGhost(target);  

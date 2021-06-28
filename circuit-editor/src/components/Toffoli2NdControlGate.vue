@@ -6,7 +6,7 @@
 
 <script>
 import Vue from 'vue';
-import { createDragImageGhost } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
 export default {
   name: "Toffoli2NdControlGate",
   props: {
@@ -32,6 +32,7 @@ export default {
   },
   methods: {
     dragStart: function(event) {
+      hideTooltips();
       const target = event.target;
       event.dataTransfer.setData("drag-origin", "stub");
       event.dataTransfer.setData("dragged-qbit", this.qrow);

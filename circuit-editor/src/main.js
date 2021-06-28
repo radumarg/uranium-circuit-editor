@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import App from './App.vue';
 import store from './store/index.js';
+import 'bootstrap';
 
 // Vue-Material
 import { MdButton, MdCheckbox, MdToolbar, MdTooltip } from 'vue-material/dist/components';
@@ -17,7 +18,6 @@ Vue.use(MdTooltip);
 import { IconsPlugin, ImagePlugin, FormInputPlugin, FormSelectPlugin, LayoutPlugin, ModalPlugin, SidebarPlugin, SpinnerPlugin, TabsPlugin, TooltipPlugin, VBHoverPlugin } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-
 
 Vue.use(IconsPlugin);
 Vue.use(ImagePlugin);
@@ -52,6 +52,9 @@ let legendBase = Vue.$cookies.get('legend-base');
 if (legendBase == null){
   Vue.$cookies.set('legendBase', '2');
 }
+
+// Used when toggling between showing/hiding ALL tooltips
+window.toolTipsAreShown = false;
 
 new Vue({
   store,

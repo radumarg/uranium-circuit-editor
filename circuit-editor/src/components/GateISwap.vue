@@ -1,7 +1,7 @@
 <template>
   <div v-on:click="showModal()">
 
-    <img :src="gateImageSrcEditor" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
+    <img :src="gateImageSrcEditor" :title="title" data-toggle="tooltip" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
     <b-modal ref="modal-dialog" size="sm"  centered hide-footer hide-header>
 
@@ -85,7 +85,7 @@
 import Vue from 'vue';
 import { mapActions } from 'vuex';
 import SingleBitGate from "./SingleBitGate";
-import { createDragImageGhost } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
 export default {
   name: "GateISwapUp",
   extends: SingleBitGate,
@@ -131,6 +131,7 @@ export default {
       this.$refs['modal-dialog'].hide();
     },
     dragStart: function(event) {
+      hideTooltips();
       const target = event.target;
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");

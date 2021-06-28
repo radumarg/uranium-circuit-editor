@@ -6,7 +6,7 @@
 
 <script>
 import Vue from 'vue';
-import { createDragImageGhost } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
 export default {
   name: "ControlledGateStub",
   props: {
@@ -37,6 +37,7 @@ export default {
   },
   methods: {
     dragStart: function(event) {
+      hideTooltips();
       event.dataTransfer.setData("drag-origin", "stub");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
       event.dataTransfer.setData("gateName", this.gate);

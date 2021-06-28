@@ -101,7 +101,7 @@
 import Vue from 'vue';
 import { mapActions } from 'vuex';
 import GateSwap from "./GateSwap";
-import { createDragImageGhost } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
 export default {
   name: "FrekinGate",
   extends: GateSwap,
@@ -169,6 +169,7 @@ export default {
       this.$refs['modal-dialog'].hide();
     },
     dragStart: function(event) {
+      hideTooltips();
       const target = event.target;
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");

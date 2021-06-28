@@ -17,6 +17,10 @@
         ⟳
         <md-tooltip md-direction="left">Redo</md-tooltip>
       </md-button>
+      <md-button class="md-raised md-primary md-button" v-on:click="toggleTooltips()">
+        ttips
+        <md-tooltip md-direction="left">Show Tooltips</md-tooltip>
+      </md-button>
 
       <div class="md-toolbar-offset">
         <table>
@@ -100,7 +104,7 @@
             </div>
           </td>
         </tr>
-      </table>
+      </table>oo
 
     </b-modal>
 
@@ -110,8 +114,9 @@
 
 <script>
 import Vue from 'vue';
-import { mapActions, mapGetters } from 'vuex';
 import * as htmlToImage from 'html-to-image';
+import JQuery from 'jquery';
+import { mapActions, mapGetters } from 'vuex';
 import { getNoQbits, getNoSteps} from "../store/modules/gatesTable.js";
 import {save_circuit} from "../store/modules/circuitSaveAndRetrieve.js";
 import { getNumberOfRowsThatFit, getNumberOfColumnsThatFit } from "../store/modules/gatesTable.js";
@@ -174,6 +179,15 @@ export default {
         let state = JSON.parse(json_txt);
         this.updateCircuit(state.circuitEditorModule);
       }
+    },
+    toggleTooltips: function() {      
+      if (window.toolTipsAreShown){ 
+        JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");
+      } else {
+        JQuery('[data-toggle="tooltip"], .tooltip').tooltip({placement: "auto"});
+        JQuery('[data-toggle="tooltip"], .tooltip').tooltip("show");
+      }
+      window.toolTipsAreShown = !window.toolTipsAreShown;
     },
     showChangeQbitsStepsModal: function() {
       this.$data.qbitsNew = parseInt(window.gatesTable.rows / 2);
@@ -326,12 +340,6 @@ it does not make much sense doing that unless you intend to save the circuit as 
 
 .md-help-button {
   font-size: 28px;
-}
-
-.md-radio {
-  color: white;
-  font-size: 17px;
-  font-weight: bold;
 }
 
 .no-resize-cell{

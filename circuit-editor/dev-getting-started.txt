@@ -58,3 +58,7 @@ cargo install cargo-generate
 - Install text-encoding: https://www.npmjs.com/package/text-encoding
 
 npm install text-encoding
+
+- Install JQuery javascript charts library:
+
+npm install jquery
