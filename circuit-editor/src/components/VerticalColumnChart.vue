@@ -109,12 +109,6 @@ export default {
                   },
                }
             },
-            series: [
-               {
-                  name: 'Probability',
-                  points: []
-               }
-            ],
             yAxis: {
                scale: {
                   range: { min: 0},

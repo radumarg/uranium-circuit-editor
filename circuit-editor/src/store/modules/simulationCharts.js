@@ -42,15 +42,22 @@ export function getTopEntriesStateProbabilities(stateProbabilities) {
         qubits = Math.log2(stateProbabilities.length);
     }
 
-    let topEntries = [... stateProbabilities.slice(0, Math.min(ENTRIES, stateProbabilities.length))];
-    topEntries.sort(function(a, b){return (b - a)});
+    let initialSlice = [... stateProbabilities.slice(0, Math.min(ENTRIES, stateProbabilities.length))];
+
+    let topEntries = [];
+    for (let i = 0; i < initialSlice.length; i++){
+        topEntries.push([i, initialSlice[i]])
+    }
+    topEntries.sort(function(a, b){return (b[1] - a[1])});
+    let minProbability = topEntries[topEntries.length - 1][1];
+
     if (stateProbabilities.length > ENTRIES){
         for (let i = ENTRIES; i < stateProbabilities.length; i++){
-            let min = Math.min(...topEntries);
-            if (stateProbabilities[i] >= min){
-                topEntries.push(stateProbabilities[i]);
-                topEntries.sort(function(a, b){return (b - a)});
+            if (stateProbabilities[i] >= minProbability){
+                topEntries.push([i, stateProbabilities[i]]);
+                topEntries.sort(function(a, b){return (b[1] - a[1])});
                 topEntries = topEntries.slice(0, ENTRIES);
+                minProbability = topEntries[topEntries.length - 1][1];
             }
         }
     }
@@ -60,8 +67,8 @@ export function getTopEntriesStateProbabilities(stateProbabilities) {
     let quantumStatesBase = Vue.$cookies.get('legend-base');
 
     for (let i = 0; i < topEntries.length; i++){
-        probability += topEntries[i];
-        result.push({ x: toState(i, qubits, quantumStatesBase), y: topEntries[i] })
+        probability += topEntries[i][1];
+        result.push({ x: toState(topEntries[i][0], qubits, quantumStatesBase), y: topEntries[i][1] })
     }
 
     if (probability < 1){
