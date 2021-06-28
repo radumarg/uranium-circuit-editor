@@ -184,7 +184,7 @@ export default {
       if (window.toolTipsAreShown){ 
         JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");
       } else {
-        JQuery('[data-toggle="tooltip"], .tooltip').tooltip({placement: "auto"});
+        JQuery('[data-toggle="tooltip"], .tooltip').tooltip({placement: "bottom"});
         JQuery('[data-toggle="tooltip"], .tooltip').tooltip("show");
       }
       window.toolTipsAreShown = !window.toolTipsAreShown;
