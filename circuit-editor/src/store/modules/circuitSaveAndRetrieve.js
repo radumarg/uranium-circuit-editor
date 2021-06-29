@@ -27,7 +27,7 @@
     if (window.circuitId && authToken){
   
         let xmlHttpReq = new XMLHttpRequest();
-        let url = '/uranium/projects/circuits-api/?circuitid='.concat(window.circuitId);
+        let url = '/projects/circuits-api/?circuitid='.concat(window.circuitId);
         xmlHttpReq.open( 'GET', url, false); //TODO: this must be changed to an async request
         xmlHttpReq.setRequestHeader('Authorization', authToken);
         xmlHttpReq.setRequestHeader('Accept', 'application/json');
@@ -61,7 +61,7 @@
       alert("For some reason saving the circuit has failed, please try again.");
     };
 
-    let url = '/uranium/projects/circuits-api/?circuitid='.concat(window.circuitId);
+    let url = '/projects/circuits-api/?circuitid='.concat(window.circuitId);
     xmlHttpReq.open( "POST", url, true);
 
     let authToken = getCookie('auth-token');
