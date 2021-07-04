@@ -122,7 +122,42 @@ export function getProximFreeSeat(circuitState, qbit, step) {
   return null;
 }
 
-// Verify if a gate already exist at location 
+// Verifiy if position is filled
+export function positionIsFilled(circuitState, step, qubit) {
+  if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+    for (let i = 0; i < circuitState.steps.length; i++) {
+      if (circuitState.steps[i].index == step) {
+        if (Object.prototype.hasOwnProperty.call(circuitState.steps[i], "gates")) {
+
+          let gates = circuitState.steps[i]["gates"];
+          for (let j = 0; j < gates.length; j++) {
+
+            let gate = gates[j];
+            if (Object.prototype.hasOwnProperty.call(gate, "target")) {
+              if (gate.target == qubit) return true;
+            }
+            if (Object.prototype.hasOwnProperty.call(gate, "target2")) {
+              if (gate.target2 == qubit) return true;
+            }
+            if (Object.prototype.hasOwnProperty.call(gate, "control")) {
+              if (gate.control == qubit) return true;
+            }
+            if (Object.prototype.hasOwnProperty.call(gate, "control2")) {
+              if (gate.control2 == qubit) return true;
+            }
+          }
+
+          return false;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+// Verify if a gate can be placed at location. Note that for example a single 
+// bit gate cannot be placed between a control and a target qbits belongin to some  
+// other control gate or between target and target2 qbits for a two qubit gate. 
 export function seatIsTaken(circuitState, qbit, step) {
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
     for (let i = 0; i < circuitState.steps.length; i++) {
@@ -556,7 +591,7 @@ function setupEmptyCells(gatesTableRowState, inputRow) {
 
 /* set cell values for non empty cells */
 function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestamp) {
-
+  
   // setup settings for cells holding gates
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
     for (let i = 0; i < circuitState.steps.length; i++) {
@@ -599,7 +634,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           if (!((rowMin <= inputRow) && (inputRow <= rowMax))) {
             continue;
           }
-
+          
           let rowControl = null;
           let rowControl2 = null;
           let rowTarget = null;
@@ -625,12 +660,14 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           // update cell properties
           gatesTableRowState.cells[column].name = gate.name;
           gatesTableRowState.cells[column].gate = gate.name;
-          // I want all elements in circuit to update when 
+          // all elements in circuit must be updated when 
           // switching from colored to blue gates:
           gatesTableRowState.cells[column].key = Vue.$cookies.get('colored-gates');
           gatesTableRowState.cells[column].tooltip = "";
           if (gate.name == "sqrt-swap" || gate.name == "swap-phi" || gate.name == "iswap"){
-            gatesTableRowState.cells[column].tooltip += `${gate.name} `
+            if ((inputRow - 1) / 2 == Math.min(target, target2)){
+              gatesTableRowState.cells[column].tooltip += `${gate.name} ` 
+            }
           }
           gatesTableRowState.cells[column].img = gate.name.replace("ctrl-", "");
           if (gate.name == "toffoli") gatesTableRowState.cells[column].img = "pauli-x";
@@ -646,8 +683,10 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             gatesTableRowState.cells[column].tooltip += `θ:${gate.theta} `
           }
           if (Object.prototype.hasOwnProperty.call(gate, "phi")) {
-            gatesTableRowState.cells[column].phi = parseFloat(gate.phi);
-            gatesTableRowState.cells[column].tooltip += `φ:${gate.phi} `
+            if (gate.name != "swap-phi" || ((inputRow - 1) / 2 == Math.min(target, target2))){
+              gatesTableRowState.cells[column].phi = parseFloat(gate.phi);
+              gatesTableRowState.cells[column].tooltip += `φ:${gate.phi} `
+            }
           }
           if (Object.prototype.hasOwnProperty.call(gate, "lambda")) {
             gatesTableRowState.cells[column].lambda = parseFloat(gate.lambda);
@@ -770,4 +809,5 @@ export default {
   seatIsTaken,
   seatsAreTaken,
   getProximFreeSeat,
+  positionIsFilled
 };

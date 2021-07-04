@@ -3,13 +3,13 @@ import {
   retrieveRowsInGatesTable,
   seatIsTaken,
   seatsAreTaken,
-  getProximFreeSeat
+  getProximFreeSeat,
+  positionIsFilled
 } from "./gatesTable.js";
 
 import {
   retrieve_circuit,
 } from "./circuitSaveAndRetrieve.js";
-
 
 export const circuitEditorModule = {
   namespaced: true,
@@ -70,13 +70,20 @@ export const circuitEditorModule = {
   },
 
   actions: {
-    // need a way to force circuit redraw
+    // need a way to force circuit redraw, perhaps there is a better way
     refreshCircuit: function () {
-      let qbit = -1;
-      let step = -1;
-      let dto = {"step": step, "qbit": qbit, "name": "identity"};
-      this.commit("circuitEditorModule/insertGate", dto);
-      this.commit("circuitEditorModule/removeGate", dto);
+      let availableQubits = window.gatesTable.rows / 2 - 1;
+      let availableSteps = window.gatesTable.columns / 2 - 1;
+      for (let s = 0; s < availableSteps; s++){
+        for (let q = 0; q < availableQubits; q++){
+          if (!positionIsFilled(circuitEditorModule.state, s, q)){
+            let dto = {"step":s, "qbit": q, "name": "identity"};
+            this.commit("circuitEditorModule/insertGate", dto);
+            this.commit("circuitEditorModule/removeGate", dto);
+            return;
+          }
+        }
+      }
     },
     updateCircuit: function (context, jsonObj) {
       this.commit("circuitEditorModule/updateCircuitState", jsonObj);

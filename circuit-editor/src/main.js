@@ -50,7 +50,7 @@ if (liveSimulation == null){
 }
 let legendBase = Vue.$cookies.get('legend-base');
 if (legendBase == null){
-  Vue.$cookies.set('legendBase', '2');
+  Vue.$cookies.set('legend-base', '2');
 }
 
 // Used when toggling between showing/hiding ALL tooltips

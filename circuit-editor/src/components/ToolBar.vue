@@ -104,7 +104,7 @@
             </div>
           </td>
         </tr>
-      </table>oo
+      </table>
 
     </b-modal>
 
