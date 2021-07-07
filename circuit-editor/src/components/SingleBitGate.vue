@@ -151,7 +151,6 @@
       </table>
     </b-modal>
 
-
   </div>
 </template>
 
