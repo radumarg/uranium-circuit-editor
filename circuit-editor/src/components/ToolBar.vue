@@ -139,6 +139,7 @@ export default {
   created() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
       if (mutation.type == 'circuitEditorModule/insertGate' || 
+          mutation.type == 'circuitEditorModule/insertGates' ||
           mutation.type == 'circuitEditorModule/insertQbit' ||
           mutation.type == 'circuitEditorModule/insertStep' ||
           mutation.type == 'circuitEditorModule/removeGateByUser' || 

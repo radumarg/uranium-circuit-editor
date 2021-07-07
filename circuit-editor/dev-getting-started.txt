@@ -45,20 +45,12 @@ npm install jscharting
 
 npm i -D jscharting-vue
 
-- Needed to compile Rust code to webassembly: https://github.com/rustwasm/wasm-pack
-
-npm install --save-dev wasm-tool/wasm-pack-plugin
-
-- Install this command line tool for working with webassembly Rust projects: https://rustwasm.github.io/wasm-pack/installer/
-
-- Install this tool needed by wasm-pack: https://github.com/cargo-generate/cargo-generate
-
 cargo install cargo-generate
-
-- Install text-encoding: https://www.npmjs.com/package/text-encoding
-
-npm install text-encoding
 
 - Install JQuery javascript charts library:
 
 npm install jquery
+
+- Install Mathjs: https://www.npmjs.com/package/mathjs
+
+npm install mathjs

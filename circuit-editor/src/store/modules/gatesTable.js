@@ -156,7 +156,7 @@ export function positionIsFilled(circuitState, step, qubit) {
 }
 
 // Verify if a gate can be placed at location. Note that for example a single 
-// bit gate cannot be placed between a control and a target qbits belongin to some  
+// bit gate cannot be placed between a control and a target qbits belonging to some  
 // other control gate or between target and target2 qbits for a two qubit gate. 
 export function seatIsTaken(circuitState, qbit, step) {
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
@@ -263,6 +263,20 @@ export function seatsAreTaken(circuitState, reallocatableQbits, proposedQbits, s
     }
   }
   return false;
+}
+
+// Verify if a set of gates can be placed at these locations. Note that for example a single 
+// bit gate cannot be placed between a control and a target qbits belonging to some  
+// other control gate or between target and target2 qbits for a two qubit gate. 
+export function seatsArrayIsTaken(circuitState, seats) {
+  for (let i = 0; i < seats.length; i++) {
+    let qbit = seats[i].qbit;
+    let step = seats[i].step;
+    if (seatIsTaken(circuitState, qbit, step)){
+      return true;
+    }
+  }
+  return false; 
 }
 
 /*************************************************************
@@ -809,5 +823,5 @@ export default {
   seatIsTaken,
   seatsAreTaken,
   getProximFreeSeat,
-  positionIsFilled
+  positionIsFilled,
 };
