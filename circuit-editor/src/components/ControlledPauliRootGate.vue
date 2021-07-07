@@ -76,12 +76,7 @@
           <td></td>
         </tr>
         <tr>
-          <td class="no-resize-cell">
-             <div v-b-hover="handleExpandGateHover">
-              <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" v-b-tooltip.hover title="Expand gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
-              <b-icon v-else icon="files" v-on:click="handleExpandGate()" style="color: #7952b3;" font-scale="1.3"></b-icon>
-              </div>
-          </td>
+          <td></td>
           <td v-b-tooltip.hover title="Root parametrized as 1/2^k" width="100px" style="padding: 5px;">Root&nbsp;(k): <br/>(t = 2^k)</td>
           <td width="100px" style="padding: 5px;"> 
             <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="rootNewK" placeholder="" type="number" id="root-new-k" v-on:change="resetRootT()" style="width:90px;"></b-form-input>
@@ -89,7 +84,12 @@
           <td></td>
         </tr>
         <tr>
-          <td></td>
+          <td class="no-resize-cell">
+             <div v-b-hover="handleExpandGateHover">
+              <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" v-b-tooltip.hover title="Expand gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
+              <b-icon v-else icon="files" v-on:click="handleExpandGate()" style="color: #7952b3;" font-scale="1.3"></b-icon>
+              </div>
+          </td>
           <td colspan="2">
             <div v-b-hover="handleExpandDownHover">
               <b-icon v-if="expandDownIsHovered" icon="chevron-bar-down" v-on:click="expandCircuitDown()" v-b-tooltip.hover title="Add qbit after" style="color: #7952b3;" font-scale="1.6"></b-icon>
