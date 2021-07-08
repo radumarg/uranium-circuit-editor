@@ -199,7 +199,7 @@ export default {
           this.$data.bitNew = this.bit = bitOld;
         }
       );
-      this.$refs['modal-dialog'].hide();
+      this.$refs['initial-modal-dialog'].hide();
     },
     handleSecondModalSave: function(){
       let qbitOld = this.qbit;

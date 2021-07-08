@@ -198,7 +198,7 @@ export default {
           this.$data.lambdaNew = this.lambda = lambdaOld;
         }
       );
-      this.$refs['modal-dialog'].hide();
+      this.$refs['initial-modal-dialog'].hide();
     },
     handleSecondModalSave: function(){
       let qbitOld = this.qbit;

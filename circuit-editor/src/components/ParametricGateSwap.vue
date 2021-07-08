@@ -221,7 +221,7 @@ export default {
           this.$data.phiNew = this.phi = phiOld;
         }
       );
-      this.$refs['modal-dialog'].hide();
+      this.$refs['initial-modal-dialog'].hide();
     },
     handleSecondModalSave: function(){
       let qbitOld = this.qbit;

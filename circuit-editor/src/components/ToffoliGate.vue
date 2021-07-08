@@ -280,7 +280,7 @@ export default {
           this.$data.controlstateNew2 = this.controlstate2 = controlstateOld2;
         }
       );
-      this.$refs['modal-dialog'].hide();
+      this.$refs['initial-modal-dialog'].hide();
     },
     handleSecondModalSave: function(){
       let qbitOld = this.qbit;
