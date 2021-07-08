@@ -231,39 +231,52 @@ export default {
       this.$data.qbitNew = this.qbit;
       if (this.qbit2 || this.qbit2 == 0){
         this.$data.qbit2New = this.qbit2;
+        this.$data.qbit2Expression = this.qbit2.toString();
       }
       if (this.root){
         if (this.root.includes("1/2^")){
           this.$data.rootNewK = this.root.replace("1/2^", "");
+          this.$data.rootKExpression = this.root.replace("1/2^", "");
           this.$data.rootNewT = null;
+          this.$data.rootTExpression = null;
         } else {
           this.$data.rootNewT= this.root.replace("1/", "");
+          this.$data.rootTExpression = this.root.replace("1/", "");
           this.$data.rootNewK = null;
+          this.$data.rootKExpression = null;
         }
       }
       if (this.control || this.control == 0){
         this.$data.controlNew = this.control;
+        this.$data.controlExpression = this.control.toString();
       }
       if (this.controlstate || this.controlstate == 0){
         this.$data.controlstateNew = this.controlstate;
+        this.$data.controlstateExpression = this.controlstate.toString();
       }
       if (this.control2 || this.control2 == 0){
         this.$data.controlNew2 = this.control2;
+        this.$data.control2Expression = this.control2.toString();
       }
       if (this.controlstate2 || this.controlstate2 == 0){
         this.$data.controlstateNew2 = this.controlstate2;
+        this.$data.controlstate2Expression = this.controlstate2.toString();
       }
       if (this.phi  || this.phi == 0){
         this.$data.phiNew = this.phi;
+        this.$data.phiExpression = this.phi.toString();
       }
       if (this.theta || this.theta == 0){
         this.$data.thetaNew = this.theta;
+        this.$data.thetaExpression = this.theta.toString();
       }
       if (this.lambda || this.lambda == 0){
         this.$data.lambdaNew = this.lambda;
+        this.$data.lambdaExpression = this.lambda.toString();
       }
       if (this.bit  || this.bit == 0){
         this.$data.bitNew = this.bit;
+        this.$data.bitExpression = this.bit.toString();
       }
       this.$refs['initial-modal-dialog'].show();
     },
