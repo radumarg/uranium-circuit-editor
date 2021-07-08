@@ -136,7 +136,7 @@
             Condition - 'q' based <br/>javascript expression:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitConditionExpression" placeholder="q > 0" type="text" id="qbit-cond" style="width:120px;"></b-form-input>
+            <b-form-input min="0" v-model="qbitConditionExpression" placeholder="q >= 0" type="text" id="qbit-cond" style="width:120px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>
@@ -157,7 +157,7 @@
             Condition - 's' based <br/>javascript expression:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepConditionExpression" placeholder="s > 0" type="text" id="step-cond" style="width:120px;"></b-form-input>
+            <b-form-input min="0" v-model="stepConditionExpression" placeholder="s >= 0" type="text" id="step-cond" style="width:120px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>

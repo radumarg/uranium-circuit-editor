@@ -112,7 +112,7 @@
             Condition - 'q' based <br/>javascript expression:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitConditionExpression" placeholder="q > 0" type="text" id="qbit-cond" style="width:120px;"></b-form-input>
+            <b-form-input min="0" v-model="qbitConditionExpression" placeholder="q >= 0" type="text" id="qbit-cond" style="width:120px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>
@@ -133,7 +133,7 @@
             Condition - 's' based <br/>javascript expression:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepConditionExpression" placeholder="s > 0" type="text" id="step-cond" style="width:120px;"></b-form-input>
+            <b-form-input min="0" v-model="stepConditionExpression" placeholder="s >= 0" type="text" id="step-cond" style="width:120px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>
@@ -143,6 +143,15 @@
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
             <b-form-input min="0" v-model="conjugateConditionExpression" placeholder="" type="text" id="conjugate-cond" style="width:300px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+         <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Theta Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="thetaExpression" placeholder="" type="text" id="conjugate-cond" style="width:300px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>
@@ -175,6 +184,7 @@ export default {
   data() {
     return {
       thetaNew: this.theta,
+      thetaExpression: this.theta,
     }
   },
   methods: {
@@ -213,6 +223,7 @@ export default {
         'qbitStop': this.qbitStop,
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
+        'thetaExpression': this.thetaExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars

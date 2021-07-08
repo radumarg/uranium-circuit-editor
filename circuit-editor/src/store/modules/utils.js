@@ -103,3 +103,31 @@ export function insertingOneGateInCircuit(circuitState, dto) {
     circuitState.steps.push({ "index": step, "gates": [gate] });
     circuitState.steps.sort((l, r) => (l.index - r.index));
   } 
+
+  export function interpolateJavaScriptExpression(expression, s, q) {
+
+    expression = expression.trim();
+    expression = expression.replaceAll("False", "false");
+    expression = expression.replaceAll("FALSE", "false");
+    expression = expression.replaceAll("True", "true");
+    expression = expression.replaceAll("TRUE", "true");
+    expression = expression.replace(/q/g, `${q}`);
+    
+    let result = "";
+
+    // replace all s-es except s in False
+    for (var i = 0; i < expression.length; i++) {
+
+      if (i < 3) {
+        if (expression[i] == "s") result += `${s}`;
+        else result += expression[i];
+      } else if (expression.length >= i + 2 && expression.substring(i - 3, i + 2).toLowerCase() == "false"){
+        result += "s";
+      } else {
+        if (expression[i] == "s") result += `${s}`;
+        else result += expression[i];
+      }
+    }
+
+    return result;
+  }

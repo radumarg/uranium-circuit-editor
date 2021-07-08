@@ -268,10 +268,10 @@ export function seatsAreTaken(circuitState, reallocatableQbits, proposedQbits, s
 // Verify if a set of gates can be placed at these locations. Note that for example a single 
 // bit gate cannot be placed between a control and a target qbits belonging to some  
 // other control gate or between target and target2 qbits for a two qubit gate. 
-export function seatsArrayIsTaken(circuitState, seats) {
-  for (let i = 0; i < seats.length; i++) {
-    let qbit = seats[i].qbit;
-    let step = seats[i].step;
+export function seatsArrayIsTaken(circuitState, dtos) {
+  for (let i = 0; i < dtos.length; i++) {
+    let qbit = dtos[i]["qbit"];
+    let step = dtos[i]["step"];
     if (seatIsTaken(circuitState, qbit, step)){
       return true;
     }

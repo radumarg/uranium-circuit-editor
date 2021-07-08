@@ -10,6 +10,7 @@ import {
 
 import {
   insertingOneGateInCircuit,
+  interpolateJavaScriptExpression,
 } from "./utils.js";
 
 import {
@@ -257,21 +258,43 @@ export const circuitEditorModule = {
         let qbitStop = parseInt(dataTransferObj["qbitStop"]);
         let qbitConditionExpression = dataTransferObj["qbitConditionExpression"];
         let conjugateConditionExpression = dataTransferObj["conjugateConditionExpression"];
-
-        let seats = [];
+        
+        let dtos = [];
         for (let s = stepStart; s <= stepStop; s++) {
           for (let q = qbitStart; q <= qbitStop; q++) {
+
             if (s == step && q == qbit) {
               continue;
             }
-            let condStep = stepConditionExpression.replace("s", s);
-            let condQbit = qbitConditionExpression.replace("q", q);
-            let condConjugate = conjugateConditionExpression.replace("s", s);
-            condConjugate = condConjugate.replace("q", q);
+
+            let condStep = interpolateJavaScriptExpression(stepConditionExpression, s, q);
+            let condQbit = interpolateJavaScriptExpression(qbitConditionExpression, s, q);
+            let condConjugate = interpolateJavaScriptExpression(conjugateConditionExpression, s, q);
+
             if (evaluate(condStep) && 
                 evaluate(condQbit) && 
                 evaluate(condConjugate)){
-              seats.push({step: s, qbit: q});
+
+              let dto = { "step": s, "qbit": q, "name": name };
+
+              if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiExpression")) {
+                let phiExpression = dataTransferObj["phiExpression"];
+                dto["phi"] = interpolateJavaScriptExpression(phiExpression, s, q);
+              }
+              if (Object.prototype.hasOwnProperty.call(dataTransferObj, "thetaExpression")) {
+                let thetaExpression = dataTransferObj["thetaExpression"];
+                dto["theta"] = interpolateJavaScriptExpression(thetaExpression, s, q);
+              }
+              if (Object.prototype.hasOwnProperty.call(dataTransferObj, "lambdaExpression")) {
+                let lambdaExpression = dataTransferObj["lambdaExpression"];
+                dto["lambda"] = interpolateJavaScriptExpression(lambdaExpression, s, q);
+              }
+              if (Object.prototype.hasOwnProperty.call(dataTransferObj, "bitExpression")) {
+                let bitExpression = dataTransferObj["bitExpression"];
+                dto["bit"] = interpolateJavaScriptExpression(bitExpression, s, q);
+              }
+
+              dtos.push(dto);
             }
           }
         }
@@ -280,17 +303,12 @@ export const circuitEditorModule = {
           alert("Negative steps not permitted!");
         } else if (qbitStart < 0 || qbitStop < 0) {
           alert("Negative qbits not permitted!");
-        } else if (seatsArrayIsTaken(circuitEditorModule.state, seats)) {
+        } else if (seatsArrayIsTaken(circuitEditorModule.state, dtos)) {
           alert("Not all proposed seats are empty!");
         } else {
-          let dtos = [];
-          for (let i = 0; i < seats.length; i++) {
-            let qbit = seats[i].qbit;
-            let step = seats[i].step;
-            let dto = { "step": step, "qbit": qbit, "name": name };
-            dtos.push(dto);
+          if (dtos.length > 0){
+            this.commit("circuitEditorModule/insertGates", dtos);
           }
-          this.commit("circuitEditorModule/insertGates", dtos);
 
           // duplicating gate was successful
           resolve(true);
