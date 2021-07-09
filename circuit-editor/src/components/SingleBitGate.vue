@@ -134,7 +134,7 @@
             Conjugate Condition - 'q, s' based <br/>javascript expression:
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="conjugateConditionExpression" placeholder="" type="text" id="conjugate-cond" style="width:300px;"></b-form-input>
+            <b-form-input min="0" v-model="conjugateConditionExpression" placeholder="" type="text" id="conjugate-cond" style="min-width:400px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>
@@ -252,7 +252,7 @@ export default {
       }
       if (this.controlstate || this.controlstate == 0){
         this.$data.controlstateNew = this.controlstate;
-        this.$data.controlstateExpression = this.controlstate.toString();
+        this.$data.controlstateExpression = this.controlstate;
       }
       if (this.control2 || this.control2 == 0){
         this.$data.controlNew2 = this.control2;
@@ -260,7 +260,7 @@ export default {
       }
       if (this.controlstate2 || this.controlstate2 == 0){
         this.$data.controlstateNew2 = this.controlstate2;
-        this.$data.controlstate2Expression = this.controlstate2.toString();
+        this.$data.controlstate2Expression = this.controlstate2;
       }
       if (this.phi  || this.phi == 0){
         this.$data.phiNew = this.phi;

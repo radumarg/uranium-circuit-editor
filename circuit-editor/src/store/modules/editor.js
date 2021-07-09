@@ -259,6 +259,11 @@ export const circuitEditorModule = {
         let qbitConditionExpression = dataTransferObj["qbitConditionExpression"];
         let conjugateConditionExpression = dataTransferObj["conjugateConditionExpression"];
         
+        stepStart = Math.min(parseInt(stepStart), parseInt(stepStop));
+        stepStop = Math.max(parseInt(stepStart), parseInt(stepStop));
+        qbitStart = Math.min(parseInt(qbitStart), parseInt(qbitStop));
+        qbitStop = Math.max(parseInt(qbitStart), parseInt(qbitStop));
+        
         let dtos = [];
         for (let s = stepStart; s <= stepStop; s++) {
           for (let q = qbitStart; q <= qbitStop; q++) {
@@ -270,35 +275,35 @@ export const circuitEditorModule = {
             let condStep = interpolateJavaScriptExpression(stepConditionExpression, s, q);
             let condQbit = interpolateJavaScriptExpression(qbitConditionExpression, s, q);
             let condConjugate = interpolateJavaScriptExpression(conjugateConditionExpression, s, q);
-
+              
             if (evaluate(condStep) && 
                 evaluate(condQbit) && 
                 evaluate(condConjugate)){
-
+              
               let dto = { "step": s, "qbit": q, "name": name };
 
               if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiExpression")) {
                 let phiExpression = dataTransferObj["phiExpression"];
-                dto["phi"] = interpolateJavaScriptExpression(phiExpression, s, q);
+                dto["phi"] = evaluate(interpolateJavaScriptExpression(phiExpression, s, q));
               }
               if (Object.prototype.hasOwnProperty.call(dataTransferObj, "thetaExpression")) {
                 let thetaExpression = dataTransferObj["thetaExpression"];
-                dto["theta"] = interpolateJavaScriptExpression(thetaExpression, s, q);
+                dto["theta"] = evaluate(interpolateJavaScriptExpression(thetaExpression, s, q));
               }
               if (Object.prototype.hasOwnProperty.call(dataTransferObj, "lambdaExpression")) {
                 let lambdaExpression = dataTransferObj["lambdaExpression"];
-                dto["lambda"] = interpolateJavaScriptExpression(lambdaExpression, s, q);
+                dto["lambda"] = evaluate(interpolateJavaScriptExpression(lambdaExpression, s, q));
               }
               if (Object.prototype.hasOwnProperty.call(dataTransferObj, "bitExpression")) {
                 let bitExpression = dataTransferObj["bitExpression"];
-                dto["bit"] = interpolateJavaScriptExpression(bitExpression, s, q);
+                dto["bit"] = evaluate(interpolateJavaScriptExpression(bitExpression, s, q));
               }
 
               dtos.push(dto);
             }
           }
         }
-
+        
         if (stepStart < 0 || stepStop < 0) {
           alert("Negative steps not permitted!");
         } else if (qbitStart < 0 || qbitStop < 0) {

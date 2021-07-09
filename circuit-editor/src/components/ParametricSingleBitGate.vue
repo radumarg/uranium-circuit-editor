@@ -142,11 +142,11 @@
             Conjugate Condition - 'q, s' based <br/>javascript expression:
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="conjugateConditionExpression" placeholder="" type="text" id="conjugate-cond" style="width:300px;"></b-form-input>
+            <b-form-input min="0" v-model="conjugateConditionExpression" placeholder="" type="text" id="conjugate-cond" style="min-width:400px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>
-         <tr>
+        <tr>
           <td colspan="3" width="300px" class="td-2nd-modal">
             Theta Value - 'q, s' based <br/>javascript expression:
           </td>
