@@ -18,8 +18,22 @@ import {
 } from "./circuitSaveAndRetrieve.js";
 
 import {
-  evaluate
+  create, 
+  all
 } from 'mathjs'
+
+// reduce the security risk by not allwing to evaluate arbitrary js
+// expressions: https://mathjs.org/docs/expressions/security.html
+const math = create(all);
+const limitedEvaluate = math.evaluate;
+math.import({
+  'import':     function () { throw new Error('Function import is disabled') },
+  'createUnit': function () { throw new Error('Function createUnit is disabled') },
+  'evaluate':   function () { throw new Error('Function evaluate is disabled') },
+  'parse':      function () { throw new Error('Function parse is disabled') },
+  'simplify':   function () { throw new Error('Function simplify is disabled') },
+  'derivative': function () { throw new Error('Function derivative is disabled') }
+}, { override: true })
 
 export const circuitEditorModule = {
   namespaced: true,
@@ -271,36 +285,36 @@ export const circuitEditorModule = {
             let condStep = interpolateJavaScriptExpression(stepConditionExpression, s, q);
             let condQbit = interpolateJavaScriptExpression(qbitConditionExpression, s, q);
             let condConjugate = interpolateJavaScriptExpression(conjugateConditionExpression, s, q);
-              
-            if (evaluate(condStep) && 
-                evaluate(condQbit) && 
-                evaluate(condConjugate)){
+            
+            if (limitedEvaluate(condStep) && 
+                limitedEvaluate(condQbit) && 
+                limitedEvaluate(condConjugate)){
               
               let dto = { "step": s, "qbit": q, "name": name };
 
               if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiExpression")) {
                 let phiExpression = dataTransferObj["phiExpression"];
-                dto["phi"] = evaluate(interpolateJavaScriptExpression(phiExpression, s, q));
+                dto["phi"] = limitedEvaluate(interpolateJavaScriptExpression(phiExpression, s, q));
               }
               if (Object.prototype.hasOwnProperty.call(dataTransferObj, "thetaExpression")) {
                 let thetaExpression = dataTransferObj["thetaExpression"];
-                dto["theta"] = evaluate(interpolateJavaScriptExpression(thetaExpression, s, q));
+                dto["theta"] = limitedEvaluate(interpolateJavaScriptExpression(thetaExpression, s, q));
               }
               if (Object.prototype.hasOwnProperty.call(dataTransferObj, "lambdaExpression")) {
                 let lambdaExpression = dataTransferObj["lambdaExpression"];
-                dto["lambda"] = evaluate(interpolateJavaScriptExpression(lambdaExpression, s, q));
+                dto["lambda"] = limitedEvaluate(interpolateJavaScriptExpression(lambdaExpression, s, q));
               }
               if (Object.prototype.hasOwnProperty.call(dataTransferObj, "bitExpression")) {
                 let bitExpression = dataTransferObj["bitExpression"];
-                dto["bit"] = evaluate(interpolateJavaScriptExpression(bitExpression, s, q));
+                dto["bit"] = limitedEvaluate(interpolateJavaScriptExpression(bitExpression, s, q));
               }
               if (Object.prototype.hasOwnProperty.call(dataTransferObj, "rootTExpression")) {
                 let rootTExpression = dataTransferObj["rootTExpression"];
                 let rootKExpression = dataTransferObj["rootKExpression"];
                 if (rootTExpression){
-                  dto["root"] = "1/" + evaluate(interpolateJavaScriptExpression(rootTExpression, s, q));
+                  dto["root"] = "1/" + limitedEvaluate(interpolateJavaScriptExpression(rootTExpression, s, q));
                 } else {
-                  dto["root"] = "1/2^" + evaluate(interpolateJavaScriptExpression(rootKExpression, s, q));
+                  dto["root"] = "1/2^" + limitedEvaluate(interpolateJavaScriptExpression(rootKExpression, s, q));
                 }
               }
 
@@ -308,7 +322,7 @@ export const circuitEditorModule = {
             }
           }
         }
-        alert("hei hei")
+        
         if (stepFirst < 0 || stepLast < 0) {
           alert("Negative steps not permitted!");
         } else if (qbitFirst < 0 || qbitLast < 0) {
@@ -317,10 +331,10 @@ export const circuitEditorModule = {
           alert("Not all proposed seats are empty!");
         } else {
           if (dtos.length > 0){
-            this.commit("circuitEditorModule/removeGate", { step: step, qbit: qbit });
+            this.commit("circuitEditorModule/removeGate", { "step": step, "qbit": qbit });
             this.commit("circuitEditorModule/insertGates", dtos);
           } else {
-            alert("No gate hase= been deployed, please review your expressions.")
+            alert("No gate hase been deployed, please review your expressions.")
           }
           
           // duplicating gate was successful

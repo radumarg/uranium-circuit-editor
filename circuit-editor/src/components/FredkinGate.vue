@@ -251,7 +251,6 @@ export default {
       this.$refs['initial-modal-dialog'].hide();
     },
     handleSecondModalSave: function(){
-      let qbitOld = this.qbit;
       let promise = this.duplicateGate({
         'step': this.step,
         'qbit': this.qbit,
@@ -269,7 +268,7 @@ export default {
         result => {}, 
         // eslint-disable-next-line no-unused-vars
         error => {
-          this.$data.qbitNew = this.qbit = qbitOld;
+          alert("There was an error while trying to evaluate the javascript expressions!");
         }
       );
       this.$refs['replicate-gate-modal-dialog'].hide();
