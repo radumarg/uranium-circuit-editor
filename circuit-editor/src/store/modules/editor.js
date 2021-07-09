@@ -268,10 +268,6 @@ export const circuitEditorModule = {
         for (let s = stepFirst; s <= stepLast; s++) {
           for (let q = qbitFirst; q <= qbitLast; q++) {
 
-            if (s == step && q == qbit) {
-              continue;
-            }
-
             let condStep = interpolateJavaScriptExpression(stepConditionExpression, s, q);
             let condQbit = interpolateJavaScriptExpression(qbitConditionExpression, s, q);
             let condConjugate = interpolateJavaScriptExpression(conjugateConditionExpression, s, q);
@@ -298,27 +294,39 @@ export const circuitEditorModule = {
                 let bitExpression = dataTransferObj["bitExpression"];
                 dto["bit"] = evaluate(interpolateJavaScriptExpression(bitExpression, s, q));
               }
+              if (Object.prototype.hasOwnProperty.call(dataTransferObj, "rootTExpression")) {
+                let rootTExpression = dataTransferObj["rootTExpression"];
+                let rootKExpression = dataTransferObj["rootKExpression"];
+                if (rootTExpression){
+                  dto["root"] = "1/" + evaluate(interpolateJavaScriptExpression(rootTExpression, s, q));
+                } else {
+                  dto["root"] = "1/2^" + evaluate(interpolateJavaScriptExpression(rootKExpression, s, q));
+                }
+              }
 
               dtos.push(dto);
             }
           }
         }
-        
+        alert("hei hei")
         if (stepFirst < 0 || stepLast < 0) {
           alert("Negative steps not permitted!");
         } else if (qbitFirst < 0 || qbitLast < 0) {
           alert("Negative qbits not permitted!");
-        } else if (seatsArrayIsTaken(circuitEditorModule.state, dtos)) {
+        } else if (seatsArrayIsTaken(circuitEditorModule.state, dtos, step, qbit)) {
           alert("Not all proposed seats are empty!");
         } else {
           if (dtos.length > 0){
+            this.commit("circuitEditorModule/removeGate", { step: step, qbit: qbit });
             this.commit("circuitEditorModule/insertGates", dtos);
+          } else {
+            alert("No gate hase= been deployed, please review your expressions.")
           }
-
+          
           // duplicating gate was successful
           resolve(true);
         }
-
+        
         // duplicating gate failed
         reject(false);
       })

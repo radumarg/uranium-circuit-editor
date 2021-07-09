@@ -155,6 +155,24 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            k Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="rootKExpression" placeholder="" type="text" id="root-k-expression" v-on:change="resetRootTExpression()" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            t Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="rootTExpression" placeholder="" type="text" id="root-t-expression" v-on:change="resetRootKExpression()" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
           <td colspan="6" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
@@ -184,6 +202,8 @@ export default {
     return {
       rootNewK: this.getKRoot(),
       rootNewT: this.getTRoot(),
+      rootKExpression: this.getKRoot(),
+      rootTExpression: this.getTRoot(),
     }
   },
   watch: {
@@ -268,6 +288,8 @@ export default {
         'qbitLast': this.qbitLast,
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
+        'rootKExpression': this.rootKExpression,
+        'rootTExpression': this.rootTExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -300,6 +322,12 @@ export default {
     },
     resetRootT(){
       this.$data.rootNewT = null;
+    },
+    resetRootKExpression(){
+      this.$data.rootKExpression = null;
+    },
+    resetRootTExpression(){
+      this.$data.rootTExpression = null;
     },
     getRoot(){
       if (this.$data.rootNewT){
