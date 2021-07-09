@@ -92,13 +92,13 @@
             First Qubit:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitStart" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
           </td>
           <td width="100px" class="td-2nd-modal">
             Last Qubit:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitStop" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model="qbitLast" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
           </td>
           <td width="200px" class="td-2nd-modal">
             Condition - 'q' based <br/>javascript expression:
@@ -113,13 +113,13 @@
             First Step:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepStart" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model="stepFirst" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
           </td>
           <td width="100px" class="td-2nd-modal">
             Last Step:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepStop" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model="stepLast" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
           </td>
           <td width="200px" class="td-2nd-modal">
             Condition - 's' based <br/>javascript expression:
@@ -181,10 +181,10 @@ export default {
       expandDownIsHovered:  false,
       expandGateIsHovered:  false,
       qbitNew: this.qbit,
-      qbitStart: this.qbit,
-      qbitStop: this.qbit,
-      stepStart: this.step,
-      stepStop: this.step,
+      qbitFirst: this.qbit,
+      qbitLast: this.qbit,
+      stepFirst: this.step,
+      stepLast: this.step,
       stepConditionExpression: "s >= 0",
       qbitConditionExpression: "q >= 0",
       conjugateConditionExpression: `(q - ${this.qbit}) == (s - ${this.step})`
@@ -276,7 +276,7 @@ export default {
       }
       if (this.bit  || this.bit == 0){
         this.$data.bitNew = this.bit;
-        this.$data.bitExpression = this.bit.toString();
+        this.$data.bitExpression = 'q';
       }
       this.$refs['initial-modal-dialog'].show();
     },
@@ -373,11 +373,11 @@ export default {
         'step': this.step,
         'qbit': this.qbit,
         'name': this.name, 
-        'stepStart': this.stepStart,
-        'stepStop': this.stepStop,
+        'stepFirst': this.stepFirst,
+        'stepLast': this.stepLast,
         'stepConditionExpression': this.stepConditionExpression,
-        'qbitStart': this.qbitStart,
-        'qbitStop': this.qbitStop,
+        'qbitFirst': this.qbitFirst,
+        'qbitLast': this.qbitLast,
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
       });

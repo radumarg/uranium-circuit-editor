@@ -100,13 +100,13 @@
             First Qubit:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitStart" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
           </td>
           <td width="100px" class="td-2nd-modal">
             Last Qubit:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitStop" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model="qbitLast" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
           </td>
           <td width="200px" class="td-2nd-modal">
             Condition - 'q' based <br/>javascript expression:
@@ -121,13 +121,13 @@
             First Step:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepStart" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model="stepFirst" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
           </td>
           <td width="100px" class="td-2nd-modal">
             Last Step:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepStop" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model="stepLast" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
           </td>
           <td width="200px" class="td-2nd-modal">
             Condition - 's' based <br/>javascript expression:
@@ -143,6 +143,15 @@
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
             <b-form-input min="0" v-model="conjugateConditionExpression" placeholder="" type="text" id="conjugate-cond" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Bit Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="bitExpression" placeholder="" type="text" id="theta-expression" style="min-width:400px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>
@@ -176,6 +185,7 @@ export default {
   data() {
     return {
       bitNew: this.bit,
+      bitExpression: 'q',
     }
   },
   methods: {
@@ -207,13 +217,14 @@ export default {
         'step': this.step,
         'qbit': this.qbit,
         'name': this.name, 
-        'stepStart': this.stepStart,
-        'stepStop': this.stepStop,
+        'stepFirst': this.stepFirst,
+        'stepLast': this.stepLast,
         'stepConditionExpression': this.stepConditionExpression,
-        'qbitStart': this.qbitStart,
-        'qbitStop': this.qbitStop,
+        'qbitFirst': this.qbitFirst,
+        'qbitLast': this.qbitLast,
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
+        'bitExpression': this.bitExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars

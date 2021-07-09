@@ -251,22 +251,22 @@ export const circuitEditorModule = {
         let step = parseInt(dataTransferObj["step"]);
         let qbit = parseInt(dataTransferObj["qbit"]);
         let name = dataTransferObj["name"];
-        let stepStart = parseInt(dataTransferObj["stepStart"]);
-        let stepStop = parseInt(dataTransferObj["stepStop"]);
+        let stepFirst = parseInt(dataTransferObj["stepFirst"]);
+        let stepLast = parseInt(dataTransferObj["stepLast"]);
         let stepConditionExpression = dataTransferObj["stepConditionExpression"];
-        let qbitStart = parseInt(dataTransferObj["qbitStart"]);
-        let qbitStop = parseInt(dataTransferObj["qbitStop"]);
+        let qbitFirst = parseInt(dataTransferObj["qbitFirst"]);
+        let qbitLast = parseInt(dataTransferObj["qbitLast"]);
         let qbitConditionExpression = dataTransferObj["qbitConditionExpression"];
         let conjugateConditionExpression = dataTransferObj["conjugateConditionExpression"];
         
-        stepStart = Math.min(parseInt(stepStart), parseInt(stepStop));
-        stepStop = Math.max(parseInt(stepStart), parseInt(stepStop));
-        qbitStart = Math.min(parseInt(qbitStart), parseInt(qbitStop));
-        qbitStop = Math.max(parseInt(qbitStart), parseInt(qbitStop));
+        stepFirst = Math.min(parseInt(stepFirst), parseInt(stepLast));
+        stepLast = Math.max(parseInt(stepFirst), parseInt(stepLast));
+        qbitFirst = Math.min(parseInt(qbitFirst), parseInt(qbitLast));
+        qbitLast = Math.max(parseInt(qbitFirst), parseInt(qbitLast));
         
         let dtos = [];
-        for (let s = stepStart; s <= stepStop; s++) {
-          for (let q = qbitStart; q <= qbitStop; q++) {
+        for (let s = stepFirst; s <= stepLast; s++) {
+          for (let q = qbitFirst; q <= qbitLast; q++) {
 
             if (s == step && q == qbit) {
               continue;
@@ -304,9 +304,9 @@ export const circuitEditorModule = {
           }
         }
         
-        if (stepStart < 0 || stepStop < 0) {
+        if (stepFirst < 0 || stepLast < 0) {
           alert("Negative steps not permitted!");
-        } else if (qbitStart < 0 || qbitStop < 0) {
+        } else if (qbitFirst < 0 || qbitLast < 0) {
           alert("Negative qbits not permitted!");
         } else if (seatsArrayIsTaken(circuitEditorModule.state, dtos)) {
           alert("Not all proposed seats are empty!");
