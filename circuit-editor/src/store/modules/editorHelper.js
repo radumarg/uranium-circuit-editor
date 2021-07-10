@@ -89,6 +89,8 @@ export function insertingOneGateInCircuit(circuitState, dto) {
 } 
 
 export function interpolateJavaScriptExpression(expression, s, q) {
+  
+  if (typeof expression == "number") return expression;
 
   expression = expression.trim();
   expression = expression.replaceAll("False", "false");

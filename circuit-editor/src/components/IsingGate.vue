@@ -234,9 +234,7 @@ export default {
         // eslint-disable-next-line no-unused-vars
         result => {}, 
         // eslint-disable-next-line no-unused-vars
-        error => {
-          alert("There was an error while trying to evaluate the javascript expressions!");
-        }
+        error => {},
       );
       this.$refs['replicate-gate-modal-dialog'].hide();
     },

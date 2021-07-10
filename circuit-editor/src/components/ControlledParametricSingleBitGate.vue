@@ -181,6 +181,15 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Theta Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="thetaExpression" placeholder="" type="text" id="theta-expression" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
           <td colspan="6" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
@@ -291,14 +300,13 @@ export default {
         'conjugateConditionExpression': this.conjugateConditionExpression,
         'controlExpression': this.controlExpression,
         'controlstateExpression': this.controlstateExpression,
+        'thetaExpression': this.thetaExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
         result => {}, 
         // eslint-disable-next-line no-unused-vars
-        error => {
-          alert("There was an error while trying to evaluate the javascript expressions!");
-        }
+        error => {},
       );
       this.$refs['replicate-gate-modal-dialog'].hide();
     },

@@ -270,11 +270,31 @@ export function seatsAreTaken(circuitState, reallocatableQbits, proposedQbits, s
 // other control gate or between target and target2 qbits for a two qubit gate. 
 export function seatsArrayIsTaken(circuitState, dtos, existingStep, existingQubit) {
   for (let i = 0; i < dtos.length; i++) {
+
     let qbit = dtos[i]["qbit"];
     let step = dtos[i]["step"];
+
     if (existingStep == step && existingQubit == qbit) continue;
+
     if (seatIsTaken(circuitState, qbit, step)){
       return true;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "control")) {
+      let control = dtos[i]["control"];
+      if (qbit == control) return true;
+      if (seatIsTaken(circuitState, control, step)){
+        return true;
+      }
+
+      if (Object.prototype.hasOwnProperty.call(dtos[i], "control2")) {
+        let control2 = dtos[i]["control2"];
+        if (qbit == control2) return true;
+        if (control == control2) return true;
+        if (seatIsTaken(circuitState, control2, step)){
+          return true;
+        }
+      }
     }
   }
   return false; 

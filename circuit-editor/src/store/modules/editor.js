@@ -301,6 +301,9 @@ export const circuitEditorModule = {
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controlstateExpression")) {
                   let controlstateExpression = dataTransferObj["controlstateExpression"];
                   dto["controlstate"] = limitedEvaluate(interpolateJavaScriptExpression(controlstateExpression, s, q));
+                  if (dto["controlstate"] != 0 && dto["controlstate"] != 1) {
+                    throw new Error(`Control state q=${q}, s=${s} does not evaluate to 0 or 1.`);
+                  }
                 }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "control2Expression")) {
                   let control2Expression = dataTransferObj["control2Expression"];
@@ -309,6 +312,9 @@ export const circuitEditorModule = {
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controlstate2Expression")) {
                   let controlstate2Expression = dataTransferObj["controlstate2Expression"];
                   dto["controlstate2"] = limitedEvaluate(interpolateJavaScriptExpression(controlstate2Expression, s, q));
+                  if (dto["controlstate"] != 0 && dto["controlstate"] != 1) {
+                    throw new Error(`Second control state q=${q}, s=${s} does not evaluate to 0 or 1.`);
+                  }
                 }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiExpression")) {
                   let phiExpression = dataTransferObj["phiExpression"];

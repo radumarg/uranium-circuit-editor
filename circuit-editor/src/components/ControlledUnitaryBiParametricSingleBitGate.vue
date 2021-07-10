@@ -124,7 +124,7 @@
             First Qubit:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitStart" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
           </td>
           <td width="100px" class="td-2nd-modal">
             Last Qubit:
@@ -185,6 +185,24 @@
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
             <b-form-input min="0" v-model="controlstateExpression" placeholder="" type="text" id="ctrl-state" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Phi Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="phiExpression" placeholder="" type="text" id="phi-expression" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Lambda Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="lambdaExpression" placeholder="" type="text" id="lambda-expression" style="min-width:400px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>
@@ -295,20 +313,20 @@ export default {
         'stepFirst': this.stepFirst,
         'stepLast': this.stepLast,
         'stepConditionExpression': this.stepConditionExpression,
-        'qbitStart': this.qbitStart,
+        'qbitFirst': this.qbitFirst,
         'qbitLast': this.qbitLast,
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
         'controlExpression': this.controlExpression,
         'controlstateExpression': this.controlstateExpression,
+        'lambdaExpression': this.lambdaExpression,
+        'phiExpression': this.phiExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
         result => {}, 
         // eslint-disable-next-line no-unused-vars
-        error => {
-          alert("There was an error while trying to evaluate the javascript expressions!");
-        }
+        error => {},
       );
       this.$refs['replicate-gate-modal-dialog'].hide();
     },
