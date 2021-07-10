@@ -163,6 +163,24 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Control Qubit - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="controlExpression" placeholder="" type="text" id="ctrl-qbit" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Control State - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="controlstateExpression" placeholder="" type="text" id="ctrl-state" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
           <td colspan="6" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
@@ -195,6 +213,8 @@ export default {
     return {
       controlNew: this.control,
       controlstateNew: this.controlstate,
+      controlExpression: this.control,
+      controlstateExpression: this.controlstate,
       options: [
         { value: '1', text: '|1⟩' },
         { value: '0', text: '|0⟩' },
@@ -262,6 +282,8 @@ export default {
         'qbitLast': this.qbitLast,
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
+        'controlExpression': this.controlExpression,
+        'controlstateExpression': this.controlstateExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars

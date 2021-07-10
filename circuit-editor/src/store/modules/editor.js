@@ -9,9 +9,10 @@ import {
 } from "./gatesTable.js";
 
 import {
+  removingGateFromCircuit,
   insertingOneGateInCircuit,
   interpolateJavaScriptExpression,
-} from "./utils.js";
+} from "./editorHelper.js";
 
 import {
   retrieve_circuit,
@@ -272,7 +273,7 @@ export const circuitEditorModule = {
         let qbitLast = parseInt(dataTransferObj["qbitLast"]);
         let qbitConditionExpression = dataTransferObj["qbitConditionExpression"];
         let conjugateConditionExpression = dataTransferObj["conjugateConditionExpression"];
-        
+
         stepFirst = Math.min(parseInt(stepFirst), parseInt(stepLast));
         stepLast = Math.max(parseInt(stepFirst), parseInt(stepLast));
         qbitFirst = Math.min(parseInt(qbitFirst), parseInt(qbitLast));
@@ -285,40 +286,62 @@ export const circuitEditorModule = {
             let condStep = interpolateJavaScriptExpression(stepConditionExpression, s, q);
             let condQbit = interpolateJavaScriptExpression(qbitConditionExpression, s, q);
             let condConjugate = interpolateJavaScriptExpression(conjugateConditionExpression, s, q);
-            
-            if (limitedEvaluate(condStep) && 
-                limitedEvaluate(condQbit) && 
-                limitedEvaluate(condConjugate)){
-              
-              let dto = { "step": s, "qbit": q, "name": name };
 
-              if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiExpression")) {
-                let phiExpression = dataTransferObj["phiExpression"];
-                dto["phi"] = limitedEvaluate(interpolateJavaScriptExpression(phiExpression, s, q));
-              }
-              if (Object.prototype.hasOwnProperty.call(dataTransferObj, "thetaExpression")) {
-                let thetaExpression = dataTransferObj["thetaExpression"];
-                dto["theta"] = limitedEvaluate(interpolateJavaScriptExpression(thetaExpression, s, q));
-              }
-              if (Object.prototype.hasOwnProperty.call(dataTransferObj, "lambdaExpression")) {
-                let lambdaExpression = dataTransferObj["lambdaExpression"];
-                dto["lambda"] = limitedEvaluate(interpolateJavaScriptExpression(lambdaExpression, s, q));
-              }
-              if (Object.prototype.hasOwnProperty.call(dataTransferObj, "bitExpression")) {
-                let bitExpression = dataTransferObj["bitExpression"];
-                dto["bit"] = limitedEvaluate(interpolateJavaScriptExpression(bitExpression, s, q));
-              }
-              if (Object.prototype.hasOwnProperty.call(dataTransferObj, "rootTExpression")) {
-                let rootTExpression = dataTransferObj["rootTExpression"];
-                let rootKExpression = dataTransferObj["rootKExpression"];
-                if (rootTExpression){
-                  dto["root"] = "1/" + limitedEvaluate(interpolateJavaScriptExpression(rootTExpression, s, q));
-                } else {
-                  dto["root"] = "1/2^" + limitedEvaluate(interpolateJavaScriptExpression(rootKExpression, s, q));
+            try {
+              if (limitedEvaluate(condStep) && 
+                  limitedEvaluate(condQbit) && 
+                  limitedEvaluate(condConjugate)){
+                
+                let dto = { "step": s, "qbit": q, "name": name };
+
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controlExpression")) {
+                  let controlExpression = dataTransferObj["controlExpression"];
+                  dto["control"] = limitedEvaluate(interpolateJavaScriptExpression(controlExpression, s, q));
                 }
-              }
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controlstateExpression")) {
+                  let controlstateExpression = dataTransferObj["controlstateExpression"];
+                  dto["controlstate"] = limitedEvaluate(interpolateJavaScriptExpression(controlstateExpression, s, q));
+                }
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "control2Expression")) {
+                  let control2Expression = dataTransferObj["control2Expression"];
+                  dto["control2"] = limitedEvaluate(interpolateJavaScriptExpression(control2Expression, s, q));
+                }
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controlstate2Expression")) {
+                  let controlstate2Expression = dataTransferObj["controlstate2Expression"];
+                  dto["controlstate2"] = limitedEvaluate(interpolateJavaScriptExpression(controlstate2Expression, s, q));
+                }
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiExpression")) {
+                  let phiExpression = dataTransferObj["phiExpression"];
+                  dto["phi"] = limitedEvaluate(interpolateJavaScriptExpression(phiExpression, s, q));
+                }
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "thetaExpression")) {
+                  let thetaExpression = dataTransferObj["thetaExpression"];
+                  dto["theta"] = limitedEvaluate(interpolateJavaScriptExpression(thetaExpression, s, q));
+                }
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "lambdaExpression")) {
+                  let lambdaExpression = dataTransferObj["lambdaExpression"];
+                  dto["lambda"] = limitedEvaluate(interpolateJavaScriptExpression(lambdaExpression, s, q));
+                }
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "bitExpression")) {
+                  let bitExpression = dataTransferObj["bitExpression"];
+                  dto["bit"] = limitedEvaluate(interpolateJavaScriptExpression(bitExpression, s, q));
+                }
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "rootTExpression")) {
+                  let rootTExpression = dataTransferObj["rootTExpression"];
+                  let rootKExpression = dataTransferObj["rootKExpression"];
+                  if (rootTExpression){
+                    dto["root"] = "1/" + limitedEvaluate(interpolateJavaScriptExpression(rootTExpression, s, q));
+                  } else {
+                    dto["root"] = "1/2^" + limitedEvaluate(interpolateJavaScriptExpression(rootKExpression, s, q));
+                  }
+                }
 
-              dtos.push(dto);
+                dtos.push(dto);
+              }
+            } catch (exception) {
+              alert(exception);
+              reject(false);
+              return;
             }
           }
         }
@@ -331,10 +354,9 @@ export const circuitEditorModule = {
           alert("Not all proposed seats are empty!");
         } else {
           if (dtos.length > 0){
-            this.commit("circuitEditorModule/removeGate", { "step": step, "qbit": qbit });
-            this.commit("circuitEditorModule/insertGates", dtos);
+            this.commit("circuitEditorModule/insertGates", {"dtos": dtos, "existingStep": step, "existingQbit": qbit});
           } else {
-            alert("No gate hase been deployed, please review your expressions.")
+            alert("No gate has been deployed, please review your expressions.")
           }
           
           // duplicating gate was successful
@@ -664,52 +686,24 @@ export const circuitEditorModule = {
       let state = circuitEditorModule.state;
       insertingOneGateInCircuit(state, dto);
     },
-    insertGates(context, dtos) {
+    insertGates(context, dataTransferObj) {
+      let dtos = dataTransferObj["dtos"];
+      let existingStep = dataTransferObj["existingStep"];
+      let existingQbit = dataTransferObj["existingQbit"];
       let state = circuitEditorModule.state;
+      removingGateFromCircuit(state, {"step": existingStep, "qbit": existingQbit});
       for (let i = 0; i < dtos.length; i++){
         insertingOneGateInCircuit(state, dtos[i]);
       }
     },
     removeGate(context, dto) {
-      let step = parseInt(dto["step"]);
-      let qbit = parseInt(dto["qbit"]);
       let state = circuitEditorModule.state;
-      if (Object.prototype.hasOwnProperty.call(state, "steps")) {
-        for (let i = 0; i < state.steps.length; i++) {
-          if (state.steps[i].index == step) {
-            let gates = state.steps[i]["gates"];
-            for (let j = 0; j < gates.length; j++) {
-              let gate = gates[j];
-              if (Object.prototype.hasOwnProperty.call(gate, "target")) {
-                if (gate.target == qbit) {
-                  gates.splice(j, 1);
-                }
-              }
-            }
-          }
-        }
-      }
+      removingGateFromCircuit(state, dto);
     },
-    // this is a copy of previous function, very, very bad
+    // mutation that triggers update to undo/redo history
     removeGateByUser(context, dto) {
-      let step = parseInt(dto["step"]);
-      let qbit = parseInt(dto["qbit"]);
       let state = circuitEditorModule.state;
-      if (Object.prototype.hasOwnProperty.call(state, "steps")) {
-        for (let i = 0; i < state.steps.length; i++) {
-          if (state.steps[i].index == step) {
-            let gates = state.steps[i]["gates"];
-            for (let j = 0; j < gates.length; j++) {
-              let gate = gates[j];
-              if (Object.prototype.hasOwnProperty.call(gate, "target")) {
-                if (gate.target == qbit) {
-                  gates.splice(j, 1);
-                }
-              }
-            }
-          }
-        }
-      }
+      removingGateFromCircuit(state, dto);
     },
     removeQbit(context, dto) {
       let qbit = parseInt(dto["qbit"]);

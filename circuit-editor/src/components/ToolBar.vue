@@ -168,6 +168,7 @@ export default {
         if (this.history.length > 0){
            let current_state = JSON.parse(this.history[this.history.length - 1]);
            this.updateCircuit(current_state.circuitEditorModule);
+           this.$root.$emit("triggerSimulationRun", current_state.circuitEditorModule);
         } else {
           this.emptyCircuit();
         }
@@ -177,11 +178,13 @@ export default {
       if(this.historyUnRoll.length > 0){
         let json_txt = this.historyUnRoll.pop();
         this.history.push(json_txt);
-        let state = JSON.parse(json_txt);
-        this.updateCircuit(state.circuitEditorModule);
+        let current_state = JSON.parse(json_txt);
+        this.updateCircuit(current_state.circuitEditorModule);
+        this.$root.$emit("triggerSimulationRun", current_state.circuitEditorModule);
       }
     },
-    toggleTooltips: function() {      
+    toggleTooltips: function() {    
+      this.refreshCircuit();  
       if (window.toolTipsAreShown){ 
         JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");
       } else {
