@@ -3,7 +3,9 @@ import {
   retrieveRowsInGatesTable,
   seatIsTaken,
   seatsAreTaken,
-  seatsArrayIsTaken,
+  seatsInArrayAreAlreadyTaken,
+  proposedNewSeatsOverlap,
+  proposedNewGatesAreInvalid,
   getProximFreeSeat,
   positionIsFilled,
 } from "./gatesTable.js";
@@ -360,8 +362,12 @@ export const circuitEditorModule = {
           alert("Negative steps not permitted!");
         } else if (qbitFirst < 0 || qbitLast < 0) {
           alert("Negative qbits not permitted!");
-        } else if (seatsArrayIsTaken(circuitEditorModule.state, dtos, step, qbit)) {
-          alert("Not all proposed seats are empty!");
+        } else if (proposedNewGatesAreInvalid(dtos)){
+          alert("Some of the proposed new gates do not allocate distinct seats for target/target2/control/control2 qubits!");
+        } else if (seatsInArrayAreAlreadyTaken(circuitEditorModule.state, dtos, step, qbit)) {
+          alert("Some of the proposed new gates have seats already occupied!");
+        } else if (proposedNewSeatsOverlap(dtos)) {
+          alert("Some of the proposed new gates overlap!");
         } else {
           if (dtos.length > 0){
             this.commit("circuitEditorModule/insertGates", {"dtos": dtos, "existingStep": step, "existingQbit": qbit});

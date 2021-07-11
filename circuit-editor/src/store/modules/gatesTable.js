@@ -265,46 +265,92 @@ export function seatsAreTaken(circuitState, reallocatableQbits, proposedQbits, s
   return false;
 }
 
-// Verify if a set of gates can be placed at these locations. Note that for example a single 
-// bit gate cannot be placed between a control and a target qbits belonging to some  
-// other control gate or between target and target2 qbits for a two qubit gate. 
-export function seatsArrayIsTaken(circuitState, dtos, existingStep, existingQubit) {
+// Detect situations where proposed gates do not allocate
+// distinct qubits for target, target2, control and control2
+export function proposedNewGatesAreInvalid(dtos) {
   for (let i = 0; i < dtos.length; i++) {
 
     let qbit = dtos[i]["qbit"];
-    let step = dtos[i]["step"];
 
-    if (existingStep == step && existingQubit == qbit) continue;
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "control")) {
+      let control = dtos[i]["control"];
+      if (qbit == control) return true;
 
-    if (seatIsTaken(circuitState, qbit, step)){
-      return true;
+      if (Object.prototype.hasOwnProperty.call(dtos[i], "control2")) {
+        let control2 = dtos[i]["control2"];
+        if (qbit == control2) return true;
+        if (control == control2) return true;
+      }
     }
 
     if (Object.prototype.hasOwnProperty.call(dtos[i], "qbit2")) {
       let qbit2 = dtos[i]["qbit2"];
       if (qbit == qbit2) return true;
-      if (seatIsTaken(circuitState, qbit2, step)){
-        return true;
-      }
 
       if (Object.prototype.hasOwnProperty.call(dtos[i], "control")) {
         let control = dtos[i]["control"];
         if (qbit2 == control) return true;
       }
     }
+  }
+  return false; 
+}
+
+// Verify if a set of gates can be placed at these locations. Note that for example a single 
+// bit gate cannot be placed between a control and a target qbits belonging to some  
+// other control gate or between target and target2 qbits for a two qubit gate. 
+export function seatsInArrayAreAlreadyTaken(circuitState, dtos, existingStep, existingQubit) {
+  for (let i = 0; i < dtos.length; i++) {
+
+    let qbit = dtos[i]["qbit"];
+    let step = dtos[i]["step"];
+
+    if (existingStep == step && existingQubit == qbit) continue;
+    if (seatIsTaken(circuitState, qbit, step)) return true;
 
     if (Object.prototype.hasOwnProperty.call(dtos[i], "control")) {
       let control = dtos[i]["control"];
-      if (qbit == control) return true;
-      if (seatIsTaken(circuitState, control, step)){
-        return true;
-      }
+      if (seatIsTaken(circuitState, control, step)) return true;
+    }
 
-      if (Object.prototype.hasOwnProperty.call(dtos[i], "control2")) {
-        let control2 = dtos[i]["control2"];
-        if (qbit == control2) return true;
-        if (control == control2) return true;
-        if (seatIsTaken(circuitState, control2, step)){
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "control2")) {
+      let control2 = dtos[i]["control2"];
+      if (seatIsTaken(circuitState, control2, step)) return true;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "qbit2")) {
+      let qbit2 = dtos[i]["qbit2"];
+      if (seatIsTaken(circuitState, qbit2, step)) return true;
+    }
+  }
+  return false; 
+}
+
+// Verify if the some of the new proposed seats overlap
+export function proposedNewSeatsOverlap(dtos) {
+  for (let i = 0; i < dtos.length; i++) {
+    let step = dtos[i]["step"];
+    let target = dtos[i]["qbit"];
+    let target2 = dtos[i]["qbit2"];
+    let control = dtos[i]["control"];
+    let control2 = dtos[i]["control2"];
+    let qbits = [target, target2, control, control2].filter(
+      (qbit) => (qbit != null)
+    );
+
+    for (let j = i + 1; j < dtos.length; j++) {
+      let step2 = dtos[j]["step"];
+      if (step != step2) continue;
+      let targetSecond = dtos[j]["qbit"];
+      let target2Second = dtos[j]["qbit2"];
+      let controlSecond = dtos[j]["control"];
+      let control2Second = dtos[j]["control2"];
+      let qbitsSecond = [targetSecond, target2Second, controlSecond, control2Second].filter(
+        (qbit) => (qbit != null)
+      );
+      for (let k = 0; k < qbits.length ; k++){
+        let qbit = qbits[k];
+        if (qbitsSecond.includes(qbit)){
           return true;
         }
       }
