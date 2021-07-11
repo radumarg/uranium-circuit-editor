@@ -198,10 +198,10 @@
               <ParametricGateSwap :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :phi="cell.phi" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'sqrt-swap'">
-              <SqrtGateSwap :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <GateSwapVariant :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'iswap'">
-              <GateISwap :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <GateSwapVariant :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'fredkin'">
               <FredkinGate :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
@@ -260,10 +260,9 @@ import ControlledUnitaryThreeParametricSingleBitGate from "./ControlledUnitaryTh
 import EmptyCellRectangle from "./EmptyCellRectangle";
 import EmptyCellSquare from "./EmptyCellSquare";
 import GateSwap from "./GateSwap";
-import IsingGate from "./IsingGate";
+import GateSwapVariant from "./GateSwapVariant";
 import ParametricGateSwap from "./ParametricGateSwap";
-import SqrtGateSwap from "./SqrtGateSwap";
-import GateISwap from "./GateISwap";
+import IsingGate from "./IsingGate";
 import SwapCircle from "./SwapCircle";
 import Toffoli2NdControlGate from "./Toffoli2NdControlGate";
 import ToffoliGate from "./ToffoliGate";
@@ -300,10 +299,9 @@ export default {
     EmptyCellRectangle,
     EmptyCellSquare,
     GateSwap,
-    IsingGate,
+    GateSwapVariant,
     ParametricGateSwap,
-    SqrtGateSwap,
-    GateISwap,
+    IsingGate,
     SwapCircle,
     Toffoli2NdControlGate,
     ToffoliGate,

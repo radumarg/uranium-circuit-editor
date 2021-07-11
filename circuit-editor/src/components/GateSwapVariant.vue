@@ -3,7 +3,7 @@
 
     <img :src="gateImageSrcEditor" :title="title" data-toggle="tooltip" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
-    <b-modal ref="initial-modal-dialog" size="sm"  centered hide-footer hide-header>
+    <b-modal ref="initial-modal-dialog" size="sm" centered hide-footer hide-header>
 
       <table style="table-layout:fixed;">
         <tr>
@@ -147,6 +147,15 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Target-2 Qubit - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="qbit2Expression" placeholder="" type="text" id="target-2-qbit" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
           <td colspan="6" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
@@ -165,90 +174,26 @@
 
 <script>
 import Vue from 'vue';
-import { mapActions } from 'vuex';
-import SingleBitGate from "./SingleBitGate";
-import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
+import GateSwap from "./GateSwap";
 export default {
-  name: "GateISwapUp",
-  extends: SingleBitGate,
+  name: "GateSwapVariant",
+  extends: GateSwap,
   props: {
-    'qbit2': Number,
   },
   data() {
     return {
-      qbit2New: this.qbit2,
     }
   },
   computed: {
     gateImageSource: function() {
       if (Vue.$cookies.get('colored-gates') === 'true'){
-        return require("../assets/colored-gates/iswap.svg");
+        return require("../assets/colored-gates/" + this.name + ".svg");
       } else {
-        return require("../assets/blue-gates/iswap.svg");
+        return require("../assets/blue-gates/" + this.name + ".svg");
       }
     },
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionSwapGateInCircuit']),
-    handleSave: function(){
-      let qbitOld = this.qbit;
-      let qbit2Old = this.qbit2;
-      let promise = this.repositionSwapGateInCircuit({
-        'step': this.step, 
-        'qbit': this.qbit, 
-        'qbit2': this.qbit2,
-        'name': this.name, 
-        'qbitNew': this.$data.qbitNew, 
-        'qbit2New': this.$data.qbit2New, 
-      });
-      promise.then(
-        // eslint-disable-next-line no-unused-vars
-        result => {}, 
-        // eslint-disable-next-line no-unused-vars
-        error => {
-          this.$data.qbitNew = this.qbit = qbitOld;
-          this.$data.qbit2New = this.qbit2 = qbit2Old;
-        }
-      );
-      this.$refs['initial-modal-dialog'].hide();
-    },
-    handleSecondModalSave: function(){
-      let promise = this.duplicateGate({
-        'step': this.step,
-        'qbit': this.qbit,
-        'name': this.name, 
-        'stepFirst': this.stepFirst,
-        'stepLast': this.stepLast,
-        'stepConditionExpression': this.stepConditionExpression,
-        'qbitFirst': this.qbitFirst,
-        'qbitLast': this.qbitLast,
-        'qbitConditionExpression': this.qbitConditionExpression,
-        'conjugateConditionExpression': this.conjugateConditionExpression,
-      });
-      promise.then(
-        // eslint-disable-next-line no-unused-vars
-        result => {}, 
-        // eslint-disable-next-line no-unused-vars
-        error => {},
-      );
-      this.$refs['replicate-gate-modal-dialog'].hide();
-    },
-    dragStart: function(event) {
-      hideTooltips();
-      const target = event.target;
-      event.dataTransfer.setData("gateName", target.name);
-      event.dataTransfer.setData("drag-origin", "gate");
-      event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalQbit", this.qbit);
-      event.dataTransfer.setData("originalQbit2", this.qbit2);
-      event.dataTransfer.setData("originalStep", this.step);
-      let dragImageGhost = createDragImageGhost(target);  
-      event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
-    },
-    dragEnd: function() {
-      let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
-      document.body.removeChild(dragImageGhost);
-    },
   },
 }
 </script>

@@ -280,6 +280,19 @@ export function seatsArrayIsTaken(circuitState, dtos, existingStep, existingQubi
       return true;
     }
 
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "qbit2")) {
+      let qbit2 = dtos[i]["qbit2"];
+      if (qbit == qbit2) return true;
+      if (seatIsTaken(circuitState, qbit2, step)){
+        return true;
+      }
+
+      if (Object.prototype.hasOwnProperty.call(dtos[i], "control")) {
+        let control = dtos[i]["control"];
+        if (qbit2 == control) return true;
+      }
+    }
+
     if (Object.prototype.hasOwnProperty.call(dtos[i], "control")) {
       let control = dtos[i]["control"];
       if (qbit == control) return true;

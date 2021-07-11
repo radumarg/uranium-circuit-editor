@@ -164,6 +164,15 @@
         </tr>
         <tr>
           <td colspan="3" width="300px" class="td-2nd-modal">
+            Target-2 Qubit - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="qbit2Expression" placeholder="" type="text" id="target-2-qbit" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
             Control Qubit - 'q, s' based <br/>javascript expression:
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
@@ -215,6 +224,7 @@ export default {
       controlstateNew: this.controlstate,
       controlExpression: this.control,
       controlstateExpression: this.controlstate,
+      qbit2Expression: this.qbit2,
       options: [
         { value: '1', text: '|1⟩' },
         { value: '0', text: '|0⟩' },
@@ -284,6 +294,7 @@ export default {
         'conjugateConditionExpression': this.conjugateConditionExpression,
         'controlExpression': this.controlExpression,
         'controlstateExpression': this.controlstateExpression,
+        'qbit2Expression': this.qbit2Expression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars

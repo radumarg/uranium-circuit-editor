@@ -1,5 +1,6 @@
-
-- Install Rust programming language (https://www.rust-lang.org/).
+All the libraries used here are deployed via package.json so there is no need to install any of them
+manually, you can do that via `npm install command`. However, we maintain here a list of libraries we 
+use in circuit editor.
 
 - Install Node.js JavaScript runtime for working on circuit editor (https://nodejs.org/en/). 
 
@@ -47,7 +48,7 @@ npm i -D jscharting-vue
 
 cargo install cargo-generate
 
-- Install JQuery javascript charts library:
+- Install JQuery javascript library:
 
 npm install jquery
 

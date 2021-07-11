@@ -156,6 +156,24 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Target-2 Qubit - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="qbit2Expression" placeholder="" type="text" id="target-2-qbit" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Theta Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="thetaExpression" placeholder="" type="text" id="theta-expression" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
           <td colspan="6" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
@@ -187,7 +205,9 @@ export default {
   data() {
     return {
       qbit2New: this.qbit2,
+      qbit2Expression: this.qbit2,
       thetaNew: this.theta,
+      thetaExpression: this.theta,
     }
   },
   methods: {
@@ -229,6 +249,8 @@ export default {
         'qbitLast': this.qbitLast,
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
+        'qbit2Expression': this.qbit2Expression,
+        'thetaExpression': this.thetaExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars

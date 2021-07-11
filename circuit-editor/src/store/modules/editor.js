@@ -294,6 +294,10 @@ export const circuitEditorModule = {
                 
                 let dto = { "step": s, "qbit": q, "name": name };
 
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "qbit2Expression")) {
+                  let qbit2Expression = dataTransferObj["qbit2Expression"];
+                  dto["qbit2"] = limitedEvaluate(interpolateJavaScriptExpression(qbit2Expression, s, q));
+                }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controlExpression")) {
                   let controlExpression = dataTransferObj["controlExpression"];
                   dto["control"] = limitedEvaluate(interpolateJavaScriptExpression(controlExpression, s, q));
