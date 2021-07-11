@@ -587,15 +587,7 @@ function setupEmptyCells(gatesTableRowState, inputRow) {
         gatesTableRowState.cells[column].height = window.cellSize;
         gatesTableRowState.cells[column].width = window.cellSize;
         let qubitNumber = getQbitFromRow(inputRow) + 1;
-        if (qubitNumber == 1){
-          gatesTableRowState.cells[column].tooltip = `qubit: 1st`
-        } else if (qubitNumber == 2) {
-          gatesTableRowState.cells[column].tooltip = `qubit: 2nd`
-        } else  if (qubitNumber == 3) {
-          gatesTableRowState.cells[column].tooltip = `qubit: 3rd`
-        } else {
-          gatesTableRowState.cells[column].tooltip = `qubit: ${qubitNumber}th`
-        }
+        gatesTableRowState.cells[column].tooltip = `qbit: ${qubitNumber - 1}`;
       } else {
         gatesTableRowState.cells[column].name = "vertical-transition-cell-rectangle";
         gatesTableRowState.cells[column].height = window.separatorCellSize;
