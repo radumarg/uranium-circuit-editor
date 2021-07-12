@@ -171,6 +171,7 @@ export default {
            this.$root.$emit("triggerSimulationRun", current_state.circuitEditorModule);
         } else {
           this.emptyCircuit();
+          this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
         }
       }
     },
