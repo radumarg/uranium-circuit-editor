@@ -105,8 +105,8 @@ export const circuitEditorModule = {
         for (let q = 0; q < availableQubits; q++){
           if (!positionIsFilled(circuitEditorModule.state, s, q)){
             let dto = {"step":s, "qbit": q, "name": "identity"};
-            this.commit("circuitEditorModule/insertGate", dto);
-            this.commit("circuitEditorModule/removeGate", dto);
+            this.commit("circuitEditorModule/insertGateNoTrack", dto);
+            this.commit("circuitEditorModule/removeGateNoTrack", dto);
             return;
           }
         }
@@ -394,7 +394,7 @@ export const circuitEditorModule = {
         } else if ((qbit != qbitNew) && seatIsTaken(circuitEditorModule.state, qbitNew, step)) {
           alert("A gate already exists at this location!")
         } else {
-          this.commit("circuitEditorModule/removeGate", { step: step, qbit: qbit });
+          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbit: qbit });
 
           dataTransferObj["qbit"] = qbitNew;
           if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiNew")) {
@@ -444,7 +444,7 @@ export const circuitEditorModule = {
           seatsAreTaken(circuitEditorModule.state, existingQbits, proposedQbits, step)) {
           alert("At least a gate already exists in the qbits ranging from proposed target to proposed control!");
         } else {
-          this.commit("circuitEditorModule/removeGate", { step: step, qbit: qbit });
+          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbit: qbit });
 
           dataTransferObj["qbit"] = qbitNew;
           dataTransferObj["control"] = controlNew;
@@ -495,7 +495,7 @@ export const circuitEditorModule = {
           seatsAreTaken(circuitEditorModule.state, existingQbits, proposedQbits, step)) {
           alert("At least a gate already exists in the qbits ranging from proposed target to proposed control!");
         } else {
-          this.commit("circuitEditorModule/removeGate", { step: step, qbit: qbit });
+          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbit: qbit });
 
           dataTransferObj["qbit"] = qbitNew;
           dataTransferObj["control"] = controlNew;
@@ -530,7 +530,7 @@ export const circuitEditorModule = {
           seatsAreTaken(circuitEditorModule.state, existingQbits, proposedQbits, step)) {
           alert("At least a gate already exists in the qbits ranging from proposed target to proposed control!");
         } else {
-          this.commit("circuitEditorModule/removeGate", { step: step, qbit: qbit });
+          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbit: qbit });
           
           dataTransferObj["qbit"] = qbitNew;
           dataTransferObj["qbit2"] = qbit2New;
@@ -567,7 +567,7 @@ export const circuitEditorModule = {
           seatsAreTaken(circuitEditorModule.state, existingQbits, proposedQbits, step)) {
           alert("At least a gate already exists in the qbits ranging from proposed target to proposed control!");
         } else {
-          this.commit("circuitEditorModule/removeGate", { step: step, qbit: qbit });
+          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbit: qbit });
           
           dataTransferObj["qbit"] = qbitNew;
           dataTransferObj["qbit2"] = qbit2New;
@@ -610,7 +610,7 @@ export const circuitEditorModule = {
           seatsAreTaken(circuitEditorModule.state, existingQbits, proposedQbits, step)) {
           alert("At least a gate already exists in the qbits ranging from proposed target to proposed control!");
         } else {
-          this.commit("circuitEditorModule/removeGate", { step: step, qbit: qbit });
+          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbit: qbit });
           
           dataTransferObj["qbit"] = qbitNew;
           dataTransferObj["qbit2"] = qbit2New;
@@ -627,11 +627,11 @@ export const circuitEditorModule = {
       })
     },
     removeGateFromCircuit: function (context, dataTransferObj) {
-      this.commit("circuitEditorModule/removeGate", dataTransferObj);
+      this.commit("circuitEditorModule/removeGateNoTrack", dataTransferObj);
       this.commit("circuitEditorModule/removeEmptySteps");
     },
     removeGateFromCircuitByUser: function (context, dataTransferObj) {
-      this.commit("circuitEditorModule/removeGateByUser", dataTransferObj);
+      this.commit("circuitEditorModule/removeGate", dataTransferObj);
       this.commit("circuitEditorModule/removeEmptySteps");
     },
     removeQbitFromCircuit: function (context, dataTransferObj) {
@@ -702,6 +702,11 @@ export const circuitEditorModule = {
       let state = circuitEditorModule.state;
       insertingOneGateInCircuit(state, dto);
     },
+    // mutation that does not trigger update to undo/redo history
+    insertGateNoTrack(context, dto) {
+      let state = circuitEditorModule.state;
+      insertingOneGateInCircuit(state, dto);
+    },
     insertGates(context, dataTransferObj) {
       let dtos = dataTransferObj["dtos"];
       let existingStep = dataTransferObj["existingStep"];
@@ -716,8 +721,8 @@ export const circuitEditorModule = {
       let state = circuitEditorModule.state;
       removingGateFromCircuit(state, dto);
     },
-    // mutation that triggers update to undo/redo history
-    removeGateByUser(context, dto) {
+    // mutation that does not trigger update to undo/redo history
+    removeGateNoTrack(context, dto) {
       let state = circuitEditorModule.state;
       removingGateFromCircuit(state, dto);
     },

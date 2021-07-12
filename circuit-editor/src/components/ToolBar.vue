@@ -142,7 +142,7 @@ export default {
           mutation.type == 'circuitEditorModule/insertGates' ||
           mutation.type == 'circuitEditorModule/insertQbit' ||
           mutation.type == 'circuitEditorModule/insertStep' ||
-          mutation.type == 'circuitEditorModule/removeGateByUser' || 
+          mutation.type == 'circuitEditorModule/removeGate' || 
           mutation.type == 'circuitEditorModule/removeQbit' || 
           mutation.type == 'circuitEditorModule/removeStep'){
         this.history.push(JSON.stringify(state));
