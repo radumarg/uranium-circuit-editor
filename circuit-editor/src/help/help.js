@@ -111,7 +111,7 @@ export function retriveHelpHtml(gateName) {
 
     return "In order to work with the Circuit Editor use the gates pallete on the left to drag & drop gates in the circuit \
             at the desired position defined by a target qubit and a selected step. Once a gate is placed in the circuit, it's position \
-            can be easily adjusted: drag and drop gestures work for both the target and the control qubits. If control key is pressed \
+            can be easily adjusted: drag and drop gestures work for both the target and the control qubits. If shift key is pressed \
             during performing a drag & drop gesture the original gate is not removed and an identical copy of the gate is created at the \
             drop location in the circuit. For any gate, double clicking on the target qubit opens a pop-up control which allows editing \
             the gate parameters. This is the method to assign values for parameters in parametric gates or to assign the index of the \

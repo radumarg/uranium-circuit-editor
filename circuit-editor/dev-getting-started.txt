@@ -1,5 +1,6 @@
-
-- Install Rust programming language (https://www.rust-lang.org/).
+All the libraries used here are deployed via package.json so there is no need to install any of them
+manually, you can do that via `npm install command`. However, we maintain here a list of libraries we 
+use in circuit editor.
 
 - Install Node.js JavaScript runtime for working on circuit editor (https://nodejs.org/en/). 
 
@@ -45,20 +46,12 @@ npm install jscharting
 
 npm i -D jscharting-vue
 
-- Needed to compile Rust code to webassembly: https://github.com/rustwasm/wasm-pack
-
-npm install --save-dev wasm-tool/wasm-pack-plugin
-
-- Install this command line tool for working with webassembly Rust projects: https://rustwasm.github.io/wasm-pack/installer/
-
-- Install this tool needed by wasm-pack: https://github.com/cargo-generate/cargo-generate
-
 cargo install cargo-generate
 
-- Install text-encoding: https://www.npmjs.com/package/text-encoding
-
-npm install text-encoding
-
-- Install JQuery javascript charts library:
+- Install JQuery javascript library:
 
 npm install jquery
+
+- Install Mathjs: https://www.npmjs.com/package/mathjs
+
+npm install mathjs

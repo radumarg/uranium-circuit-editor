@@ -3,7 +3,7 @@
 
     <img :src="gateImageSrcEditor" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
-    <b-modal ref="modal-dialog" size="sm"  centered hide-footer hide-header>
+    <b-modal ref="initial-modal-dialog" size="sm" centered hide-footer hide-header>
 
       <table style="table-layout:fixed;">
         <tr>
@@ -52,7 +52,12 @@
           <td></td>
         </tr>
         <tr>
-          <td></td>
+          <td class="no-resize-cell">
+             <div v-b-hover="handleExpandGateHover">
+              <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" v-b-tooltip.hover title="Expand gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
+              <b-icon v-else icon="files" v-on:click="handleExpandGate()" style="color: #7952b3;" font-scale="1.3"></b-icon>
+              </div>
+          </td>
           <td colspan="2">
             <div v-b-hover="handleExpandDownHover">
               <b-icon v-if="expandDownIsHovered" icon="chevron-bar-down" v-on:click="expandCircuitDown()" v-b-tooltip.hover title="Add qbit after" style="color: #7952b3;" font-scale="1.6"></b-icon>
@@ -70,6 +75,82 @@
 
     </b-modal>
 
+    <b-modal ref="replicate-gate-modal-dialog" size="lg" width="100px" centered hide-footer hide-header>
+      <table>
+        <tr>
+          <td colspan="6">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleSecondModalCloseHover">
+              <b-icon v-if="secondModalCloseIsHovered" v-on:click="hideSecondModal()" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="x-square" v-on:click="hideSecondModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td width="100px" class="td-2nd-modal">
+            First Qubit:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            Last Qubit:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="qbitLast" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
+          </td>
+          <td width="200px" class="td-2nd-modal">
+            Condition - 'q' based <br/>javascript expression:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="qbitConditionExpression" placeholder="q >= 0" type="text" id="qbit-cond" style="width:120px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td width="100px" class="td-2nd-modal">
+            First Step:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="stepFirst" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            Last Step:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="stepLast" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
+          </td>
+          <td width="200px" class="td-2nd-modal">
+            Condition - 's' based <br/>javascript expression:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="stepConditionExpression" placeholder="s >= 0" type="text" id="step-cond" style="width:120px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Conjugate Condition - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="conjugateConditionExpression" placeholder="" type="text" id="conjugate-cond" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="6" class="td-2nd-modal">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleSecondModalSaveHover">
+              <b-icon v-if="secondModalSaveIsHovered" v-on:click="handleSecondModalSave()" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
+              <b-icon v-else icon="check" v-on:click="handleSecondModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </b-modal>
+
   </div>
 </template>
 
@@ -80,7 +161,7 @@ import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
 export default {
   name: "SingleBitGate",
   props: {
-    'step' : Number, 
+    'step' : Number,
     'qbit': Number,
     'qrow': Number,
     'img': String,
@@ -91,12 +172,22 @@ export default {
     return {
       trashIsHovered: false,
       closeIsHovered: false,
+      secondModalCloseIsHovered: false,
       saveIsHovered:  false,
+      secondModalSaveIsHovered:  false,
       expandLeftIsHovered:  false,
       expandRightIsHovered:  false,
       expandUpIsHovered:  false,
       expandDownIsHovered:  false,
-      qbitNew: this.qbit
+      expandGateIsHovered:  false,
+      qbitNew: this.qbit,
+      qbitFirst: this.qbit,
+      qbitLast: this.qbit,
+      stepFirst: this.step,
+      stepLast: this.step,
+      stepConditionExpression: "s >= 0",
+      qbitConditionExpression: "q >= 0",
+      conjugateConditionExpression: `(q - ${this.qbit}) == (s - ${this.step})`
     }
   },
   computed: {
@@ -124,57 +215,77 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['insertQbitInCircuit', 'insertStepInCircuit', 'removeGateFromCircuitByUser', 'repositionSimpleGateInCircuit']),
+    ...mapActions('circuitEditorModule/', ['insertQbitInCircuit', 'insertStepInCircuit', 'removeGateFromCircuitByUser', 'repositionSimpleGateInCircuit', 'duplicateGate']),
     ...mapGetters("circuitEditorModule/", ["getMaximumStepIndex", "getMaximumQbitIndex"]),
     showModal: function() {
       this.trashIsHovered = false;
       this.closeIsHovered = false;
+      this.secondModalCloseIsHovered = false;
       this.saveIsHovered = false;
+      this.secondModalSaveIsHovered = false;
       this.expandLeftIsHovered = false;
       this.expandRightIsHovered = false;
       this.expandUpIsHovered = false;
       this.expandDownIsHovered = false;
+      this.expandGateIsHovered = false;
       this.$data.qbitNew = this.qbit;
       if (this.qbit2 || this.qbit2 == 0){
         this.$data.qbit2New = this.qbit2;
+        this.$data.qbit2Expression = this.qbit2.toString();
       }
       if (this.root){
         if (this.root.includes("1/2^")){
           this.$data.rootNewK = this.root.replace("1/2^", "");
+          this.$data.rootKExpression = this.root.replace("1/2^", "");
           this.$data.rootNewT = null;
+          this.$data.rootTExpression = null;
         } else {
           this.$data.rootNewT= this.root.replace("1/", "");
+          this.$data.rootTExpression = this.root.replace("1/", "");
           this.$data.rootNewK = null;
+          this.$data.rootKExpression = null;
         }
       }
       if (this.control || this.control == 0){
         this.$data.controlNew = this.control;
+        this.$data.controlExpression = this.control.toString();
       }
       if (this.controlstate || this.controlstate == 0){
         this.$data.controlstateNew = this.controlstate;
+        this.$data.controlstateExpression = this.controlstate;
       }
       if (this.control2 || this.control2 == 0){
         this.$data.controlNew2 = this.control2;
+        this.$data.control2Expression = this.control2.toString();
       }
       if (this.controlstate2 || this.controlstate2 == 0){
         this.$data.controlstateNew2 = this.controlstate2;
+        this.$data.controlstate2Expression = this.controlstate2;
       }
       if (this.phi  || this.phi == 0){
         this.$data.phiNew = this.phi;
+        this.$data.phiExpression = this.phi.toString();
       }
       if (this.theta || this.theta == 0){
         this.$data.thetaNew = this.theta;
+        this.$data.thetaExpression = this.theta.toString();
       }
       if (this.lambda || this.lambda == 0){
         this.$data.lambdaNew = this.lambda;
+        this.$data.lambdaExpression = this.lambda.toString();
       }
       if (this.bit  || this.bit == 0){
         this.$data.bitNew = this.bit;
+        this.$data.bitExpression = 'q';
       }
-      this.$refs['modal-dialog'].show();
+      this.$refs['initial-modal-dialog'].show();
     },
     hideModal: function() {
-      this.$refs['modal-dialog'].hide();
+      this.$refs['initial-modal-dialog'].hide();
+    },
+    hideSecondModal: function() {
+      this.$refs['replicate-gate-modal-dialog'].hide();
+      this.$refs['initial-modal-dialog'].show();
     },
     handleTrashHover(hovered) {
       this.trashIsHovered = hovered;
@@ -182,8 +293,14 @@ export default {
     handleCloseHover(hovered) {
       this.closeIsHovered = hovered;
     },
+    handleSecondModalCloseHover(hovered) {
+      this.secondModalCloseIsHovered = hovered;
+    },
     handleSaveHover(hovered) {
       this.saveIsHovered = hovered;
+    },
+    handleSecondModalSaveHover(hovered) {
+      this.secondModalSaveIsHovered = hovered;
     },
     handleExpandLeftHover(hovered) {
       this.expandLeftIsHovered = hovered;
@@ -196,6 +313,9 @@ export default {
     },
     handleExpandDownHover(hovered) {
       this.expandDownIsHovered = hovered;
+    },
+    handleExpandGateHover(hovered) {
+      this.expandGateIsHovered = hovered;
     },
     expandCircuitLeft: function(){
       if (window.gatesTable.columns/2 == this.getMaximumStepIndex() + 2){
@@ -245,7 +365,32 @@ export default {
           this.$data.qbitNew = this.qbit = qbitOld;
         }
       );
-      this.$refs['modal-dialog'].hide();
+      this.$refs['initial-modal-dialog'].hide();
+    },
+    handleSecondModalSave: function(){
+      let promise = this.duplicateGate({
+        'step': this.step,
+        'qbit': this.qbit,
+        'name': this.name, 
+        'stepFirst': this.stepFirst,
+        'stepLast': this.stepLast,
+        'stepConditionExpression': this.stepConditionExpression,
+        'qbitFirst': this.qbitFirst,
+        'qbitLast': this.qbitLast,
+        'qbitConditionExpression': this.qbitConditionExpression,
+        'conjugateConditionExpression': this.conjugateConditionExpression,
+      });
+      promise.then(
+        // eslint-disable-next-line no-unused-vars
+        result => {}, 
+        // eslint-disable-next-line no-unused-vars
+        error => {},
+      );
+      this.$refs['replicate-gate-modal-dialog'].hide();
+    },
+    handleExpandGate: function(){
+      this.$refs['initial-modal-dialog'].hide();
+      this.$refs['replicate-gate-modal-dialog'].show();
     },
     dragStart: function(event) {
       hideTooltips();
@@ -274,6 +419,9 @@ table {
 th,
 td {
   padding: 1px;
+}
+.td-2nd-modal {
+  padding: 5px;
 }
 .no-resize-cell{
   width: 35px;

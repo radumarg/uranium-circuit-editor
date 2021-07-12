@@ -313,7 +313,7 @@ export default {
       if (event.dataTransfer.types.includes("dragged-qbit")) {
         draggedQbit = event.dataTransfer.getData("dragged-qbit");
       }
-      if (event.ctrlKey && draggedQbit) {
+      if (event.shiftKey && draggedQbit) {
         // control key si pressed and draggedQbit not null means
         // we are not doing drag & drop from the gates pallete
         this.addNewGateToCircuit(event);

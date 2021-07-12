@@ -3,7 +3,7 @@
 
     <img :src="gateImageSrcEditor" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
-    <b-modal ref="modal-dialog" size="sm"  centered hide-footer hide-header>
+    <b-modal ref="initial-modal-dialog" size="sm"  centered hide-footer hide-header>
 
       <table style="table-layout:fixed;">
         <tr>
@@ -60,7 +60,12 @@
           <td></td>
         </tr>
         <tr>
-          <td></td>
+          <td class="no-resize-cell">
+             <div v-b-hover="handleExpandGateHover">
+              <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" v-b-tooltip.hover title="Expand gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
+              <b-icon v-else icon="files" v-on:click="handleExpandGate()" style="color: #7952b3;" font-scale="1.3"></b-icon>
+              </div>
+          </td>
           <td v-b-tooltip.hover title="Control state" width="100px" style="padding: 5px;">Ctrl-State:</td>
           <td width="100px" style="padding: 5px;"> 
             <b-form-select v-model="controlstateNew" :options="options" style="width:90px;" id="controlstate-new" v-on:change="updatePopupGateIamge()"></b-form-select>
@@ -86,6 +91,101 @@
 
     </b-modal>
 
+    <b-modal ref="replicate-gate-modal-dialog" size="lg" width="100px" centered hide-footer hide-header>
+      <table>
+        <tr>
+          <td colspan="6">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleSecondModalCloseHover">
+              <b-icon v-if="secondModalCloseIsHovered" v-on:click="hideSecondModal()" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="x-square" v-on:click="hideSecondModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td width="100px" class="td-2nd-modal">
+            First Qubit:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            Last Qubit:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="qbitLast" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
+          </td>
+          <td width="200px" class="td-2nd-modal">
+            Condition - 'q' based <br/>javascript expression:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="qbitConditionExpression" placeholder="q >= 0" type="text" id="qbit-cond" style="width:120px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td width="100px" class="td-2nd-modal">
+            First Step:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="stepFirst" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            Last Step:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="stepLast" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
+          </td>
+          <td width="200px" class="td-2nd-modal">
+            Condition - 's' based <br/>javascript expression:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="stepConditionExpression" placeholder="s >= 0" type="text" id="step-cond" style="width:120px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Conjugate Condition - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="conjugateConditionExpression" placeholder="" type="text" id="conjugate-cond" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Control Qubit - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="controlExpression" placeholder="" type="text" id="ctrl-qbit" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Control State - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="controlstateExpression" placeholder="" type="text" id="ctrl-state" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="6" class="td-2nd-modal">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleSecondModalSaveHover">
+              <b-icon v-if="secondModalSaveIsHovered" v-on:click="handleSecondModalSave()" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
+              <b-icon v-else icon="check" v-on:click="handleSecondModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </b-modal>
+
+
   </div>
 </template>
 
@@ -105,6 +205,8 @@ export default {
     return {
       controlNew: this.control,
       controlstateNew: this.controlstate,
+      controlExpression: this.control,
+      controlstateExpression: this.controlstate,
       options: [
         { value: 1, text: '|1⟩' },
         { value: 0, text: '|0⟩' },
@@ -150,7 +252,7 @@ export default {
         'name': this.name, 
         'qbitNew': this.$data.qbitNew, 
         'controlNew': this.$data.controlNew,
-        'controlstateNew': this.$data.controlstateNew
+        'controlstateNew': this.$data.controlstateNew,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -162,7 +264,30 @@ export default {
           this.$data.controlstateNew = this.controlstate = controlstateOld;
         }
       );
-      this.$refs['modal-dialog'].hide();
+      this.$refs['initial-modal-dialog'].hide();
+    },
+    handleSecondModalSave: function(){
+      let promise = this.duplicateGate({
+        'step': this.step,
+        'qbit': this.qbit,
+        'name': this.name, 
+        'stepFirst': this.stepFirst,
+        'stepLast': this.stepLast,
+        'stepConditionExpression': this.stepConditionExpression,
+        'qbitFirst': this.qbitFirst,
+        'qbitLast': this.qbitLast,
+        'qbitConditionExpression': this.qbitConditionExpression,
+        'conjugateConditionExpression': this.conjugateConditionExpression,
+        'controlExpression': this.controlExpression,
+        'controlstateExpression': this.controlstateExpression,
+      });
+      promise.then(
+        // eslint-disable-next-line no-unused-vars
+        result => {}, 
+        // eslint-disable-next-line no-unused-vars
+        error => {},
+      );
+      this.$refs['replicate-gate-modal-dialog'].hide();
     },
     dragStart: function(event) {
       hideTooltips();
@@ -201,6 +326,9 @@ table {
 th,
 td {
   padding: 1px;
+}
+.td-2nd-modal {
+  padding: 5px;
 }
 .no-resize-cell{
   width: 35px;

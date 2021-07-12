@@ -18,7 +18,7 @@
     "jquery": "^3.6.0",
     "js-yaml": "^3.14.1",
     "jscharting": "^3.0.3-beta",
-    "text-encoding": "^0.7.0",
+    "mathjs": "^9.4.3",
     "vue": "^2.6.12",
     "vue-cookies": "^1.7.4",
     "vue-material": "^1.0.0-beta-15",
