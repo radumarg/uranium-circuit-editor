@@ -11,9 +11,10 @@ import {
 } from "./gatesTable.js";
 
 import {
-  removingGateFromCircuit,
   insertingOneGateInCircuit,
   interpolateJavaScriptExpression,
+  isDefined,
+  removingGateFromCircuit,
 } from "./editorHelper.js";
 
 import {
@@ -146,7 +147,7 @@ export const circuitEditorModule = {
         let name = dataTransferObj["name"];
         let step = parseInt(dataTransferObj["step"]);
         let qbit = parseInt(dataTransferObj["qbit"]);
-
+        
         // assign qbit2 (target2 qbit) if not assigned and this is a ising, swap or fredkin gate
         let qbit2 = null;
         if (Object.prototype.hasOwnProperty.call(dataTransferObj, "qbit2")) {
@@ -253,7 +254,7 @@ export const circuitEditorModule = {
             let bit = dataTransferObj["bit"];
             dto["bit"] = bit;
           }
-
+          
           this.commit("circuitEditorModule/insertGate", dto);
           
           // inserting the gate was successful
@@ -262,6 +263,12 @@ export const circuitEditorModule = {
         // inserting the gate failed
         reject(false);
       })
+    },
+    insertGatesInCircuit(context, dto) {
+      this.commit("circuitEditorModule/insertGates", dto);
+    },
+    removeGatesFromCircuit(context, dto) {
+      this.commit("circuitEditorModule/removeGates", dto);
     },
     duplicateGate: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
@@ -392,7 +399,7 @@ export const circuitEditorModule = {
         if (qbitNew < 0) {
           alert("Negative steps/qbits not permitted!");
         } else if ((qbit != qbitNew) && seatIsTaken(circuitEditorModule.state, qbitNew, step)) {
-          alert("A gate already exists at this location!")
+          alert("A gate already exists at this location!");
         } else {
           this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbit: qbit });
 
@@ -712,7 +719,9 @@ export const circuitEditorModule = {
       let existingStep = dataTransferObj["existingStep"];
       let existingQbit = dataTransferObj["existingQbit"];
       let state = circuitEditorModule.state;
-      removingGateFromCircuit(state, {"step": existingStep, "qbit": existingQbit});
+      if (isDefined(existingStep) && isDefined(existingQbit)){
+        removingGateFromCircuit(state, {"step": existingStep, "qbit": existingQbit});
+      }
       for (let i = 0; i < dtos.length; i++){
         insertingOneGateInCircuit(state, dtos[i]);
       }
@@ -725,6 +734,13 @@ export const circuitEditorModule = {
     removeGateNoTrack(context, dto) {
       let state = circuitEditorModule.state;
       removingGateFromCircuit(state, dto);
+    },
+    removeGates(context, dataTransferObj) {
+      let dtos = dataTransferObj["dtos"];
+      for (let i = 0; i < dtos.length; i++){
+        let state = circuitEditorModule.state;
+        removingGateFromCircuit(state, dtos[i]);
+      }
     },
     removeQbit(context, dto) {
       let qbit = parseInt(dto["qbit"]);

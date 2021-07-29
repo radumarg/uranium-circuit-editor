@@ -117,7 +117,7 @@ import Vue from 'vue';
 import * as htmlToImage from 'html-to-image';
 import JQuery from 'jquery';
 import { mapActions, mapGetters } from 'vuex';
-import { getNoQbits, getNoSteps} from "../store/modules/gatesTable.js";
+import { getNoQbits, getNoSteps, classicBitsAreValid, measureGatesArePositionedLast} from "../store/modules/gatesTable.js";
 import {save_circuit} from "../store/modules/circuitSaveAndRetrieve.js";
 import { getNumberOfRowsThatFit, getNumberOfColumnsThatFit } from "../store/modules/gatesTable.js";
 export default {
@@ -143,17 +143,32 @@ export default {
           mutation.type == 'circuitEditorModule/insertQbit' ||
           mutation.type == 'circuitEditorModule/insertStep' ||
           mutation.type == 'circuitEditorModule/removeGate' || 
+          mutation.type == 'circuitEditorModule/removeGates' ||
           mutation.type == 'circuitEditorModule/removeQbit' || 
           mutation.type == 'circuitEditorModule/removeStep'){
+        let classicBitsAreOk = classicBitsAreValid(state.circuitEditorModule);
+        let measureGatesAreOk = measureGatesArePositionedLast(state.circuitEditorModule);  
+        if (classicBitsAreOk && measureGatesAreOk){
+          this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
+        } else {
+          if (!classicBitsAreOk) {
+            alert("Some of the classic bits have values larger than the maximum qbit index. Please undo you last change.");
+          } else if (!measureGatesAreOk) {
+            alert("Measure gates must always be positioned last on any qubit. Please undo you last change.");
+          }
+        }
         this.history.push(JSON.stringify(state));
-        this.historyUnRoll = [];
-        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
+        this.historyUnRoll = [];    
       }      
     });
   },
   mounted() {
     let darkTheme = (Vue.$cookies.get("dark-theme") === 'true')
     this.$root.$emit("switchThemeDark", darkTheme);
+    if (this.$store.state.circuitEditorModule.steps.length > 0){
+      this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
+      this.history.push(JSON.stringify(this.$store.state));
+    }
   },
   beforeDestroy() {
     this.unsubscribe();
@@ -322,6 +337,7 @@ it does not make much sense doing that unless you intend to save the circuit as 
       window.gatesTable.rows = Math.max(2 * qbits + 2, window.initialRows);
       window.gatesTable.columns = Math.max(2 * steps + 2, window.initialColumns);
       this.updateCircuit(jsonObj);
+      this.history.push(JSON.stringify(this.$store.state));
       this.$root.$emit("triggerSimulationRun", jsonObj);
       this.$root.$emit("circuitModifiedFromMenu");
     }

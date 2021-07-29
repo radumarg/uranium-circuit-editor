@@ -113,6 +113,57 @@ export function getNoQbits(circuitState) {
   return qbits + 1;
 }
 
+// the index of a classic bit cannot be larger than maximum qubit index
+export function classicBitsAreValid(circuitState){
+  let maxQbitIndex = getNoQbits(circuitState) - 1;
+  for (let i = 0; i < circuitState.steps.length; i++) {
+    let gates = circuitState.steps[i]["gates"];
+    for (let j = 0; j < gates.length; j++) {
+      let gate = gates[j];
+      if (gate.name.includes("measure-")){
+        if (gate.bit > maxQbitIndex) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+}
+
+// make sure that no non-measure gate is placed after a measure gate on any given qubit
+export function measureGatesArePositionedLast(circuitState){
+  let measureGates = [];
+  for (let i = 0; i < circuitState.steps.length; i++) {
+    let gates = circuitState.steps[i]["gates"];
+    for (let j = 0; j < gates.length; j++) {
+      let gate = gates[j];
+      if (gate.name.includes("measure-")){
+        measureGates.push(gate.target);
+      } else {
+        if (measureGates.includes(gate.target)) {
+          return false;
+        }
+        if (Object.prototype.hasOwnProperty.call(gate, "target2")) {
+          if (measureGates.includes(gate.target2)) {
+            return false;
+          }
+        }
+        if (Object.prototype.hasOwnProperty.call(gate, "control")) {
+          if (measureGates.includes(gate.control)) {
+            return false;
+          }
+        }
+        if (Object.prototype.hasOwnProperty.call(gate, "control2")) {
+          if (measureGates.includes(gate.control2)) {
+            return false;
+          }
+        }
+      }
+    }
+  }
+  return true;
+}
+
 export function getProximFreeSeat(circuitState, qbit, step) {
   if (!seatIsTaken(circuitState, qbit + 1, step)) {
     return qbit + 1;

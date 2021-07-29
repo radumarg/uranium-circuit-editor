@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :src="gateImageSource" @dragend="dragEnd" @dragstart="dragStart" alt="Controlled bit for Fredkin gate" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;" />
+    <img :src="gateImageSource" :id="id" @dragend="dragEnd" @dragstart="dragStart" alt="Controlled bit for Fredkin gate" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;" />
   </div>
 </template>
 

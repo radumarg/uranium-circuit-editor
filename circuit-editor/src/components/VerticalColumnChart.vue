@@ -24,7 +24,7 @@
 import JSCharting from 'jscharting-vue';
 import { mapGetters } from "vuex";
 import { JSC } from 'jscharting-vue';
-import { getBinnedProbabilities } from "../store/modules/simulationCharts.js";
+import { getBinnedProbabilities, getMeasureGates } from "../store/modules/simulationCharts.js";
 
 export default {
    name: 'columnChart',
@@ -125,6 +125,7 @@ export default {
          minRange: undefined, 
          maxRange: undefined,
          qubits: 0,
+         measureGates: {},
          defaultNumberOfBins: 128,
       }
    },
@@ -160,14 +161,18 @@ export default {
 
          // reset plot range if number of qubits has changed
          let maxQubitIndex = this.getMaximumQbitIndex();
+         let measureGates = getMeasureGates(stateProbabilities);
          if (maxQubitIndex == -1) {
             this.$data.minRange = 0;
             this.$data.maxRange = 1024;
             this.$data.qubits = 0;
-         } else if (this.$data.qubits != maxQubitIndex + 1){
+            this.$data.measureGates = {};
+         } else if (this.$data.qubits != maxQubitIndex + 1 ||                       // qubit added/removed
+                    this.$data.measureGates != measureGates){    // measure gates added/removed
             this.$data.minRange = 0;
             this.$data.maxRange = this.$data.stateProbabilities.length;
             this.$data.qubits = maxQubitIndex + 1;
+            this.$data.measureGates = measureGates;
          }
 
          // update plot

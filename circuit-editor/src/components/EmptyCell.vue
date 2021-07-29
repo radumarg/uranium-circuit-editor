@@ -7,6 +7,7 @@
     @dragover="handleDragOver"
     @dragleave="handleDragLeave"
     v-on:dblclick="showModal()"
+    v-on:click="selectIfCtrlDown"
   >
     <img
       src="../assets/gray-line.svg"
@@ -197,6 +198,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { seatsAreTaken } from "../store/modules/gatesTable.js";
+import { handleSelectEvent } from "../store/modules/editorHelper.js";
 export default {
   name: "EmptyCell",
   props: {
@@ -228,6 +230,11 @@ export default {
       "getMaximumStepIndex",
       "getMaximumQbitIndex",
     ]),
+    selectIfCtrlDown: function (event) {
+      if (event.ctrlKey) {
+        handleSelectEvent(this.qbit, this.step);
+      }
+    },
     showModal: function () {
       this.$refs["modal-dialog"].show();
       this.closeIsHovered = false;
@@ -314,7 +321,7 @@ export default {
         draggedQbit = event.dataTransfer.getData("dragged-qbit");
       }
       if (event.shiftKey && draggedQbit) {
-        // control key si pressed and draggedQbit not null means
+        // shift key is pressed and draggedQbit not null means
         // we are not doing drag & drop from the gates pallete
         this.addNewGateToCircuit(event);
       } else {
@@ -328,7 +335,7 @@ export default {
         this.handleDragLeave();
         return;
       }
-
+      
       let draggedQbit = null;
       if (event.dataTransfer.types.includes("dragged-qbit")) {
         draggedQbit = event.dataTransfer.getData("dragged-qbit");
@@ -474,7 +481,7 @@ export default {
         let bit = event.dataTransfer.getData("bit");
         dto["bit"] = bit;
       }
-
+      
       let existingQbits = [
         originalQbit,
         originalQbit2,

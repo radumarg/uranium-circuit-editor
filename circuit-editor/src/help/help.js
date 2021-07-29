@@ -72,11 +72,17 @@ export function retriveHelpHtml(gateName) {
     } else if (gateName == "fredkin") {
         return 'This gate acts on three qubits and performs a controlled swap when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state is |0⟩ instead of |1⟩.';
     } else if (gateName == "measure-x") {
-        return 'Measures a qubit along the direction given by the X-axis of the Bloch sphere. This is not a unitary operation.';
+        return 'Measures a qubit along the direction given by the X-axis of the Bloch sphere. This is not a unitary operation. The index of the classic bit where a qubit is measured cannot be larger than the maximum qubit index. \
+When multiple qubits are measured in the same classical bit an XOR operation is performed on the bit value. When no measure gates are present in the circuit simulation results are identical to the situation where \
+each qubit is measured into a classical bit with index equal to the qubit index of the measure gate.';
     } else if (gateName == "measure-y") {
-        return 'Measures a qubit along the direction given by the Y-axis of the Bloch sphere. This is not a unitary operation.';
+        return 'Measures a qubit along the direction given by the Y-axis of the Bloch sphere. This is not a unitary operation. The index of the classic bit where a qubit is measured cannot be larger than the maximum qubit index. \
+When multiple qubits are measured in the same classical bit an XOR operation is performed on the bit value. When no measure gates are present in the circuit simulation results are identical to the situation where \
+each qubit is measured into a classical bit with index equal to the qubit index of the measure gate.';
     } else if (gateName == "measure-z") {
-        return 'Measures a qubit along the direction given by the Z-axis of the Bloch sphere. This is not a unitary operation.';
+        return 'Measures a qubit along the direction given by the Z-axis of the Bloch sphere. This is not a unitary operation. The index of the classic bit where a qubit is measured cannot be larger than the maximum qubit index. \
+When multiple qubits are measured in the same classical bit an XOR operation is performed on the bit value. When no measure gates are present in the circuit simulation results are identical to the situation where \
+each qubit is measured into a classical bit with index equal to the qubit index of the measure gate.';
     } else if (gateName == "xx") {
         return 'XX Ising gate is a native gate for laser driven trapped ions devices.';
     } else if (gateName == "yy") {
@@ -110,17 +116,18 @@ export function retriveHelpHtml(gateName) {
     }
 
     return "In order to work with the Circuit Editor use the gates pallete on the left to drag & drop gates in the circuit \
-            at the desired position defined by a target qubit and a selected step. Once a gate is placed in the circuit, it's position \
-            can be easily adjusted: drag and drop gestures work for both the target and the control qubits. If shift key is pressed \
+            at the desired position defined by a target qubit and a desired step. Once a gate is placed in the circuit, it's position \
+            can be easily adjusted: drag and drop gestures work for both the target and the control qubits. If the Shift key is pressed \
             during performing a drag & drop gesture the original gate is not removed and an identical copy of the gate is created at the \
             drop location in the circuit. For any gate, double clicking on the target qubit opens a pop-up control which allows editing \
-            the gate parameters. This is the method to assign values for parameters in parametric gates or to assign the index of the \
-            classic bit used as mesurement target by measure gates. The same control permits inserting new qubits or new steps in the \
-            immediate vicinity of a particular gate location. Steps or qubits can be removed from a control which is opened by double \
-            clicking on an empty location in the circuit. In order to see in this dashboard help information regarding a particular gate, \
-            select the gate in gates pallete and press the help button. Once a circuit has been created it can be saved in \
-            a YAML format or it can  be exported to any of the following formats: OpenQASM, Qiskit, Quil, PyQuil, or Cirq. \
-            For exporting circuits follow the MyProjects menu link in the main Uranium website.";
+            the gate parameters or expanding that gate to a one or a two dimensional array of gates. This is also the method to assign values for parameters \
+            in parametric gates or to assign the index of the classic bit used as mesurement target by measure gates. The same control permits \
+            inserting new qubits or new steps in the immediate vicinity of a particular gate location. Steps or qubits can be removed from a control \
+            which is opened by double clicking on an empty location in the circuit. Ctrl + Click gesture(s) applied on a gate or an empty cell can be used to \
+            select a gate or a group of gates. Once gates have been selected Ctrl + C, Ctrl + V, Ctrl + X, Esc and Delete keys work as you would expect. \
+            In order to see in this dashboard help information regarding a particular gate, select the gate in gates pallete and press the help button. \
+            Once a circuit has been created it can be saved in a YAML format or it can  be exported to Qiskit format (other export formats will be \
+            available in the future depending on user requests). For exporting circuits follow the MyProjects menu link in the main Uranium website.";
 }
 
 export function retriveGateMatrixHtml(gateName) {

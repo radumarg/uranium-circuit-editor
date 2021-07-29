@@ -1,7 +1,7 @@
 <template>
-  <div v-on:click="showModal()">
+  <div v-on:click="handleClick">
 
-    <img :src="gateImageSrcEditor" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
+    <img :src="gateImageSrcEditor" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
     <b-modal ref="initial-modal-dialog" size="sm" centered hide-footer hide-header>
 
@@ -158,6 +158,7 @@
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
 import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
+import { handleSelectEvent } from "../store/modules/editorHelper.js";
 export default {
   name: "SingleBitGate",
   props: {
@@ -167,6 +168,7 @@ export default {
     'img': String,
     'title': String,
     'name': String,
+    'id': String,
   },
   data() {
     return {
@@ -217,6 +219,16 @@ export default {
   methods: {
     ...mapActions('circuitEditorModule/', ['insertQbitInCircuit', 'insertStepInCircuit', 'removeGateFromCircuitByUser', 'repositionSimpleGateInCircuit', 'duplicateGate']),
     ...mapGetters("circuitEditorModule/", ["getMaximumStepIndex", "getMaximumQbitIndex"]),
+    handleClick: function (event) {
+      if (event.ctrlKey) {
+        this.selectImage();
+      } else {
+        this.showModal();
+      }
+    },
+    selectImage: function() {
+      handleSelectEvent(this.qbit, this.step);
+    },
     showModal: function() {
       this.trashIsHovered = false;
       this.closeIsHovered = false;

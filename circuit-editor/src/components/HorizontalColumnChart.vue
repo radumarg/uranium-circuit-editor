@@ -12,7 +12,7 @@ import Vue from 'vue';
 import { mapGetters } from "vuex";
 import JSCharting from 'jscharting-vue';
 import { JSC } from 'jscharting-vue';
-import { getStateProbabilities, getBinnedProbabilities} from "../store/modules/simulationCharts.js";
+import { getStateProbabilities, getBinnedProbabilities, getMeasureGates} from "../store/modules/simulationCharts.js";
 
 export default {
    name: 'columnChart',
@@ -48,6 +48,7 @@ export default {
          maxRange: undefined,
          tooManyQubitsAlertShown: false,
          qubits: 0,
+         measureGates: {},
          defaultNumberOfBins: 128,
          liveSimulation: Vue.$cookies.get("live-simulation") === 'true',
       }
@@ -74,17 +75,21 @@ export default {
       runSimulation: async function (circuitState) {
          if (this.$data.liveSimulation == true) {
             let maxQubitIndex = this.getMaximumQbitIndex();
+            let measureGates = getMeasureGates(circuitState);
             if (maxQubitIndex == -1){
                this.$data.stateProbabilities = [];
                this.$data.minRange = 0;
                this.$data.maxRange = 1024;
                this.$data.qubits = 0;
+               this.$data.measureGates = {};
             } else if (maxQubitIndex < 20){
                let stateProbabilities = await getStateProbabilities(circuitState);
                this.$data.stateProbabilities = stateProbabilities;
-               if (this.$data.qubits != maxQubitIndex + 1){
+               if (this.$data.qubits != maxQubitIndex + 1 ||                      // qubit added/removed
+                   this.$data.measureGates != measureGates){                      // measure gates added/removed
                   this.$data.minRange = 0;
                   this.$data.maxRange = this.$data.stateProbabilities.length;
+                  this.$data.measureGates = measureGates;
                }
             } else {
                if (!this.$data.tooManyQubitsAlertShown) {

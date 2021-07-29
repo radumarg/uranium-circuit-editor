@@ -18,12 +18,36 @@ function toState(dec, totalLength, base) {
     return output.concat(state);
 }
 
+export async function getMeasureGates(circuitState) {
+
+  let measureGates = {};
+
+  if (circuitState != undefined) {
+    if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+      for (let i = 0; i < circuitState.steps.length; i++) {
+        if (Object.prototype.hasOwnProperty.call(circuitState.steps[i], "gates"))
+        {
+          let gates = circuitState.steps[i]["gates"];
+          for (let j = 0; j < gates.length; j++) {
+            let gate = gates[j];
+            if (gate.name.includes("measure-")){
+              measureGates[gate.target] = [gate.name, gate.bit];
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return measureGates;
+}
+
 export async function getStateProbabilities(circuitState) {
 
     if (circuitState != undefined) {
-        let serializedCircuit = JSON.stringify(circuitState);
-        await init('./wasm/moara_js_bg.wasm');
-        return get_probabilities(serializedCircuit);
+      let serializedCircuit = JSON.stringify(circuitState);
+      await init('./wasm/moara_js_bg.wasm');
+      return get_probabilities(serializedCircuit);
     }
 
     return []

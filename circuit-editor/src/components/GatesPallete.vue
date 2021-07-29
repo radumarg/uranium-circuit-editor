@@ -266,13 +266,13 @@ export default {
       let table = document.getElementById("gates-pallete-table");
       let cells = table.getElementsByTagName("TD");
       for(var i = 0; i < cells.length; i++) {
-        cells[i].style.backgroundColor = "#374048";
+        cells[i].style.backgroundColor = window.darkBackgroundColor;
       }
       // set bckg black for selected cell
       if (cell != null) {
         if (selectedCellBgColor == "BLACK"){
           this.$root.$emit("updateHelpEvent", null);
-          cell.style.backgroundColor = "#374048";
+          cell.style.backgroundColor = window.darkBackgroundColor;
         } else {
           cell.style.backgroundColor = "Black";
           this.$root.$emit("updateHelpEvent", cell.id);
@@ -305,7 +305,7 @@ export default {
         }
       } else {
         for(let i = 0; i < cells.length; i++) {
-          cells[i].style.borderColor = "ghostwhite";
+          cells[i].style.borderColor = window.lightBackgroundColor;
         }
       }
     })
