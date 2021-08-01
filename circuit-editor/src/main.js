@@ -82,7 +82,7 @@ $(document).on('keyup', function(e) {
     // Delete is pressed
     let selectionRange = extractSelectionRange();
 
-    if (selectionRange){
+    if (selectionRange.length){
       let dtos = [];
       for (let q = selectionRange[0]; q <= selectionRange[1]; q++){
         for (let s = selectionRange[2]; s <= selectionRange[3]; s++){
@@ -99,7 +99,7 @@ $(document).on('keyup', function(e) {
     // Ctrl+C is pressed
     let selectionRange = extractSelectionRange();
 
-    if (selectionRange){
+    if (selectionRange.length){
       saveCopiedGates(store.state.circuitEditorModule, selectionRange[0], selectionRange[1], selectionRange[2], selectionRange[3]);
       undoGatesSelection();
     }
@@ -135,7 +135,7 @@ $(document).on('keyup', function(e) {
     // Ctrl+X is pressed
     let selectionRange = extractSelectionRange();
 
-    if (selectionRange){
+    if (selectionRange.length){
       let dtos = [];
       for (let q = selectionRange[0]; q <= selectionRange[1]; q++){
         for (let s = selectionRange[2]; s <= selectionRange[3]; s++){

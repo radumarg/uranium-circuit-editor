@@ -117,9 +117,10 @@ import Vue from 'vue';
 import * as htmlToImage from 'html-to-image';
 import JQuery from 'jquery';
 import { mapActions, mapGetters } from 'vuex';
-import { getNoQbits, getNoSteps, classicBitsAreValid, measureGatesArePositionedLast} from "../store/modules/gatesTable.js";
+import { getNoQbits, getNoSteps } from "../store/modules/gatesTable.js";
 import {save_circuit} from "../store/modules/circuitSaveAndRetrieve.js";
 import { getNumberOfRowsThatFit, getNumberOfColumnsThatFit } from "../store/modules/gatesTable.js";
+import {sendWorkerMessage} from '../store/modules/worker-api';
 export default {
   name: "ToolBar",
   data() {
@@ -146,19 +147,10 @@ export default {
           mutation.type == 'circuitEditorModule/removeGates' ||
           mutation.type == 'circuitEditorModule/removeQbit' || 
           mutation.type == 'circuitEditorModule/removeStep'){
-        let classicBitsAreOk = classicBitsAreValid(state.circuitEditorModule);
-        let measureGatesAreOk = measureGatesArePositionedLast(state.circuitEditorModule);  
-        if (classicBitsAreOk && measureGatesAreOk){
-          this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
-        } else {
-          if (!classicBitsAreOk) {
-            alert("Some of the classic bits have values larger than the maximum qbit index. Please undo you last change.");
-          } else if (!measureGatesAreOk) {
-            alert("Measure gates must always be positioned last on any qubit. Please undo you last change.");
-          }
-        }
+        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
         this.history.push(JSON.stringify(state));
-        this.historyUnRoll = [];    
+        this.historyUnRoll = [];
+        sendWorkerMessage(state.circuitEditorModule);
       }      
     });
   },

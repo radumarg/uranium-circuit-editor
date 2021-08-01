@@ -55,3 +55,7 @@ npm install jquery
 - Install Mathjs: https://www.npmjs.com/package/mathjs
 
 npm install mathjs
+
+- Install worker loader module for webpack: https://www.npmjs.com/package/worker-loader
+
+npm install worker-loader
