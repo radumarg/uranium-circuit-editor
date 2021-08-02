@@ -102,17 +102,17 @@ each qubit is measured into a classical bit with index equal to the qubit index 
     }  else if (gateName == "ctrl-pauli-z-root-dagger") {
         return 'Controlled gates act on 2 qubits, where usually the first acts as a control and the second acts as target. The "ctrl-pauli-z-root-dagger" gate typically performs the "pauli-z-root-dagger" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state is |0⟩ instead of |1⟩. ';
     } else if (gateName == "pauli-x-root") {
-        return 'The "pauli-x-root" gate is the root of a pauli-x gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a rotation around X-axis of Bloch sphere with an angle given by π/t or, depending on the chosen parametrization, π/2^k radians.';
+        return 'The "pauli-x-root" gate is the root of a "pauli-x" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a rotation around X-axis of Bloch sphere with an angle given by π/t or, depending on the chosen parametrization, π/2^k radians.';
     } else if (gateName == "pauli-y-root") {
-        return 'The "pauli-y-root" gate is the root of a pauli-y gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a rotation around Y-axis of Bloch sphere with an angle given by π/t or, depending on the chosen parametrization, π/2^k radians.';
+        return 'The "pauli-y-root" gate is the root of a "pauli-y" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a rotation around Y-axis of Bloch sphere with an angle given by π/t or, depending on the chosen parametrization, π/2^k radians.';
     } else if (gateName == "pauli-z-root") {
-        return 'The "pauli-z-root" gate is the root of a pauli-z gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a rotation around Z-axis of Bloch sphere with an angle given by π/t or depending on the chosen parametrization, π/2^k radians.';
+        return 'The "pauli-z-root" gate is the root of a "pauli-z" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a rotation around Z-axis of Bloch sphere with an angle given by π/t or depending on the chosen parametrization, π/2^k radians.';
     } else if (gateName == "pauli-x-root-dagger") {
-        return 'The "pauli-x-root" gate is the transpose conjugate of pauli-x-root gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a rotation around X-axis of Bloch sphere with an angle given by -π/t or, depending on the chosen parametrization, -π/2^k radians.';
+        return 'The "pauli-x-root-dagger" gate is the transpose conjugate of "pauli-x-root" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a rotation around X-axis of Bloch sphere with an angle given by -π/t or, depending on the chosen parametrization, -π/2^k radians.';
     } else if (gateName == "pauli-y-root-dagger") {
-        return 'The "pauli-y-root" gate is the transpose conjugate of pauli-y-root gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a rotation around Y-axis of Bloch sphere with an angle given by -π/t or, depending on the chosen parametrization, -π/2^k radians.';
+        return 'The "pauli-y-root-dagger" gate is the transpose conjugate of "pauli-y-root" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a rotation around Y-axis of Bloch sphere with an angle given by -π/t or, depending on the chosen parametrization, -π/2^k radians.';
     } else if (gateName == "pauli-z-root-dagger") {
-        return 'The "pauli-z-root" gate is the transpose conjugate of pauli-z-root gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a rotation around Z-axis of Bloch sphere with an angle given by -π/t or depending on the chosen parametrization, -π/2^k radians.';
+        return 'The "pauli-z-root" gate is the transpose conjugate of "pauli-z-root" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a rotation around Z-axis of Bloch sphere with an angle given by -π/t or depending on the chosen parametrization, -π/2^k radians.';
     }
 
     return "In order to work with the Circuit Editor use the gates pallete on the left to drag & drop gates in the circuit \
@@ -1121,10 +1121,10 @@ export function retriveGateMatrixHtml(gateName) {
         <table class='matrix'> \
         <tr>\
             <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
-            <td style='padding: 5px; text-align: center;'>-&nbsp;sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>&nbsp;sin(π/2t)</td>\
         </tr>\
         <tr>\
-            <td style='padding: 5px; text-align: center;'>&nbsp;sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>-&nbsp;sin(π/2t)</td>\
             <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
         </tr>\
         </table>";
