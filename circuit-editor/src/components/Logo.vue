@@ -1,9 +1,9 @@
-<template functional>
+<template>
   <div id="logo">
     <table>
       <tr>
         <td>
-          <a href="https://uranium.transilvania-quantum.org/">
+          <a href="javascript: /* activate mouse pointer change */" v-on:click="goBack">
             <img src="../assets/uranium.png" draggable="false" style="width:auto;height:80px;" alt="Uranium Logo" />
           </a>
         </td>
@@ -14,6 +14,16 @@
 
 <script>
 export default {
+  methods: {
+    goBack: function() {
+      var previousURL = document.referrer;
+      if (previousURL.includes("transilvania-quantum")){
+        window.location.href = previousURL;
+      } else {
+        window.location.href = "https://uranium.transilvania-quantum.org/";
+      }
+    },
+  }
 };
 </script>
 
