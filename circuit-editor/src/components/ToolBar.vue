@@ -117,13 +117,14 @@ import Vue from 'vue';
 import * as htmlToImage from 'html-to-image';
 import JQuery from 'jquery';
 import { mapActions, mapGetters } from 'vuex';
-import { getNoQbits, getNoSteps } from "../store/modules/gatesTable.js";
+import { getNoQbits, getNoSteps, getNumberOfRowsThatFit, getNumberOfColumnsThatFit } from "../store/modules/gatesTable.js";
 import {save_circuit} from "../store/modules/circuitSaveAndRetrieve.js";
-import { getNumberOfRowsThatFit, getNumberOfColumnsThatFit } from "../store/modules/gatesTable.js";
+import { setCookiesIfNotAltreadySet } from "../store/modules/utils.js";
 import {sendWorkerMessage} from '../store/modules/worker-api';
 export default {
   name: "ToolBar",
   data() {
+    setCookiesIfNotAltreadySet();
     return {
       darkTheme: Vue.$cookies.get("dark-theme") === 'true',
       colorGates: Vue.$cookies.get("colored-gates") === 'true',

@@ -33,3 +33,22 @@ export function hideTooltips(){
   JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");
   window.toolTipsAreShown = false;
 }
+
+export function setCookiesIfNotAltreadySet(){ 
+  let useColoreGates = Vue.$cookies.get('colored-gates');
+  if (useColoreGates == null){
+    Vue.$cookies.set('colored-gates', 'true');
+  }
+  let useDarkTheme = Vue.$cookies.get('dark-theme');
+  if (useDarkTheme == null){
+    Vue.$cookies.set('dark-theme', 'false');
+  }
+  let liveSimulation = Vue.$cookies.get('live-simulation');
+  if (liveSimulation == null){
+    Vue.$cookies.set('live-simulation', 'true');
+  }
+  let legendBase = Vue.$cookies.get('legend-base');
+  if (legendBase == null){
+    Vue.$cookies.set('legend-base', '2');
+  }
+}

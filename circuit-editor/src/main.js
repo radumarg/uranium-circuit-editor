@@ -21,6 +21,7 @@ Vue.use(MdTooltip);
 import { IconsPlugin, ImagePlugin, FormInputPlugin, FormSelectPlugin, LayoutPlugin, ModalPlugin, SidebarPlugin, SpinnerPlugin, TabsPlugin, TooltipPlugin, VBHoverPlugin } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import { setCookiesIfNotAltreadySet } from "./store/modules/utils.js";
 
 Vue.use(IconsPlugin);
 Vue.use(ImagePlugin);
@@ -43,26 +44,10 @@ new Vue({
   render: h => h(App),
 }).$mount('#app')
 
-// Setup cookies in case no cookie is set
-let useColoreGates = Vue.$cookies.get('colored-gates');
-if (useColoreGates == null){
-  Vue.$cookies.set('colored-gates', 'true');
-}
-let useDarkTheme = Vue.$cookies.get('dark-theme');
-if (useDarkTheme == null){
-  Vue.$cookies.set('dark-theme', 'false');
-}
-let liveSimulation = Vue.$cookies.get('live-simulation');
-if (liveSimulation == null){
-  Vue.$cookies.set('live-simulation', 'true');
-}
-let legendBase = Vue.$cookies.get('legend-base');
-if (legendBase == null){
-  Vue.$cookies.set('legend-base', '2');
-}
-
 // Used when toggling between showing/hiding ALL tooltips
 window.toolTipsAreShown = false;
+
+setCookiesIfNotAltreadySet();
 
 // Color scheme used by Editor for background
 window.selectBackgroundColor = "#C0C0C0";
