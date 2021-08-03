@@ -151,6 +151,7 @@ export default {
         this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
         this.history.push(JSON.stringify(state));
         this.historyUnRoll = [];
+        // validate circuit in a separate thread
         sendWorkerMessage(state.circuitEditorModule);
       }      
     });
