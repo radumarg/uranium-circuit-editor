@@ -51,7 +51,7 @@
           </td>
           <td></td>
         </tr>
-        <tr>
+        <!-- <tr>
           <td></td>
           <td v-b-tooltip.hover title="Control qubit" width="100px" style="padding: 5px;">Control:</td>
           <td width="100px" style="padding: 5px;"> 
@@ -69,6 +69,14 @@
           <td v-b-tooltip.hover title="Control state" width="100px" style="padding: 5px;">Ctrl-State:</td>
           <td width="100px" style="padding: 5px;"> 
             <b-form-select v-model="controlstateNew" :options="options" style="width:90px;" id="controlstate-new" v-on:change="updatePopupGateIamge()"></b-form-select>
+          </td>
+          <td></td>
+        </tr> -->
+        <tr>
+          <td></td>
+           <td v-b-tooltip.hover title="Edit control qubits" width="100px" style="padding: 5px;">Controls:</td>
+           <td width="100px" style="padding: 5px;">
+            <b-button block variant="light" style="color: #7952b3;">Edit</b-button>
           </td>
           <td></td>
         </tr>
@@ -191,9 +199,9 @@
           <td colspan="6">
           </td>
           <td class="no-resize-cell">
-            <div v-b-hover="handleReplicateGateModalCloseHover">
-              <b-icon v-if="replicateGateModalCloseIsHovered" v-on:click="hideReplicateGateModal()" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
-              <b-icon v-else icon="x-square" v-on:click="hideReplicateGateModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            <div v-b-hover="handleEditControlsModalCloseHover">
+              <b-icon v-if="editControlsModalCloseIsHovered" v-on:click="hideEditControlsModal()" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="x-square" v-on:click="hideEditControlsModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
         </tr>
@@ -201,9 +209,9 @@
           <td colspan="6" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
-            <div v-b-hover="handleReplicateGateModalSaveHover">
-              <b-icon v-if="replicateGateModalSaveIsHovered" v-on:click="handleReplicateGateModalSave()" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
-              <b-icon v-else icon="check" v-on:click="handleReplicateGateModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            <div v-b-hover="handleEditControlsModalSaveHover">
+              <b-icon v-if="editControlsModalSaveIsHovered" v-on:click="handleEditControlsModalSave()" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
+              <b-icon v-else icon="check" v-on:click="handleEditControlsModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
         </tr>
