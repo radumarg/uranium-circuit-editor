@@ -105,9 +105,9 @@
           <td colspan="6">
           </td>
           <td class="no-resize-cell">
-            <div v-b-hover="handleSecondModalCloseHover">
-              <b-icon v-if="secondModalCloseIsHovered" v-on:click="hideSecondModal()" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
-              <b-icon v-else icon="x-square" v-on:click="hideSecondModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            <div v-b-hover="handleDuplicateGateModalCloseHover">
+              <b-icon v-if="secondModalCloseIsHovered" v-on:click="hideDuplicateGateModal()" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="x-square" v-on:click="hideDuplicateGateModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
         </tr>
@@ -193,9 +193,9 @@
           <td colspan="6" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
-            <div v-b-hover="handleSecondModalSaveHover">
-              <b-icon v-if="secondModalSaveIsHovered" v-on:click="handleSecondModalSave()" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
-              <b-icon v-else icon="check" v-on:click="handleSecondModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            <div v-b-hover="handleDuplicateGateModalSaveHover">
+              <b-icon v-if="secondModalSaveIsHovered" v-on:click="handleDuplicateGateModalSave()" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
+              <b-icon v-else icon="check" v-on:click="handleDuplicateGateModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
         </tr>
@@ -253,7 +253,7 @@ export default {
       );
       this.$refs['initial-modal-dialog'].hide();
     },
-    handleSecondModalSave: function(){
+    handleDuplicateGateModalSave: function(){
       let promise = this.duplicateGate({
         'step': this.step,
         'qbit': this.qbit,
