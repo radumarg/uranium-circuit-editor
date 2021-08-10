@@ -82,7 +82,7 @@
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleReplicateGateModalCloseHover">
-              <b-icon v-if="secondModalCloseIsHovered" v-on:click="hideReplicateGateModal()" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-if="replicateGateCloseModalIsHovered" v-on:click="hideReplicateGateModal()" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
               <b-icon v-else icon="x-square" v-on:click="hideReplicateGateModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
@@ -143,7 +143,7 @@
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleReplicateGateModalSaveHover">
-              <b-icon v-if="secondModalSaveIsHovered" v-on:click="handleReplicateGateModalSave()" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
+              <b-icon v-if="replicateGateSaveModalIsHovered" v-on:click="handleReplicateGateModalSave()" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
               <b-icon v-else icon="check" v-on:click="handleReplicateGateModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
@@ -174,9 +174,11 @@ export default {
     return {
       trashIsHovered: false,
       closeIsHovered: false,
-      secondModalCloseIsHovered: false,
+      replicateGateCloseModalIsHovered: false,
+      editControlsCloseModalIsHovered: false,
       saveIsHovered:  false,
-      secondModalSaveIsHovered:  false,
+      replicateGateSaveModalIsHovered:  false,
+      editControlsSaveIsHovered:  false,
       expandLeftIsHovered:  false,
       expandRightIsHovered:  false,
       expandUpIsHovered:  false,
@@ -232,9 +234,11 @@ export default {
     showModal: function() {
       this.trashIsHovered = false;
       this.closeIsHovered = false;
-      this.secondModalCloseIsHovered = false;
+      this.replicateGateCloseModalIsHovered = false;
+      this.editControlsCloseModalIsHovered = false;
       this.saveIsHovered = false;
-      this.secondModalSaveIsHovered = false;
+      this.replicateGateSaveModalIsHovered = false;
+      this.editControlsSaveIsHovered = false;
       this.expandLeftIsHovered = false;
       this.expandRightIsHovered = false;
       this.expandUpIsHovered = false;
@@ -306,13 +310,19 @@ export default {
       this.closeIsHovered = hovered;
     },
     handleReplicateGateModalCloseHover(hovered) {
-      this.secondModalCloseIsHovered = hovered;
+      this.replicateGateCloseModalIsHovered = hovered;
+    },
+    handleEditControlsModalCloseHover(hovered) {
+      this.editControlsCloseModalIsHovered = hovered;
     },
     handleSaveHover(hovered) {
       this.saveIsHovered = hovered;
     },
     handleReplicateGateModalSaveHover(hovered) {
-      this.secondModalSaveIsHovered = hovered;
+      this.replicateGateSaveModalIsHovered = hovered;
+    },
+    handleEditControlsModalSaveHover(hovered) {
+      this.editControlsSaveIsHovered = hovered;
     },
     handleExpandLeftHover(hovered) {
       this.expandLeftIsHovered = hovered;
