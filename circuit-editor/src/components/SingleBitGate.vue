@@ -184,6 +184,7 @@ export default {
       expandUpIsHovered:  false,
       expandDownIsHovered:  false,
       expandGateIsHovered:  false,
+      editControlsIsHovered:  false,
       qbitNew: this.qbit,
       qbitFirst: this.qbit,
       qbitLast: this.qbit,
@@ -244,6 +245,7 @@ export default {
       this.expandUpIsHovered = false;
       this.expandDownIsHovered = false;
       this.expandGateIsHovered = false;
+      this.editControlsIsHovered = false;
       this.$data.qbitNew = this.qbit;
       if (this.qbit2 || this.qbit2 == 0){
         this.$data.qbit2New = this.qbit2;
@@ -303,6 +305,10 @@ export default {
       this.$refs['replicate-gate-modal-dialog'].hide();
       this.$refs['initial-modal-dialog'].show();
     },
+    hideEditControlsModal: function() {
+      this.$refs['edit-controls-modal-dialog'].hide();
+      this.$refs['initial-modal-dialog'].show();
+    },
     handleTrashHover(hovered) {
       this.trashIsHovered = hovered;
     },
@@ -338,6 +344,9 @@ export default {
     },
     handleExpandGateHover(hovered) {
       this.expandGateIsHovered = hovered;
+    },
+    handleEditControlsHover(hovered) {
+      this.editControlsIsHovered = hovered;
     },
     expandCircuitLeft: function(){
       if (window.gatesTable.columns/2 == this.getMaximumStepIndex() + 2){
@@ -410,9 +419,27 @@ export default {
       );
       this.$refs['replicate-gate-modal-dialog'].hide();
     },
+    handleEditControlsModalSave: function(){
+      // let promise = this.duplicateGate({
+      //   'step': this.step,
+      //   'qbit': this.qbit,
+      //   'name': this.name, 
+      // });
+      // promise.then(
+      //   // eslint-disable-next-line no-unused-vars
+      //   result => {}, 
+      //   // eslint-disable-next-line no-unused-vars
+      //   error => {},
+      // );
+      this.$refs['edit-controls-modal-dialog'].hide();
+    },
     handleExpandGate: function(){
       this.$refs['initial-modal-dialog'].hide();
       this.$refs['replicate-gate-modal-dialog'].show();
+    },
+    handleEditControls: function(){
+      this.$refs['initial-modal-dialog'].hide();
+      this.$refs['edit-controls-modal-dialog'].show();
     },
     dragStart: function(event) {
       hideTooltips();
