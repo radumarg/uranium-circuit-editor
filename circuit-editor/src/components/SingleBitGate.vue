@@ -175,10 +175,8 @@ export default {
       trashIsHovered: false,
       closeIsHovered: false,
       replicateGateModalCloseIsHovered: false,
-      editControlsModalCloseIsHovered: false,
       saveIsHovered:  false,
       replicateGateModalSaveIsHovered:  false,
-      editControlsModalSaveIsHovered:  false,
       expandLeftIsHovered:  false,
       expandRightIsHovered:  false,
       expandUpIsHovered:  false,
@@ -236,10 +234,8 @@ export default {
       this.trashIsHovered = false;
       this.closeIsHovered = false;
       this.replicateGateModalCloseIsHovered = false;
-      this.editControlsModalCloseIsHovered = false;
       this.saveIsHovered = false;
       this.replicateGateModalSaveIsHovered = false;
-      this.editControlsModalSaveIsHovered = false;
       this.expandLeftIsHovered = false;
       this.expandRightIsHovered = false;
       this.expandUpIsHovered = false;
@@ -305,10 +301,6 @@ export default {
       this.$refs['replicate-gate-modal-dialog'].hide();
       this.$refs['initial-modal-dialog'].show();
     },
-    hideEditControlsModal: function() {
-      this.$refs['edit-controls-modal-dialog'].hide();
-      this.$refs['initial-modal-dialog'].show();
-    },
     handleTrashHover(hovered) {
       this.trashIsHovered = hovered;
     },
@@ -318,17 +310,11 @@ export default {
     handleReplicateGateModalCloseHover(hovered) {
       this.replicateGateModalCloseIsHovered = hovered;
     },
-    handleEditControlsModalCloseHover(hovered) {
-      this.editControlsModalCloseIsHovered = hovered;
-    },
     handleSaveHover(hovered) {
       this.saveIsHovered = hovered;
     },
     handleReplicateGateModalSaveHover(hovered) {
       this.replicateGateModalSaveIsHovered = hovered;
-    },
-    handleEditControlsModalSaveHover(hovered) {
-      this.editControlsModalSaveIsHovered = hovered;
     },
     handleExpandLeftHover(hovered) {
       this.expandLeftIsHovered = hovered;
@@ -344,9 +330,6 @@ export default {
     },
     handleExpandGateHover(hovered) {
       this.expandGateIsHovered = hovered;
-    },
-    handleEditControlsHover(hovered) {
-      this.editControlsIsHovered = hovered;
     },
     expandCircuitLeft: function(){
       if (window.gatesTable.columns/2 == this.getMaximumStepIndex() + 2){
@@ -419,27 +402,9 @@ export default {
       );
       this.$refs['replicate-gate-modal-dialog'].hide();
     },
-    handleEditControlsModalSave: function(){
-      // let promise = this.duplicateGate({
-      //   'step': this.step,
-      //   'qbit': this.qbit,
-      //   'name': this.name, 
-      // });
-      // promise.then(
-      //   // eslint-disable-next-line no-unused-vars
-      //   result => {}, 
-      //   // eslint-disable-next-line no-unused-vars
-      //   error => {},
-      // );
-      this.$refs['edit-controls-modal-dialog'].hide();
-    },
     handleExpandGate: function(){
       this.$refs['initial-modal-dialog'].hide();
       this.$refs['replicate-gate-modal-dialog'].show();
-    },
-    handleEditControls: function(){
-      this.$refs['initial-modal-dialog'].hide();
-      this.$refs['edit-controls-modal-dialog'].show();
     },
     dragStart: function(event) {
       hideTooltips();

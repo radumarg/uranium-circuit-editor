@@ -229,10 +229,12 @@
 import Vue from 'vue';
 import { mapActions } from 'vuex';
 import SingleBitGate from "./SingleBitGate";
+import {controlsMixin} from "../mixins/controlsMixin.js";
 import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
 export default {
   name: "ControlledSingleBitGate",
   extends: SingleBitGate,
+  mixins: [controlsMixin],
   props: {
     'control': Number,
     'controlstate': Number,
