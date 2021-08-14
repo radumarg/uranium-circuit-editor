@@ -198,7 +198,13 @@
     <b-modal ref="edit-controls-modal-dialog" size="lg" width="100px" centered hide-footer hide-header>
       <table>
         <tr>
-          <td colspan="6">
+          <td class="no-resize-cell">
+            <div v-b-hover="handleEditControlsPlusHover">
+              <b-icon v-if="editControlsPlusIsHovered" v-on:click="addControl()" icon="plus" style="color: #7952b3;" font-scale="1.7"></b-icon>
+              <b-icon v-else icon="plus" v-on:click="addControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+          <td colspan="5">
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsModalCloseHover">
@@ -208,7 +214,13 @@
           </td>
         </tr>
         <tr>
-          <td colspan="6" class="td-2nd-modal">
+          <td class="no-resize-cell">
+            <div v-b-hover="handleEditControlsMinusHover">
+              <b-icon v-if="editControlsMinusIsHovered" v-on:click="removeControl()" icon="dash" style="color: #7952b3;" font-scale="1.7"></b-icon>
+              <b-icon v-else icon="dash" v-on:click="removeControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+          <td colspan="5" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsModalSaveHover">
