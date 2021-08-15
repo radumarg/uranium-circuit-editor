@@ -51,21 +51,6 @@
           </td>
           <td></td>
         </tr>
-        <!-- <tr>
-          <td></td>
-          <td v-b-tooltip.hover title="Control qubit" width="100px" style="padding: 5px;">Control:</td>
-          <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="controlNew" placeholder="control" type="number" id="control-new" style="width:90px;"></b-form-input>
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td v-b-tooltip.hover title="Control state" width="100px" style="padding: 5px;">Ctrl-State:</td>
-          <td width="100px" style="padding: 5px;"> 
-            <b-form-select v-model="controlstateNew" :options="options" style="width:90px;" id="controlstate-new" v-on:change="updatePopupGateIamge()"></b-form-select>
-          </td>
-          <td></td>
-        </tr> -->
         <tr>
           <td></td>
            <td v-b-tooltip.hover title="Edit control qubits" width="100px" style="padding: 5px;">Controls:</td>
@@ -214,6 +199,43 @@
           </td>
         </tr>
         <tr>
+          <td></td>
+          <td style="padding: 5px;">
+            <img :src="stubImageSrcPopup" style="width:30px;height:auto;" />
+          </td>
+          <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Target:</td>
+          <td style="padding: 5px;">
+            <div class="d-flex justify-content-center align-items-center">
+              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="qbitNew" placeholder="1" type="number" id="target-qbit" style="width:77px;"></b-form-input>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td width="100px" style="padding: 5px;">
+            <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="controlNew" placeholder="control" type="number" id="control-new" style="width:75px;"></b-form-input>
+          </td>
+          <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Controls:</td>
+          <td style="padding: 5px;">
+            <div class="d-flex justify-content-center align-items-center">
+              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="numberControls" placeholder="1" type="number" id="number-controls" style="width:77px;"></b-form-input>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td width="100px" style="padding: 5px;"> 
+            <b-form-select v-model="controlstateNew" :options="options" style="width:90px;" id="controlstate-new" v-on:change="updatePopupGateIamge()"></b-form-select>
+          </td>
+          <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Validate:</td>
+          <td style="padding: 5px;">
+            <b-button variant="light" @click="handleControlsValidation()" style="color: #7952b3;">CHECK</b-button>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsMinusHover">
               <b-icon v-if="editControlsMinusIsHovered" v-on:click="removeControl()" icon="dash" style="color: #7952b3;" font-scale="1.7"></b-icon>
@@ -282,7 +304,19 @@ export default {
       } else {
         return String.empty;
       }
-    }
+    },
+    stubImageSrcPopup: function() {
+      let controlstate = 0;
+      if (this.name) {
+        if (Vue.$cookies.get('colored-gates') === 'true'){
+          return require("../assets/colored-gates/" + this.name + "-stub-" + controlstate + ".svg");
+        } else {
+          return require("../assets/blue-gates/" + this.name + "-stub-" + controlstate + ".svg");
+        }
+      } else {
+        return String.empty;
+      }
+    },
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionControlledGateInCircuit']),

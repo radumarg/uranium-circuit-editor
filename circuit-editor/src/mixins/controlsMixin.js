@@ -3,6 +3,8 @@ export const controlsMixin = {
     return {
       editControlsModalCloseIsHovered: false,
       editControlsModalSaveIsHovered:  false,
+      editControlsPlusIsHovered:  false,
+      editControlsMinusIsHovered:  false,
     }
   },
   methods: {
@@ -13,6 +15,8 @@ export const controlsMixin = {
     handleEditControls: function(){
       this.editControlsModalCloseIsHovered = false;
       this.editControlsModalSaveIsHovered = false;
+      this.editControlsPlusIsHovered = false;
+      this.editControlsMinusIsHovered = false;
       this.$refs['initial-modal-dialog'].hide();
       this.$refs['edit-controls-modal-dialog'].show();
     },
@@ -24,6 +28,12 @@ export const controlsMixin = {
     },
     handleEditControlsModalSaveHover(hovered) {
       this.editControlsModalSaveIsHovered = hovered;
+    },
+    handleEditControlsPlusHover(hovered) {
+      this.editControlsPlusIsHovered = hovered;
+    },
+    handleEditControlsMinusHover(hovered) {
+      this.editControlsMinusIsHovered = hovered;
     },
     handleEditControlsModalSave: function(){
       // let promise = this.duplicateGate({
@@ -38,6 +48,15 @@ export const controlsMixin = {
       //   error => {},
       // );
       this.$refs['edit-controls-modal-dialog'].hide();
+    },
+    removeControl(){
+
+    },
+    addControl(){
+      
+    },
+    handleControlsValidation(){
+      alert("hei");
     },
   }
 }
