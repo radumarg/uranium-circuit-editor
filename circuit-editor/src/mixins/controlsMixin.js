@@ -1,3 +1,5 @@
+import Vue from 'vue';
+
 export const controlsMixin = {
   data() {
     return {
@@ -6,6 +8,31 @@ export const controlsMixin = {
       editControlsPlusIsHovered:  false,
       editControlsMinusIsHovered:  false,
     }
+  },
+  computed: {
+    gateImageSrcPopup: function() {
+      if (this.name) {
+        if (Vue.$cookies.get('colored-gates') === 'true'){
+          return require("../assets/colored-gates/" + this.name + "-1.svg");
+        } else {
+          return require("../assets/blue-gates/" + this.name + "-1.svg");
+        }
+      } else {
+        return String.empty;
+      }
+    },
+    stubImageSrcPopup: function() {
+      let controlstate = 0;
+      if (this.name) {
+        if (Vue.$cookies.get('colored-gates') === 'true'){
+          return require("../assets/colored-gates/" + this.name + "-stub-" + controlstate + ".svg");
+        } else {
+          return require("../assets/blue-gates/" + this.name + "-stub-" + controlstate + ".svg");
+        }
+      } else {
+        return String.empty;
+      }
+    },
   },
   methods: {
     hideEditControlsModal: function() {

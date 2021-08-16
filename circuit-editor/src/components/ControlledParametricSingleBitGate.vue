@@ -210,10 +210,12 @@
 import Vue from 'vue';
 import { mapActions } from 'vuex';
 import ParametricSingleBitGate from "./ParametricSingleBitGate";
+import {controlsMixin} from "../mixins/controlsMixin.js";
 import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
 export default {
   name: "ControlledParametricSingleBitGate",
   extends: ParametricSingleBitGate,
+  mixins: [controlsMixin],
   props: {
     'control': Number,
     'controlstate': Number,
@@ -236,19 +238,6 @@ export default {
       // when doing drag & drop on the stub
       this.$data.controlNew = this.control;
       this.$data.controlstateNew = this.controlstate;
-    }
-  },
-  computed: {
-    gateImageSrcPopup: function() {
-      if (this.name) {
-        if (Vue.$cookies.get('colored-gates') === 'true'){
-          return require("../assets/colored-gates/" + this.name + "-" + this.controlstate + ".svg");
-        } else {
-          return require("../assets/blue-gates/" + this.name + "-" + this.controlstate + ".svg");
-        }
-      } else {
-        return String.empty;
-      }
     }
   },
   methods: {

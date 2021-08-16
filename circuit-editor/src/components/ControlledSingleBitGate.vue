@@ -293,31 +293,6 @@ export default {
       this.$data.controlstateNew = this.controlstate;
     }
   },
-  computed: {
-    gateImageSrcPopup: function() {
-      if (this.name) {
-        if (Vue.$cookies.get('colored-gates') === 'true'){
-          return require("../assets/colored-gates/" + this.name + "-" + this.controlstate + ".svg");
-        } else {
-          return require("../assets/blue-gates/" + this.name + "-" + this.controlstate + ".svg");
-        }
-      } else {
-        return String.empty;
-      }
-    },
-    stubImageSrcPopup: function() {
-      let controlstate = 0;
-      if (this.name) {
-        if (Vue.$cookies.get('colored-gates') === 'true'){
-          return require("../assets/colored-gates/" + this.name + "-stub-" + controlstate + ".svg");
-        } else {
-          return require("../assets/blue-gates/" + this.name + "-stub-" + controlstate + ".svg");
-        }
-      } else {
-        return String.empty;
-      }
-    },
-  },
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionControlledGateInCircuit']),
     handleSave: function(){
