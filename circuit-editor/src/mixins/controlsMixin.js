@@ -1,12 +1,19 @@
 import Vue from 'vue';
 
 export const controlsMixin = {
+  props: {
+    'control': Number,
+    'controls': Array,
+    'controlstate': Number,
+    'controlstates': Array,
+  },
   data() {
     return {
       editControlsModalCloseIsHovered: false,
       editControlsModalSaveIsHovered:  false,
       editControlsPlusIsHovered:  false,
       editControlsMinusIsHovered:  false,
+      numberOfControls: this.controls.length,
     }
   },
   computed: {
@@ -22,12 +29,12 @@ export const controlsMixin = {
       }
     },
     stubImageSrcPopup: function() {
-      let controlstate = 0;
+      let controlstate1 = 1;
       if (this.name) {
         if (Vue.$cookies.get('colored-gates') === 'true'){
-          return require("../assets/colored-gates/" + this.name + "-stub-" + controlstate + ".svg");
+          return require("../assets/colored-gates/" + this.name + "-stub-" + controlstate1 + ".svg");
         } else {
-          return require("../assets/blue-gates/" + this.name + "-stub-" + controlstate + ".svg");
+          return require("../assets/blue-gates/" + this.name + "-stub-" + controlstate1 + ".svg");
         }
       } else {
         return String.empty;
@@ -35,6 +42,13 @@ export const controlsMixin = {
     },
   },
   methods: {
+    editControlsModalSize(){
+      if (this.controls.length <= 6){
+        return "lg";
+      } else {
+        return "xl";
+      }
+    },
     hideEditControlsModal: function() {
       this.$refs['edit-controls-modal-dialog'].hide();
       this.$refs['initial-modal-dialog'].show();

@@ -138,58 +138,58 @@
               <UnitaryThreeParametricSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-hadamard'">
-              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-pauli-x'">
-              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-pauli-y'">
-              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-pauli-z'">
-              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-sqrt-not'">
-              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-s'">
-              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-s-dagger'">
-              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-t'">
-              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-t-dagger'">
-              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-rx-theta'">
-              <ControlledParametricSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
+              <ControlledParametricSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-ry-theta'">
-              <ControlledParametricSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
+              <ControlledParametricSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-rz-theta'">
-              <ControlledParametricSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
+              <ControlledParametricSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-u1'">
-              <ControlledUnitaryParametricSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :lambda="cell.lambda" :key="cell.key"/>
+              <ControlledUnitaryParametricSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :lambda="cell.lambda" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-u2'">
-              <ControlledUnitaryBiParametricSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
+              <ControlledUnitaryBiParametricSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-u3'">
-              <ControlledUnitaryThreeParametricSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
+              <ControlledUnitaryThreeParametricSingleBitGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name.includes('ctrl') && cell.name.includes('stub')">
-              <ControlledGateStub :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :control2="cell.control2" :controlstate2="cell.controlstate2" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledGateStub :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :control2="cell.control2" :controlstate2="cell.controlstate2" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="!cell.name.includes('ctrl') && cell.name.includes('pauli') && cell.name.includes('root')">
               <PauliRootGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name.includes('ctrl') && cell.name.includes('pauli') && cell.name.includes('root')">
-              <ControlledPauliRootGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledPauliRootGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'swap'">
               <GateSwap :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
@@ -204,22 +204,22 @@
               <GateSwapVariant :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'fredkin'">
-              <FredkinGate :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <FredkinGate :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-swap-stub-up'">
-              <FredkinGateControlStubUp :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <FredkinGateControlStubUp :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-swap-stub-down'">
-              <FredkinGateControlStubDown :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <FredkinGateControlStubDown :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'fredkin-control-middle'">
-              <FredkinGateControlMiddle :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <FredkinGateControlMiddle :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'toffoli'">
-              <ToffoliGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :control2="cell.control2" :controlstate2="cell.controlstate2" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ToffoliGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :control2="cell.control2" :controlstate2="cell.controlstate2" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'toffoli-2nd-control-1' || cell.name === 'toffoli-2nd-control-0'">
-              <Toffoli2NdControlGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :control="cell.control" :controlstate="cell.controlstate" :control2="cell.control2" :controlstate2="cell.controlstate2" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :key="cell.key"/>
+              <Toffoli2NdControlGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :control2="cell.control2" :controlstate2="cell.controlstate2" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'xx' || cell.name === 'yy' || cell.name === 'zz'">
               <IsingGate :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>

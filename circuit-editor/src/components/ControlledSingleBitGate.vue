@@ -180,7 +180,7 @@
       </table>
     </b-modal>
 
-    <b-modal ref="edit-controls-modal-dialog" size="lg" width="100px" centered hide-footer hide-header>
+    <b-modal ref="edit-controls-modal-dialog" :size="editControlsModalSize()" width="100px" scrollable centered hide-footer hide-header>
       <table>
         <tr>
           <td class="no-resize-cell">
@@ -206,28 +206,34 @@
           <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Target:</td>
           <td style="padding: 5px;">
             <div class="d-flex justify-content-center align-items-center">
-              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="qbitNew" placeholder="1" type="number" id="target-qbit" style="width:77px;"></b-form-input>
+              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="qbitNew" placeholder="target" type="number" id="target-qbit" style="width:70px;"></b-form-input>
             </div>
           </td>
           <td></td>
         </tr>
         <tr>
           <td></td>
-          <td width="100px" style="padding: 5px;">
-            <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="controlNew" placeholder="control" type="number" id="control-new" style="width:75px;"></b-form-input>
+          <td width="80px" style="padding: 5px; background-color: red;">
+            <div class="d-flex justify-content-center align-items-center">
+              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="controlNew" placeholder="controls" type="number" id="control-new" style="width:70px;"></b-form-input>
+            </div>
           </td>
+
+
+
+
           <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Controls:</td>
           <td style="padding: 5px;">
             <div class="d-flex justify-content-center align-items-center">
-              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="numberControls" placeholder="1" type="number" id="number-controls" style="width:77px;"></b-form-input>
+              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="numberOfControls" placeholder="1" type="number" id="number-controls" style="width:70px;"></b-form-input>
             </div>
           </td>
           <td></td>
         </tr>
         <tr>
           <td></td>
-          <td width="100px" style="padding: 5px;"> 
-            <b-form-select v-model="controlstateNew" :options="options" style="width:90px;" id="controlstate-new" v-on:change="updatePopupGateIamge()"></b-form-select>
+          <td width="80px" style="padding: 5px;  background-color: red;"> 
+            <b-form-select v-model="controlstateNew" :options="options" style="width:70px;" id="controlstate-new" v-on:change="updatePopupGateIamge()"></b-form-select>
           </td>
           <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Validate:</td>
           <td style="padding: 5px;">
@@ -269,14 +275,12 @@ export default {
   name: "ControlledSingleBitGate",
   extends: SingleBitGate,
   mixins: [controlsMixin],
-  props: {
-    'control': Number,
-    'controlstate': Number,
-  },
   data() {
     return {
       controlNew: this.control,
+      controlsNew: this.controls,
       controlstateNew: this.controlstate,
+      controlstatesNew: this.controlstates,
       controlExpression: this.control,
       controlstateExpression: this.controlstate,
       options: [
@@ -290,7 +294,9 @@ export default {
       // need this in order to update controlNew
       // when doing drag & drop on the stub
       this.$data.controlNew = this.control;
+      this.$data.controlsNew = this.controls;
       this.$data.controlstateNew = this.controlstate;
+      this.$data.controlstatesNew = this.controlstates;
     }
   },
   methods: {
