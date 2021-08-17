@@ -200,8 +200,8 @@
         </tr>
         <tr>
           <td></td>
-          <td style="padding: 5px;">
-            <img :src="stubImageSrcPopup" style="width:30px;height:auto;" />
+          <td v-for="control in numberOfControls" v-bind:key="control" style="padding: 5px;">
+            <img :src="stubImageSrcPopup(control - 1)" style="width:30px;height:auto;" />
           </td>
           <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Target:</td>
           <td style="padding: 5px;">
@@ -213,15 +213,11 @@
         </tr>
         <tr>
           <td></td>
-          <td width="80px" style="padding: 5px; background-color: red;">
+          <td v-for="control in numberOfControls" v-bind:key="control" width="80px" style="padding: 5px; background-color: red;">
             <div class="d-flex justify-content-center align-items-center">
               <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="controlNew" placeholder="controls" type="number" id="control-new" style="width:70px;"></b-form-input>
             </div>
           </td>
-
-
-
-
           <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Controls:</td>
           <td style="padding: 5px;">
             <div class="d-flex justify-content-center align-items-center">
@@ -232,7 +228,7 @@
         </tr>
         <tr>
           <td></td>
-          <td width="80px" style="padding: 5px;  background-color: red;"> 
+          <td v-for="control in numberOfControls" v-bind:key="control" width="80px" style="padding: 5px;  background-color: red;">
             <b-form-select v-model="controlstateNew" :options="options" style="width:70px;" id="controlstate-new" v-on:change="updatePopupGateIamge()"></b-form-select>
           </td>
           <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Validate:</td>

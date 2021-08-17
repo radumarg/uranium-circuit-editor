@@ -28,18 +28,6 @@ export const controlsMixin = {
         return String.empty;
       }
     },
-    stubImageSrcPopup: function() {
-      let controlstate1 = 1;
-      if (this.name) {
-        if (Vue.$cookies.get('colored-gates') === 'true'){
-          return require("../assets/colored-gates/" + this.name + "-stub-" + controlstate1 + ".svg");
-        } else {
-          return require("../assets/blue-gates/" + this.name + "-stub-" + controlstate1 + ".svg");
-        }
-      } else {
-        return String.empty;
-      }
-    },
   },
   methods: {
     editControlsModalSize(){
@@ -98,6 +86,17 @@ export const controlsMixin = {
     },
     handleControlsValidation(){
       alert("hei");
+    },
+    stubImageSrcPopup: function(controlIndex) {
+      if (this.name) {
+        if (Vue.$cookies.get('colored-gates') === 'true'){
+          return require("../assets/colored-gates/" + this.name + "-stub-" + this.controlstates[controlIndex] + ".svg");
+        } else {
+          return require("../assets/blue-gates/" + this.name + "-stub-" + this.controlstates[controlIndex] + ".svg");
+        }
+      } else {
+        return String.empty;
+      }
     },
   }
 }
