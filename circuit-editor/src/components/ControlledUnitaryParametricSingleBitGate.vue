@@ -63,7 +63,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Control state" width="100px" style="padding: 5px;">Ctrl-State:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-select v-model="controlstateNew" :options="options" style="width:90px;" id="controlstate-new" v-on:change="updatePopupGateIamge()"></b-form-select>
+            <b-form-select v-model="controlstateNew" :options="options" style="width:90px;" id="controlstate-new"></b-form-select>
           </td>
           <td></td>
         </tr>
@@ -316,14 +316,6 @@ export default {
     dragEnd: function() {
       let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
       document.body.removeChild(dragImageGhost);
-    },
-    updatePopupGateIamge(){
-      var img = document.getElementById("popup-gate-image");
-      if (Vue.$cookies.get('colored-gates') === 'true'){
-          img.src = require("../assets/colored-gates/" + this.name + "-" + this.$data.controlstateNew + ".svg");
-        } else {
-          img.src = require("../assets/blue-gates/" + this.name + "-" + this.$data.controlstateNew + ".svg");
-        }
     },
   },
 }

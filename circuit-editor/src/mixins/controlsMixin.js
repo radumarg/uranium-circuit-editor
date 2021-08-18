@@ -98,6 +98,16 @@ export const controlsMixin = {
         return String.empty;
       }
     },
+    emptySlotsInEditControlsModal(){
+      return Math.max(0, 11 - this.numberOfControls);
+    },
+    numberOfColumnsInEditControlsModal(){
+      return 2 + Math.max(this.numberOfControls, 11);
+    },
+    onControlStateChange(){ 
+      // need to refresh control state icon image
+      this.$forceUpdate();
+    }
   }
 }
 

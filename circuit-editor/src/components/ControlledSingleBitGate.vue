@@ -181,7 +181,7 @@
     </b-modal>
 
     <b-modal ref="edit-controls-modal-dialog" :size="editControlsModalSize()" width="100px" scrollable centered hide-footer hide-header>
-      <table>
+      <table class=fixed_width_column_table>
         <tr>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsPlusHover">
@@ -189,7 +189,7 @@
               <b-icon v-else icon="plus" v-on:click="addControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
-          <td colspan="5">
+          <td :colspan="numberOfColumnsInEditControlsModal()">
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsModalCloseHover">
@@ -200,8 +200,10 @@
         </tr>
         <tr>
           <td></td>
-          <td v-for="control in numberOfControls" v-bind:key="control" style="padding: 5px;">
+          <td v-for="(control, index) in numberOfControls" v-bind:key="index" style="padding: 5px;">
             <img :src="stubImageSrcPopup(control - 1)" style="width:30px;height:auto;" />
+          </td>
+          <td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 1000" style="padding: 5px;">
           </td>
           <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Target:</td>
           <td style="padding: 5px;">
@@ -213,23 +215,27 @@
         </tr>
         <tr>
           <td></td>
-          <td v-for="control in numberOfControls" v-bind:key="control" width="80px" style="padding: 5px; background-color: red;">
+          <td v-for="(control, index) in controls" v-bind:key="index + 2000" width="80px" style="padding: 5px;">
             <div class="d-flex justify-content-center align-items-center">
-              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="controlNew" placeholder="controls" type="number" id="control-new" style="width:70px;"></b-form-input>
+              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="controls[index]" placeholder="control" type="number" id="control-new" style="width:70px;"></b-form-input>
             </div>
+          </td>
+          <td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 3000" style="padding: 5px;">
           </td>
           <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Controls:</td>
           <td style="padding: 5px;">
             <div class="d-flex justify-content-center align-items-center">
-              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="numberOfControls" placeholder="1" type="number" id="number-controls" style="width:70px;"></b-form-input>
+              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="numberOfControls" placeholder="controls" type="number" id="number-controls" style="width:70px;"></b-form-input>
             </div>
           </td>
           <td></td>
         </tr>
         <tr>
           <td></td>
-          <td v-for="control in numberOfControls" v-bind:key="control" width="80px" style="padding: 5px;  background-color: red;">
-            <b-form-select v-model="controlstateNew" :options="options" style="width:70px;" id="controlstate-new" v-on:change="updatePopupGateIamge()"></b-form-select>
+          <td v-for="(controlstate, index) in controlstates" v-bind:key="index + 4000" width="80px" style="padding: 5px;">
+            <b-form-select v-model="controlstates[index]" @change="onControlStateChange()"  placeholder="controlstate" :options="options" style="width:70px;" id="controlstate-new"></b-form-select>
+          </td>
+          <td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 5000" style="padding: 5px;">
           </td>
           <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Validate:</td>
           <td style="padding: 5px;">
@@ -244,7 +250,7 @@
               <b-icon v-else icon="dash" v-on:click="removeControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
-          <td colspan="5" class="td-2nd-modal">
+          <td :colspan="numberOfColumnsInEditControlsModal()" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsModalSaveHover">
@@ -367,14 +373,6 @@ export default {
       let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
       document.body.removeChild(dragImageGhost);
     },
-    updatePopupGateIamge(){
-      var img = document.getElementById("popup-gate-image");
-      if (Vue.$cookies.get('colored-gates') === 'true'){
-          img.src = require("../assets/colored-gates/" + this.name + "-" + this.$data.controlstateNew + ".svg");
-        } else {
-          img.src = require("../assets/blue-gates/" + this.name + "-" + this.$data.controlstateNew + ".svg");
-        }
-    },
   },
 }
 </script>
@@ -401,4 +399,10 @@ td {
 img {
   display: inline-block;
 }
+
+.fixed_width_column_table {
+  table-layout: fixed; 
+  width: 100%;
+}
+
 </style>

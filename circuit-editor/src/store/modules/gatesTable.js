@@ -41,7 +41,7 @@ class GatesTableCell {
     /* control bit for a controlled gate */
     this.control = null;
     /* controls bit for a controlled gate */
-    this.controls = [2, 3, 4, 5, 6, 7, 8, 9];
+    this.controls = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
     /* 2nd control bit for a controlled gate */
     this.control2 = null;
     /* the qbit associated to current row (null in case row does not hold gates) */
@@ -49,7 +49,7 @@ class GatesTableCell {
     /* For controlled gates this indicates the control state defined as +/-1 along Z axis in computational basis.*/
     this.controlstate = null;
     /* For controlled gates this indicates the control state defined as +/-1 along Z axis in computational basis.*/
-    this.controlstates = [1, 0, 0, 1, 1, 0, 0, 1];
+    this.controlstates = [1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1];
     /* For Toffoli gate this indicates the 2nd control state defined as +/-1 along Z axis in computational basis.*/
     this.controlstate2 = null;
     /* the circle in parametric swap gates is not being refreshed by vue when draging the upper qbit, 
