@@ -13,6 +13,8 @@ export const controlsMixin = {
       editControlsModalSaveIsHovered:  false,
       editControlsPlusIsHovered:  false,
       editControlsMinusIsHovered:  false,
+      controlsNew: this.controls,
+      controlstatesNew: this.controlstates,
       numberOfControls: this.controls.length,
     }
   },
@@ -31,7 +33,7 @@ export const controlsMixin = {
   },
   methods: {
     editControlsModalSize(){
-      if (this.controls.length <= 6){
+      if (this.controlsNew.length <= 7){
         return "lg";
       } else {
         return "xl";
@@ -90,24 +92,48 @@ export const controlsMixin = {
     stubImageSrcPopup: function(controlIndex) {
       if (this.name) {
         if (Vue.$cookies.get('colored-gates') === 'true'){
-          return require("../assets/colored-gates/" + this.name + "-stub-" + this.controlstates[controlIndex] + ".svg");
+          return require("../assets/colored-gates/" + this.name + "-stub-" + this.controlstatesNew[controlIndex] + ".svg");
         } else {
-          return require("../assets/blue-gates/" + this.name + "-stub-" + this.controlstates[controlIndex] + ".svg");
+          return require("../assets/blue-gates/" + this.name + "-stub-" + this.controlstatesNew[controlIndex] + ".svg");
         }
       } else {
         return String.empty;
       }
     },
     emptySlotsInEditControlsModal(){
-      return Math.max(0, 11 - this.numberOfControls);
+      let visibleControls = 7;
+      if (this.controlsNew.length > 7) visibleControls = 11;
+      return Math.max(0, visibleControls - this.controlsNew.length);
     },
     numberOfColumnsInEditControlsModal(){
-      return 2 + Math.max(this.numberOfControls, 11);
+      let visibleControls = 7;
+      if (this.controlsNew.length > 7) visibleControls = 11;
+      return 2 + Math.max(this.controlsNew.length, visibleControls);
     },
     onControlStateChange(){ 
       // need to refresh control state icon image
       this.$forceUpdate();
-    }
+    },
+    onNumberControlsChange(){ 
+      if (this.numberOfControls < this.controlsNew.length){
+        if (this.numberOfControls > 0){
+          this.controlsNew = this.controlsNew.slice(0, this.numberOfControls);
+          this.controlstatesNew = this.controlstatesNew.slice(0, this.numberOfControls);
+        } else {
+          this.numberOfControls = 1;
+          this.controlsNew = [this.controlsNew[0]];
+          this.controlstatesNew = [this.controlstatesNew[0]];
+        }
+      } else {
+        let lastControl = this.controlsNew[this.controlsNew.length - 1];
+        for (let i = 0; i < this.numberOfControls - this.controlsNew.length; i++){
+          lastControl++;
+          this.controlsNew.push(lastControl);
+          this.controlstatesNew.push(1);
+        }
+      }
+      this.$forceUpdate();
+    },
   }
 }
 

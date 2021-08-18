@@ -181,7 +181,7 @@
     </b-modal>
 
     <b-modal ref="edit-controls-modal-dialog" :size="editControlsModalSize()" width="100px" scrollable centered hide-footer hide-header>
-      <table class=fixed_width_column_table>
+      <table>
         <tr>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsPlusHover">
@@ -189,7 +189,7 @@
               <b-icon v-else icon="plus" v-on:click="addControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
-          <td :colspan="numberOfColumnsInEditControlsModal()">
+          <td :colspan="numberOfColumnsInEditControlsModal()" class="edit-controls-cell">
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsModalCloseHover">
@@ -200,13 +200,13 @@
         </tr>
         <tr>
           <td></td>
-          <td v-for="(control, index) in numberOfControls" v-bind:key="index" style="padding: 5px;">
+          <td v-for="(control, index) in controlsNew.length" v-bind:key="index" class="edit-controls-cell">
             <img :src="stubImageSrcPopup(control - 1)" style="width:30px;height:auto;" />
           </td>
-          <td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 1000" style="padding: 5px;">
+          <td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 1000" class="edit-controls-cell">
           </td>
-          <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Target:</td>
-          <td style="padding: 5px;">
+          <td v-b-tooltip.hover title="Control qubits" class="edit-controls-cell">Target:</td>
+          <td class="edit-controls-cell">
             <div class="d-flex justify-content-center align-items-center">
               <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="qbitNew" placeholder="target" type="number" id="target-qbit" style="width:70px;"></b-form-input>
             </div>
@@ -215,30 +215,30 @@
         </tr>
         <tr>
           <td></td>
-          <td v-for="(control, index) in controls" v-bind:key="index + 2000" width="80px" style="padding: 5px;">
+          <td v-for="(control, index) in controlsNew" v-bind:key="index + 2000" class="edit-controls-cell">
             <div class="d-flex justify-content-center align-items-center">
-              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="controls[index]" placeholder="control" type="number" id="control-new" style="width:70px;"></b-form-input>
+              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="controlsNew[index]" placeholder="control" type="number" id="control-new" style="width:70px;"></b-form-input>
             </div>
           </td>
-          <td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 3000" style="padding: 5px;">
+          <td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 3000" class="edit-controls-cell">
           </td>
-          <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Controls:</td>
-          <td style="padding: 5px;">
+          <td v-b-tooltip.hover title="Control qubits" class="edit-controls-cell">Controls:</td>
+          <td class="edit-controls-cell">
             <div class="d-flex justify-content-center align-items-center">
-              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="numberOfControls" placeholder="controls" type="number" id="number-controls" style="width:70px;"></b-form-input>
+              <b-form-input min="0" v-model="numberOfControls" @change="onNumberControlsChange()" placeholder="controls" type="number" id="number-controls" style="width:70px;"></b-form-input>
             </div>
           </td>
           <td></td>
         </tr>
         <tr>
           <td></td>
-          <td v-for="(controlstate, index) in controlstates" v-bind:key="index + 4000" width="80px" style="padding: 5px;">
-            <b-form-select v-model="controlstates[index]" @change="onControlStateChange()"  placeholder="controlstate" :options="options" style="width:70px;" id="controlstate-new"></b-form-select>
+          <td v-for="(controlstate, index) in controlstatesNew" v-bind:key="index + 4000" width="80px" class="edit-controls-cell">
+            <b-form-select v-model="controlstatesNew[index]" @change="onControlStateChange()"  placeholder="controlstate" :options="options" style="width:70px;" id="controlstate-new"></b-form-select>
           </td>
-          <td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 5000" style="padding: 5px;">
+          <td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 5000" class="edit-controls-cell">
           </td>
-          <td v-b-tooltip.hover title="Control qubits" style="padding: 5px;">Validate:</td>
-          <td style="padding: 5px;">
+          <td v-b-tooltip.hover title="Control qubits" class="edit-controls-cell">Validate:</td>
+          <td class="edit-controls-cell">
             <b-button variant="light" @click="handleControlsValidation()" style="color: #7952b3;">CHECK</b-button>
           </td>
           <td></td>
@@ -250,7 +250,7 @@
               <b-icon v-else icon="dash" v-on:click="removeControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
-          <td :colspan="numberOfColumnsInEditControlsModal()" class="td-2nd-modal">
+          <td :colspan="numberOfColumnsInEditControlsModal()" class="edit-controls-cell">
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsModalSaveHover">
@@ -261,8 +261,6 @@
         </tr>
       </table>
     </b-modal>
-
-
 
   </div>
 </template>
@@ -280,8 +278,6 @@ export default {
     return {
       controlNew: this.control,
       controlsNew: this.controls,
-      controlstateNew: this.controlstate,
-      controlstatesNew: this.controlstates,
       controlExpression: this.control,
       controlstateExpression: this.controlstate,
       options: [
@@ -377,17 +373,21 @@ export default {
 </script>
 
 <style scoped>
+
 table {
   text-align: center;
   table-layout: fixed;
 }
+
 th,
 td {
   padding: 1px;
 }
+
 .td-2nd-modal {
   padding: 5px;
 }
+
 .no-resize-cell{
   width: 35px;
   max-width: 35px;
@@ -395,13 +395,15 @@ td {
   max-height: 35px;
 }
 
-img {
-  display: inline-block;
+.edit-controls-cell{
+  min-width: 80px;
+  width: 80px;
+  max-width: 80px;
+  padding: 5px;
 }
 
-.fixed_width_column_table {
-  table-layout: fixed; 
-  width: 100%;
+img {
+  display: inline-block;
 }
 
 </style>
