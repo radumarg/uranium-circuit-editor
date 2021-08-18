@@ -241,7 +241,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapActions } from 'vuex';
 import UnitaryThreeParametricSingleBitGate from "./UnitaryThreeParametricSingleBitGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";

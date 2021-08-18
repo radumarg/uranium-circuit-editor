@@ -224,7 +224,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapActions } from 'vuex';
 import PauliRootGate from "./PauliRootGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";

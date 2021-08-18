@@ -223,7 +223,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapActions } from 'vuex';
 import UnitaryBiParametricSingleBitGate from "./UnitaryBiParametricSingleBitGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";

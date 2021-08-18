@@ -268,7 +268,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapActions } from 'vuex';
 import SingleBitGate from "./SingleBitGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";
