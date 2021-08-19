@@ -33,7 +33,7 @@ export const controlsMixin = {
   },
   methods: {
     editControlsModalSize(){
-      if (this.controlsNew.length <= 7){
+      if (this.controlsNew.length <= 5){
         return "lg";
       } else {
         return "xl";
@@ -80,12 +80,6 @@ export const controlsMixin = {
       // );
       this.$refs['edit-controls-modal-dialog'].hide();
     },
-    removeControl(){
-
-    },
-    addControl(){
-      
-    },
     handleControlsValidation(){
       alert("hei");
     },
@@ -101,13 +95,11 @@ export const controlsMixin = {
       }
     },
     emptySlotsInEditControlsModal(){
-      let visibleControls = 7;
-      if (this.controlsNew.length > 7) visibleControls = 11;
+      let visibleControls = (this.controlsNew.length > 5) ? 11 : 5;
       return Math.max(0, visibleControls - this.controlsNew.length);
     },
     numberOfColumnsInEditControlsModal(){
-      let visibleControls = 7;
-      if (this.controlsNew.length > 7) visibleControls = 11;
+      let visibleControls = (this.controlsNew.length > 5) ? 11 : 5;
       return 2 + Math.max(this.controlsNew.length, visibleControls);
     },
     onControlStateChange(){ 
@@ -133,6 +125,32 @@ export const controlsMixin = {
         }
       }
       this.$forceUpdate();
+    },
+    addControl(){
+      this.numberOfControls += 1;
+      let lastControl = this.controlsNew[this.controlsNew.length - 1] + 1;
+      this.controlsNew.push(lastControl);
+      this.controlstatesNew.push(1);
+    },
+    removeControl(){ 
+      alert("hei")
+      this.numberOfControls -= 1;
+      if (this.numberOfControls > 0){
+        this.controlsNew = this.controlsNew.slice(0, this.numberOfControls);
+        this.controlstatesNew = this.controlstatesNew.slice(0, this.numberOfControls);
+      } else {
+        this.numberOfControls = 1;
+        this.controlsNew = [this.controlsNew[0]];
+        this.controlstatesNew = [this.controlstatesNew[0]];
+      }
+    },
+    getEmbededTableStyle(){
+      let maxWidth = (this.controlsNew.length > 5) ? 800 : 600;
+      return `overflow-x:scroll; max-width: ${maxWidth}px;`
+    },
+    getEmbedTableCellStyle(){
+      let width = (this.controlsNew.length > 5) ? 880 : 560;
+      return `width: ${width}px; min-width: ${width}px; max-width: ${width}px`;
     },
   }
 }
