@@ -33,11 +33,27 @@ export const controlsMixin = {
   },
   methods: {
     editControlsModalSize(){
-      if (this.controlsNew.length <= 5){
+      if (this.controlsNew.length <= 7){
         return "lg";
       } else {
         return "xl";
       }
+    },
+    getEmbededTableStyle(){
+      let maxWidth = (this.controlsNew.length > 7) ? 880 : 600;
+      return `overflow-x:scroll; max-width: ${maxWidth}px;`
+    },
+    getEmbedTableCellStyle(){
+      let width = (this.controlsNew.length > 7) ? 880 : 560;
+      return `width: ${width}px; min-width: ${width}px; max-width: ${width}px`;
+    },
+    emptySlotsInEditControlsModal(){
+      let visibleControls = (this.controlsNew.length > 7) ? 11 : 7;
+      return Math.max(0, visibleControls - this.controlsNew.length);
+    },
+    numberOfColumnsInEditControlsModal(){
+      let visibleControls = (this.controlsNew.length > 7) ? 11 : 7;
+      return 2 + Math.max(this.controlsNew.length, visibleControls);
     },
     hideEditControlsModal: function() {
       this.$refs['edit-controls-modal-dialog'].hide();
@@ -94,14 +110,6 @@ export const controlsMixin = {
         return String.empty;
       }
     },
-    emptySlotsInEditControlsModal(){
-      let visibleControls = (this.controlsNew.length > 5) ? 11 : 5;
-      return Math.max(0, visibleControls - this.controlsNew.length);
-    },
-    numberOfColumnsInEditControlsModal(){
-      let visibleControls = (this.controlsNew.length > 5) ? 11 : 5;
-      return 2 + Math.max(this.controlsNew.length, visibleControls);
-    },
     onControlStateChange(){ 
       // need to refresh control state icon image
       this.$forceUpdate();
@@ -133,24 +141,11 @@ export const controlsMixin = {
       this.controlstatesNew.push(1);
     },
     removeControl(){ 
-      alert("hei")
-      this.numberOfControls -= 1;
-      if (this.numberOfControls > 0){
+      if (this.numberOfControls > 1){
+        this.numberOfControls -= 1;
         this.controlsNew = this.controlsNew.slice(0, this.numberOfControls);
         this.controlstatesNew = this.controlstatesNew.slice(0, this.numberOfControls);
-      } else {
-        this.numberOfControls = 1;
-        this.controlsNew = [this.controlsNew[0]];
-        this.controlstatesNew = [this.controlstatesNew[0]];
       }
-    },
-    getEmbededTableStyle(){
-      let maxWidth = (this.controlsNew.length > 5) ? 800 : 600;
-      return `overflow-x:scroll; max-width: ${maxWidth}px;`
-    },
-    getEmbedTableCellStyle(){
-      let width = (this.controlsNew.length > 5) ? 880 : 560;
-      return `width: ${width}px; min-width: ${width}px; max-width: ${width}px`;
     },
   }
 }

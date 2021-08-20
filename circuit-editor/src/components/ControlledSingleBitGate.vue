@@ -200,29 +200,29 @@
         </tr>
         <tr>
           <td></td>
-          <td :colspan="numberOfColumnsInEditControlsModal()" rowspan="3" :style="getEmbedTableCellStyle()">
-            <b-table-simple :style="getEmbededTableStyle()" :responsive="true">
+          <td :colspan="numberOfColumnsInEditControlsModal()" rowspan="3" :style="getEmbedTableCellStyle()" class="text-center">
+            <b-table-simple :style="getEmbededTableStyle()" :responsive="true" borderless>
               <b-tr>
-                <b-td v-for="(control, index) in controlsNew.length" v-bind:key="index" style="max-width: 70px;">
+                <b-td v-for="(control, index) in controlsNew.length" v-bind:key="index" style="min-width: 79px; max-width: 79px; border: 1px solid #E0E0E0;">
                   <img :src="stubImageSrcPopup(control - 1)" style="width:30px; height:auto;" />
                 </b-td>
-                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 1000" style="min-width: 70px;" />
+                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 1000" style="min-width: 79px; max-width: 79px;" />
               </b-tr>
               <b-tr>
-                <b-td v-for="(control, index) in controlsNew" v-bind:key="index + 2000" style="max-width: 70px;">
+                <b-td v-for="(control, index) in controlsNew" v-bind:key="index + 2000" style="min-width: 79px; max-width: 79px;">
                   <div class="d-flex justify-content-center align-items-center">
-                    <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="controlsNew[index]" placeholder="control" type="number" id="control-new" style="width:72px;"></b-form-input>
+                    <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model="controlsNew[index]" placeholder="control" type="number" id="control-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
                   </div>
                 </b-td>
-                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 3000"  style="max-width: 70px;" />
+                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 3000"  style="min-width: 79px; max-width: 79px;" />
               </b-tr>
               <b-tr>
-                <b-td v-for="(controlstate, index) in controlstatesNew" v-bind:key="index + 4000" width="80px" style="min-width: 70px;">
+                <b-td v-for="(controlstate, index) in controlstatesNew" v-bind:key="index + 4000" style="min-width: 79px; max-width: 79px;">
                   <div class="d-flex justify-content-center align-items-center">
-                    <b-form-select v-model="controlstatesNew[index]" @change="onControlStateChange()"  placeholder="controlstate" :options="options" id="controlstate-new" style="width:72px;"></b-form-select>
+                    <b-form-select v-model="controlstatesNew[index]" @change="onControlStateChange()"  placeholder="controlstate" :options="options" id="controlstate-new" style="min-width: 72px; max-width: 72px;"></b-form-select>
                   </div>
                 </b-td>
-                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 5000" style="min-width: 70px;" />
+                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 5000" style="min-width: 79px; max-width: 79px;" />
               </b-tr>
             </b-table-simple>
           </td>
@@ -388,13 +388,16 @@ export default {
 table {
   text-align: center;
   table-layout: fixed;
-  border: 1px solid black;
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 th,
 td {
   padding: 1px;
-  border: 1px solid black;
 }
 
 .td-2nd-modal {
@@ -414,19 +417,6 @@ td {
   max-width: 80px;
   padding: 5px;
 }
-
-.edit-controls-cell2{
-  background-color: red
-}
-
-/* b-table-simple > b-tr > b-td {
-min-width: 80px;
-  width: 80px;
-  max-width: 80px;
-  padding: 5px;
-} */
-
-
 
 img {
   display: inline-block;
