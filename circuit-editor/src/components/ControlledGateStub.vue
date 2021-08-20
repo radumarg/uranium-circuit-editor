@@ -23,7 +23,7 @@
         </tr>
         <tr>
           <td></td>
-          <td colspan="2" style="padding: 25px;">
+          <td colspan="2" style="padding: 17px;">
             <div class="d-flex justify-content-center align-items-center">
               <img :src="stubImageSrcPopup()" style="width:30px; height:auto;" />
             </div>
@@ -47,7 +47,7 @@
           <td></td>
         </tr>
         <tr>
-          <td colspan="4" style="padding: 10px;"></td>
+          <td colspan="4" style="padding: 5px;"></td>
         </tr>
         <tr>
           <td colspan="3"></td>

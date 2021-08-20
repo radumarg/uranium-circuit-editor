@@ -9,14 +9,14 @@
         <tr>
           <td class="no-resize-cell">
              <div v-b-hover="handleTrashHover">
-              <b-icon v-if="trashIsHovered" v-on:click="handleDeleteGate()" icon="trash" v-b-tooltip.hover title="Delete gate" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-if="trashIsHovered" v-on:click="handleDeleteGate()" icon="trash" title="Delete gate" style="color: #7952b3;" font-scale="1.6"></b-icon>
               <b-icon v-else icon="trash" v-on:click="handleDeleteGate()" style="color: #7952b3;" font-scale="1.4"></b-icon>
               </div>
           </td>
           <td colspan="2">
             <div v-b-hover="handleExpandUpHover">
-              <b-icon v-if="expandUpIsHovered" icon="chevron-bar-up" v-on:click="expandCircuitUp()" v-b-tooltip.hover title="Add qbit before" style="color: #7952b3;" font-scale="1.6"></b-icon>
-              <b-icon v-else icon="chevron-bar-up" v-on:click="expandCircuitUp()" v-b-tooltip.hover title="Add qbit before" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-if="expandUpIsHovered" icon="chevron-bar-up" v-on:click="expandCircuitUp()" title="Add qbit before" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="chevron-bar-up" v-on:click="expandCircuitUp()" title="Add qbit before" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
           <td class="no-resize-cell">
@@ -29,8 +29,8 @@
         <tr>
           <td>
             <div v-b-hover="handleExpandLeftHover">
-              <b-icon v-if="expandLeftIsHovered" icon="chevron-bar-left" v-on:click="expandCircuitLeft()" v-b-tooltip.hover title="Add step to the left" style="color: #7952b3;" font-scale="1.6"></b-icon>
-              <b-icon v-else icon="chevron-bar-left" v-on:click="expandCircuitLeft()" v-b-tooltip.hover title="Add step to the left" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-if="expandLeftIsHovered" icon="chevron-bar-left" v-on:click="expandCircuitLeft()" title="Add step to the left" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="chevron-bar-left" v-on:click="expandCircuitLeft()" title="Add step to the left" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
           <td colspan="2" style="padding: 10px;">
@@ -38,14 +38,14 @@
           </td>
           <td>
             <div v-b-hover="handleExpandRightHover">
-              <b-icon v-if="expandRightIsHovered" icon="chevron-bar-right" v-on:click="expandCircuitRight()" v-b-tooltip.hover title="Add step to the right" style="color: #7952b3;" font-scale="1.6"></b-icon>
-              <b-icon v-else icon="chevron-bar-right" v-on:click="expandCircuitRight()" v-b-tooltip.hover title="Add step to the right" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-if="expandRightIsHovered" icon="chevron-bar-right" v-on:click="expandCircuitRight()" title="Add step to the right" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="chevron-bar-right" v-on:click="expandCircuitRight()" title="Add step to the right" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
         </tr>
         <tr>
           <td></td>
-          <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
+          <td title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
             <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
@@ -53,10 +53,10 @@
         </tr>
         <tr>
           <td></td>
-           <td v-b-tooltip.hover title="Edit control qubits" width="100px" style="padding: 5px;">Controls:</td>
+           <td title="Edit control qubits" width="100px" style="padding: 5px;">Controls:</td>
            <td width="100px" style="padding: 5px;">
              <div v-b-hover="handleEditControlsHover">
-              <b-icon v-if="editControlsIsHovered" icon="pencil-fill" v-on:click="handleEditControls()" v-b-tooltip.hover title="Edit controls" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-if="editControlsIsHovered" icon="pencil-fill" v-on:click="handleEditControls()" title="Edit controls" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="pencil" style="color: #7952b3;" font-scale="1.4"></b-icon>
              </div>
           </td>
@@ -65,19 +65,19 @@
         <tr>
           <td class="no-resize-cell">
              <div v-b-hover="handleExpandGateHover">
-              <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" v-b-tooltip.hover title="Expand gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
+              <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" title="Expand gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
               <b-icon v-else icon="files" v-on:click="handleExpandGate()" style="color: #7952b3;" font-scale="1.3"></b-icon>
              </div>
           </td>
           <td colspan="2">
             <div v-b-hover="handleExpandDownHover">
-              <b-icon v-if="expandDownIsHovered" icon="chevron-bar-down" v-on:click="expandCircuitDown()" v-b-tooltip.hover title="Add qbit after" style="color: #7952b3;" font-scale="1.6"></b-icon>
-              <b-icon v-else icon="chevron-bar-down" v-on:click="expandCircuitDown()" v-b-tooltip.hover title="Add qbit after" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-if="expandDownIsHovered" icon="chevron-bar-down" v-on:click="expandCircuitDown()" title="Add qbit after" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="chevron-bar-down" v-on:click="expandCircuitDown()" title="Add qbit after" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleSaveHover">
-              <b-icon v-if="saveIsHovered" v-on:click="handleSave()" icon="check" v-b-tooltip.hover title="Save changes" style="color: #7952b3;" font-scale="1.7"></b-icon>
+              <b-icon v-if="saveIsHovered" v-on:click="handleSave()" icon="check" title="Save changes" style="color: #7952b3;" font-scale="1.7"></b-icon>
               <b-icon v-else v-on:click="handleSave()" icon="check" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
@@ -93,7 +93,7 @@
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleReplicateGateModalCloseHover">
-              <b-icon v-if="replicateGateModalCloseIsHovered" v-on:click="hideReplicateGateModal()" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-if="replicateGateModalCloseIsHovered" v-on:click="hideReplicateGateModal()" title="Close dialog" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
               <b-icon v-else icon="x-square" v-on:click="hideReplicateGateModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
@@ -172,7 +172,7 @@
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleReplicateGateModalSaveHover">
-              <b-icon v-if="replicateGateModalSaveIsHovered" v-on:click="handleReplicateGateModalSave()" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
+              <b-icon v-if="replicateGateModalSaveIsHovered" v-on:click="handleReplicateGateModalSave()" title="Save changes" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
               <b-icon v-else icon="check" v-on:click="handleReplicateGateModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
@@ -185,7 +185,7 @@
         <tr>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsPlusHover">
-              <b-icon v-if="editControlsPlusIsHovered" v-on:click="addControl()" icon="plus" style="color: #7952b3;" font-scale="1.7"></b-icon>
+              <b-icon v-if="editControlsPlusIsHovered" v-on:click="addControl()" title="Add control" icon="plus" style="color: #7952b3;" font-scale="1.7"></b-icon>
               <b-icon v-else icon="plus" v-on:click="addControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
@@ -193,7 +193,7 @@
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsModalCloseHover">
-              <b-icon v-if="editControlsModalCloseIsHovered" v-on:click="hideEditControlsModal()" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-if="editControlsModalCloseIsHovered" v-on:click="hideEditControlsModal()" title="Close dialog" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
               <b-icon v-else icon="x-square" v-on:click="hideEditControlsModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
@@ -246,15 +246,15 @@
         </tr>
         <tr>
           <td></td>
-          <td class="edit-controls-cell" title="Re-assign control qubits upwrads starting from target qubit">
+          <td class="edit-controls-cell">
             <div v-b-hover="handleMoveGateOneQubitUpwardsHover">
-              <b-icon v-if="moveGateOneQubitUpwardsIsHovered" icon="arrow-up-square-fill" v-on:click="moveGateOneQubitUpwards()" v-b-tooltip.hover title="Move gate one qubit upwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-if="moveGateOneQubitUpwardsIsHovered" icon="arrow-up-square-fill" v-on:click="moveGateOneQubitUpwards()" title="Move gate one qubit upwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="arrow-up-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
              </div>
           </td>
-          <td class="edit-controls-cell" title="Re-assign control qubits downwrads starting from target qubit">
+          <td class="edit-controls-cell">
             <div v-b-hover="handleMoveGateOneQubitDownwardsHover">
-              <b-icon v-if="moveGateOneQubitDownwardsIsHovered" icon="arrow-down-square-fill" v-on:click="moveGateOneQubitDownwards()" v-b-tooltip.hover title="Move gate one qubit downwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-if="moveGateOneQubitDownwardsIsHovered" icon="arrow-down-square-fill" v-on:click="moveGateOneQubitDownwards()" title="Move gate one qubit downwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="arrow-down-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
              </div>
           </td>
@@ -262,15 +262,15 @@
         </tr>
         <tr>
           <td></td>
-          <td class="edit-controls-cell" title="Re-assign control qubits upwrads starting from target qubit">
+          <td class="edit-controls-cell">
             <div v-b-hover="handleAlignControlsUpwardsHover">
-              <b-icon v-if="alignControlsUpwardsIsHovered" icon="caret-up-fill" v-on:click="alignControlsUpwardsFromTargetQubit()" v-b-tooltip.hover title="Align controls upwards from target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-if="alignControlsUpwardsIsHovered" icon="caret-up-fill" v-on:click="alignControlsUpwardsFromTargetQubit()" title="Align controls upwards from target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="caret-up" style="color: #7952b3;" font-scale="1.4"></b-icon>
              </div>
           </td>
-          <td class="edit-controls-cell" title="Re-assign control qubits downwrads starting from target qubit">
+          <td class="edit-controls-cell" >
             <div v-b-hover="handleAlignControlsDownwardsHover">
-              <b-icon v-if="alignControlsDownwardsIsHovered" icon="caret-down-fill" v-on:click="alignControlsDownwardsFromTargetQubit()" v-b-tooltip.hover title="Align controls downwards from target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-if="alignControlsDownwardsIsHovered" icon="caret-down-fill" v-on:click="alignControlsDownwardsFromTargetQubit()" title="Align controls downwards from target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="caret-down" style="color: #7952b3;" font-scale="1.4"></b-icon>
              </div>
           </td>
@@ -279,7 +279,7 @@
         <tr>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsMinusHover">
-              <b-icon v-if="editControlsMinusIsHovered" v-on:click="removeControl()" icon="dash" style="color: #7952b3;" font-scale="1.7"></b-icon>
+              <b-icon v-if="editControlsMinusIsHovered" v-on:click="removeControl()" title="Remove control" icon="dash" style="color: #7952b3;" font-scale="1.7"></b-icon>
               <b-icon v-else icon="dash" v-on:click="removeControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
@@ -287,7 +287,7 @@
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsModalSaveHover">
-              <b-icon v-if="editControlsModalSaveIsHovered" v-on:click="handleEditControlsModalSave()" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
+              <b-icon v-if="editControlsModalSaveIsHovered" v-on:click="handleEditControlsModalSave()" title="Save changes" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
               <b-icon v-else icon="check" v-on:click="handleEditControlsModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
