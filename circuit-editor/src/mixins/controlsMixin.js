@@ -20,6 +20,10 @@ export const controlsMixin = {
       controlsNew: this.controls,
       controlstatesNew: this.controlstates,
       numberOfControls: this.controls.length,
+      options: [
+        { value: 1, text: '|1⟩' },
+        { value: 0, text: '|0⟩' },
+      ],
     }
   },
   computed: {

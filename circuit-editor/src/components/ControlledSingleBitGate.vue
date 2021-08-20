@@ -313,10 +313,6 @@ export default {
       controlsNew: this.controls,
       controlExpression: this.control,
       controlstateExpression: this.controlstate,
-      options: [
-        { value: 1, text: '|1⟩' },
-        { value: 0, text: '|0⟩' },
-      ],
     }
   },
   watch: {
