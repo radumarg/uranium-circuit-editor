@@ -13,6 +13,10 @@ export const controlsMixin = {
       editControlsModalSaveIsHovered:  false,
       editControlsPlusIsHovered:  false,
       editControlsMinusIsHovered:  false,
+      moveGateOneQubitUpwardsIsHovered: false,
+      moveGateOneQubitDownwardsIsHovered: false,
+      alignControlsUpwardsIsHovered: false,
+      alignControlsDownwardsIsHovered: false,
       controlsNew: this.controls,
       controlstatesNew: this.controlstates,
       numberOfControls: this.controls.length,
@@ -64,6 +68,10 @@ export const controlsMixin = {
       this.editControlsModalSaveIsHovered = false;
       this.editControlsPlusIsHovered = false;
       this.editControlsMinusIsHovered = false;
+      this.moveGateOneQubitUpwardsIsHovered = false;
+      this.moveGateOneQubitDownwardsIsHovered = false;
+      this.alignControlsUpwardsIsHovered = false;
+      this.alignControlsDownwardsIsHovered = false;
       this.$refs['initial-modal-dialog'].hide();
       this.$refs['edit-controls-modal-dialog'].show();
     },
@@ -81,6 +89,18 @@ export const controlsMixin = {
     },
     handleEditControlsMinusHover(hovered) {
       this.editControlsMinusIsHovered = hovered;
+    },
+    handleMoveGateOneQubitUpwardsHover(hovered) {
+      this.moveGateOneQubitUpwardsIsHovered = hovered;
+    },
+    handleMoveGateOneQubitDownwardsHover(hovered) {
+      this.moveGateOneQubitDownwardsIsHovered = hovered;
+    },
+    handleAlignControlsUpwardsHover(hovered) {
+      this.alignControlsUpwardsIsHovered = hovered;
+    },
+    handleAlignControlsDownwardsHover(hovered) {
+      this.alignControlsDownwardsIsHovered = hovered;
     },
     handleEditControlsModalSave: function(){
       // let promise = this.duplicateGate({
@@ -146,6 +166,14 @@ export const controlsMixin = {
         this.controlsNew = this.controlsNew.slice(0, this.numberOfControls);
         this.controlstatesNew = this.controlstatesNew.slice(0, this.numberOfControls);
       }
+    },
+    moveGateOneQubitUpwards(){
+    },
+    moveGateOneQubitDownwards(){
+    },
+    alignControlsUpwardsFromTargetQubit(){
+    },
+    alignControlsDownardsFromTargetQubit(){
     },
   }
 }
