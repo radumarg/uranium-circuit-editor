@@ -163,7 +163,7 @@ export function undoGatesSelection(resetQubits=true, overrideAll=false) {
 }
 
 export function isDefined(value){ 
-  return (Boolean(value) || value == 0);
+  return (Boolean(value) || value === 0);
 }
 
 export function handleSelectEvent(qbit, step) {
