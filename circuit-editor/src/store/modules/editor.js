@@ -792,7 +792,7 @@ export const circuitEditorModule = {
           let step = state.steps[i];
           if (Object.prototype.hasOwnProperty.call(step, "gates")) {
             let gates = step["gates"];
-            if (gates.length == 0){
+            if (gates.length === 0){
               state.steps.splice(i, 1);
             }
           }

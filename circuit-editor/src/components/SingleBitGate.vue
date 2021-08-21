@@ -241,7 +241,7 @@ export default {
       this.expandDownIsHovered = false;
       this.expandGateIsHovered = false;
       this.$data.qbitNew = this.qbit;
-      if (this.qbit2 || this.qbit2 == 0){
+      if (this.qbit2 || this.qbit2 === 0){
         this.$data.qbit2New = this.qbit2;
         this.$data.qbit2Expression = this.qbit2.toString();
       }
@@ -258,35 +258,35 @@ export default {
           this.$data.rootKExpression = null;
         }
       }
-      if (this.control || this.control == 0){
+      if (this.control || this.control === 0){
         this.$data.controlNew = this.control;
         this.$data.controlExpression = this.control.toString();
       }
-      if (this.controlstate || this.controlstate == 0){
+      if (this.controlstate || this.controlstate === 0){
         this.$data.controlstateNew = this.controlstate;
         this.$data.controlstateExpression = this.controlstate;
       }
-      if (this.control2 || this.control2 == 0){
+      if (this.control2 || this.control2 === 0){
         this.$data.controlNew2 = this.control2;
         this.$data.control2Expression = this.control2.toString();
       }
-      if (this.controlstate2 || this.controlstate2 == 0){
+      if (this.controlstate2 || this.controlstate2 === 0){
         this.$data.controlstateNew2 = this.controlstate2;
         this.$data.controlstate2Expression = this.controlstate2;
       }
-      if (this.phi  || this.phi == 0){
+      if (this.phi  || this.phi === 0){
         this.$data.phiNew = this.phi;
         this.$data.phiExpression = this.phi.toString();
       }
-      if (this.theta || this.theta == 0){
+      if (this.theta || this.theta === 0){
         this.$data.thetaNew = this.theta;
         this.$data.thetaExpression = this.theta.toString();
       }
-      if (this.lambda || this.lambda == 0){
+      if (this.lambda || this.lambda === 0){
         this.$data.lambdaNew = this.lambda;
         this.$data.lambdaExpression = this.lambda.toString();
       }
-      if (this.bit  || this.bit == 0){
+      if (this.bit  || this.bit === 0){
         this.$data.bitNew = this.bit;
         this.$data.bitExpression = 'q';
       }

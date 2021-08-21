@@ -130,7 +130,7 @@ export function getBinnedProbabilities(fullStateProbabilities, min, max, numberO
         max = min + numberOfBins * binWidth;
     }
     
-    if (fullStateProbabilities.length == 0) {
+    if (fullStateProbabilities.length === 0) {
         // display empty graph if state vector is empty
         numberOfBins = 2;
         min = 0;
@@ -145,7 +145,7 @@ export function getBinnedProbabilities(fullStateProbabilities, min, max, numberO
         if (fullStateProbabilities.length > 0)
             accumulator += fullStateProbabilities[i];
 
-        if ((i > min || (max - min) == numberOfBins) && ((i - min) % binWidth == 0)){
+        if ((i > min || (max - min) == numberOfBins) && ((i - min) % binWidth === 0)){
             let label = toState(istart, qubits, quantumStatesBase) + '/' + toState(i, qubits, quantumStatesBase);
             if (Math.round(binWidth) == 1) {
                 label = toState(i, qubits, quantumStatesBase);
