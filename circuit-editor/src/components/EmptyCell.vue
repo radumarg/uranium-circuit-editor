@@ -402,7 +402,7 @@ export default {
         dto["qbit2"],
         dto["control"],
         dto["control2"],
-      ].filter((qbit) => Boolean(qbit) || qbit == 0);
+      ].filter((qbit) => Boolean(qbit) || qbit === 0);
 
       if (
         seatsAreTaken(
@@ -487,7 +487,7 @@ export default {
         originalQbit2,
         originalControl,
         originalControl2,
-      ].filter((qbit) => Boolean(qbit) || qbit == 0);
+      ].filter((qbit) => Boolean(qbit) || qbit === 0);
 
       // In case the drag event was initiated from a controlled gate stub
       if (step != originalStep) {
@@ -558,7 +558,7 @@ export default {
         dto["qbit2"],
         dto["control"],
         dto["control2"],
-      ].filter((qbit) => Boolean(qbit) || qbit == 0);
+      ].filter((qbit) => Boolean(qbit) || qbit === 0);
 
       if (
         seatsAreTaken(
@@ -612,7 +612,7 @@ export default {
         dto["qbit2"],
         dto["control"],
         dto["control2"],
-      ].filter((qbit) => Boolean(qbit) || qbit == 0);
+      ].filter((qbit) => Boolean(qbit) || qbit === 0);
       if (
         (dto["control"] < 0) || seatsAreTaken(
           this.$store.state.circuitEditorModule,
@@ -627,7 +627,7 @@ export default {
           dto["qbit2"],
           dto["control"],
           dto["control2"],
-        ].filter((qbit) => Boolean(qbit) || qbit == 0);
+        ].filter((qbit) => Boolean(qbit) || qbit === 0);
         if ((dto["control"] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
         ) {
           alert("Cannot allocate controll qubit!");
@@ -678,7 +678,7 @@ export default {
         dto["qbit2"],
         dto["control"],
         dto["control2"],
-      ].filter((qbit) => Boolean(qbit) || qbit == 0);
+      ].filter((qbit) => Boolean(qbit) || qbit === 0);
 
       if (
         seatsAreTaken(
@@ -710,7 +710,7 @@ export default {
         dto["qbit"],
         dto["control"],
         dto["control2"],
-      ].filter((qbit) => Boolean(qbit) || qbit == 0);
+      ].filter((qbit) => Boolean(qbit) || qbit === 0);
       if (
         (dto["control"] < 0) || (dto["control2"] < 0) || seatsAreTaken(
           this.$store.state.circuitEditorModule,
@@ -725,7 +725,7 @@ export default {
           dto["qbit"],
           dto["control"],
           dto["control2"],
-        ].filter((qbit) => Boolean(qbit) || qbit == 0);
+        ].filter((qbit) => Boolean(qbit) || qbit === 0);
         if (
           (dto["control"] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
         ) {
@@ -735,7 +735,7 @@ export default {
           dto["qbit"],
           dto["control"],
           dto["control2"],
-        ].filter((qbit) => Boolean(qbit) || qbit == 0);
+        ].filter((qbit) => Boolean(qbit) || qbit === 0);
           if (
             seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
           ) {
@@ -798,7 +798,7 @@ export default {
       let proposedQbits = [
         dto["qbit"],
         dto["qbit2"],
-      ].filter((qbit) => Boolean(qbit) || qbit == 0);
+      ].filter((qbit) => Boolean(qbit) || qbit === 0);
 
       if (
         seatsAreTaken(
@@ -906,7 +906,7 @@ export default {
         dto["qbit"],
         dto["qbit2"],
         dto["control"],
-      ].filter((qbit) => Boolean(qbit) || qbit == 0);
+      ].filter((qbit) => Boolean(qbit) || qbit === 0);
 
       if (
         seatsAreTaken(
@@ -938,7 +938,7 @@ export default {
         dto["qbit"],
         dto["qbit2"],
         dto["control"],
-      ].filter((qbit) => Boolean(qbit) || qbit == 0);
+      ].filter((qbit) => Boolean(qbit) || qbit === 0);
       if (
         (dto["qbit2"] < 0) || (dto["control"] < 0) || seatsAreTaken(
           this.$store.state.circuitEditorModule,
@@ -953,7 +953,7 @@ export default {
           dto["qbit"],
           dto["qbit2"],
           dto["control"],
-        ].filter((qbit) => Boolean(qbit) || qbit == 0);
+        ].filter((qbit) => Boolean(qbit) || qbit === 0);
         if (
           (dto["control"] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
         ) {
@@ -963,7 +963,7 @@ export default {
           dto["qbit"],
           dto["qbit2"],
           dto["control"],
-        ].filter((qbit) => Boolean(qbit) || qbit == 0);
+        ].filter((qbit) => Boolean(qbit) || qbit === 0);
           if (
             seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
           ) {
