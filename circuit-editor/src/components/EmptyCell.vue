@@ -413,7 +413,7 @@ export default {
         )
       ) {
         alert(
-          "Cannot duplicate this gate here, not all required qubits are available!"
+          "Cannot replicate this gate here, not all required qubits are available!"
         );
         this.handleDragLeave();
         return;

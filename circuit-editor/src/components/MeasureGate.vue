@@ -62,7 +62,7 @@
         <tr>
           <td class="no-resize-cell">
              <div v-b-hover="handleExpandGateHover">
-              <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" v-b-tooltip.hover title="Expand gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
+              <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" v-b-tooltip.hover title="Replicate gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
               <b-icon v-else icon="files" v-on:click="handleExpandGate()" style="color: #7952b3;" font-scale="1.3"></b-icon>
               </div>
           </td>
