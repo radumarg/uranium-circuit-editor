@@ -41,7 +41,7 @@ class GatesTableCell {
     /* control bit for a controlled gate */
     this.control = null;
     /* controls bit for a controlled gate */
-    this.controls = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+    this.controls = [];
     /* 2nd control bit for a controlled gate */
     this.control2 = null;
     /* the qbit associated to current row (null in case row does not hold gates) */
@@ -49,7 +49,7 @@ class GatesTableCell {
     /* For controlled gates this indicates the control state defined as +/-1 along Z axis in computational basis.*/
     this.controlstate = null;
     /* For controlled gates this indicates the control state defined as +/-1 along Z axis in computational basis.*/
-    this.controlstates = [1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1];
+    this.controlstates = [];
     /* For Toffoli gate this indicates the 2nd control state defined as +/-1 along Z axis in computational basis.*/
     this.controlstate2 = null;
     /* the circle in parametric swap gates is not being refreshed by vue when draging the upper qbit, 
@@ -747,6 +747,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           let target2 = null;
           let control = null;
           let control2 = null;
+          let controls = [];
 
           if (Object.prototype.hasOwnProperty.call(gate, "target")) {
             target = parseInt(gate.target);
@@ -761,8 +762,13 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             control2 = parseInt(gate.control2);
           }
 
+          if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+            controls = JSON.parse("[" + gate.controls + "]");
+            gatesTableRowState.cells[column].controls = controls;
+          }
+
           // get range of qbits affected when displaying this gate
-          let qbits = [target, target2, control, control2].filter(
+          let qbits = [target, target2, control, control2, ...controls].filter(
             (qbit) => qbit != null
           );
 
@@ -812,6 +818,10 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           }
           gatesTableRowState.cells[column].img = gate.name.replace("ctrl-", "");
           if (gate.name == "toffoli") gatesTableRowState.cells[column].img = "pauli-x";
+
+          if (Object.prototype.hasOwnProperty.call(gate, "controlstates")) {
+            gatesTableRowState.cells[column].controlstates = JSON.parse("[" + gate.controlstates + "]");
+          }
 
           if (Object.prototype.hasOwnProperty.call(gate, "controlstate")) {
             gatesTableRowState.cells[column].controlstate = parseInt(gate.controlstate);

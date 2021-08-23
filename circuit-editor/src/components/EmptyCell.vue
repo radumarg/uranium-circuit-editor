@@ -506,11 +506,6 @@ export default {
         if (!success) return;
       }
 
-      if (gateName == "toffoli") {
-        let success = this.repositionToffoliGate(dto, qbit, step, originalQbit, originalStep, existingQbits, originalControl, originalControl2, draggedQbit);
-        if (!success) return;
-      }
-
       if (
         gateName.includes("swap") ||
         gateName == "xx" ||
@@ -518,11 +513,6 @@ export default {
         gateName == "zz"
       ) {
         let success = this.repositionTwoTargetQubitsGate(dto, qbit, step, originalQbit, originalQbit2, originalStep, existingQbits, draggedQbit);
-        if (!success) return;
-      }
-
-      if (gateName == "fredkin") {
-        let success = this.repositionFredkinGate(dto, qbit, step, originalQbit, originalQbit2, originalStep, existingQbits, draggedQbit);
         if (!success) return;
       }
 

@@ -203,9 +203,6 @@
             <div v-else-if="cell.name === 'iswap'">
               <GateSwapVariant :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
-            <div v-else-if="cell.name === 'fredkin'">
-              <FredkinGate :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
-            </div>
             <div v-else-if="cell.name === 'ctrl-swap-stub-up'">
               <FredkinGateControlStubUp :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
@@ -214,9 +211,6 @@
             </div>
             <div v-else-if="cell.name === 'fredkin-control-middle'">
               <FredkinGateControlMiddle :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
-            </div>
-            <div v-else-if="cell.name === 'toffoli'">
-              <ToffoliGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :control2="cell.control2" :controlstate2="cell.controlstate2" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'toffoli-2nd-control-1' || cell.name === 'toffoli-2nd-control-0'">
               <Toffoli2NdControlGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :control2="cell.control2" :controlstate2="cell.controlstate2" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :key="cell.key"/>
@@ -266,8 +260,6 @@ import ParametricGateSwap from "./ParametricGateSwap";
 import IsingGate from "./IsingGate";
 import SwapCircle from "./SwapCircle";
 import Toffoli2NdControlGate from "./Toffoli2NdControlGate";
-import ToffoliGate from "./ToffoliGate";
-import FredkinGate from "./FredkinGate";
 import FredkinGateControlStubUp from "./FredkinGateControlStubUp";
 import FredkinGateControlStubDown from "./FredkinGateControlStubDown";
 import FredkinGateControlMiddle from "./FredkinGateControlMiddle";
@@ -305,8 +297,6 @@ export default {
     IsingGate,
     SwapCircle,
     Toffoli2NdControlGate,
-    ToffoliGate,
-    FredkinGate,
     FredkinGateControlStubUp,
     FredkinGateControlStubDown,
     FredkinGateControlMiddle,
