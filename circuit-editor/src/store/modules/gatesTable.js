@@ -38,20 +38,12 @@ class GatesTableCell {
     this.taken = false;
     /* id of this cell, only for cells that can hold gates */
     this.id = "";
-    /* control bit for a controlled gate */
-    this.control = null;
-    /* controls bit for a controlled gate */
+    /* controls bits for a controlled gate */
     this.controls = [];
-    /* 2nd control bit for a controlled gate */
-    this.control2 = null;
     /* the qbit associated to current row (null in case row does not hold gates) */
     this.qrow = 0;
-    /* For controlled gates this indicates the control state defined as +/-1 along Z axis in computational basis.*/
-    this.controlstate = null;
-    /* For controlled gates this indicates the control state defined as +/-1 along Z axis in computational basis.*/
+    /* For controlled gates this indicates the control states defined as +/-1 along Z axis in computational basis.*/
     this.controlstates = [];
-    /* For Toffoli gate this indicates the 2nd control state defined as +/-1 along Z axis in computational basis.*/
-    this.controlstate2 = null;
     /* the circle in parametric swap gates is not being refreshed by vue when draging the upper qbit, 
        upwards to a new position so we need to update this key to force vue to re-render that cell 
     */
@@ -102,11 +94,8 @@ export function getNoQbits(circuitState) {
           if (Object.prototype.hasOwnProperty.call(gate, "target2")) {
             qbits = Math.max(qbits, parseInt(gate.target2));
           }
-          if (Object.prototype.hasOwnProperty.call(gate, "control")) {
-            qbits = Math.max(qbits, parseInt(gate.control));
-          }
-          if (Object.prototype.hasOwnProperty.call(gate, "control2")) {
-            qbits = Math.max(qbits, parseInt(gate.control2));
+          if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+            qbits = Math.max(qbits, ...JSON.parse("[" + gate.controls + "]"));
           }
         }
       }
@@ -152,14 +141,12 @@ export function measureGatesArePositionedLast(circuitState){
             return false;
           }
         }
-        if (Object.prototype.hasOwnProperty.call(gate, "control")) {
-          if (measureGates.includes(gate.control)) {
-            return false;
-          }
-        }
-        if (Object.prototype.hasOwnProperty.call(gate, "control2")) {
-          if (measureGates.includes(gate.control2)) {
-            return false;
+        if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+          let controls = JSON.parse("[" + gate.controls + "]");
+          for (let j = 0; j < controls.length; j++){
+            if (measureGates.includes(controls[j])) {
+              return false;
+            }
           }
         }
       }
@@ -194,11 +181,11 @@ export function positionIsFilled(circuitState, step, qubit) {
             if (Object.prototype.hasOwnProperty.call(gate, "target2")) {
               if (gate.target2 == qubit) return true;
             }
-            if (Object.prototype.hasOwnProperty.call(gate, "control")) {
-              if (gate.control == qubit) return true;
-            }
-            if (Object.prototype.hasOwnProperty.call(gate, "control2")) {
-              if (gate.control2 == qubit) return true;
+            if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+              let controls = JSON.parse("[" + gate.controls + "]");
+              for (let j = 0; j < controls.length; j++){
+                if (controls[j] == qubit) return true;
+              }
             }
           }
 
@@ -224,8 +211,7 @@ export function seatIsTaken(circuitState, qbit, step) {
             let gate = gates[j];
             let target = null;
             let target2 = null;
-            let control = null;
-            let control2 = null;
+            let controls = [];
 
             if (Object.prototype.hasOwnProperty.call(gate, "target")) {
               target = parseInt(gate.target);
@@ -233,15 +219,12 @@ export function seatIsTaken(circuitState, qbit, step) {
             if (Object.prototype.hasOwnProperty.call(gate, "target2")) {
               target2 = parseInt(gate.target2);
             }
-            if (Object.prototype.hasOwnProperty.call(gate, "control")) {
-              control = parseInt(gate.control);
-            }
-            if (Object.prototype.hasOwnProperty.call(gate, "control2")) {
-              control2 = parseInt(gate.control2);
+            if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+              controls = JSON.parse("[" + gate.controls + "]");
             }
 
             // get range of qbits affected when displaying this gate
-            let qbits = [target, target2, control, control2].filter(
+            let qbits = [target, target2, ...controls].filter(
               (qbit) => qbit != null
             );
 
@@ -273,8 +256,7 @@ export function seatsAreTaken(circuitState, reallocatableQbits, proposedQbits, s
             let gate = gates[j];
             let target = null;
             let target2 = null;
-            let control = null;
-            let control2 = null;
+            let controls = [];
 
             if (Object.prototype.hasOwnProperty.call(gate, "target")) {
               target = parseInt(gate.target);
@@ -282,14 +264,11 @@ export function seatsAreTaken(circuitState, reallocatableQbits, proposedQbits, s
             if (Object.prototype.hasOwnProperty.call(gate, "target2")) {
               target2 = parseInt(gate.target2);
             }
-            if (Object.prototype.hasOwnProperty.call(gate, "control")) {
-              control = parseInt(gate.control);
-            }
-            if (Object.prototype.hasOwnProperty.call(gate, "control2")) {
-              control2 = parseInt(gate.control2);
+            if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+              controls = JSON.parse("[" + gate.controls + "]");
             }
             // get range of qbits affected when displaying this gate
-            let qbits = [target, target2, control, control2].filter(
+            let qbits = [target, target2, ...controls].filter(
               (qbit) => (qbit != null)
             );
             
@@ -321,32 +300,33 @@ export function seatsAreTaken(circuitState, reallocatableQbits, proposedQbits, s
 }
 
 // Detect situations where proposed gates do not allocate
-// distinct qubits for target, target2, control and control2
+// distinct qubits for target, target2, controls
 export function proposedNewGatesAreInvalid(dtos) {
   for (let i = 0; i < dtos.length; i++) {
 
+    let noExpectedQubits = 1;
     let qbit = dtos[i]["qbit"];
-
-    if (Object.prototype.hasOwnProperty.call(dtos[i], "control")) {
-      let control = dtos[i]["control"];
-      if (qbit == control) return true;
-
-      if (Object.prototype.hasOwnProperty.call(dtos[i], "control2")) {
-        let control2 = dtos[i]["control2"];
-        if (qbit == control2) return true;
-        if (control == control2) return true;
-      }
-    }
+    let qbit2 = null;
+    let controls = [];
 
     if (Object.prototype.hasOwnProperty.call(dtos[i], "qbit2")) {
-      let qbit2 = dtos[i]["qbit2"];
-      if (qbit == qbit2) return true;
-
-      if (Object.prototype.hasOwnProperty.call(dtos[i], "control")) {
-        let control = dtos[i]["control"];
-        if (qbit2 == control) return true;
-      }
+      qbit2 = dtos[i]["qbit2"];
+      noExpectedQubits += 1;
     }
+
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "controls")) {
+      controls = dtos[i]["controls"];
+      noExpectedQubits += controls.length;
+    }
+
+    let distinctQbits = [qbit, qbit2, ...controls]
+      .filter((qbit) => qbit != null)
+      // x - item in array
+      // i - index of item
+      // a - array reference
+      .filter((x, i, a) => a.indexOf(x) == i);
+
+    if (distinctQbits.length != noExpectedQubits) return true;
   }
   return false; 
 }
@@ -363,19 +343,16 @@ export function seatsInArrayAreAlreadyTaken(circuitState, dtos, existingStep, ex
     if (existingStep == step && existingQubit == qbit) continue;
     if (seatIsTaken(circuitState, qbit, step)) return true;
 
-    if (Object.prototype.hasOwnProperty.call(dtos[i], "control")) {
-      let control = dtos[i]["control"];
-      if (seatIsTaken(circuitState, control, step)) return true;
-    }
-
-    if (Object.prototype.hasOwnProperty.call(dtos[i], "control2")) {
-      let control2 = dtos[i]["control2"];
-      if (seatIsTaken(circuitState, control2, step)) return true;
-    }
-
     if (Object.prototype.hasOwnProperty.call(dtos[i], "qbit2")) {
       let qbit2 = dtos[i]["qbit2"];
       if (seatIsTaken(circuitState, qbit2, step)) return true;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "controls")) {
+      let controls = dtos[i]["controls"];
+      for (let j = 0; j < controls.length; j++){
+        if (seatIsTaken(circuitState, controls[j], step)) return true;
+      }   
     }
   }
   return false; 
@@ -387,9 +364,11 @@ export function proposedNewSeatsOverlap(dtos) {
     let step = dtos[i]["step"];
     let target = dtos[i]["qbit"];
     let target2 = dtos[i]["qbit2"];
-    let control = dtos[i]["control"];
-    let control2 = dtos[i]["control2"];
-    let qbits = [target, target2, control, control2].filter(
+    let controls = [];
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "controls")) {
+      controls = dtos.controls;
+    }
+    let qbits = [target, target2, ...controls].filter(
       (qbit) => (qbit != null)
     );
 
@@ -398,9 +377,11 @@ export function proposedNewSeatsOverlap(dtos) {
       if (step != step2) continue;
       let targetSecond = dtos[j]["qbit"];
       let target2Second = dtos[j]["qbit2"];
-      let controlSecond = dtos[j]["control"];
-      let control2Second = dtos[j]["control2"];
-      let qbitsSecond = [targetSecond, target2Second, controlSecond, control2Second].filter(
+      let controlsSecond = [];
+      if (Object.prototype.hasOwnProperty.call(dtos[j], "controls")) {
+        controlsSecond = dtos.controls;
+      }
+      let qbitsSecond = [targetSecond, target2Second, ...controlsSecond].filter(
         (qbit) => (qbit != null)
       );
       for (let k = 0; k < qbits.length ; k++){
@@ -531,6 +512,8 @@ var rCtrlGates = ["ctrl-rx-theta", "ctrl-ry-theta", "ctrl-rz-theta"];
 var hadamardCtrlGates = ["ctrl-hadamard"];
 var unitaryCtrlGates = ["ctrl-u1", "ctrl-u2", "ctrl-u3"];
 var isingGates = ["xx", "yy", "zz"];
+var isingCtrlGates = ["ctrl-xx", "ctrl-yy", "ctrl-zz"];
+var swapCtrlGates = ["ctrl-swap", "ctrl-sqrt-swap", "ctrl-swap-phi", "ctrl-iswap" ];
 
 function getSwapIntermediateLineName(thisRowHoldsGates, qmin, qrow, gateName) {
   if (thisRowHoldsGates) {
@@ -544,66 +527,72 @@ function getSwapIntermediateLineName(thisRowHoldsGates, qmin, qrow, gateName) {
   }
 }
 
-function getCtrlStubDownName(gate) {
-  if (gate.name == "toffoli") {
-    if (gate.control2 > gate.control){
-      return "ctrl-pauli-stub-down-" + gate.controlstate2.toString(10);
-    } else {
-      return "ctrl-pauli-stub-down-" + gate.controlstate.toString(10);
-    }
-  } else if (pauliCtrlGates.includes(gate.name)) {
-    return "ctrl-pauli-stub-down-" + gate.controlstate.toString(10);
+function getCtrlStubDownName(gate, controlstate) {
+  if (pauliCtrlGates.includes(gate.name)) {
+    return "ctrl-pauli-stub-down-" + controlstate;
   } else if (pauliRootCtrlGates.includes(gate.name)) {
-    return "ctrl-pauli-root-stub-down-" + gate.controlstate.toString(10);
+    return "ctrl-pauli-root-stub-down-" + controlstate;
   } else if (stCtrlGates.includes(gate.name)) {
-    return "ctrl-st-stub-down-" + gate.controlstate.toString(10);
+    return "ctrl-st-stub-down-" + controlstate;
   } else if (rCtrlGates.includes(gate.name)) {
-    return "ctrl-r-stub-down-" + gate.controlstate.toString(10);
+    return "ctrl-r-stub-down-" + controlstate;
   } else if (hadamardCtrlGates.includes(gate.name)) {
-    return "ctrl-hadamard-stub-down-" + gate.controlstate.toString(10);
+    return "ctrl-hadamard-stub-down-" + controlstate;
   } else if (unitaryCtrlGates.includes(gate.name)) {
-    return "ctrl-u-stub-down-" + gate.controlstate.toString(10);
-  } else if (gate.name == "fredkin") {
-    return "ctrl-swap-stub-down-" + gate.controlstate.toString(10);
+    return "ctrl-u-stub-down-" + controlstate;
+  } else if (swapCtrlGates.includes(gate.name)) {
+    return "ctrl-swap-stub-down-" + controlstate;
+  } else if (isingCtrlGates.includes(gate.name)) {
+    return "ctrl-ising-down-up-" + controlstate;
   }
 }
 
-function getCtrlStubUpName(gate) {
-  if (gate.name == "toffoli") {
-    if (gate.control < gate.control2){
-      return "ctrl-pauli-stub-up-" + gate.controlstate.toString(10);
-    } else {
-      return "ctrl-pauli-stub-up-" + gate.controlstate2.toString(10);
-    }
-  } else if (pauliCtrlGates.includes(gate.name)) {
-    return "ctrl-pauli-stub-up-" + gate.controlstate.toString(10);
+function getCtrlStubUpName(gate, controlstate) {
+  if (pauliCtrlGates.includes(gate.name)) {
+    return "ctrl-pauli-stub-up-" + controlstate;
   } else if (pauliRootCtrlGates.includes(gate.name)) {
-    return "ctrl-pauli-root-stub-up-" + gate.controlstate.toString(10);
+    return "ctrl-pauli-root-stub-up-" + controlstate;
   } else if (stCtrlGates.includes(gate.name)) {
-    return "ctrl-st-stub-up-" + gate.controlstate.toString(10);
+    return "ctrl-st-stub-up-" + controlstate;
   } else if (rCtrlGates.includes(gate.name)) {
-    return "ctrl-r-stub-up-" + gate.controlstate.toString(10);
+    return "ctrl-r-stub-up-" + controlstate;
   } else if (hadamardCtrlGates.includes(gate.name)) {
-    return "ctrl-hadamard-stub-up-" + gate.controlstate.toString(10);
+    return "ctrl-hadamard-stub-up-" + controlstate;
   } else if (unitaryCtrlGates.includes(gate.name)) {
-    return "ctrl-u-stub-up-" + gate.controlstate.toString(10);
-  } else if (gate.name == "fredkin") {
-    return "ctrl-swap-stub-up-" + gate.controlstate.toString(10);
+    return "ctrl-u-stub-up-" + controlstate;
+  } else if (swapCtrlGates.includes(gate.name)) {
+    return "ctrl-swap-stub-up-" + controlstate;
+  } else if (isingCtrlGates.includes(gate.name)) {
+    return "ctrl-ising-stub-up-" + controlstate;
+  }
+}
+
+function getCtrlStubMidName(gate, controlstate) {
+  if (pauliCtrlGates.includes(gate.name)) {
+    return "ctrl-pauli-stub-mid-" + controlstate;
+  } else if (pauliRootCtrlGates.includes(gate.name)) {
+    return "ctrl-pauli-root-stub-mid-" + controlstate;
+  } else if (stCtrlGates.includes(gate.name)) {
+    return "ctrl-st-stub-mid-" + controlstate;
+  } else if (rCtrlGates.includes(gate.name)) {
+    return "ctrl-r-stub-mid-" + controlstate;
+  } else if (hadamardCtrlGates.includes(gate.name)) {
+    return "ctrl-hadamard-stub-mid-" + controlstate;
+  } else if (unitaryCtrlGates.includes(gate.name)) {
+    return "ctrl-u-stub-mid-" + controlstate;
+  } else if (swapCtrlGates.includes(gate.name)) {
+    return "ctrl-swap-stub-mid-" + controlstate;
+  } else if (isingCtrlGates.includes(gate.name)) {
+    return "ctrl-ising-stub-mid-" + controlstate;
   }
 }
 
 function getIntermediateLineName(gateName, thisRowHoldsGates) {
-  if (isingGates.includes(gateName)) {
+  if (isingGates.includes(gateName) || isingCtrlGates.includes(gateName)) {
     if (thisRowHoldsGates) {
       return "ising-line-long";
     } else {
       return "ising-line-short";
-    }
-  } else if (gateName == "toffoli") {
-    if (thisRowHoldsGates) {
-      return "toffoli-line-long";
-    } else {
-      return "pauli-line-short";
     }
   } else if (pauliCtrlGates.includes(gateName)) {
     if (thisRowHoldsGates) {
@@ -641,9 +630,9 @@ function getIntermediateLineName(gateName, thisRowHoldsGates) {
     } else {
       return "u-line-short";
     }
-  } else if (gateName == "fredkin") {
+  } else if (swapCtrlGates.includes(gateName)) {
     if (thisRowHoldsGates) {
-      return "fredkin-line-long";
+      return "swap-line-long";
     } else {
       return "swap-line-short";
     }
@@ -745,8 +734,6 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           let gate = gates[j];
           let target = null;
           let target2 = null;
-          let control = null;
-          let control2 = null;
           let controls = [];
 
           if (Object.prototype.hasOwnProperty.call(gate, "target")) {
@@ -755,20 +742,13 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           if (Object.prototype.hasOwnProperty.call(gate, "target2")) {
             target2 = parseInt(gate.target2);
           }
-          if (Object.prototype.hasOwnProperty.call(gate, "control")) {
-            control = parseInt(gate.control);
-          }
-          if (Object.prototype.hasOwnProperty.call(gate, "control2")) {
-            control2 = parseInt(gate.control2);
-          }
-
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
             controls = JSON.parse("[" + gate.controls + "]");
             gatesTableRowState.cells[column].controls = controls;
           }
 
           // get range of qbits affected when displaying this gate
-          let qbits = [target, target2, control, control2, ...controls].filter(
+          let qbits = [target, target2, ...controls].filter(
             (qbit) => qbit != null
           );
 
@@ -782,28 +762,6 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             continue;
           }
           
-          let rowControl = null;
-          let rowControl2 = null;
-          let rowTarget = null;
-          let rowTarget2 = null;
-
-          if (target !== null) {
-            gatesTableRowState.cells[column].qbit = target;
-            rowTarget = getRowFromQbit(target);
-          }
-          if (target2 !== null) {
-            gatesTableRowState.cells[column].qbit2 = target2;
-            rowTarget2 = getRowFromQbit(target2);
-          }
-          if (control != null) {
-            gatesTableRowState.cells[column].control = control;
-            rowControl = getRowFromQbit(control);
-          }
-          if (control2 != null) {
-            gatesTableRowState.cells[column].control2 = control2;
-            rowControl2 = getRowFromQbit(control2);
-          }
-
           // update cell properties
           gatesTableRowState.cells[column].name = gate.name;
           gatesTableRowState.cells[column].gate = gate.name;
@@ -817,17 +775,9 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             }
           }
           gatesTableRowState.cells[column].img = gate.name.replace("ctrl-", "");
-          if (gate.name == "toffoli") gatesTableRowState.cells[column].img = "pauli-x";
 
           if (Object.prototype.hasOwnProperty.call(gate, "controlstates")) {
             gatesTableRowState.cells[column].controlstates = JSON.parse("[" + gate.controlstates + "]");
-          }
-
-          if (Object.prototype.hasOwnProperty.call(gate, "controlstate")) {
-            gatesTableRowState.cells[column].controlstate = parseInt(gate.controlstate);
-          }
-          if (Object.prototype.hasOwnProperty.call(gate, "controlstate2")) {
-            gatesTableRowState.cells[column].controlstate2 = parseInt(gate.controlstate2);
           }
           if (Object.prototype.hasOwnProperty.call(gate, "theta")) {
             gatesTableRowState.cells[column].theta = parseFloat(gate.theta);
@@ -864,86 +814,63 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             gatesTableRowState.cells[column].qrow = getQbitFromRow(inputRow);
           }
 
+          let controlstate = null;
+          let rowQbit = getQbitFromRow(inputRow);
+          if (controls.includes(rowQbit)){
+            let controlIndex = controls.indexOf(rowQbit);
+            let controlstates = JSON.parse("[" + gate.controlstates + "]");
+            controlstate = controlstates[controlIndex];
+          }
+
           if (rowMin == inputRow) {
-            if (isingGates.includes(gate.name)) {
-              gatesTableRowState.cells[column].name = gate.name;
-              if (gate.name == "xx"){
-                gatesTableRowState.cells[column].img = "x";
-              } else if (gate.name == "yy") {
-                gatesTableRowState.cells[column].img = "y";
-              } else if (gate.name == "zz") {
-                gatesTableRowState.cells[column].img = "z";
-              }       
-            } else if (gate.name.includes("swap")) {
-              gatesTableRowState.cells[column].name = gate.name;
-              gatesTableRowState.cells[column].img = "swap-up";
+            gatesTableRowState.cells[column].name = gate.name;
+            if (controls.includes(qmin)){
+              gatesTableRowState.cells[column].name = getCtrlStubUpName(gate, controlstate);
             } else {
-              if (control == qmin || control2 == qmin) {
-                gatesTableRowState.cells[column].name = getCtrlStubUpName(gate);
-              } else if ((gate.name == "fredkin") && (target == qmin || target2 == qmin)) {
-                gatesTableRowState.cells[column].name = gate.name;
+              if (isingGates.includes(gate.name)){
+                if (gate.name == "xx"){
+                  gatesTableRowState.cells[column].img = "x";
+                } else if (gate.name == "yy") {
+                  gatesTableRowState.cells[column].img = "y";
+                } else if (gate.name == "zz") {
+                  gatesTableRowState.cells[column].img = "z";
+                }
+              } else if (gate.name.includes("swap")) {
                 gatesTableRowState.cells[column].img = "swap-up";
               }
             }
           } else if (rowMin < inputRow && inputRow < rowMax) {
-            let thisRowHoldsGates = rowHoldsGates(inputRow);
-            if (gate.name.includes("swap")) {
-              let qrow = getQbitFromRow(inputRow);
-              gatesTableRowState.cells[column].name = getSwapIntermediateLineName(thisRowHoldsGates, qmin, qrow, gate.name);
-              if (!thisRowHoldsGates) {
-                // force update swap gates intermediate segments/circles 
-                // which do not get rerendered properly when the one of 
-                // the gate qubits is moved via drag & drop 
-                gatesTableRowState.cells[column].key = timestamp;
-              }
-            } else if (gate.name == "toffoli") {
-              if ((rowControl == inputRow) || (rowControl2 == inputRow)) {
-                if (gate.control < gate.target && gate.control2 < gate.target){
-                  if (gate.control < gate.control2){
-                    gatesTableRowState.cells[column].name = "toffoli-2nd-control-" + gate.controlstate2;
-                  } else {
-                    gatesTableRowState.cells[column].name = "toffoli-2nd-control-" + gate.controlstate;
-                  }
-                } else {
-                  if (gate.control2 < gate.control){
-                    gatesTableRowState.cells[column].name = "toffoli-2nd-control-" + gate.controlstate2;
-                  } else {
-                    gatesTableRowState.cells[column].name = "toffoli-2nd-control-" + gate.controlstate;
-                  }
+            if (controls.includes(rowQbit)){
+              gatesTableRowState.cells[column].name = gate.name;
+              gatesTableRowState.cells[column].img = getCtrlStubMidName(gate, controlstate);
+            } else {
+              let thisRowHoldsGates = rowHoldsGates(inputRow);
+              if (gate.name.includes("swap")) {
+                gatesTableRowState.cells[column].name = getSwapIntermediateLineName(thisRowHoldsGates, qmin, rowQbit, gate.name);
+                if (!thisRowHoldsGates) {
+                  // force update swap gates intermediate segments/circles 
+                  // which do not get rerendered properly when the one of 
+                  // the gate qubits is moved via drag & drop 
+                  gatesTableRowState.cells[column].key = timestamp;
                 }
-              } else if (rowTarget != inputRow) {
-                gatesTableRowState.cells[column].name = getIntermediateLineName(gate.name, thisRowHoldsGates);
-              }
-            } else if (gate.name == "fredkin") {
-              if ((rowTarget == inputRow) || (rowTarget2 == inputRow)) {
-                gatesTableRowState.cells[column].name = gate.name;
-                gatesTableRowState.cells[column].img = 'fredkin-target-middle';
-              } else if (rowControl == inputRow) {
-                gatesTableRowState.cells[column].name = 'fredkin-control-middle';
               } else {
                 gatesTableRowState.cells[column].name = getIntermediateLineName(gate.name, thisRowHoldsGates);
               }
-            } else {
-              gatesTableRowState.cells[column].name = getIntermediateLineName(gate.name, thisRowHoldsGates);
             }
           } else if (rowMax == inputRow) {
-            if (isingGates.includes(gate.name)) {
-              gatesTableRowState.cells[column].name = gate.name;
-              if (gate.name == "xx") {
-                gatesTableRowState.cells[column].img = "x";
-              } else if (gate.name == "yy") {
-                gatesTableRowState.cells[column].img = "y";
-              } else if (gate.name == "zz") {
-                gatesTableRowState.cells[column].img = "z";
-              }  
-            } else if (gate.name.includes("swap")) {
-              gatesTableRowState.cells[column].name = gate.name;
-              gatesTableRowState.cells[column].img = "swap-down";
+            gatesTableRowState.cells[column].name = gate.name;
+            if (controls.includes(qmin)){
+              gatesTableRowState.cells[column].name = getCtrlStubDownName(gate, controlstate);
             } else {
-              if (control == qmax || control2 == qmax) {
-                gatesTableRowState.cells[column].name = getCtrlStubDownName(gate);
-              } else if ((gate.name == "fredkin") && (target == qmax || target2 == qmax)) {
-                gatesTableRowState.cells[column].name = gate.name;
+              if (isingGates.includes(gate.name)){
+                if (gate.name == "xx"){
+                  gatesTableRowState.cells[column].img = "x";
+                } else if (gate.name == "yy") {
+                  gatesTableRowState.cells[column].img = "y";
+                } else if (gate.name == "zz") {
+                  gatesTableRowState.cells[column].img = "z";
+                }
+              } else if (gate.name.includes("swap")) {
                 gatesTableRowState.cells[column].img = "swap-down";
               }
             }
