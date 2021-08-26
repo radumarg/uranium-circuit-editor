@@ -2,9 +2,7 @@ import Vue from 'vue';
 
 export const controlsMixin = {
   props: {
-    'control': Number,
     'controls': Array,
-    'controlstate': Number,
     'controlstates': Array,
   },
   data() {
@@ -107,7 +105,7 @@ export const controlsMixin = {
       this.alignControlsDownwardsIsHovered = hovered;
     },
     handleEditControlsModalSave: function(){
-      // let promise = this.duplicateGate({
+      // let promise = this.replicateGate({
       //   'step': this.step,
       //   'qbit': this.qbit,
       //   'name': this.name, 

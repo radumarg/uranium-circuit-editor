@@ -777,7 +777,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           gatesTableRowState.cells[column].img = gate.name.replace("ctrl-", "");
 
           if (Object.prototype.hasOwnProperty.call(gate, "controlstates")) {
-            gatesTableRowState.cells[column].controlstates = JSON.parse("[" + gate.controlstates + "]");
+            gatesTableRowState.cells[column].controlstates = gate.controlstates.split(",");
           }
           if (Object.prototype.hasOwnProperty.call(gate, "theta")) {
             gatesTableRowState.cells[column].theta = parseFloat(gate.theta);
@@ -818,7 +818,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           let rowQbit = getQbitFromRow(inputRow);
           if (controls.includes(rowQbit)){
             let controlIndex = controls.indexOf(rowQbit);
-            let controlstates = JSON.parse("[" + gate.controlstates + "]");
+            let controlstates = gate.controlstates.split(",");
             controlstate = controlstates[controlIndex];
           }
 

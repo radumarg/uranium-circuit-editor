@@ -42,7 +42,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" style="padding: 5px;">Control qubit:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="controlNew" placeholder="qbit" type="number" id="control-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="controlNew" placeholder="qbit" type="number" id="control-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
           </td>
           <td></td>
         </tr>

@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target Qbit:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -55,7 +55,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Classic Bit:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="bitNew" placeholder="bit" type="number" id="bit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="bitNew" placeholder="bit" type="number" id="bit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -100,13 +100,13 @@
             First Qubit:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
           </td>
           <td width="100px" class="td-2nd-modal">
             Last Qubit:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitLast" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="qbitLast" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
           </td>
           <td width="200px" class="td-2nd-modal">
             Condition - 'q' based <br/>javascript expression:
@@ -121,13 +121,13 @@
             First Step:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepFirst" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="stepFirst" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
           </td>
           <td width="100px" class="td-2nd-modal">
             Last Step:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepLast" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="stepLast" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
           </td>
           <td width="200px" class="td-2nd-modal">
             Condition - 's' based <br/>javascript expression:
@@ -191,6 +191,10 @@ export default {
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
     handleSave: function(){
+      if (!Number.isInteger(this.$data.qbitNew) || !Number.isInteger(this.$data.bitNew)){
+        alert("Please enter an integer number!");
+        return;
+      }
       let qbitOld = this.qbit;
       let bitOld = this.bitOld;
       let promise = this.repositionSimpleGateInCircuit({
@@ -212,7 +216,7 @@ export default {
       this.$refs['initial-modal-dialog'].hide();
     },
     handleReplicateGateModalSave: function(){
-      let promise = this.duplicateGate({
+      let promise = this.replicateGate({
         'step': this.step,
         'qbit': this.qbit,
         'name': this.name, 

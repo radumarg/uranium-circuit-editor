@@ -340,11 +340,12 @@ export default {
       if (event.dataTransfer.types.includes("dragged-qbit")) {
         draggedQbit = event.dataTransfer.getData("dragged-qbit");
       }
-
+      
       let qbit = event.currentTarget.getAttribute("qbit");
       let qbitDelta = draggedQbit - qbit;
       let step = event.currentTarget.getAttribute("step");
       let gateName = event.dataTransfer.getData("gateName");
+      let controls = [];
 
       // add the new gate mandatory params
       let dto = { step: step, qbit: qbit, name: gateName };
@@ -360,21 +361,13 @@ export default {
           dto["qbit2"] = qbit;
         }
       }
-      if (event.dataTransfer.types.includes("originalcontrol")) {
-        let control = event.dataTransfer.getData("originalControl");
-        dto["control"] = parseInt(control) - qbitDelta;
+      if (event.dataTransfer.types.includes("originalcontrols")) {
+        controls =  JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
+        dto["controls"] = controls.map( function(value) { return value - qbitDelta; } );
       }
-      if (event.dataTransfer.types.includes("originalcontrol2")) {
-        let control2 = event.dataTransfer.getData("originalControl2");
-        dto["control2"] = parseInt(control2) - qbitDelta;
-      }
-      if (event.dataTransfer.types.includes("controlstate")) {
-        let controlstate = event.dataTransfer.getData("controlstate");
-        dto["controlstate"] = controlstate;
-      }
-      if (event.dataTransfer.types.includes("controlstate2")) {
-        let controlstate = event.dataTransfer.getData("controlstate2");
-        dto["controlstate2"] = controlstate;
+      if (event.dataTransfer.types.includes("controlstates")) {
+        let controlstates = event.dataTransfer.getData("controlstates").split(",");
+        dto["controlstates"] = controlstates;
       }
       if (event.dataTransfer.types.includes("phi")) {
         let phi = event.dataTransfer.getData("phi");
@@ -400,8 +393,7 @@ export default {
       let proposedQbits = [
         dto["qbit"],
         dto["qbit2"],
-        dto["control"],
-        dto["control2"],
+        ...controls,
       ].filter((qbit) => Boolean(qbit) || qbit === 0);
 
       if (
@@ -427,11 +419,10 @@ export default {
       let gateName = event.dataTransfer.getData("gateName");
       let originalQbit = event.dataTransfer.getData("originalQbit");
       let originalQbit2 = event.dataTransfer.getData("originalQbit2");
-      let originalControl = event.dataTransfer.getData("originalControl");
-      let originalControl2 = event.dataTransfer.getData("originalControl2");
+      let originalControls = [];
       let originalStep = event.dataTransfer.getData("originalStep");
       let dragOrigin = event.dataTransfer.getData("drag-origin");
-
+      
       let draggedQbit = null;
       if (event.dataTransfer.types.includes("dragged-qbit")) {
         draggedQbit = event.dataTransfer.getData("dragged-qbit");
@@ -439,27 +430,19 @@ export default {
 
       // add the new gate mandatory params
       let dto = { step: step, qbit: qbit, name: gateName };
-
+      
       // add optional params, notice lower case needed for types.includes
       if (event.dataTransfer.types.includes("originalqbit2")) {
         let qbit2 = event.dataTransfer.getData("originalQbit2");
         dto["qbit2"] = qbit2;
       }
-      if (event.dataTransfer.types.includes("originalcontrol")) {
-        let control = event.dataTransfer.getData("originalControl");
-        dto["control"] = control;
+      if (event.dataTransfer.types.includes("originalcontrols")) {
+        originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
+        dto["controls"] = [...originalControls];
       }
-      if (event.dataTransfer.types.includes("originalcontrol2")) {
-        let control2 = event.dataTransfer.getData("originalControl2");
-        dto["control2"] = control2;
-      }
-      if (event.dataTransfer.types.includes("controlstate")) {
-        let controlstate = event.dataTransfer.getData("controlstate");
-        dto["controlstate"] = controlstate;
-      }
-      if (event.dataTransfer.types.includes("controlstate2")) {
-        let controlstate = event.dataTransfer.getData("controlstate2");
-        dto["controlstate2"] = controlstate;
+      if (event.dataTransfer.types.includes("controlstates")) {
+        let controlstates = event.dataTransfer.getData("controlstates").split(",");
+        dto["controlstates"] = controlstates;
       }
       if (event.dataTransfer.types.includes("phi")) {
         let phi = event.dataTransfer.getData("phi");
@@ -485,8 +468,7 @@ export default {
       let existingQbits = [
         originalQbit,
         originalQbit2,
-        originalControl,
-        originalControl2,
+        ...originalControls,
       ].filter((qbit) => Boolean(qbit) || qbit === 0);
 
       // In case the drag event was initiated from a controlled gate stub

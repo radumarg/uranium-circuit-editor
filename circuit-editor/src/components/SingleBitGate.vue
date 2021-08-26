@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:75px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:75px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -92,13 +92,13 @@
             First Qubit:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
           </td>
           <td width="100px" class="td-2nd-modal">
             Last Qubit:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitLast" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="qbitLast" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
           </td>
           <td width="200px" class="td-2nd-modal">
             Condition - 'q' based <br/>javascript expression:
@@ -113,13 +113,13 @@
             First Step:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepFirst" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="stepFirst" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
           </td>
           <td width="100px" class="td-2nd-modal">
             Last Step:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepLast" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="stepLast" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
           </td>
           <td width="200px" class="td-2nd-modal">
             Condition - 's' based <br/>javascript expression:
@@ -218,7 +218,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['insertQbitInCircuit', 'insertStepInCircuit', 'removeGateFromCircuitByUser', 'repositionSimpleGateInCircuit', 'duplicateGate']),
+    ...mapActions('circuitEditorModule/', ['insertQbitInCircuit', 'insertStepInCircuit', 'removeGateFromCircuitByUser', 'repositionSimpleGateInCircuit', 'replicateGate']),
     ...mapGetters("circuitEditorModule/", ["getMaximumStepIndex", "getMaximumQbitIndex"]),
     handleClick: function (event) {
       if (event.ctrlKey) {
@@ -260,21 +260,14 @@ export default {
           this.$data.rootKExpression = null;
         }
       }
-      if (this.control || this.control === 0){
-        this.$data.controlNew = this.control;
-        this.$data.controlExpression = this.control.toString();
+      //TODO: fix
+      if (this.controls && this.controls.length > 0){
+        this.$data.controlsNew = this.controls;
+        this.$data.controlsExpression = this.controls[0].toString();
       }
-      if (this.controlstate || this.controlstate === 0){
-        this.$data.controlstateNew = this.controlstate;
-        this.$data.controlstateExpression = this.controlstate;
-      }
-      if (this.control2 || this.control2 === 0){
-        this.$data.controlNew2 = this.control2;
-        this.$data.control2Expression = this.control2.toString();
-      }
-      if (this.controlstate2 || this.controlstate2 === 0){
-        this.$data.controlstateNew2 = this.controlstate2;
-        this.$data.controlstate2Expression = this.controlstate2;
+      if (this.controlstates && this.controlstates.length > 0){
+        this.$data.controlstatesNew = this.controlstates;
+        this.$data.controlstatesExpression =  this.controlstates[0];
       }
       if (this.phi  || this.phi === 0){
         this.$data.phiNew = this.phi;
@@ -363,6 +356,10 @@ export default {
       this.removeGateFromCircuitByUser({'step': this.step, 'qbit': this.qbit});
     },
     handleSave: function(){
+      if (!Number.isInteger(this.$data.qbitNew)){
+        alert("Please enter an integer number!");
+        return;
+      }
       let qbitOld = this.qbit;
       let promise = this.repositionSimpleGateInCircuit({
         'step': this.step, 
@@ -382,7 +379,7 @@ export default {
       this.$refs['initial-modal-dialog'].hide();
     },
     handleReplicateGateModalSave: function(){
-      let promise = this.duplicateGate({
+      let promise = this.replicateGate({
         'step': this.step,
         'qbit': this.qbit,
         'name': this.name, 

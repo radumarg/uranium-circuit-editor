@@ -52,3 +52,7 @@ export function setCookiesIfNotAltreadySet(){
     Vue.$cookies.set('legend-base', '2');
   }
 }
+
+export function arraysAreEqual(a, b) {
+  return a.every(item => b.includes(item)) && b.every(item => a.includes(item));
+}

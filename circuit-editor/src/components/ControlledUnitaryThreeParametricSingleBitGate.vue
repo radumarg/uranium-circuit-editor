@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -55,7 +55,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Control qubit" width="100px" style="padding: 5px;">Control:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="controlNew" placeholder="control" type="number" id="control-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="controlNew" placeholder="control" type="number" id="control-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -71,7 +71,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Theta:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="thetaNew" placeholder="theta" type="number" id="theta-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="thetaNew" placeholder="theta" type="number" id="theta-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -79,7 +79,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Phi:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="phiNew" placeholder="phi" type="number" id="phi-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="phiNew" placeholder="phi" type="number" id="phi-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -87,7 +87,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Lambda:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="lambdaNew" placeholder="lambda" type="number" id="lambda-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="lambdaNew" placeholder="lambda" type="number" id="lambda-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -132,13 +132,13 @@
             First Qubit:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
           </td>
           <td width="100px" class="td-2nd-modal">
             Last Qubit:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitLast" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="qbitLast" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
           </td>
           <td width="200px" class="td-2nd-modal">
             Condition - 'q' based <br/>javascript expression:
@@ -153,13 +153,13 @@
             First Step:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepFirst" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="stepFirst" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
           </td>
           <td width="100px" class="td-2nd-modal">
             Last Step:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepLast" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="stepLast" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
           </td>
           <td width="200px" class="td-2nd-modal">
             Condition - 's' based <br/>javascript expression:
@@ -183,7 +183,7 @@
             Control Qubit - 'q, s' based <br/>javascript expression:
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="controlExpression" placeholder="" type="text" id="ctrl-qbit" style="min-width:400px;"></b-form-input>
+            <b-form-input min="0" v-model="controlsExpression" placeholder="" type="text" id="ctrl-qbit" style="min-width:400px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>
@@ -192,7 +192,7 @@
             Control State - 'q, s' based <br/>javascript expression:
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="controlstateExpression" placeholder="" type="text" id="ctrl-state" style="min-width:400px;"></b-form-input>
+            <b-form-input min="0" v-model="controlstatesExpression" placeholder="" type="text" id="ctrl-state" style="min-width:400px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>
@@ -257,8 +257,8 @@ export default {
     return {
       controlNew: this.control,
       controlstateNew: this.controlstate,
-      controlExpression: this.control,
-      controlstateExpression: this.controlstate,
+      controlsExpression: this.controls[0],
+      controlstatesExpression: this.controlstates[0],
       options: [
         { value: '1', text: '|1⟩' },
         { value: '0', text: '|0⟩' },
@@ -278,6 +278,10 @@ export default {
     handleSave: function(){
       if (this.$data.qbitNew == this.$data.controlNew){
         alert("Control and target qubits must differ!");
+        return;
+      }
+      if (!Number.isInteger(this.$data.qbitNew)){
+        alert("Please enter an integer number!");
         return;
       }
       let qbitOld = this.qbit;
@@ -315,7 +319,7 @@ export default {
       this.$refs['initial-modal-dialog'].hide();
     },
     handleReplicateGateModalSave: function(){
-      let promise = this.duplicateGate({
+      let promise = this.replicateGate({
         'step': this.step,
         'qbit': this.qbit,
         'name': this.name, 
@@ -326,8 +330,8 @@ export default {
         'qbitLast': this.qbitLast,
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
-        'controlExpression': this.controlExpression,
-        'controlstateExpression': this.controlstateExpression,
+        'controlsExpression': this.controlsExpression,
+        'controlstatesExpression': this.controlstatesExpression,
         'lambdaExpression': this.lambdaExpression,
         'phiExpression': this.phiExpression,
         'thetaExpression': this.thetaExpression,
