@@ -610,13 +610,14 @@ export const circuitEditorModule = {
                 }
               }
               if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+                //TODO: needed? also in gates table
                 let controls = JSON.parse("[" + gate.controls + "]");
                 for (let k = 0; k < controls.length; k++){
                   if (controls[k] >= qbit) {
                     controls[k] += 1;
                   }
                 }
-                gate.controls = controls;
+                gate.controls = [...controls];
               }
             }
           }

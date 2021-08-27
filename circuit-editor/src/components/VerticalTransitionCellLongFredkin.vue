@@ -34,17 +34,17 @@ export default {
         image.src = require("../assets/blue-gates/swap-line-long.svg");
       }
     },
-    handleDropEvent: function () {
-      let originalQbit = event.dataTransfer.getData("originalQbit");
-      let originalQbit2 = event.dataTransfer.getData("originalQbit2");
-      let originalControl = event.dataTransfer.getData("originalControl");
+    handleDropEvent: function (event) {
+      let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
+      let originalQbit2 = parseInt(event.dataTransfer.getData("originalQbit2"));
+      let originalControl = parseInt(event.dataTransfer.getData("originalControl"));
       let controlstate = event.dataTransfer.getData("controlstate");
-      let originalStep = event.dataTransfer.getData("originalStep");
+      let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let dragOrigin = event.dataTransfer.getData("drag-origin");
-      let draggedQbit = event.dataTransfer.getData("dragged-qbit");
+      let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       let gateName = event.dataTransfer.getData("gateName");
-      let step = event.currentTarget.getAttribute("step");
-      let qbit = event.currentTarget.getAttribute("qbit");
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
       let dropQbit = this.id.split('_').shift();
   
       if (originalStep == null || step != originalStep || qbit != originalQbit) {

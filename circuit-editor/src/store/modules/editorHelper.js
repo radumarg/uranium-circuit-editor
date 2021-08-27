@@ -5,8 +5,8 @@ import Vue from 'vue';
 import $ from "jquery";
 
 export function removingGateFromCircuit(circuitState, dto){
-  let step = parseInt(dto["step"]);
-  let qbit = parseInt(dto["qbit"]);
+  let step = dto["step"];
+  let qbit = dto["qbit"];
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
     for (let i = 0; i < circuitState.steps.length; i++) {
       if (circuitState.steps[i].index == step) {
@@ -25,41 +25,33 @@ export function removingGateFromCircuit(circuitState, dto){
 }
 
 export function insertingOneGateInCircuit(circuitState, dto) {
-  let step = parseInt(dto["step"]);
-  let qbit = parseInt(dto["qbit"]);
+  let step = dto["step"];
+  let qbit = dto["qbit"];
   let name = dto["name"];
-
+  
   let gate = { "name": name, "target": qbit };
   if (Object.prototype.hasOwnProperty.call(dto, "qbit2")) {
-      let qbit2 = parseFloat(dto["qbit2"]);
+      let qbit2 = dto["qbit2"];
       gate["target2"] = qbit2;
   }
-  if (Object.prototype.hasOwnProperty.call(dto, "control")) {
-      let control = parseFloat(dto["control"]);
-      gate["control"] = control;
+  if (Object.prototype.hasOwnProperty.call(dto, "controls")) {
+      let controls = dto["controls"];
+      gate["controls"] = [...controls];
   }
-  if (Object.prototype.hasOwnProperty.call(dto, "controlstate")) {
-      let controlstate = dto["controlstate"];
-      gate["controlstate"] = controlstate;
-  }
-  if (Object.prototype.hasOwnProperty.call(dto, "control2")) {
-      let control2 = parseFloat(dto["control2"]);
-      gate["control2"] = control2;
-  }
-  if (Object.prototype.hasOwnProperty.call(dto, "controlstate2")) {
-      let controlstate2 = dto["controlstate2"];
-      gate["controlstate2"] = controlstate2;
+  if (Object.prototype.hasOwnProperty.call(dto, "controlstates")) {
+      let controlstates = dto["controlstates"];
+      gate["controlstates"] = [...controlstates];
   }
   if (Object.prototype.hasOwnProperty.call(dto, "phi")) {
-      let phi = parseFloat(dto["phi"]);
+      let phi = dto["phi"];
       gate["phi"] = phi;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "theta")) {
-      let theta = parseFloat(dto["theta"]);
+      let theta = dto["theta"];
       gate["theta"] = theta;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "lambda")) {
-      let lambda = parseFloat(dto["lambda"]);
+      let lambda = dto["lambda"];
       gate["lambda"] = lambda;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "root")) {
@@ -67,7 +59,7 @@ export function insertingOneGateInCircuit(circuitState, dto) {
       gate["root"] = root;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "bit")) {
-      let bit = parseFloat(dto["bit"]);
+      let bit = dto["bit"];
       gate["bit"] = bit;
   }
 
@@ -215,7 +207,7 @@ export function saveCopiedGates(circuitState, qbitStart, qbitStop, stepStart, st
               gate.target <= qbitStop &&
               stepIndex >= stepStart &&
               stepIndex <= stepStop) {
-
+            //TODO: remove all parsed ints? If circuit created. If circuit loaded
             let copiedGate = {"qbit": parseInt(gate.target) - qbitStart, "step": stepIndex - stepStart, "name": gate.name };
 
             if (Object.prototype.hasOwnProperty.call(gate, "target2")) {
@@ -234,19 +226,19 @@ export function saveCopiedGates(circuitState, qbitStart, qbitStop, stepStart, st
               copiedGate.controlstate2 = parseInt(gate.controlstate2);
             }
             if (Object.prototype.hasOwnProperty.call(gate, "theta")) {
-              copiedGate.theta = parseFloat(gate.theta);
+              copiedGate.theta = gate.theta;
             }
             if (Object.prototype.hasOwnProperty.call(gate, "phi")) {
-              copiedGate.phi = parseFloat(gate.phi);
+              copiedGate.phi = gate.phi;
             }
             if (Object.prototype.hasOwnProperty.call(gate, "lambda")) {
-              copiedGate.lambda = parseFloat(gate.lambda);
+              copiedGate.lambda = gate.lambda;
             }
             if (Object.prototype.hasOwnProperty.call(gate, "root")) {
               copiedGate.root = gate.root;
             }
             if (Object.prototype.hasOwnProperty.call(gate, "bit")) {
-              copiedGate.bit = parseInt(gate.bit);
+              copiedGate.bit = gate.bit;
             }
    
             window.copiedGates.push(copiedGate);

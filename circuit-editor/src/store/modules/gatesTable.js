@@ -17,15 +17,17 @@ class GatesTableCell {
     this.qbit2 = null;
     /* the step where this active gate is applied */
     this.step = null;
-    /* image or component displayed by this cell */
+    /* name of Vue component displayed by this cell. For example for a controlled
+    gate we have one component used to render target qubit and another component
+    used to render the controll qubit*/
     this.name = null;
-    /* tooltip to be dispayed for this gates */
-    this.tooltip = null;
     /* name of the gate, possibly different from name in multiple bit gates */
     this.gate = null;
-    /* image that will be shown inside this cell which 
-    may be different from gate name, ex for controlled qbits */
+    /* image that will be shown inside this cell which is different
+    from gate name for controlled gates or two target qubit gates */
     this.img = null;
+    /* tooltip to be dispayed for this gate */
+    this.tooltip = null;
     /* angles for parametric gates */
     this.phi = null;
     this.theta = null;
@@ -762,22 +764,37 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             continue;
           }
           
-          // update cell properties
-          gatesTableRowState.cells[column].name = gate.name;
+          // this is the name of the gate
           gatesTableRowState.cells[column].gate = gate.name;
-          // all elements in circuit must be updated when 
-          // switching from colored to blue gates:
+
+          // name of Vue component used to render this cell. For example for 
+          // a controlled gate we have one component used to render target qubit 
+          // and another component used to render the controll qubit
+          gatesTableRowState.cells[column].name = gate.name;                     
+
+          // image that will be shown inside this cell which is different
+          // from gate name for controlled gates or two target qubit gates.
+          // In the case of pauli root gates when root is 'k', this is used
+          // to resolved gate image name based on values for 'k' and 'img'
+          gatesTableRowState.cells[column].img = gate.name.replace("ctrl-", ""); 
+
+          // all elements in circuit must be updated when switching from colored to blue gates:
           gatesTableRowState.cells[column].key = Vue.$cookies.get('colored-gates');
+
           gatesTableRowState.cells[column].tooltip = "";
-          if (gate.name == "sqrt-swap" || gate.name == "swap-phi" || gate.name == "iswap"){
+          if (gate.name == "sqrt-swap"
+              || gate.name == "swap-phi"
+              || gate.name == "iswap"
+              || gate.name == "ctrl-sqrt-swap"
+              || gate.name == "ctrl-swap-phi"
+              || gate.name == "ctrl-iswap"){
             if ((inputRow - 1) / 2 == Math.min(target, target2)){
               gatesTableRowState.cells[column].tooltip += `${gate.name} ` 
             }
           }
-          gatesTableRowState.cells[column].img = gate.name.replace("ctrl-", "");
 
           if (Object.prototype.hasOwnProperty.call(gate, "controlstates")) {
-            gatesTableRowState.cells[column].controlstates = gate.controlstates.split(",");
+            gatesTableRowState.cells[column].controlstates = [...gate.controlstates];
           }
           if (Object.prototype.hasOwnProperty.call(gate, "theta")) {
             gatesTableRowState.cells[column].theta = parseFloat(gate.theta);
@@ -818,12 +835,11 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           let rowQbit = getQbitFromRow(inputRow);
           if (controls.includes(rowQbit)){
             let controlIndex = controls.indexOf(rowQbit);
-            let controlstates = gate.controlstates.split(",");
+            let controlstates = [...gate.controlstates];
             controlstate = controlstates[controlIndex];
           }
 
           if (rowMin == inputRow) {
-            gatesTableRowState.cells[column].name = gate.name;
             if (controls.includes(qmin)){
               gatesTableRowState.cells[column].name = getCtrlStubUpName(gate, controlstate);
             } else {
@@ -841,7 +857,6 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             }
           } else if (rowMin < inputRow && inputRow < rowMax) {
             if (controls.includes(rowQbit)){
-              gatesTableRowState.cells[column].name = gate.name;
               gatesTableRowState.cells[column].img = getCtrlStubMidName(gate, controlstate);
             } else {
               let thisRowHoldsGates = rowHoldsGates(inputRow);
@@ -858,8 +873,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
               }
             }
           } else if (rowMax == inputRow) {
-            gatesTableRowState.cells[column].name = gate.name;
-            if (controls.includes(qmin)){
+            if (controls.includes(qmax)){
               gatesTableRowState.cells[column].name = getCtrlStubDownName(gate, controlstate);
             } else {
               if (isingGates.includes(gate.name)){

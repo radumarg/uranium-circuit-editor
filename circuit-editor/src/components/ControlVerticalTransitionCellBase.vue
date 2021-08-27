@@ -9,15 +9,15 @@ export default {
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['insertGateInCircuit', 'removeGateFromCircuit']),
-    handleDropEvent: function () {
-      let originalQbit = event.dataTransfer.getData("originalQbit");
-      let originalStep = event.dataTransfer.getData("originalStep");
-      let originalControl = event.dataTransfer.getData("originalControl");
+    handleDropEvent: function (event) {
+      let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
+      let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
+      let originalControl = parseInt(event.dataTransfer.getData("originalControl"));
       let controlstate = event.dataTransfer.getData("controlstate");
       let dragOrigin = event.dataTransfer.getData("drag-origin");
       let gateName = event.dataTransfer.getData("gateName");
-      let step = event.currentTarget.getAttribute("step");
-      let qbit = event.currentTarget.getAttribute("qbit");
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
       let dropQbit = this.id.split('_').shift();
    
       if (originalStep == null || step != originalStep || qbit != originalQbit) {
@@ -30,15 +30,15 @@ export default {
       
       // add optional params, notice lower case needed for types.includes
       if (event.dataTransfer.types.includes("phi")) {
-        let phi = event.dataTransfer.getData("phi");
+        let phi = parseFloat(event.dataTransfer.getData("phi"));
         dto["phi"] = phi;
       }
       if (event.dataTransfer.types.includes("theta")) {
-        let theta = event.dataTransfer.getData("theta");
+        let theta = parseFloat(event.dataTransfer.getData("theta"));
         dto["theta"] = theta;
       }
       if (event.dataTransfer.types.includes("lambda")) {
-        let lambda = event.dataTransfer.getData("lambda");
+        let lambda = parseFloat(event.dataTransfer.getData("lambda"));
         dto["lambda"] = lambda;
       }
       if (event.dataTransfer.types.includes("root")) {

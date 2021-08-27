@@ -318,7 +318,7 @@ export default {
     handleDropEvent: function (event) {
       let draggedQbit = null;
       if (event.dataTransfer.types.includes("dragged-qbit")) {
-        draggedQbit = event.dataTransfer.getData("dragged-qbit");
+        draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       }
       if (event.shiftKey && draggedQbit) {
         // shift key is pressed and draggedQbit not null means
@@ -338,12 +338,12 @@ export default {
       
       let draggedQbit = null;
       if (event.dataTransfer.types.includes("dragged-qbit")) {
-        draggedQbit = event.dataTransfer.getData("dragged-qbit");
+        draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       }
       
-      let qbit = event.currentTarget.getAttribute("qbit");
+      let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
       let qbitDelta = draggedQbit - qbit;
-      let step = event.currentTarget.getAttribute("step");
+      let step = parseInt(event.currentTarget.getAttribute("step"));
       let gateName = event.dataTransfer.getData("gateName");
       let controls = [];
 
@@ -352,8 +352,8 @@ export default {
 
       // add optional params, notice lower case needed for types.includes
       if (event.dataTransfer.types.includes("originalqbit2")) {
-        let originalQbit = event.dataTransfer.getData("originalQbit");
-        let originalQbit2 = event.dataTransfer.getData("originalQbit2");
+        let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
+        let originalQbit2 = parseInt(event.dataTransfer.getData("originalQbit2"));
         if (draggedQbit == originalQbit) {
           dto["qbit2"] = parseInt(originalQbit2) - qbitDelta;
         } else if (draggedQbit == originalQbit2) {
@@ -370,15 +370,15 @@ export default {
         dto["controlstates"] = controlstates;
       }
       if (event.dataTransfer.types.includes("phi")) {
-        let phi = event.dataTransfer.getData("phi");
+        let phi = parseFloat(event.dataTransfer.getData("phi"));
         dto["phi"] = phi;
       }
       if (event.dataTransfer.types.includes("theta")) {
-        let theta = event.dataTransfer.getData("theta");
+        let theta = parseFloat(event.dataTransfer.getData("theta"));
         dto["theta"] = theta;
       }
       if (event.dataTransfer.types.includes("lambda")) {
-        let lambda = event.dataTransfer.getData("lambda");
+        let lambda = parseFloat(event.dataTransfer.getData("lambda"));
         dto["lambda"] = lambda;
       }
       if (event.dataTransfer.types.includes("root")) {
@@ -386,7 +386,7 @@ export default {
         dto["root"] = root;
       }
       if (event.dataTransfer.types.includes("bit")) {
-        let bit = event.dataTransfer.getData("bit");
+        let bit = parseInt(event.dataTransfer.getData("bit"));
         dto["bit"] = bit;
       }
 
@@ -414,46 +414,46 @@ export default {
       this.insertGateInCircuit(dto);
     },
     removeDraggedGateAndAddNewGateToCircuit: function (event) {
-      let qbit = event.currentTarget.getAttribute("qbit");
-      let step = event.currentTarget.getAttribute("step");
+      let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
+      let step = parseInt(event.currentTarget.getAttribute("step"));
       let gateName = event.dataTransfer.getData("gateName");
-      let originalQbit = event.dataTransfer.getData("originalQbit");
-      let originalQbit2 = event.dataTransfer.getData("originalQbit2");
+      let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
+      let originalQbit2 = parseInt(event.dataTransfer.getData("originalQbit2"));
       let originalControls = [];
-      let originalStep = event.dataTransfer.getData("originalStep");
+      let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let dragOrigin = event.dataTransfer.getData("drag-origin");
       
       let draggedQbit = null;
       if (event.dataTransfer.types.includes("dragged-qbit")) {
-        draggedQbit = event.dataTransfer.getData("dragged-qbit");
+        draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       }
-
+      
       // add the new gate mandatory params
       let dto = { step: step, qbit: qbit, name: gateName };
       
       // add optional params, notice lower case needed for types.includes
       if (event.dataTransfer.types.includes("originalqbit2")) {
-        let qbit2 = event.dataTransfer.getData("originalQbit2");
+        let qbit2 = parseInt(event.dataTransfer.getData("originalQbit2"));
         dto["qbit2"] = qbit2;
       }
       if (event.dataTransfer.types.includes("originalcontrols")) {
         originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
-        dto["controls"] = [...originalControls];
+        dto["controls"] = originalControls;
       }
       if (event.dataTransfer.types.includes("controlstates")) {
         let controlstates = event.dataTransfer.getData("controlstates").split(",");
         dto["controlstates"] = controlstates;
       }
       if (event.dataTransfer.types.includes("phi")) {
-        let phi = event.dataTransfer.getData("phi");
+        let phi = parseFloat(event.dataTransfer.getData("phi"));
         dto["phi"] = phi;
       }
       if (event.dataTransfer.types.includes("theta")) {
-        let theta = event.dataTransfer.getData("theta");
+        let theta = parseFloat(event.dataTransfer.getData("theta"));
         dto["theta"] = theta;
       }
       if (event.dataTransfer.types.includes("lambda")) {
-        let lambda = event.dataTransfer.getData("lambda");
+        let lambda = parseFloat(event.dataTransfer.getData("lambda"));
         dto["lambda"] = lambda;
       }
       if (event.dataTransfer.types.includes("root")) {
@@ -461,7 +461,7 @@ export default {
         dto["root"] = root;
       }
       if (event.dataTransfer.types.includes("bit")) {
-        let bit = event.dataTransfer.getData("bit");
+        let bit = parseInt(event.dataTransfer.getData("bit"));
         dto["bit"] = bit;
       }
       
@@ -484,11 +484,12 @@ export default {
       }
 
       if (gateName.includes("ctrl-")) {
+        if (!dto["controls"]){
+          dto["controls"] = [];
+        }
         let success = this.repositionControlledGate(dto, dragOrigin, qbit, step, originalQbit, originalStep, existingQbits);
         if (!success) return;
-      }
-
-      if (
+      } else if (
         gateName.includes("swap") ||
         gateName == "xx" ||
         gateName == "yy" ||
@@ -507,7 +508,7 @@ export default {
         let dto = { step: originalStep, qbit: originalQbit };
         this.removeGateFromCircuit(dto);
       }
-
+      
       // step2 - add the new gate to the circuit
       this.insertGateInCircuit(dto);
     },
@@ -519,7 +520,7 @@ export default {
       existingQbits
     ) {
       // If this was a controlled gate and was draged from the gate panel than the control bit is not assigned
-      if (dto["control"] == null) {
+      if (dto["controls"].length == 0) {
         if (!this.findBestFitForControlledGate(dto, qbit, step, existingQbits)) {
           return false;
         }
@@ -528,8 +529,7 @@ export default {
       let proposedQbits = [
         dto["qbit"],
         dto["qbit2"],
-        dto["control"],
-        dto["control2"],
+        ...dto["controls"],
       ].filter((qbit) => Boolean(qbit) || qbit === 0);
 
       if (
@@ -556,13 +556,14 @@ export default {
     },
     repositionControlledGate: function (dto, dragOrigin, qbit, step, originalQbit, originalStep, existingQbits) {
       
+      //TODO: fix
       if (dragOrigin == "stub") {
         dto["qbit"] = originalQbit;
         dto["control"] = qbit;
       } else {
         if (dto["control"] == dto["qbit"]) dto["control"] = null;
       }
-
+      
       let success = this.placeControlledGate(
         dto,
         qbit,
@@ -578,29 +579,24 @@ export default {
       return success;
     },
     findBestFitForControlledGate: function (dto, qbit, step, existingQbits) {
-      dto["control"] = parseInt(qbit) - 1;
+      // TODO:fix
+      dto["controls"] = [parseInt(qbit) - 1];
       let proposedQbits = [
         dto["qbit"],
         dto["qbit2"],
-        dto["control"],
-        dto["control2"],
+        ...dto["controls"],
       ].filter((qbit) => Boolean(qbit) || qbit === 0);
       if (
-        (dto["control"] < 0) || seatsAreTaken(
-          this.$store.state.circuitEditorModule,
-          existingQbits,
-          proposedQbits,
-          step
-        )
+        (dto["controls"][0] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
       ) {
-        dto["control"] = parseInt(qbit) + 1;
+        // TODO:fix
+        dto["controls"] = [parseInt(qbit) + 1];
         proposedQbits = [
           dto["qbit"],
           dto["qbit2"],
-          dto["control"],
-          dto["control2"],
+          ...dto["controls"],
         ].filter((qbit) => Boolean(qbit) || qbit === 0);
-        if ((dto["control"] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
+        if (seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
         ) {
           alert("Cannot allocate controll qubit!");
           return false;

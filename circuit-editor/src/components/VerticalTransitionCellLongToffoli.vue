@@ -25,18 +25,18 @@ export default {
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['insertGateInCircuit', 'removeGateFromCircuit']),
-    handleDropEvent: function () {
-      let originalQbit = event.dataTransfer.getData("originalQbit");
-      let originalStep = event.dataTransfer.getData("originalStep");
-      let originalControl = event.dataTransfer.getData("originalControl");
+    handleDropEvent: function (event) {
+      let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
+      let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
+      let originalControl = parseInt(event.dataTransfer.getData("originalControl"));
       let controlstate = event.dataTransfer.getData("controlstate");
-      let originalControl2 = event.dataTransfer.getData("originalControl2");
+      let originalControl2 = parseInt(parseInt(event.dataTransfer.getData("originalControl2")));
       let controlstate2 = event.dataTransfer.getData("controlstate2");
       let dragOrigin = event.dataTransfer.getData("drag-origin");
-      let draggedQbit = event.dataTransfer.getData("dragged-qbit");
+      let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       let gateName = event.dataTransfer.getData("gateName");
-      let step = event.currentTarget.getAttribute("step");
-      let qbit = event.currentTarget.getAttribute("qbit");
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
       let dropQbit = this.id.split('_').shift();
    
       if (originalStep == null || step != originalStep || qbit != originalQbit) {
