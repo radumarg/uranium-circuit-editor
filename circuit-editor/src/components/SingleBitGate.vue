@@ -269,19 +269,19 @@ export default {
         this.$data.controlstatesNew = this.controlstates;
         this.$data.controlstatesExpression =  this.controlstates[0];
       }
-      if (this.phi  || this.phi === 0){
+      if (isDefined(this.phi)){
         this.$data.phiNew = this.phi;
         this.$data.phiExpression = this.phi.toString();
       }
-      if (this.theta || this.theta === 0){
+      if (isDefined(this.theta)){
         this.$data.thetaNew = this.theta;
         this.$data.thetaExpression = this.theta.toString();
       }
-      if (this.lambda || this.lambda === 0){
+      if (isDefined(this.lambda)){
         this.$data.lambdaNew = this.lambda;
         this.$data.lambdaExpression = this.lambda.toString();
       }
-      if (this.bit  || this.bit === 0){
+      if (isDefined(this.bit)){
         this.$data.bitNew = this.bit;
         this.$data.bitExpression = 'q';
       }

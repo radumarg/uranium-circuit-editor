@@ -537,7 +537,7 @@ function getCtrlStubDownName(gate, controlstate) {
   } else if (stCtrlGates.includes(gate.name)) {
     return "ctrl-st-stub-down-" + controlstate;
   } else if (rCtrlGates.includes(gate.name)) {
-    return "ctrl-r-stub-down-" + controlstate;
+    return "ctrl-r-theta-stub-down-" + controlstate;
   } else if (hadamardCtrlGates.includes(gate.name)) {
     return "ctrl-hadamard-stub-down-" + controlstate;
   } else if (unitaryCtrlGates.includes(gate.name)) {
@@ -557,7 +557,7 @@ function getCtrlStubUpName(gate, controlstate) {
   } else if (stCtrlGates.includes(gate.name)) {
     return "ctrl-st-stub-up-" + controlstate;
   } else if (rCtrlGates.includes(gate.name)) {
-    return "ctrl-r-stub-up-" + controlstate;
+    return "ctrl-r-theta-stub-up-" + controlstate;
   } else if (hadamardCtrlGates.includes(gate.name)) {
     return "ctrl-hadamard-stub-up-" + controlstate;
   } else if (unitaryCtrlGates.includes(gate.name)) {
@@ -577,7 +577,7 @@ function getCtrlStubMidName(gate, controlstate) {
   } else if (stCtrlGates.includes(gate.name)) {
     return "ctrl-st-stub-mid-" + controlstate;
   } else if (rCtrlGates.includes(gate.name)) {
-    return "ctrl-r-stub-mid-" + controlstate;
+    return "ctrl-r-theta-stub-mid-" + controlstate;
   } else if (hadamardCtrlGates.includes(gate.name)) {
     return "ctrl-hadamard-stub-mid-" + controlstate;
   } else if (unitaryCtrlGates.includes(gate.name)) {
