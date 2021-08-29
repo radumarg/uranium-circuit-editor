@@ -210,14 +210,14 @@
 import { mapActions } from 'vuex';
 import UnitaryParametricSingleBitGate from "./UnitaryParametricSingleBitGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";
-import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "ControlledUnitaryParametricSingleBitGate",
   extends: UnitaryParametricSingleBitGate,
   mixins: [controlsMixin],
   props: {
     'control': Number,
-    'controlstate': Number,
+    'controlstate':  String,
   },
   data() {
     return {

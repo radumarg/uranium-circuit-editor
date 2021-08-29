@@ -193,7 +193,7 @@
 import Vue from 'vue';
 import { mapActions } from 'vuex';
 import GateSwap from "./GateSwap";
-import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "ParametricGateSwap",
   extends: GateSwap,

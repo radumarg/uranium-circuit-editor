@@ -237,7 +237,7 @@
 
 <script>
 import Vue from 'vue';
-import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   methods: {
     gateSelected: function (event) {

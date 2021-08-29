@@ -6,7 +6,7 @@
 
 <script>
 import Vue from 'vue';
-import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "FredkinGateControlStubDown",
   props: {
@@ -17,7 +17,7 @@ export default {
     'name': String,
     'gate': String,
     'control': Number,
-    'controlstate': Number,
+    'controlstate':  String,
     'qrow': Number,
   },
   computed: {

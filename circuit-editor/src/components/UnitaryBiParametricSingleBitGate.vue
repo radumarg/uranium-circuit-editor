@@ -191,7 +191,7 @@
 <script>
 import { mapActions } from 'vuex';
 import UnitaryParametricSingleBitGate from "./UnitaryParametricSingleBitGate";
-import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "UnitaryBiParametricSingleBitGate",
   extends: UnitaryParametricSingleBitGate,

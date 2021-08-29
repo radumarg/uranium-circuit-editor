@@ -157,8 +157,8 @@
 <script>
 import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
-import { handleSelectEvent } from "../store/modules/editorHelper.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { handleSelectEvent, isDefined } from "../store/modules/editorHelper.js";
 export default {
   name: "SingleBitGate",
   props: {

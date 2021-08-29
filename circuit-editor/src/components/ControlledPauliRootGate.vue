@@ -227,14 +227,14 @@
 import { mapActions } from 'vuex';
 import PauliRootGate from "./PauliRootGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";
-import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "ControlledPauliRootGate",
   extends: PauliRootGate,
   mixins: [controlsMixin],
   props: {
     'control': Number,
-    'controlstate': Number,
+    'controlstate':  String,
   },
   data() {
     return {

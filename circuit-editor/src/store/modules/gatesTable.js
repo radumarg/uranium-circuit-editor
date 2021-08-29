@@ -40,12 +40,16 @@ class GatesTableCell {
     this.taken = false;
     /* id of this cell, only for cells that can hold gates */
     this.id = "";
-    /* controls bits for a controlled gate */
+    /* controls qbits for a controlled gate */
     this.controls = [];
     /* the qbit associated to current row (null in case row does not hold gates) */
     this.qrow = 0;
     /* For controlled gates this indicates the control states defined as +/-1 along Z axis in computational basis.*/
     this.controlstates = [];
+    /* control qbit for a controlled gate control stub Vue component */
+    this.control = null;
+     /* controlstate for a controlled gate control stub Vue component */
+    this.controlstate = null;
     /* the circle in parametric swap gates is not being refreshed by vue when draging the upper qbit, 
        upwards to a new position so we need to update this key to force vue to re-render that cell 
     */
@@ -834,14 +838,20 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           let controlstate = null;
           let rowQbit = getQbitFromRow(inputRow);
           if (controls.includes(rowQbit)){
+
             let controlIndex = controls.indexOf(rowQbit);
+            gatesTableRowState.cells[column].control = rowQbit;
+
             let controlstates = [...gate.controlstates];
             controlstate = controlstates[controlIndex];
+            gatesTableRowState.cells[column].controlstate = controlstate;
           }
 
           if (rowMin == inputRow) {
             if (controls.includes(qmin)){
               gatesTableRowState.cells[column].name = getCtrlStubUpName(gate, controlstate);
+              gatesTableRowState.cells[column].qbit = target;
+              gatesTableRowState.cells[column].qbit2 = target2;
             } else {
               if (isingGates.includes(gate.name)){
                 if (gate.name == "xx"){
@@ -875,6 +885,8 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           } else if (rowMax == inputRow) {
             if (controls.includes(qmax)){
               gatesTableRowState.cells[column].name = getCtrlStubDownName(gate, controlstate);
+              gatesTableRowState.cells[column].qbit = target;
+              gatesTableRowState.cells[column].qbit2 = target2;
             } else {
               if (isingGates.includes(gate.name)){
                 if (gate.name == "xx"){

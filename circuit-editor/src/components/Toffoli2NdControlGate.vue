@@ -6,7 +6,7 @@
 
 <script>
 import Vue from 'vue';
-import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 import { handleSelectEvent } from "../store/modules/editorHelper.js";
 export default {
   name: "Toffoli2NdControlGate",
@@ -17,7 +17,7 @@ export default {
     'name': String,
     'gate': String,
     'control': Number,
-    'controlstate': Number,
+    'controlstate':  String,
     'control2': Number,
     'controlstate2': Number,
     'qrow': Number,

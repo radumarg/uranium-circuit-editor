@@ -1,3 +1,8 @@
+/*
+  These are not to be condidered utilities in general rather functional 
+  code fragments reused in various parts of Circuit Editor. 
+*/
+
 import Vue from 'vue';
 import JQuery from 'jquery';
 
@@ -51,8 +56,4 @@ export function setCookiesIfNotAltreadySet(){
   if (legendBase == null){
     Vue.$cookies.set('legend-base', '2');
   }
-}
-
-export function arraysAreEqual(a, b) {
-  return a.every(item => b.includes(item)) && b.every(item => a.includes(item));
 }

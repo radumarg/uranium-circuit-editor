@@ -21,7 +21,7 @@ Vue.use(MdTooltip);
 import { IconsPlugin, ImagePlugin, FormInputPlugin, FormSelectPlugin, LayoutPlugin, ModalPlugin, SidebarPlugin, SpinnerPlugin, TabsPlugin, TablePlugin, TooltipPlugin, VBHoverPlugin } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-import { setCookiesIfNotAltreadySet } from "./store/modules/utils.js";
+import { setCookiesIfNotAltreadySet } from "./store/modules/applicationWideReusableUnits.js";
 
 Vue.use(IconsPlugin);
 Vue.use(ImagePlugin);

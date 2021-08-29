@@ -119,7 +119,7 @@ import JQuery from 'jquery';
 import { mapActions, mapGetters } from 'vuex';
 import { getNoQbits, getNoSteps, getNumberOfRowsThatFit, getNumberOfColumnsThatFit } from "../store/modules/gatesTable.js";
 import {save_circuit} from "../store/modules/circuitSaveAndRetrieve.js";
-import { setCookiesIfNotAltreadySet } from "../store/modules/utils.js";
+import { setCookiesIfNotAltreadySet } from "../store/modules/applicationWideReusableUnits.js";
 import {sendWorkerMessage} from '../store/modules/worker-api';
 export default {
   name: "ToolBar",

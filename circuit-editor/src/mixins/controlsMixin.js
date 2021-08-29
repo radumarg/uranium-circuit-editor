@@ -1,5 +1,13 @@
 import Vue from 'vue';
 
+import { 
+  getDuplicateValues,
+} from "../store/modules/javaScriptUtils";
+
+import {
+  isDefined,
+} from "../store/modules/editorHelper.js";
+
 export const controlsMixin = {
   props: {
     'controls': Array,
@@ -19,8 +27,8 @@ export const controlsMixin = {
       controlstatesNew: this.controlstates,
       numberOfControls: this.controls.length,
       options: [
-        { value: 1, text: '|1⟩' },
-        { value: 0, text: '|0⟩' },
+        { value: '1', text: '|1⟩' },
+        { value: '0', text: '|0⟩' },
       ],
     }
   },
@@ -105,21 +113,17 @@ export const controlsMixin = {
       this.alignControlsDownwardsIsHovered = hovered;
     },
     handleEditControlsModalSave: function(){
-      // let promise = this.replicateGate({
-      //   'step': this.step,
-      //   'qbit': this.qbit,
-      //   'name': this.name, 
-      // });
-      // promise.then(
-      //   // eslint-disable-next-line no-unused-vars
-      //   result => {}, 
-      //   // eslint-disable-next-line no-unused-vars
-      //   error => {},
-      // );
-      this.$refs['edit-controls-modal-dialog'].hide();
-    },
-    handleControlsValidation(){
-      alert("hei");
+      let duplicateControls = getDuplicateValues(this.controlsNew);
+      if (this.$data.controlsNew.includes(this.$data.qbitNew)){
+        alert("Control and target qubits must differ!");
+      } else if (isDefined(this.$data.qbit2New) && this.$data.controlsNew.includes(this.$data.qbit2New)){
+        alert("Control and target qubits must differ!");
+      } else if (duplicateControls.length > 0){
+        alert("Duplicate controls: " + JSON.stringify(duplicateControls));
+      } else {
+        this.handleSave();
+        this.$refs['edit-controls-modal-dialog'].hide();
+      }
     },
     stubImageSrcPopup: function(controlIndex) {
       if (this.name) {

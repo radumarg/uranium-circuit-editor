@@ -229,7 +229,7 @@
           <td title="Control qubit" class="edit-controls-cell">Target:</td>
           <td class="edit-controls-cell">
             <div class="d-flex justify-content-center align-items-center">
-              <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="qbitNew" placeholder="target" type="number" id="target-qbit" style="width:70px;"></b-form-input>
+              <b-form-input readonly min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="qbitNew" placeholder="target" type="number" id="target-qbit" style="width:70px;"></b-form-input>
             </div>
           </td>
           <td></td>
@@ -247,31 +247,31 @@
         <tr>
           <td></td>
           <td class="edit-controls-cell">
-            <div v-b-hover="handleMoveGateOneQubitUpwardsHover">
-              <b-icon v-if="moveGateOneQubitUpwardsIsHovered" icon="arrow-up-square-fill" v-on:click="moveGateOneQubitUpwards()" title="Move gate one qubit upwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
-              <b-icon v-else icon="arrow-up-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            <div v-b-hover="handleAlignControlsUpwardsHover">
+              <b-icon v-if="alignControlsUpwardsIsHovered" icon="caret-up-fill" v-on:click="alignControlsUpwardsFromTargetQubit()" title="Align controls upwards from target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="caret-up" style="color: #7952b3;" font-scale="1.4"></b-icon>
              </div>
           </td>
           <td class="edit-controls-cell">
-            <div v-b-hover="handleMoveGateOneQubitDownwardsHover">
-              <b-icon v-if="moveGateOneQubitDownwardsIsHovered" icon="arrow-down-square-fill" v-on:click="moveGateOneQubitDownwards()" title="Move gate one qubit downwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
-              <b-icon v-else icon="arrow-down-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            <div v-b-hover="handleMoveGateOneQubitUpwardsHover">
+              <b-icon v-if="moveGateOneQubitUpwardsIsHovered" icon="arrow-up-square-fill" v-on:click="moveGateOneQubitUpwards()" title="Move gate one qubit upwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="arrow-up-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
              </div>
           </td>
           <td></td>
         </tr>
         <tr>
           <td></td>
-          <td class="edit-controls-cell">
-            <div v-b-hover="handleAlignControlsUpwardsHover">
-              <b-icon v-if="alignControlsUpwardsIsHovered" icon="caret-up-fill" v-on:click="alignControlsUpwardsFromTargetQubit()" title="Align controls upwards from target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
-              <b-icon v-else icon="caret-up" style="color: #7952b3;" font-scale="1.4"></b-icon>
-             </div>
-          </td>
           <td class="edit-controls-cell" >
             <div v-b-hover="handleAlignControlsDownwardsHover">
               <b-icon v-if="alignControlsDownwardsIsHovered" icon="caret-down-fill" v-on:click="alignControlsDownwardsFromTargetQubit()" title="Align controls downwards from target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="caret-down" style="color: #7952b3;" font-scale="1.4"></b-icon>
+             </div>
+          </td>
+          <td class="edit-controls-cell">
+            <div v-b-hover="handleMoveGateOneQubitDownwardsHover">
+              <b-icon v-if="moveGateOneQubitDownwardsIsHovered" icon="arrow-down-square-fill" v-on:click="moveGateOneQubitDownwards()" title="Move gate one qubit downwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="arrow-down-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
              </div>
           </td>
           <td></td>
@@ -302,7 +302,7 @@
 import { mapActions } from 'vuex';
 import SingleBitGate from "./SingleBitGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";
-import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
+import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "ControlledSingleBitGate",
   extends: SingleBitGate,
@@ -316,18 +316,16 @@ export default {
   },
   watch: {
     control: function() {
-      // need this in order to update controlNew
+      // need this in order to update controlsNew
       // when doing drag & drop on the stub
-      this.$data.controlNew = this.control;
       this.$data.controlsNew = this.controls;
-      this.$data.controlstateNew = this.controlstate;
       this.$data.controlstatesNew = this.controlstates;
     }
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionControlledGateInCircuit']),
     handleSave: function(){
-      if (this.$data.qbitNew == this.$data.controlNew){
+      if (this.$data.controlsNew.includes(this.$data.qbitNew)){
         alert("Control and target qubits must differ!");
         return;
       }
@@ -336,8 +334,8 @@ export default {
         return;
       }
       let qbitOld = this.qbit;
-      let controlOld = this.control;
-      let controlstateOld = this.controlstate;
+      let controlsOld = this.controls;
+      let controlstatesOld = this.controlstates;
       let promise = this.repositionControlledGateInCircuit({
         'step': this.step, 
         'qbit': this.qbit, 
@@ -345,8 +343,8 @@ export default {
         'controlstate': this.controlstate,
         'name': this.name, 
         'qbitNew': this.$data.qbitNew, 
-        'controlNew': this.$data.controlNew,
-        'controlstateNew': this.$data.controlstateNew,
+        'controlsNew': this.$data.controlsNew,
+        'controlstatesNew': this.$data.controlstatesNew,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -354,8 +352,8 @@ export default {
         // eslint-disable-next-line no-unused-vars
         error => {
           this.$data.qbitNew = this.qbit = qbitOld;
-          this.$data.controlNew = this.control = controlOld;
-          this.$data.controlstateNew = this.controlstate = controlstateOld;
+          this.$data.controlsNew = this.controls = controlsOld;
+          this.$data.controlstatesNew = this.controlstates = controlstatesOld;
         }
       );
       this.$refs['initial-modal-dialog'].hide();

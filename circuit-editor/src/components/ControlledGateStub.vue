@@ -9,7 +9,7 @@
         <tr>
           <td class="no-resize-cell">
              <div v-b-hover="handleTrashHover">
-              <b-icon v-if="trashIsHovered" v-on:click="handleDeleteControl()" icon="trash" v-b-tooltip.hover title="Delete gate" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-if="trashIsHovered" v-on:click="handleDeleteControl()" icon="trash" v-b-tooltip.hover title="Delete control" style="color: #7952b3;" font-scale="1.6"></b-icon>
               <b-icon v-else icon="trash" v-on:click="handleDeleteControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
               </div>
           </td>
@@ -34,7 +34,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" style="padding: 5px;">Control state:</td>
           <td style="padding: 5px;">
-            <b-form-select  @keyup.enter.native="handleSave()" v-model="controlstatesNew" @change="onControlStateChange()"  placeholder="controlstate" :options="options" id="controlstate-new" style="min-width: 72px; max-width: 72px;"></b-form-select>
+            <b-form-select  @keyup.enter.native="handleSave()" v-model="controlstateNew" @change="onControlStateChange()"  placeholder="controlstate" :options="options" id="controlstate-new" style="min-width: 72px; max-width: 72px;"></b-form-select>
           </td>
           <td></td>
         </tr>
@@ -42,7 +42,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" style="padding: 5px;">Control qubit:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="controlNew" placeholder="qbit" type="number" id="control-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
+            <b-form-input readonly min="0" @keyup.enter.native="handleSave()" v-model.number="control" placeholder="qbit" type="number" id="control-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -67,8 +67,9 @@
 
 <script>
 import Vue from 'vue';
-import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
-import { handleSelectEvent } from "../store/modules/editorHelper.js";
+import { mapActions } from 'vuex';
+import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { handleSelectEvent, isDefined } from "../store/modules/editorHelper.js";
 export default {
   name: "ControlledGateStub",
   props: {
@@ -79,10 +80,10 @@ export default {
     'title': String,
     'name': String,
     'gate': String,
+    'controls': Array,
+    'controlstates': Array,
     'control': Number,
-    'controlstate': Number,
-    'control2': Number,
-    'controlstate2': Number,
+    'controlstate': String,
     'theta': Number,
     'phi': Number,
     'lambda': Number,
@@ -94,11 +95,10 @@ export default {
       trashIsHovered: false,
       closeIsHovered: false,
       saveIsHovered:  false,
-      controlNew: this.control,
-      controlstatesNew: this.controlstate,
+      controlstateNew: this.controlstate,
       options: [
-        { value: 1, text: '|1⟩' },
-        { value: 0, text: '|0⟩' },
+        { value: '1', text: '|1⟩' },
+        { value: '0', text: '|0⟩' },
       ],
     }
   },
@@ -112,6 +112,7 @@ export default {
     },
   },
   methods: {
+    ...mapActions('circuitEditorModule/', ['repositionControlledGateInCircuit']),
     showModal: function() {
       this.trashIsHovered = false;
       this.closeIsHovered = false;
@@ -131,25 +132,103 @@ export default {
       this.saveIsHovered = hovered;
     },
     handleSave() {
+      let controlIndex = this.controls.indexOf(this.control);
+      let controlStatesNew = [...this.controlstates];
+      controlStatesNew[controlIndex] = this.$data.controlstateNew;
+      let dto = {
+        'name': this.gate,
+        'step': this.step, 
+        'qbit': this.qbit, 
+        'controls': this.controls,
+        'qbitNew': this.qbit,
+        'controlsNew': this.controls,
+        'controlstatesNew': controlStatesNew,
+      }
+      if (isDefined(this.qbit2)) {
+        dto['qbit2'] = this.qbit2;
+      }
+      if (isDefined(this.qbit2)) {
+        dto['qbit2New'] = this.qbit2;
+      }
+      if (isDefined(this.phi)) {
+        dto['phiNew'] = this.phi;
+      }
+      if (isDefined(this.theta)) {
+        dto['thetaNew'] = this.theta;
+      }
+      if (isDefined(this.lambda)) {
+        dto['lambdaNew'] = this.lambda;
+      }
+      if (isDefined(this.root)) {
+        dto['rootNew'] = this.root;
+      }
+      let promise = this.repositionControlledGateInCircuit(dto);
+      promise.then(
+        // eslint-disable-next-line no-unused-vars
+        result => {}, 
+        // eslint-disable-next-line no-unused-vars
+        error => {},
+      );
+      this.$refs['modal-dialog'].hide();
     },
     handleDeleteControl: function(){
-      
+      if (this.controls.length == 1){
+        alert("Cannot delete last control!");
+      } else {
+        let controlIndex = this.controls.indexOf(this.control);
+        let controlStatesNew = [...this.controlstates].splice(controlIndex, 1);
+        let controlsNew = [...this.controls].splice(controlIndex, 1);
+        let dto = {
+          'name': this.gate,
+          'step': this.step, 
+          'qbit': this.qbit, 
+          'controls': this.controls,
+          'qbitNew': this.qbit,
+          'controlsNew': controlsNew,
+          'controlstatesNew': controlStatesNew,
+        }
+        if (isDefined(this.qbit2)) {
+          dto['qbit2'] = this.qbit2;
+        }
+        if (isDefined(this.qbit2)) {
+          dto['qbit2New'] = this.qbit2;
+        }
+        if (isDefined(this.phi)) {
+          dto['phiNew'] = this.phi;
+        }
+        if (isDefined(this.theta)) {
+          dto['thetaNew'] = this.theta;
+        }
+        if (isDefined(this.lambda)) {
+          dto['lambdaNew'] = this.lambda;
+        }
+        if (isDefined(this.root)) {
+          dto['rootNew'] = this.root;
+        }
+        let promise = this.repositionControlledGateInCircuit(dto);
+        promise.then(
+          // eslint-disable-next-line no-unused-vars
+          result => {}, 
+          // eslint-disable-next-line no-unused-vars
+          error => {}
+        );
+      }
+      this.$refs['modal-dialog'].hide();
     },
     onControlStateChange(){ 
       // need to refresh control state icon image
       this.$forceUpdate();
     },
     stubImageSrcPopup: function() {
-      return require("../assets/colored-gates/ctrl-s-stub-1.svg");
-      // if (this.name) {
-      //   if (Vue.$cookies.get('colored-gates') === 'true'){
-      //     return require("../assets/colored-gates/" + this.name + "-stub-" + this.controlstatesNew + ".svg");
-      //   } else {
-      //     return require("../assets/blue-gates/" + this.name + "-stub-" + this.controlstatesNew + ".svg");
-      //   }
-      // } else {
-      //   return String.empty;
-      // }
+      if (this.gate) {
+        if (Vue.$cookies.get('colored-gates') === 'true'){
+          return require("../assets/colored-gates/" + this.gate + "-stub-" + this.controlstateNew + ".svg");
+        } else {
+          return require("../assets/blue-gates/" + this.gate + "-stub-" + this.controlstateNew + ".svg");
+        }
+      } else {
+        return String.empty;
+      }
     },
     handleClick: function (event) {
       if (event.ctrlKey) {
@@ -168,27 +247,21 @@ export default {
       event.dataTransfer.setData("gateName", this.gate);
       event.dataTransfer.setData("originalQbit", this.qbit);
       event.dataTransfer.setData("originalStep", this.step);
-      event.dataTransfer.setData("originalControl", this.control);
-      event.dataTransfer.setData("controlstate", this.controlstate);
-      if (this.qbit2 != null){
+      event.dataTransfer.setData("originalControls", this.controls);
+      event.dataTransfer.setData("controlstates", this.controlstates);
+      if (isDefined(this.qbit2)){
         event.dataTransfer.setData("originalQbit2", this.qbit2);
       }
-      if (this.control2 != null){
-        event.dataTransfer.setData("originalControl2", this.control2);
-      }
-      if (this.controlstate2 != null){
-        event.dataTransfer.setData("controlstate2", this.controlstate2);
-      }
-      if (!isNaN(this.theta) && this.theta != null) {
+      if (isDefined(this.theta)) {
         event.dataTransfer.setData("theta", this.theta);
       }
-      if (!isNaN(this.phi) && this.phi != null){
+      if (isDefined(this.phi)){
         event.dataTransfer.setData("phi", this.phi);
       }
-      if (!isNaN(this.lambda) && this.lambda != null){
+      if (isDefined(this.lambda)){
         event.dataTransfer.setData("lambda", this.lambda);
       }
-      if (this.root != null && this.root !== undefined){
+      if (isDefined(this.root)){
         event.dataTransfer.setData("root", this.root);
       }
       const target = event.target;
