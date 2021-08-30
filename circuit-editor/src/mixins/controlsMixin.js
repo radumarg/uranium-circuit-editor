@@ -23,8 +23,8 @@ export const controlsMixin = {
       moveGateOneQubitDownwardsIsHovered: false,
       alignControlsUpwardsIsHovered: false,
       alignControlsDownwardsIsHovered: false,
-      controlsNew: this.controls,
-      controlstatesNew: this.controlstates,
+      controlsNew: [...this.controls],
+      controlstatesNew: [...this.controlstates],
       numberOfControls: this.controls.length,
       options: [
         { value: '1', text: '|1⟩' },
@@ -155,7 +155,7 @@ export const controlsMixin = {
         for (let i = 0; i < this.numberOfControls - this.controlsNew.length; i++){
           lastControl++;
           this.controlsNew.push(lastControl);
-          this.controlstatesNew.push(1);
+          this.controlstatesNew.push('1');
         }
       }
       this.$forceUpdate();
@@ -163,8 +163,12 @@ export const controlsMixin = {
     addControl(){
       this.numberOfControls += 1;
       let lastControl = this.controlsNew[this.controlsNew.length - 1] + 1;
+      while (lastControl == this.$data.qbitNew 
+          || lastControl == this.$data.qbit2New) {
+        lastControl++;
+      }
       this.controlsNew.push(lastControl);
-      this.controlstatesNew.push(1);
+      this.controlstatesNew.push('1');
     },
     removeControl(){ 
       if (this.numberOfControls > 1){
@@ -174,12 +178,48 @@ export const controlsMixin = {
       }
     },
     moveGateOneQubitUpwards(){
+      if (this.$data.qbitNew > 0 && Math.min(...this.controlsNew) > 0){
+        this.$data.qbitNew -= 1;
+        if (isDefined(this.$data.qbit2New)) this.$data.qbit2New -= 1;
+        for (let i = 0; i < this.controlsNew.length; i++){
+          this.controlsNew[i] -= 1;
+        }
+      } else {
+        alert("The 0 qubit index has been reached.")
+      }
     },
     moveGateOneQubitDownwards(){
+      this.$data.qbitNew += 1;
+      if (isDefined(this.$data.qbit2New)) this.$data.qbit2New += 1;
+      for (let i = 0; i < this.controlsNew.length; i++){
+        this.controlsNew[i] += 1;
+      }
     },
     alignControlsUpwardsFromTargetQubit(){
+      let startUp = this.$data.qbitNew;
+      let startDown = this.$data.qbitNew;
+      if (isDefined(this.$data.qbit2New)){
+        startUp = Math.min(startUp, this.$data.qbit2New);
+        startDown = Math.max(startDown, this.$data.qbit2New);
+      }
+      for (let i = 0; i < this.controlsNew.length; i++){
+        if (startUp - i >= 1){
+          this.controlsNew[i] = startUp - i - 1;
+        } else {
+          this.controlsNew[i] = startDown + i - startUp + 1;
+        }
+      }
+      this.$forceUpdate();
     },
-    alignControlsDownardsFromTargetQubit(){
+    alignControlsDownwardsFromTargetQubit(){
+      let start = this.$data.qbitNew;
+      if (isDefined(this.$data.qbit2New)){
+        start = Math.max(start, this.$data.qbit2New)
+      }
+      for (let i = 0; i < this.controlsNew.length; i++){
+        this.controlsNew[i] = start + i + 1;
+      }
+      this.$forceUpdate();
     },
   }
 }

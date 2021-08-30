@@ -209,20 +209,20 @@
                 <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 1000" style="min-width: 79px; max-width: 79px;" />
               </b-tr>
               <b-tr>
-                <b-td v-for="(control, index) in controlsNew" v-bind:key="index + 2000" style="min-width: 79px; max-width: 79px;">
-                  <div class="d-flex justify-content-center align-items-center">
-                    <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="controlsNew[index]" placeholder="control" type="number" id="control-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
-                  </div>
-                </b-td>
-                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 3000"  style="min-width: 79px; max-width: 79px;" />
-              </b-tr>
-              <b-tr>
                 <b-td v-for="(controlstate, index) in controlstatesNew" v-bind:key="index + 4000" style="min-width: 79px; max-width: 79px;">
                   <div class="d-flex justify-content-center align-items-center">
                     <b-form-select v-model="controlstatesNew[index]" @change="onControlStateChange()"  placeholder="controlstate" :options="options" id="controlstate-new" style="min-width: 72px; max-width: 72px;"></b-form-select>
                   </div>
                 </b-td>
                 <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 5000" style="min-width: 79px; max-width: 79px;" />
+              </b-tr>
+              <b-tr>
+                <b-td v-for="(control, index) in controlsNew" v-bind:key="index + 2000" style="min-width: 79px; max-width: 79px;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="controlsNew[index]" placeholder="control" type="number" id="control-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
+                  </div>
+                </b-td>
+                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 3000"  style="min-width: 79px; max-width: 79px;" />
               </b-tr>
             </b-table-simple>
           </td>
@@ -318,8 +318,8 @@ export default {
     control: function() {
       // need this in order to update controlsNew
       // when doing drag & drop on the stub
-      this.$data.controlsNew = this.controls;
-      this.$data.controlstatesNew = this.controlstates;
+      this.$data.controlsNew = [...this.controls];
+      this.$data.controlstatesNew = [...this.controlstates];
     }
   },
   methods: {
@@ -334,14 +334,13 @@ export default {
         return;
       }
       let qbitOld = this.qbit;
-      let controlsOld = this.controls;
-      let controlstatesOld = this.controlstates;
+      let controlsOld = [...this.controls];
+      let controlstatesOld = [...this.controlstates];
       let promise = this.repositionControlledGateInCircuit({
         'step': this.step, 
         'qbit': this.qbit, 
-        'control': this.control,
-        'controlstate': this.controlstate,
-        'name': this.name, 
+        'name': this.name,
+        'controls': this.controls, 
         'qbitNew': this.$data.qbitNew, 
         'controlsNew': this.$data.controlsNew,
         'controlstatesNew': this.$data.controlstatesNew,
@@ -352,8 +351,10 @@ export default {
         // eslint-disable-next-line no-unused-vars
         error => {
           this.$data.qbitNew = this.qbit = qbitOld;
-          this.$data.controlsNew = this.controls = controlsOld;
-          this.$data.controlstatesNew = this.controlstates = controlstatesOld;
+          this.controls = [...controlsOld];
+          this.$data.controlsNew = [...controlsOld];
+          this.controlstates = [...controlstatesOld];
+          this.$data.controlstatesNew = [...controlstatesOld];
         }
       );
       this.$refs['initial-modal-dialog'].hide();
@@ -389,8 +390,8 @@ export default {
       event.dataTransfer.setData("dragged-qbit", this.qrow);
       event.dataTransfer.setData("originalQbit", this.qbit);
       event.dataTransfer.setData("originalStep", this.step);
-      event.dataTransfer.setData("originalControl", this.control);
-      event.dataTransfer.setData("controlstate", this.controlstate);
+      event.dataTransfer.setData("originalControls", this.controls);
+      event.dataTransfer.setData("controlstates", this.controlstates);
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
     },

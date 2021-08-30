@@ -870,16 +870,19 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
               gatesTableRowState.cells[column].img = getCtrlStubMidName(gate, controlstate);
             } else {
               let thisRowHoldsGates = rowHoldsGates(inputRow);
-              if (gate.name.includes("swap")) {
-                gatesTableRowState.cells[column].name = getSwapIntermediateLineName(thisRowHoldsGates, qmin, rowQbit, gate.name);
-                if (!thisRowHoldsGates) {
-                  // force update swap gates intermediate segments/circles 
-                  // which do not get rerendered properly when the one of 
-                  // the gate qubits is moved via drag & drop 
-                  gatesTableRowState.cells[column].key = timestamp;
+              if (!thisRowHoldsGates || (gate.target != rowQbit && gate.target2 != rowQbit))
+              {
+                if (gate.name.includes("swap")) {
+                  gatesTableRowState.cells[column].name = getSwapIntermediateLineName(thisRowHoldsGates, qmin, rowQbit, gate.name);
+                  if (!thisRowHoldsGates) {
+                    // force update swap gates intermediate segments/circles 
+                    // which do not get rerendered properly when the one of 
+                    // the gate qubits is moved via drag & drop 
+                    gatesTableRowState.cells[column].key = timestamp;
+                  }
+                } else {
+                  gatesTableRowState.cells[column].name = getIntermediateLineName(gate.name, thisRowHoldsGates);
                 }
-              } else {
-                gatesTableRowState.cells[column].name = getIntermediateLineName(gate.name, thisRowHoldsGates);
               }
             }
           } else if (rowMax == inputRow) {

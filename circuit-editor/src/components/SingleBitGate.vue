@@ -262,11 +262,11 @@ export default {
       }
       //TODO: fix
       if (this.controls && this.controls.length > 0){
-        this.$data.controlsNew = this.controls;
+        this.$data.controlsNew = [...this.controls];
         this.$data.controlsExpression = this.controls[0].toString();
       }
       if (this.controlstates && this.controlstates.length > 0){
-        this.$data.controlstatesNew = this.controlstates;
+        this.$data.controlstatesNew = [...this.controlstates];
         this.$data.controlstatesExpression =  this.controlstates[0];
       }
       if (isDefined(this.phi)){

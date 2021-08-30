@@ -22,7 +22,8 @@ import {
 } from "./circuitSaveAndRetrieve.js";
 
 import { 
-  arraysAreEqual 
+  arraysAreEqual,
+  zipArrays,
 } from "./javaScriptUtils.js";
 
 import {
@@ -186,7 +187,14 @@ export const circuitEditorModule = {
         } else if (name.includes("ctrl-")) {
           controlstates.push('1');
         }
-                
+
+        // order controls and controlstates by qubit index
+        let controlSettings = zipArrays(controls, controlstates).sort((a, b) => (a[0] > b[0]) ? 1 : -1);
+        for (let i = 0; i < controls.length; i++){
+          controls[i] = controlSettings[i][0];
+          controlstates[i] = controlSettings[i][1];
+        }
+            
         if (step < 0 || qbit < 0 || qbit2 < 0 || controls.some((element) => element < 0)) {
           alert("Negative steps/qubits not permitted!");
         } else if (seatIsTaken(circuitEditorModule.state, qbit, step)) {
