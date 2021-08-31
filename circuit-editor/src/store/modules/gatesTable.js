@@ -101,7 +101,7 @@ export function getNoQbits(circuitState) {
             qbits = Math.max(qbits, parseInt(gate.target2));
           }
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-            qbits = Math.max(qbits, ...JSON.parse("[" + gate.controls + "]"));
+            qbits = Math.max(qbits, ...[...gate.controls]);
           }
         }
       }
@@ -148,7 +148,7 @@ export function measureGatesArePositionedLast(circuitState){
           }
         }
         if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-          let controls = JSON.parse("[" + gate.controls + "]");
+          let controls = [...gate.controls];
           for (let j = 0; j < controls.length; j++){
             if (measureGates.includes(controls[j])) {
               return false;
@@ -161,6 +161,7 @@ export function measureGatesArePositionedLast(circuitState){
   return true;
 }
 
+//TODO: this might not be neeeded anymore
 export function getProximFreeSeat(circuitState, qbit, step) {
   if (!seatIsTaken(circuitState, qbit + 1, step)) {
     return qbit + 1;
@@ -188,7 +189,7 @@ export function positionIsFilled(circuitState, step, qubit) {
               if (gate.target2 == qubit) return true;
             }
             if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-              let controls = JSON.parse("[" + gate.controls + "]");
+              let controls = [...gate.controls];
               for (let j = 0; j < controls.length; j++){
                 if (controls[j] == qubit) return true;
               }
@@ -226,7 +227,7 @@ export function seatIsTaken(circuitState, qbit, step) {
               target2 = parseInt(gate.target2);
             }
             if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-              controls = JSON.parse("[" + gate.controls + "]");
+              controls = [...gate.controls];
             }
 
             // get range of qbits affected when displaying this gate
@@ -271,7 +272,7 @@ export function seatsAreTaken(circuitState, reallocatableQbits, proposedQbits, s
               target2 = parseInt(gate.target2);
             }
             if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-              controls = JSON.parse("[" + gate.controls + "]");
+              controls = [...gate.controls];
             }
             // get range of qbits affected when displaying this gate
             let qbits = [target, target2, ...controls].filter(
@@ -749,7 +750,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             target2 = parseInt(gate.target2);
           }
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-            controls = JSON.parse("[" + gate.controls + "]");
+            controls = [...gate.controls];
             gatesTableRowState.cells[column].controls = controls;
           }
 
@@ -867,7 +868,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             }
           } else if (rowMin < inputRow && inputRow < rowMax) {
             if (controls.includes(rowQbit)){
-              gatesTableRowState.cells[column].img = getCtrlStubMidName(gate, controlstate);
+              gatesTableRowState.cells[column].name = getCtrlStubMidName(gate, controlstate);
             } else {
               let thisRowHoldsGates = rowHoldsGates(inputRow);
               if (!thisRowHoldsGates || (gate.target != rowQbit && gate.target2 != rowQbit))

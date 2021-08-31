@@ -484,8 +484,11 @@ export default {
       }
 
       if (gateName.includes("ctrl-")) {
-        if (!dto["controls"]){
-          dto["controls"] = [];
+        if (!dto["controls"]) dto["controls"] = [];
+        if (!dto["controlstates"]) dto["controlstates"] = ['1'];
+        if (isDefined(originalQbit)){
+          let delta = qbit - originalQbit;
+          dto["controls"] = [...dto["controls"].map(val => val + delta)];
         }
         let success = this.repositionControlledGate(dto, dragOrigin, qbit, step, originalQbit, originalStep, existingQbits);
         if (!success) return;
@@ -508,7 +511,7 @@ export default {
         let dto = { step: originalStep, qbit: originalQbit };
         this.removeGateFromCircuit(dto);
       }
-      
+
       // step2 - add the new gate to the circuit
       this.insertGateInCircuit(dto);
     },
@@ -600,118 +603,6 @@ export default {
         ) {
           alert("Cannot allocate controll qubit!");
           return false;
-        }
-      }
-      return true;
-    },
-    repositionToffoliGate: function (dto, qbit, step, originalQbit, originalStep, existingQbits, originalControl, originalControl2, draggedQbit) {
-
-      if (draggedQbit != null) {
-        if (draggedQbit == originalControl) {
-          dto["control"] = qbit;
-          dto["qbit"] = originalQbit;
-        } else if (draggedQbit == originalControl2) {
-          dto["control2"] = qbit;
-          dto["qbit"] = originalQbit;
-        } else {
-          if (qbit == originalControl) dto["control"] = null;
-          else if (qbit == originalControl2) dto["control2"] = null;
-        }
-      }
-
-      let success = this.placeToffoliGate(
-        dto,
-        qbit,
-        step,
-        originalStep,
-        existingQbits
-      );
-      
-      if (!success){
-        this.handleDragLeave();
-      }
-
-      return success;
-    },
-    placeToffoliGate: function (dto, qbit, step, originalStep, existingQbits) {
-      // If gate was draged from the gate panel than the control bits are not assigned
-      if (dto["control"] == null || dto["control2"] == null) {
-        if (!this.findBestFitForToffoliGate(dto, qbit, step, existingQbits)) {
-          return false;
-        }
-      }
-
-      let proposedQbits = [
-        dto["qbit"],
-        dto["qbit2"],
-        dto["control"],
-        dto["control2"],
-      ].filter((qbit) => isDefined(qbit));
-
-      if (
-        seatsAreTaken(
-          this.$store.state.circuitEditorModule,
-          existingQbits,
-          proposedQbits,
-          step
-        )
-      ) {
-        //  Try to reposition the control bits if necessary in case dragging from one step to another
-        if (step != originalStep) {
-          if (!this.findBestFitForToffoliGate(dto, qbit, step, existingQbits)) {
-            return false;
-          }
-        } else {
-          alert(
-            "At least a gate already exists in the qbits ranging between the proposed target and proposed controls!"
-          );
-          return false;
-        }
-      }
-      return true;
-    },
-    findBestFitForToffoliGate: function (dto, qbit, step, existingQbits) {
-      dto["qbit"] = parseInt(qbit);
-      dto["control"] = dto["qbit"] - 1;
-      dto["control2"] = dto["qbit"] - 2;
-      let proposedQbits = [
-        dto["qbit"],
-        dto["control"],
-        dto["control2"],
-      ].filter((qbit) => isDefined(qbit));
-      if (
-        (dto["control"] < 0) || (dto["control2"] < 0) || seatsAreTaken(
-          this.$store.state.circuitEditorModule,
-          existingQbits,
-          proposedQbits,
-          step
-        )
-      ) {
-        dto["control"] = dto["qbit"] - 1;
-        dto["control2"] = dto["qbit"] + 1;
-        proposedQbits = [
-          dto["qbit"],
-          dto["control"],
-          dto["control2"],
-        ].filter((qbit) => isDefined(qbit));
-        if (
-          (dto["control"] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
-        ) {
-          dto["control"] = dto["qbit"] + 1;
-          dto["control2"] = dto["qbit"] + 2;
-          proposedQbits = [
-          dto["qbit"],
-          dto["control"],
-          dto["control2"],
-        ].filter((qbit) => isDefined(qbit));
-          if (
-            seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
-          ) {
-            alert(
-              "Cannot allocate both two control qubits!"
-            );
-            return false;
-          }
         }
       }
       return true;
@@ -822,125 +713,6 @@ export default {
             );
             return false;
           }
-      }
-      return true;
-    },
-    repositionFredkinGate: function(dto, qbit, step, originalQbit, originalQbit2, originalStep, existingQbits, draggedQbit){
-      if (
-          (draggedQbit == originalQbit2 && qbit == originalQbit) ||
-          (draggedQbit == originalQbit && qbit == originalQbit2)
-        ) {
-        dto["qbit"] = qbit;
-        dto["qbit2"] = null;
-      } else if (draggedQbit != null) {
-        if (draggedQbit == originalQbit) {
-          if (dto["qbit2"] == dto["qbit"]) dto["qbit2"] = null;
-          if (dto["control"] == dto["qbit"]) dto["control"] = null;
-        } else if (draggedQbit == originalQbit2) {
-          dto["qbit2"] = qbit;
-          dto["qbit"] = originalQbit;
-          if (dto["qbit"] == dto["qbit2"]) dto["qbit2"] = null;
-          if (dto["control"] == dto["qbit2"]) dto["control"] = null;
-        } else {
-          dto["control"] = qbit;
-          dto["qbit"] = originalQbit;
-          dto["qbit2"] = originalQbit2;
-        }
-      }
-
-      let success = this.placeFredkinGate(
-        dto,
-        qbit,
-        step,
-        originalStep,
-        existingQbits
-      );
-
-      if (!success){
-        this.handleDragLeave();
-      }
-
-      return success;
-    },
-    placeFredkinGate: function (dto, qbit, step, originalStep, existingQbits) {
-      // If gate was draged from the gate panel than the control bits are not assigned
-      if (dto["qbit2"] == null || dto["control"] == null) {
-        if (!this.findBestFitForFredkinGate(dto, qbit, step, existingQbits)) {
-          return false;
-        }
-      }
-
-      let proposedQbits = [
-        dto["qbit"],
-        dto["qbit2"],
-        dto["control"],
-      ].filter((qbit) => isDefined(qbit));
-
-      if (
-        seatsAreTaken(
-          this.$store.state.circuitEditorModule,
-          existingQbits,
-          proposedQbits,
-          step
-        )
-      ) {
-        //  Try to reposition the control bits if necessary in case dragging from one step to another
-        if (step != originalStep) {
-          if (!this.findBestFitForFredkinGate(dto, qbit, step, existingQbits)) {
-            return false;
-          }
-        } else {
-          alert(
-            "At least a gate already exists in the qbits ranging between the proposed target and controls!"
-          );
-          return false;
-        }
-      }
-      return true;
-    },
-    findBestFitForFredkinGate: function (dto, qbit, step, existingQbits) {
-      dto["qbit"] = parseInt(qbit);
-      dto["qbit2"] = dto["qbit"] - 1;
-      dto["control"] = dto["qbit"] - 2;
-      let proposedQbits = [
-        dto["qbit"],
-        dto["qbit2"],
-        dto["control"],
-      ].filter((qbit) => isDefined(qbit));
-      if (
-        (dto["qbit2"] < 0) || (dto["control"] < 0) || seatsAreTaken(
-          this.$store.state.circuitEditorModule,
-          existingQbits,
-          proposedQbits,
-          step
-        )
-      ) {
-        dto["qbit2"] = dto["qbit"] + 1;
-        dto["control"] = dto["qbit"] - 1;
-        proposedQbits = [
-          dto["qbit"],
-          dto["qbit2"],
-          dto["control"],
-        ].filter((qbit) => isDefined(qbit));
-        if (
-          (dto["control"] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
-        ) {
-          dto["qbit2"] = dto["qbit"] + 1;
-          dto["control"] = dto["qbit"] + 2;
-          proposedQbits = [ 
-          dto["qbit"],
-          dto["qbit2"],
-          dto["control"],
-        ].filter((qbit) => isDefined(qbit));
-          if (
-            seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
-          ) {
-            alert(
-              "Cannot allocate both the control and the target bit!"
-            );
-            return false;
-          }
-        }
       }
       return true;
     },

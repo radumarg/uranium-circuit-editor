@@ -6,7 +6,6 @@ import {
   seatsInArrayAreAlreadyTaken,
   proposedNewSeatsOverlap,
   proposedNewGatesAreInvalid,
-  getProximFreeSeat,
   positionIsFilled,
 } from "./gatesTable.js";
 
@@ -89,7 +88,7 @@ export const circuitEditorModule = {
                 maxQbit = Math.max(maxQbit, gate.target2);
               }
               if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-                let controls = JSON.parse("[" + gate.controls + "]");
+                let controls = [...gate.controls];
                 maxQbit = Math.max(maxQbit, ...controls);
               }
             } 
@@ -154,39 +153,20 @@ export const circuitEditorModule = {
         let step = dataTransferObj["step"];
         let qbit = dataTransferObj["qbit"];
         
-        // assign qbit2 (target2 qbit) if not assigned and this is a two target qubits gate (swap, ising, phaseshisft, etc.)
         let qbit2 = null;
         if (Object.prototype.hasOwnProperty.call(dataTransferObj, "qbit2")) {
           qbit2 = dataTransferObj["qbit2"];
-        } else if ((isingGates.includes(name)
-                    || controlledIsingGates.includes(name) 
-                    || swapGates.includes(name) 
-                    || controlledSwapGates.includes(name)
-                    || parametricSwapGates.includes(name) 
-                    || controlledParametricSwapGates.includes(name) 
-                  )) {
-          qbit2 = getProximFreeSeat(circuitEditorModule.state, qbit, step);
-        }
+        } 
 
-        // assign control qbit if not assigned and this is a control gate
         let controls = [];
         if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controls")) {
           controls = [...dataTransferObj["controls"]];
-        } else if (name.includes("ctrl-")) {
-          let control = getProximFreeSeat(circuitEditorModule.state, qbit, step);
-          if ((control == null) && (qbit2 != null)){
-            control = getProximFreeSeat(circuitEditorModule.state, qbit2, step);
-          }
-          if (control != null) controls.push(control);
-        }
+        } 
 
-        // add optional params, in case they exist and this is a control gate
         let controlstates = []
         if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controlstates")) {
           controlstates = [...dataTransferObj["controlstates"]];
-        } else if (name.includes("ctrl-")) {
-          controlstates.push('1');
-        }
+        } 
 
         // order controls and controlstates by qubit index
         let controlSettings = zipArrays(controls, controlstates).sort((a, b) => (a[0] > b[0]) ? 1 : -1);
@@ -618,8 +598,7 @@ export const circuitEditorModule = {
                 }
               }
               if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-                //TODO: needed? also in gates table
-                let controls = JSON.parse("[" + gate.controls + "]");
+                let controls = [...gate.controls];
                 for (let k = 0; k < controls.length; k++){
                   if (controls[k] >= qbit) {
                     controls[k] += 1;

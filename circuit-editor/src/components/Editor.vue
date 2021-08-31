@@ -212,9 +212,6 @@
             <div v-else-if="cell.name === 'fredkin-control-middle'">
               <FredkinGateControlMiddle :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
-            <div v-else-if="cell.name === 'toffoli-2nd-control-1' || cell.name === 'toffoli-2nd-control-0'">
-              <Toffoli2NdControlGate :id="cell.id" :qbit="cell.qbit" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :key="cell.key"/>
-            </div>
             <div v-else-if="cell.name === 'xx' || cell.name === 'yy' || cell.name === 'zz'">
               <IsingGate :id="cell.id" :qbit="cell.qbit" :qbit2="cell.qbit2" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>  
@@ -259,7 +256,6 @@ import GateSwapVariant from "./GateSwapVariant";
 import ParametricGateSwap from "./ParametricGateSwap";
 import IsingGate from "./IsingGate";
 import SwapCircle from "./SwapCircle";
-import Toffoli2NdControlGate from "./Toffoli2NdControlGate";
 import FredkinGateControlStubUp from "./FredkinGateControlStubUp";
 import FredkinGateControlStubDown from "./FredkinGateControlStubDown";
 import FredkinGateControlMiddle from "./FredkinGateControlMiddle";
@@ -296,7 +292,6 @@ export default {
     ParametricGateSwap,
     IsingGate,
     SwapCircle,
-    Toffoli2NdControlGate,
     FredkinGateControlStubUp,
     FredkinGateControlStubDown,
     FredkinGateControlMiddle,
