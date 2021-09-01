@@ -27,37 +27,37 @@
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'pauli-line-long'">
-              <VerticalTransitionCellLong :id="cell.id" :step="cell.step" :qbit="cell.qbit" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :step="cell.step" :qrow="cell.qrow" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'pauli-root-line-long'">
-              <VerticalTransitionCellLong :id="cell.id" :step="cell.step" :qbit="cell.qbit" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :step="cell.step" :qrow="cell.qrow" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'toffoli-line-long'">
-              <VerticalTransitionCellLongToffoli :id="cell.id" :step="cell.step" :qbit="cell.qbit" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLongToffoli :id="cell.id" :step="cell.step" :qrow="cell.qrow" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'r-line-short'">
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'r-line-long'">
-              <VerticalTransitionCellLong :id="cell.id" :step="cell.step" :qbit="cell.qbit" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :step="cell.step" :qrow="cell.qrow" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'st-line-short'">
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'st-line-long'">
-              <VerticalTransitionCellLong :id="cell.id" :step="cell.step" :qbit="cell.qbit" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :step="cell.step" :qrow="cell.qrow" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'hadamard-line-short'">
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'hadamard-line-long'">
-              <VerticalTransitionCellLong :id="cell.id" :step="cell.step" :qbit="cell.qbit" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :step="cell.step" :qrow="cell.qrow" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'u-line-short'">
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'u-line-long'">
-              <VerticalTransitionCellLong :id="cell.id" :step="cell.step" :qbit="cell.qbit" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'swap-circle-small'" :key="cell.key">
               <SwapCircle />
@@ -66,19 +66,19 @@
               <VerticalTransitionCellShort :name="cell.name" />
             </div>
             <div v-else-if="cell.name === 'swap-line-long'">
-              <VerticalTransitionCellLongSwap :id="cell.id" :step="cell.step" :qbit="cell.qbit" :qbit2="cell.qbit2" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLongSwap :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'fredkin-line-long'">
-              <VerticalTransitionCellLongFredkin :id="cell.id" :step="cell.step" :qbit="cell.qbit" :qbit2="cell.qbit2" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLongFredkin :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
              <div v-else-if="cell.name === 'ising-line-short'" :key="cell.key">
               <VerticalTransitionCellShort :name="cell.name" />
             </div>
             <div v-else-if="cell.name === 'ising-line-long'">
-              <VerticalTransitionCellLongIsing :id="cell.id" :step="cell.step" :qbit="cell.qbit" :qbit2="cell.qbit2" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLongIsing :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'empty-cell'">
-              <EmptyCell :id="cell.id" :qbit="cell.qbit" :step="cell.step"/>
+              <EmptyCell :id="cell.id" :qrow="cell.qrow" :step="cell.step"/>
             </div>
             <div v-else-if="cell.name === 'zero-state'">
               <ZeroState :title="cell.tooltip" />

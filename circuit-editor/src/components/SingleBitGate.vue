@@ -343,7 +343,7 @@ export default {
          alert("Please increase the number qbits in the circuit first.");
         return;
       }
-      this.insertQbitInCircuit(this.qbit);
+      this.insertQbitInCircuit(this.qrow);
     },
     expandCircuitDown: function(){
       if (window.gatesTable.rows/2 == this.getMaximumQbitIndex() + 1 ){

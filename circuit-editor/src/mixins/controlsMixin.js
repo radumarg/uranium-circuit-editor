@@ -154,6 +154,10 @@ export const controlsMixin = {
         let lastControl = this.controlsNew[this.controlsNew.length - 1];
         for (let i = 0; i < this.numberOfControls - this.controlsNew.length; i++){
           lastControl++;
+          while (lastControl == this.$data.qbitNew 
+            || lastControl == this.$data.qbit2New) {
+            lastControl++;
+          }
           this.controlsNew.push(lastControl);
           this.controlstatesNew.push('1');
         }

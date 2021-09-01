@@ -17,7 +17,7 @@ export default {
       let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       let gateName = event.dataTransfer.getData("gateName");
       let step = parseInt(event.currentTarget.getAttribute("step"));
-      let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
+      let qbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let dropQbit = this.id.split('_').shift();
    
       if (originalStep == null || step != originalStep || qbit != originalQbit) {

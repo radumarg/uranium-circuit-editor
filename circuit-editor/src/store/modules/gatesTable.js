@@ -11,12 +11,14 @@ class GatesTableCell {
     this.height = 0;
     /* cell width */
     this.width = 0;
-    /* the qbit where this active gate is applied */
-    this.qbit = null;
-    /* 2nd qbit where this active gate is applied (swap gates) */
-    this.qbit2 = null;
     /* the step where this active gate is applied */
     this.step = null;
+    /* the qbit associated to current row (null in case row does not hold gates) */
+    this.qrow = 0;
+    /* the qbit associated with gate present on this cell */
+    this.qbit = null;
+    /* 2nd qbit associated with gate present on this cell if this is a multiple target qubit gate (e.g. swap, ising) */
+    this.qbit2 = null;
     /* name of Vue component displayed by this cell. For example for a controlled
     gate we have one component used to render target qubit and another component
     used to render the controll qubit*/
@@ -42,8 +44,6 @@ class GatesTableCell {
     this.id = "";
     /* controls qbits for a controlled gate */
     this.controls = [];
-    /* the qbit associated to current row (null in case row does not hold gates) */
-    this.qrow = 0;
     /* For controlled gates this indicates the control states defined as +/-1 along Z axis in computational basis.*/
     this.controlstates = [];
     /* control qbit for a controlled gate control stub Vue component */
@@ -670,12 +670,12 @@ function setupEmptyCells(gatesTableRowState, inputRow) {
   // set default settings assuming all cells they are empty and hold no gates
   for (let column = 0; column < window.gatesTable.columns; column++) {
     if (rowHoldsGates(inputRow))
-      gatesTableRowState.cells[column].qbit = getQbitFromRow(inputRow);
+      gatesTableRowState.cells[column].qrow = getQbitFromRow(inputRow);
     if (columnHoldsGate(column))
       gatesTableRowState.cells[column].step = gateStepFromColumn(column);
 
     if (rowHoldsGates(inputRow) && columnHoldsGate(column)) {
-      gatesTableRowState.cells[column].id = gatesTableRowState.cells[column].qbit + "_" + gatesTableRowState.cells[column].step;
+      gatesTableRowState.cells[column].id = gatesTableRowState.cells[column].qrow + "_" + gatesTableRowState.cells[column].step;
     }
 
     if (column === 0) {
@@ -745,9 +745,11 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
 
           if (Object.prototype.hasOwnProperty.call(gate, "target")) {
             target = parseInt(gate.target);
+            gatesTableRowState.cells[column].qbit = target;
           }
           if (Object.prototype.hasOwnProperty.call(gate, "target2")) {
             target2 = parseInt(gate.target2);
+            gatesTableRowState.cells[column].qbit2 = target2;
           }
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
             controls = [...gate.controls];
@@ -768,7 +770,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           if (!((rowMin <= inputRow) && (inputRow <= rowMax))) {
             continue;
           }
-          
+
           // this is the name of the gate
           gatesTableRowState.cells[column].gate = gate.name;
 
@@ -832,10 +834,6 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             continue;
           }
 
-          if (rowHoldsGates(inputRow)) {
-            gatesTableRowState.cells[column].qrow = getQbitFromRow(inputRow);
-          }
-
           let controlstate = null;
           let rowQbit = getQbitFromRow(inputRow);
           if (controls.includes(rowQbit)){
@@ -851,8 +849,6 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           if (rowMin == inputRow) {
             if (controls.includes(qmin)){
               gatesTableRowState.cells[column].name = getCtrlStubUpName(gate, controlstate);
-              gatesTableRowState.cells[column].qbit = target;
-              gatesTableRowState.cells[column].qbit2 = target2;
             } else {
               if (isingGates.includes(gate.name)){
                 if (gate.name == "xx"){
@@ -889,8 +885,6 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           } else if (rowMax == inputRow) {
             if (controls.includes(qmax)){
               gatesTableRowState.cells[column].name = getCtrlStubDownName(gate, controlstate);
-              gatesTableRowState.cells[column].qbit = target;
-              gatesTableRowState.cells[column].qbit2 = target2;
             } else {
               if (isingGates.includes(gate.name)){
                 if (gate.name == "xx"){

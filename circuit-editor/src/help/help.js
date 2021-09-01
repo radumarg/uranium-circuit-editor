@@ -8,7 +8,7 @@ export function retriveHelpHtml(gateName) {
     } else if (gateName == "u1") {
         return 'This is a generic, one parameter, unitary single bit gate and is defined as: u3(0, 0, λ). The "u1" gate acts on a single qubit. Leaves the basis state |0⟩ unchanged and map |1⟩ to exp(i*λ)|1⟩. The probability of measuring a |0⟩ or |1⟩ is unchanged after applying this gate, however it modifies the phase of the quantum state. The z, s and t gates are special cases of "u1" for λ values given by π, π/2 and π/4 respectively.'
     } else if (gateName == "hadamard") {
-        return 'The "hadamard" gate acts on a single qubit and is defined as: u2(0, π). This gate creates a superposition by mapping |0⟩ to |+⟩ and |1⟩ to |-⟩. It is the combination of two rotations, first a π rotation about the Z-axis of the Bloch sphere followed by a π/2 about the Y-axis. Alternatively, it can be represented as a π rotation around an axis diagonal in the X-Y plane. The Hadamard gate is the one-qubit version of the quantum Fourier transform.';
+        return 'The "hadamard" gate acts on a single qubit and is defined as: u2(0, π). This gate creates a superposition by mapping |0⟩ to |+⟩ and |1⟩ to |-⟩. It is the combination of two rotations, first a π rotation about the Z-axis of the Bloch sphere followed by a π/2 about the Y-axis. Alternatively, it can be represented as a π rotation around an axis diagonal in the X-Z plane. The Hadamard gate is the one-qubit version of the quantum Fourier transform.';
     } else if (gateName == "identity") {
         return 'The "identity" gate acts on a single qubit and preserves current state of the qubit it is applied to.';
     } else if (gateName == "pauli-x") {

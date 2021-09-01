@@ -1,7 +1,7 @@
 <template>
   <div
     :step="step"
-    :qbit="qbit"
+    :qrow="qrow"
     @dragover.prevent
     @drop.prevent="handleDropEvent"
     @dragover="handleDragOver"
@@ -203,7 +203,7 @@ export default {
   name: "EmptyCell",
   props: {
     step: Number,
-    qbit: Number,
+    qrow: Number,
     id: String,
   },
   data() {
@@ -232,7 +232,7 @@ export default {
     ]),
     selectIfCtrlDown: function (event) {
       if (event.ctrlKey) {
-        handleSelectEvent(this.qbit, this.step);
+        handleSelectEvent(this.qrow, this.step);
       }
     },
     showModal: function () {
@@ -296,17 +296,17 @@ export default {
         alert("Please increase the number qbits in the circuit first.");
         return;
       }
-      this.insertQbitInCircuit(this.qbit);
+      this.insertQbitInCircuit(this.qrow);
     },
     expandCircuitDown: function () {
       if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex() + 1) {
         alert("Please increase the number qbits in the circuit first.");
         return;
       }
-      this.insertQbitInCircuit(this.qbit + 1);
+      this.insertQbitInCircuit(this.qrow + 1);
     },
     removeQbit: function () {
-      let dto = { qbit: this.qbit };
+      let dto = { qbit: this.qrow };
       this.removeQbitFromCircuit(dto);
       this.$refs["modal-dialog"].hide();
     },
@@ -341,7 +341,7 @@ export default {
         draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       }
       
-      let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
+      let qbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let qbitDelta = draggedQbit - qbit;
       let step = parseInt(event.currentTarget.getAttribute("step"));
       let gateName = event.dataTransfer.getData("gateName");
@@ -414,7 +414,8 @@ export default {
       this.insertGateInCircuit(dto);
     },
     removeDraggedGateAndAddNewGateToCircuit: function (event) {
-      let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
+      let success = true;
+      let qbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let step = parseInt(event.currentTarget.getAttribute("step"));
       let gateName = event.dataTransfer.getData("gateName");
       let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
@@ -473,55 +474,74 @@ export default {
 
       // In case the drag event was initiated from a controlled gate stub
       if (step != originalStep) {
-        if (dragOrigin == "stub") {
-          alert(
-            "The control qbit must be positioned in the same row with target qbit!"
-          );
-          this.handleDragLeave();
-          return;
-        }
         existingQbits = [];
+        if (dragOrigin == "stub") {
+          alert("The control qbit must be positioned in the same row with target qbit!");
+          success = false;
+        }
       }
 
-      if (gateName.includes("ctrl-")) {
-        if (!dto["controls"]) dto["controls"] = [];
-        if (!dto["controlstates"]) dto["controlstates"] = ['1'];
-        if (isDefined(originalQbit)){
-          let delta = qbit - originalQbit;
-          dto["controls"] = [...dto["controls"].map(val => val + delta)];
+      if (success){
+        if (gateName.includes("ctrl-")) {
+
+          if (!dto["controls"]) {
+            dto["controls"] = [];
+          }
+          if (!dto["controlstates"]) {
+            dto["controlstates"] = ['1'];
+          }
+          if (dragOrigin != "stub"){
+            let delta = qbit - originalQbit;
+            dto["controls"] = originalControls.map(val => val + delta).filter(val => val >= 0);
+          } else {
+            dto["controls"] = dto["controls"].map(function(item) { return item == draggedQbit ? qbit : item; });
+          }
+          success = this.repositionControlledGate(dto, qbit, step, originalStep, existingQbits);          
+
+        } else if (
+          gateName.includes("swap") ||
+          gateName == "xx" ||
+          gateName == "yy" ||
+          gateName == "zz"
+        ) {
+
+          if (
+            (draggedQbit == originalQbit2 && qbit == originalQbit) ||
+            (draggedQbit == originalQbit && qbit == originalQbit2)
+          ) {
+              dto["qbit2"] = null;
+          } else if (draggedQbit != null) {
+            if (draggedQbit == originalQbit) {
+              dto["qbit2"] = originalQbit2;
+            } else if (draggedQbit == originalQbit2) {
+              dto["qbit"] = originalQbit;
+              dto["qbit2"] = qbit;
+            }
+          } 
+          success = this.repositionTwoTargetQubitsGate(dto, qbit, step, originalStep, existingQbits);
+
         }
-        let success = this.repositionControlledGate(dto, dragOrigin, qbit, step, originalQbit, originalStep, existingQbits);
-        if (!success) return;
-      } else if (
-        gateName.includes("swap") ||
-        gateName == "xx" ||
-        gateName == "yy" ||
-        gateName == "zz"
-      ) {
-        let success = this.repositionTwoTargetQubitsGate(dto, qbit, step, originalQbit, originalQbit2, originalStep, existingQbits, draggedQbit);
-        if (!success) return;
       }
       
-      // At this point all qbits have been asigned value, will
-      // start by removing the old gate and then will insert a new one
+      if (success) {
+        // At this point all qbits have been asigned value, will
+        // start by removing the old gate and then will insert a new one
 
-      // step1 - remove original gate if drag event started from a cell
-      // in editor (not originating from gates pallete)
-      if (isDefined(originalQbit) && isDefined(originalStep)) {
-        let dto = { step: originalStep, qbit: originalQbit };
-        this.removeGateFromCircuit(dto);
+        // step1 - remove original gate if drag event started from a cell
+        // in editor (not originating from gates pallete)
+        if (isDefined(originalQbit) && isDefined(originalStep)) {
+          let dto = { step: originalStep, qbit: originalQbit };
+          this.removeGateFromCircuit(dto);
+        }
+
+        // step2 - add the new gate to the circuit
+        this.insertGateInCircuit(dto);
+      } else {
+        // remove red line shown on mouse over event
+        this.handleDragLeave();
       }
-
-      // step2 - add the new gate to the circuit
-      this.insertGateInCircuit(dto);
     },
-    placeControlledGate: function (
-      dto,
-      qbit,
-      step,
-      originalStep,
-      existingQbits
-    ) {
+    repositionControlledGate: function (dto, qbit, step, originalStep, existingQbits) {
       // If this was a controlled gate and was draged from the gate panel than the control bit is not assigned
       if (dto["controls"].length == 0) {
         if (!this.findBestFitForControlledGate(dto, qbit, step, existingQbits)) {
@@ -549,37 +569,11 @@ export default {
             return false;
           }
         } else {
-          alert(
-            "At least a gate already exists in the qbits ranging between the proposed target and proposed control!"
-          );
+          alert("At least a gate already exists in the qbits ranging between the proposed target and proposed control!");
           return false;
         }
       }
       return true;
-    },
-    repositionControlledGate: function (dto, dragOrigin, qbit, step, originalQbit, originalStep, existingQbits) {
-      
-      //TODO: fix
-      if (dragOrigin == "stub") {
-        dto["qbit"] = originalQbit;
-        dto["control"] = qbit;
-      } else {
-        if (dto["control"] == dto["qbit"]) dto["control"] = null;
-      }
-      
-      let success = this.placeControlledGate(
-        dto,
-        qbit,
-        step,
-        originalStep,
-        existingQbits
-      );
-
-      if (!success){
-        this.handleDragLeave();
-      }
-
-      return success;
     },
     findBestFitForControlledGate: function (dto, qbit, step, existingQbits) {
       // TODO:fix
@@ -607,47 +601,7 @@ export default {
       }
       return true;
     },
-    repositionTwoTargetQubitsGate: function(dto, qbit, step, originalQbit, originalQbit2, originalStep, existingQbits, draggedQbit){
-
-      if (
-        (draggedQbit == originalQbit2 && qbit == originalQbit) ||
-        (draggedQbit == originalQbit && qbit == originalQbit2)
-      ) {
-          dto["qbit"] = qbit;
-          dto["qbit2"] = null;
-      } else if (draggedQbit != null) {
-        if (draggedQbit == originalQbit) {
-          dto["qbit"] = qbit;
-          dto["qbit2"] = originalQbit2;
-        } else if (draggedQbit == originalQbit2) {
-          dto["qbit"] = originalQbit;
-          dto["qbit2"] = qbit;
-        }
-      } else {
-        dto["qbit"] = qbit;
-      }
-
-      let success = this.placeTwoTargetQubitsGate(
-        dto,
-        qbit,
-        step,
-        originalStep,
-        existingQbits
-      );
-
-      if (!success){
-        this.handleDragLeave();
-      }
-      
-      return success;
-    },
-    placeTwoTargetQubitsGate: function (
-      dto,
-      qbit,
-      step,
-      originalStep,
-      existingQbits
-    ) {
+    repositionTwoTargetQubitsGate: function(dto, qbit, step, originalStep, existingQbits){
       if (dto["qbit2"] == null) {
         if (!this.findBestFitForTwoTargetQubitsGate(dto, qbit, step, existingQbits)) {
           return false;
