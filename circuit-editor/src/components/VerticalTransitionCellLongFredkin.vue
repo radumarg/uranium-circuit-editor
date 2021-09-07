@@ -1,5 +1,5 @@
 <template>
-   <div :step="step" :qrow="row" @dragover.prevent @drop.prevent="handleDropEvent" @dragover="handleDragOver" @dragleave="handleDragLeave">
+   <div :step="step" :qrow="qrow" :qbit="qbit" @dragover.prevent @drop.prevent="handleDropEvent" @dragover="handleDragOver" @dragleave="handleDragLeave">
     <img :src="gateImageSource" :id="id" draggable="false" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;" />
   </div>
 </template>
@@ -13,6 +13,7 @@ export default {
     step: Number,
     qbit: Number,
     qbit2: Number,
+    qrow: Number,
     id: String,
   },
   computed: {
@@ -44,8 +45,8 @@ export default {
       let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       let gateName = event.dataTransfer.getData("gateName");
       let step = parseInt(event.currentTarget.getAttribute("step"));
-      let qbit = parseInt(event.currentTarget.getAttribute("qrow"));
-      let dropQbit = this.id.split('_').shift();
+      let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
+      let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
   
       if (originalStep == null || step != originalStep || qbit != originalQbit) {
         this.handleDragLeave();

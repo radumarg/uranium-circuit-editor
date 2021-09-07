@@ -745,15 +745,12 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
 
           if (Object.prototype.hasOwnProperty.call(gate, "target")) {
             target = parseInt(gate.target);
-            gatesTableRowState.cells[column].qbit = target;
           }
           if (Object.prototype.hasOwnProperty.call(gate, "target2")) {
             target2 = parseInt(gate.target2);
-            gatesTableRowState.cells[column].qbit2 = target2;
           }
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
             controls = [...gate.controls];
-            gatesTableRowState.cells[column].controls = controls;
           }
 
           // get range of qbits affected when displaying this gate
@@ -767,9 +764,13 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           let rowMax = getRowFromQbit(Math.max(...qbits));
 
           // test if this gate impacts current row
-          if (!((rowMin <= inputRow) && (inputRow <= rowMax))) {
+          if ((inputRow < rowMin) || (inputRow > rowMax)) {
             continue;
           }
+
+          gatesTableRowState.cells[column].qbit = target;
+          gatesTableRowState.cells[column].qbit2 = target2;
+          gatesTableRowState.cells[column].controls = controls;
 
           // this is the name of the gate
           gatesTableRowState.cells[column].gate = gate.name;

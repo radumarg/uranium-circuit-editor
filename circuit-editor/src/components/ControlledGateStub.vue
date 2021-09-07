@@ -139,9 +139,9 @@ export default {
         'name': this.gate,
         'step': this.step, 
         'qbit': this.qbit, 
-        'controls': this.controls,
+        'controls': [...this.controls],
         'qbitNew': this.qbit,
-        'controlsNew': this.controls,
+        'controlsNew': [...this.controls],
         'controlstatesNew': controlStatesNew,
       }
       if (isDefined(this.qbit2)) {
@@ -175,17 +175,19 @@ export default {
       if (this.controls.length == 1){
         alert("Cannot delete last control!");
       } else {
+        let controlStatesNew = [...this.controlstates]
+        let controlsNew = [...this.controls];
         let controlIndex = this.controls.indexOf(this.control);
-        let controlStatesNew = [...this.controlstates].splice(controlIndex, 1);
-        let controlsNew = [...this.controls].splice(controlIndex, 1);
+        controlStatesNew.splice(controlIndex, 1);
+        controlsNew.splice(controlIndex, 1);
         let dto = {
           'name': this.gate,
           'step': this.step, 
           'qbit': this.qbit, 
-          'controls': this.controls,
+          'controls': [...this.controls],
           'qbitNew': this.qbit,
-          'controlsNew': controlsNew,
-          'controlstatesNew': controlStatesNew,
+          'controlsNew': [...controlsNew],
+          'controlstatesNew': [...controlStatesNew],
         }
         if (isDefined(this.qbit2)) {
           dto['qbit2'] = this.qbit2;
@@ -247,8 +249,8 @@ export default {
       event.dataTransfer.setData("gateName", this.gate);
       event.dataTransfer.setData("originalQbit", this.qbit);
       event.dataTransfer.setData("originalStep", this.step);
-      event.dataTransfer.setData("originalControls", this.controls);
-      event.dataTransfer.setData("controlstates", this.controlstates);
+      event.dataTransfer.setData("originalControls", [...this.controls]);
+      event.dataTransfer.setData("controlstates", [...this.controlstates]);
       if (isDefined(this.qbit2)){
         event.dataTransfer.setData("originalQbit2", this.qbit2);
       }

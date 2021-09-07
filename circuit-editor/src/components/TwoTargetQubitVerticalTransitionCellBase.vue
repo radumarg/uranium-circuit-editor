@@ -4,6 +4,7 @@ export default {
   name: "TwoTargetQubitVerticalTransitionCellBase",
   props: {
     step: Number,
+    qrow: Number,
     qbit: Number,
     qbit2: Number,
     id: String,
@@ -17,8 +18,8 @@ export default {
       let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       let gateName = event.dataTransfer.getData("gateName");
       let step = parseInt(event.currentTarget.getAttribute("step"));
-      let qbit = parseInt(event.currentTarget.getAttribute("qrow"));
-      let dropQbit = this.id.split('_').shift();
+      let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
+      let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
    
       if (originalStep == null || step != originalStep || qbit != originalQbit) {
         this.handleDragLeave();

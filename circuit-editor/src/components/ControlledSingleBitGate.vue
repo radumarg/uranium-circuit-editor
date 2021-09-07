@@ -309,7 +309,7 @@ export default {
   mixins: [controlsMixin],
   data() {
     return {
-      controlsNew: this.controls,
+      controlsNew: [...this.controls],
       controlsExpression: this.controls[0],
       controlstatesExpression: this.controlstates[0],
     }
@@ -340,7 +340,7 @@ export default {
         'step': this.step, 
         'qbit': this.qbit, 
         'name': this.name,
-        'controls': this.controls, 
+        'controls': [...this.controls], 
         'qbitNew': this.$data.qbitNew, 
         'controlsNew': this.$data.controlsNew,
         'controlstatesNew': this.$data.controlstatesNew,
@@ -390,8 +390,8 @@ export default {
       event.dataTransfer.setData("dragged-qbit", this.qrow);
       event.dataTransfer.setData("originalQbit", this.qbit);
       event.dataTransfer.setData("originalStep", this.step);
-      event.dataTransfer.setData("originalControls", this.controls);
-      event.dataTransfer.setData("controlstates", this.controlstates);
+      event.dataTransfer.setData("originalControls", [...this.controls]);
+      event.dataTransfer.setData("controlstates", [...this.controlstates]);
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
     },
