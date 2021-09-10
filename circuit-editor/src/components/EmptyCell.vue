@@ -437,7 +437,6 @@ export default {
       if (
         seatsAreTaken(
           this.$store.state.circuitEditorModule,
-          null,
           proposedQbits,
           step
         )
@@ -601,9 +600,9 @@ export default {
       if (
         seatsAreTaken(
           this.$store.state.circuitEditorModule,
-          existingQbits,
           proposedQbits,
-          step
+          step,
+          existingQbits,
         )
       ) {
         if (step != originalStep) {
@@ -627,7 +626,7 @@ export default {
         ...dto["controls"],
       ].filter((qbit) => isDefined(qbit));
       if (
-        (dto["controls"][0] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
+        (dto["controls"][0] < 0) || seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)
       ) {
         // TODO:fix
         dto["controls"] = [parseInt(qbit) + 1];
@@ -636,7 +635,7 @@ export default {
           dto["qbit2"],
           ...dto["controls"],
         ].filter((qbit) => isDefined(qbit));
-        if (seatsAreTaken(this.$store.state.circuitEditorModule, existingQbits, proposedQbits, step)
+        if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)
         ) {
           alert("Cannot allocate controll qubit!");
           return false;
@@ -659,9 +658,9 @@ export default {
       if (
         seatsAreTaken(
           this.$store.state.circuitEditorModule,
-          existingQbits,
           proposedQbits,
-          step
+          step,
+          existingQbits
         )
       ) {
         //  Try to reposition the target bits if necessary in case dragging from one step to another
@@ -686,9 +685,9 @@ export default {
       if (
         seatsAreTaken(
           this.$store.state.circuitEditorModule,
-          existingQbits,
           proposedQbits,
-          step
+          step,
+          existingQbits
         )
       ) {
           dto["qbit2"] = dto["qbit"] - 1;
@@ -700,9 +699,9 @@ export default {
           if (
             seatsAreTaken(
               this.$store.state.circuitEditorModule,
-              existingQbits,
               proposedQbits,
-              step
+              step,
+              existingQbits
             )
           ) {
             alert(

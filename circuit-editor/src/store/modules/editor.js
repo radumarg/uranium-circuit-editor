@@ -1,11 +1,8 @@
 import {
   computeGatesTableCells,
   retrieveRowsInGatesTable,
-  seatIsTaken,
   seatsAreTaken,
   seatsInArrayAreAlreadyTaken,
-  proposedNewSeatsOverlap,
-  proposedNewGatesAreInvalid,
   positionIsFilled,
 } from "./gatesTable.js";
 
@@ -14,6 +11,8 @@ import {
   interpolateJavaScriptExpression,
   isDefined,
   removingGateFromCircuit,
+  proposedNewGatesAreInvalid,
+  proposedNewSeatsOverlap,
 } from "./editorHelper.js";
 
 import {
@@ -23,6 +22,7 @@ import {
 import { 
   arraysAreEqual,
   zipArrays,
+  getUniqueValues
 } from "./javaScriptUtils.js";
 
 import {
@@ -83,12 +83,12 @@ export const circuitEditorModule = {
             let gates = step["gates"];
             for (let j = 0; j < gates.length; j++) {
               let gate = gates[j];
-              maxQbit = Math.max(maxQbit, gate.target);
-              if (Object.prototype.hasOwnProperty.call(gate, "target2")) {
-                maxQbit = Math.max(maxQbit, gate.target2);
+              if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+                let targets = gate.targets;
+                maxQbit = Math.max(maxQbit, ...targets);
               }
               if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-                let controls = [...gate.controls];
+                let controls = gate.controls;
                 maxQbit = Math.max(maxQbit, ...controls);
               }
             } 
@@ -107,7 +107,7 @@ export const circuitEditorModule = {
       for (let s = 0; s < availableSteps; s++){
         for (let q = 0; q < availableQubits; q++){
           if (!positionIsFilled(circuitEditorModule.state, s, q)){
-            let dto = {"step":s, "qbit": q, "name": "identity"};
+            let dto = {"step":s, "qbits": [q], "name": "identity"};
             this.commit("circuitEditorModule/insertGateNoTrack", dto);
             this.commit("circuitEditorModule/removeGateNoTrack", dto);
             return;
@@ -151,12 +151,11 @@ export const circuitEditorModule = {
         
         let name = dataTransferObj["name"];
         let step = dataTransferObj["step"];
-        let qbit = dataTransferObj["qbit"];
         
-        let qbit2 = null;
-        if (Object.prototype.hasOwnProperty.call(dataTransferObj, "qbit2")) {
-          qbit2 = dataTransferObj["qbit2"];
-        } 
+        let qbits = [];
+        if (Object.prototype.hasOwnProperty.call(dataTransferObj, "targets")) {
+          qbits = [...dataTransferObj["targets"]];
+        }
 
         let controls = [];
         if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controls")) {
@@ -175,50 +174,50 @@ export const circuitEditorModule = {
           controlstates[i] = controlSettings[i][1];
         }
             
-        if (step < 0 || qbit < 0 || qbit2 < 0 || controls.some((element) => element < 0)) {
+        if (step < 0 || qbits.some((element) => element < 0) || controls.some((element) => element < 0)) {
           alert("Negative steps/qubits not permitted!");
-        } else if (seatIsTaken(circuitEditorModule.state, qbit, step)) {
+        } else if (seatsAreTaken(circuitEditorModule.state, qbits, step)) {
           alert("A gate already exists at this location!");
         } else {
           let dto = {};
           if (singleBitGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name };
+            dto = { "step": step, "qbits": qbits, "name": name };
           } else if (parametricSingleBitGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name, "theta": 0 };
+            dto = { "step": step, "qbits": qbits, "name": name, "theta": 0 };
           } else if (pauliRootGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name, "root": "1/1" };
+            dto = { "step": step, "qbits": qbits, "name": name, "root": "1/1" };
           } else if (unitarySingleBitGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name, "lambda": 0 };
+            dto = { "step": step, "qbits": qbits, "name": name, "lambda": 0 };
           } else if (unitaryTwoParamGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name, "phi": 0, "lambda": 0 };
+            dto = { "step": step, "qbits": qbits, "name": name, "phi": 0, "lambda": 0 };
           } else if (unitaryThreeParamGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name, "theta": 0, "phi": 0, "lambda": 0 };
+            dto = { "step": step, "qbits": qbits, "name": name, "theta": 0, "phi": 0, "lambda": 0 };
           } else if (measureGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name, "bit": qbit };
+            dto = { "step": step, "qbits": qbits, "name": name, "bit": qbits[0] };
           } else if (controlledSingleBitGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name, "controls": controls, "controlstates": controlstates };
+            dto = { "step": step, "qbits": qbits, "name": name, "controls": controls, "controlstates": controlstates };
           } else if (controlledPauliRootGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name, "controls": controls, "controlstates": controlstates, "root": "1/1" };
+            dto = { "step": step, "qbits": qbits, "name": name, "controls": controls, "controlstates": controlstates, "root": "1/1" };
           } else if (controlledParametricSingleBitGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name, "theta": 0, "controls": controls, "controlstates": controlstates };
+            dto = { "step": step, "qbits": qbits, "name": name, "theta": 0, "controls": controls, "controlstates": controlstates };
           } else if (controlledUnitarySingleBitGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name, "lambda": 0, "controls": controls, "controlstates": controlstates };
+            dto = { "step": step, "qbits": qbits, "name": name, "lambda": 0, "controls": controls, "controlstates": controlstates };
           } else if (controlledUnitaryTwoParamGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
+            dto = { "step": step, "qbits": qbits, "name": name, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
           } else if (controlledUnitaryThreeParamGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "name": name, "theta": 0, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
+            dto = { "step": step, "qbits": qbits, "name": name, "theta": 0, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
           } else if (swapGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "qbit2": qbit2, "name": name, };
+            dto = { "step": step, "qbits": qbits, "name": name, };
           } else if (parametricSwapGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "qbit2": qbit2, "name": name, "phi": 0, };
+            dto = { "step": step, "qbits": qbits, "name": name, "phi": 0, };
           } else if (isingGates.includes(name)) {
-            dto = { "step": step, "qbit": qbit, "qbit2": qbit2, "name": name, "theta": 0, };
+            dto = { "step": step, "qbits": qbits, "name": name, "theta": 0, };
           } else if (controlledSwapGates.includes(name)) {
-              dto = { "step": step, "qbit": qbit, "qbit2": qbit2, "name": name, "controls": controls, "controlstates": controlstates };
+              dto = { "step": step, "qbits": qbits, "name": name, "controls": controls, "controlstates": controlstates };
           } else if (controlledParametricSwapGates.includes(name)) {
-              dto = { "step": step, "qbit": qbit, "qbit2": qbit2, "name": name, "phi": 0, "controls": controls, "controlstates": controlstates };
+              dto = { "step": step, "qbits": qbits, "name": name, "phi": 0, "controls": controls, "controlstates": controlstates };
           } else if (controlledIsingGates.includes(name)) {
-              dto = { "step": step, "qbit": qbit, "qbit2": qbit2, "name": name, "theta": 0, "controls": controls, "controlstates": controlstates };
+              dto = { "step": step, "qbits": qbits, "name": name, "theta": 0, "controls": controls, "controlstates": controlstates };
           } else {
             console.log("This (new?) gate is not handled in code. Gate name: " + name);
             return;
@@ -263,7 +262,7 @@ export const circuitEditorModule = {
     replicateGate: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
         let step = dataTransferObj["step"];
-        let qbit = dataTransferObj["qbit"];
+        let qbits = dataTransferObj["qbits"];
         let name = dataTransferObj["name"];
         let stepFirst = dataTransferObj["stepFirst"];
         let stepLast = dataTransferObj["stepLast"];
@@ -294,12 +293,13 @@ export const circuitEditorModule = {
                   limitedEvaluate(condQbit) && 
                   limitedEvaluate(condConjugate)){
                 
-                let dto = { "step": s, "qbit": q, "name": name };
+                let dto = { "step": s, "qbits": [q], "name": name };
 
-                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "qbit2Expression")) {
-                  let qbit2Expression = dataTransferObj["qbit2Expression"];
-                  dto["qbit2"] = limitedEvaluate(interpolateJavaScriptExpression(qbit2Expression, s, q));
-                }
+                // TODO: fix
+                // if (Object.prototype.hasOwnProperty.call(dataTransferObj, "qbit2Expression")) {
+                //   let qbit2Expression = dataTransferObj["qbit2Expression"];
+                //   dto["qbit2"] = limitedEvaluate(interpolateJavaScriptExpression(qbit2Expression, s, q));
+                // }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controlsExpression")) {
                   dto["controls"] = [];
                   let controlsExpression = dataTransferObj["controlsExpression"];
@@ -361,13 +361,13 @@ export const circuitEditorModule = {
           alert("Negative qbits not permitted!");
         } else if (proposedNewGatesAreInvalid(dtos)){
           alert("Some of the proposed new gates do not allocate distinct seats for target/target2/control/control2 qubits!");
-        } else if (seatsInArrayAreAlreadyTaken(circuitEditorModule.state, dtos, step, qbit)) {
+        } else if (seatsInArrayAreAlreadyTaken(circuitEditorModule.state, dtos, step, qbits)) {
           alert("Some of the proposed new gates have seats already occupied!");
         } else if (proposedNewSeatsOverlap(dtos)) {
           alert("Some of the proposed new gates overlap!");
         } else {
           if (dtos.length > 0){
-            this.commit("circuitEditorModule/insertGates", {"dtos": dtos, "existingStep": step, "existingQbit": qbit});
+            this.commit("circuitEditorModule/insertGates", {"dtos": dtos, "existingStep": step, "existingQbits": qbits});
           } else {
             alert("No gate has been deployed, please review your expressions.")
           }
@@ -383,17 +383,17 @@ export const circuitEditorModule = {
     repositionSimpleGateInCircuit: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
         let step = dataTransferObj["step"];
-        let qbit = dataTransferObj["qbit"];
-        let qbitNew = dataTransferObj["qbitNew"];
+        let qbits = dataTransferObj["qbits"];
+        let qbitsNew = dataTransferObj["qbitsNew"];
         
-        if (qbitNew < 0) {
+        if (qbitsNew.some((element) => element < 0)) {
           alert("Negative steps/qbits not permitted!");
-        } else if ((qbit != qbitNew) && seatIsTaken(circuitEditorModule.state, qbitNew, step)) {
+        } else if ((!arraysAreEqual(qbits, qbitsNew)) && seatsAreTaken(circuitEditorModule.state, qbitsNew, step, qbits)) {
           alert("A gate already exists at this location!");
         } else {
-          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbit: qbit });
+          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbits: qbits });
 
-          dataTransferObj["qbit"] = qbitNew;
+          dataTransferObj["qbits"] = [...qbitsNew];
           if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiNew")) {
             let phi = dataTransferObj["phiNew"];
             dataTransferObj["phi"] = phi;
@@ -427,25 +427,25 @@ export const circuitEditorModule = {
     repositionControlledGateInCircuit: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
         let step = dataTransferObj["step"];
-        let qbit = dataTransferObj["qbit"];
-        let controls = [...dataTransferObj["controls"]];
-        let qbitNew = dataTransferObj["qbitNew"];
-        let controlsNew = [...dataTransferObj["controlsNew"]];
-        let controlstatesNew = [...dataTransferObj["controlstatesNew"]];
-        let existingQbits = [qbit, ...controls];
-        let proposedQbits = [qbitNew, ...controlsNew];
+        let qbits = dataTransferObj["qbits"];
+        let controls = dataTransferObj["controls"];
+        let qbitsNew = dataTransferObj["qbitsNew"];
+        let controlsNew = dataTransferObj["controlsNew"];
+        let controlstatesNew = dataTransferObj["controlstatesNew"];
+        let existingQbits = [...qbits, ...controls];
+        let proposedQbits = [...qbitsNew, ...controlsNew];
         
-        if (qbitNew < 0 || controlsNew.some((element) => element < 0)) {
+        if (qbitsNew.some((element) => element < 0) || controlsNew.some((element) => element < 0)) {
           alert("Negative qbits not permitted!");
-        } else if (((qbit != qbitNew) || !arraysAreEqual(controls, controlsNew)) &&
-          seatsAreTaken(circuitEditorModule.state, existingQbits, proposedQbits, step)) {
+        } else if ((!arraysAreEqual(qbits, qbitsNew) || !arraysAreEqual(controls, controlsNew)) &&
+          seatsAreTaken(circuitEditorModule.state, proposedQbits, step, existingQbits)) {
           alert("At least a gate already exists in the qbits ranging from proposed target to proposed control!");
         } else {
-          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbit: qbit });
+          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbits: qbits });
 
-          dataTransferObj["qbit"] = qbitNew;
-          dataTransferObj["controls"] = controlsNew;
-          dataTransferObj["controlstates"] = controlstatesNew;
+          dataTransferObj["qbits"] = [...qbitsNew];
+          dataTransferObj["controls"] = [...controlsNew];
+          dataTransferObj["controlstates"] = [...controlstatesNew];
           if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiNew")) {
             let phi = dataTransferObj["phiNew"];
             dataTransferObj["phi"] = phi;
@@ -475,25 +475,22 @@ export const circuitEditorModule = {
     repositionTwoTargetQubitGateInCircuit: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
         let step = dataTransferObj["step"];
-        let qbit = dataTransferObj["qbit"];
-        let qbit2 = dataTransferObj["qbit2"];
-        let qbitNew = dataTransferObj["qbitNew"];
-        let qbit2New = dataTransferObj["qbit2New"];
-        let existingQbits = [qbit, qbit2];
-        let proposedQbits = [qbitNew, qbit2New];
+        let qbits = dataTransferObj["qbits"];
+        let qbitsNew = dataTransferObj["qbitsNew"];
+        let existingQbits = [...qbits];
+        let proposedQbits = [...qbitsNew];
         
-        if (qbitNew < 0 || qbit2New < 0) {
+        if (qbitsNew.some((element) => element < 0)) {
           alert("Negative qbits not permitted!");
-        } else if (qbitNew == qbit2New) {
-          alert("The two qbits must be different!");
-        } else if (((qbit != qbitNew) || (qbit2 != qbit2New)) &&
-          seatsAreTaken(circuitEditorModule.state, existingQbits, proposedQbits, step)) {
+        } else if (qbitsNew.length != getUniqueValues(qbitsNew).length) {
+          alert("The target qbits must be different!");
+        } else if ((!arraysAreEqual(qbits, qbitsNew)) &&
+          seatsAreTaken(circuitEditorModule.state, proposedQbits, step, existingQbits)) {
           alert("At least a gate already exists in the qbits ranging from proposed target to proposed control!");
         } else {
-          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbit: qbit });
-          
-          dataTransferObj["qbit"] = qbitNew;
-          dataTransferObj["qbit2"] = qbit2New;
+          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbits: qbits });
+
+          dataTransferObj["qbits"] = [...qbitsNew];
 
           if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiNew")) {
             let phi = dataTransferObj["phiNew"];
@@ -518,32 +515,29 @@ export const circuitEditorModule = {
       //TODO: not working
       return new Promise((resolve, reject) => {
         let step = dataTransferObj["step"];
-        let qbit = dataTransferObj["qbit"];
-        let qbit2 = dataTransferObj["qbit2"];
+        let qbits = dataTransferObj["qbits"];
         let controls = dataTransferObj["controls"];
         let controlstatesNew = dataTransferObj["controlstatesNew"];
-        let qbitNew = dataTransferObj["qbitNew"];
-        let qbit2New = dataTransferObj["qbit2New"];
+        let qbitsNew = dataTransferObj["qbitsNew"];
         let controlsNew = dataTransferObj["controlsNew"];
-        let existingQbits = [qbit, qbit2, ...controls];
-        let proposedQbits = [qbitNew, qbit2New, ...controlsNew];
+        let existingQbits = [...qbits, ...controls];
+        let proposedQbits = [...qbitsNew, ...controlsNew];
         
-        if (qbitNew < 0 || qbit2New < 0 || controlsNew.some((element) => element < 0)) {
+        if (qbitsNew.some((element) => element < 0) || controlsNew.some((element) => element < 0)) {
           alert("Negative qbits not permitted!");
-        } else if (qbitNew == qbit2New) {
-          alert("The two target qbits must be different!");
-        } else if (controlsNew.includes(qbitNew) || controlsNew.includes(qbit2New)) {
+        } else if (qbitsNew.length != getUniqueValues(qbitsNew).length) {
+          alert("The target qbits must be different!");
+        } else if (qbitsNew.some(e => controlsNew.includes(e))) {
           alert("The target and control qbits must be different!");
-        } else if (((qbit != qbitNew) || (qbit2 != qbit2New) || !arraysAreEqual(controls, controlsNew)) &&
-          seatsAreTaken(circuitEditorModule.state, existingQbits, proposedQbits, step)) {
+        } else if ((!arraysAreEqual(qbits, qbitsNew)|| !arraysAreEqual(controls, controlsNew)) &&
+          seatsAreTaken(circuitEditorModule.state, proposedQbits, step, existingQbits)) {
           alert("At least a gate already exists in the qbits ranging from proposed target to proposed control!");
         } else {
-          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbit: qbit });
+          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, qbits: qbits });
           
-          dataTransferObj["qbit"] = qbitNew;
-          dataTransferObj["qbit2"] = qbit2New;
-          dataTransferObj["controls"] = controlsNew;
-          dataTransferObj["controlstates"] = controlstatesNew;
+          dataTransferObj["qbits"] = [...qbitsNew];
+          dataTransferObj["controls"] = [...controlsNew];
+          dataTransferObj["controlstates"] = [...controlstatesNew];
 
           this.dispatch('circuitEditorModule/insertGateInCircuit', dataTransferObj);
 
@@ -587,16 +581,16 @@ export const circuitEditorModule = {
             for (let j = 0; j < gates.length; j++) {
               let gate = gates[j];
 
-              if (Object.prototype.hasOwnProperty.call(gate, "target")) {
-                if (gate.target >= qbit) {
-                  gate.target = parseInt(gate.target) + 1;
+              if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+                let targets = [...gate.targets];
+                for (let k = 0; k < targets.length; k++){
+                  if (targets[k] >= qbit) {
+                    targets[k] += 1;
+                  }
                 }
+                gate.targets = targets;
               }
-              if (Object.prototype.hasOwnProperty.call(gate, "target2")) {
-                if (gate.target2 >= qbit) {
-                  gate.target2 = parseInt(gate.target2) + 1;
-                }
-              }
+
               if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
                 let controls = [...gate.controls];
                 for (let k = 0; k < controls.length; k++){
@@ -604,7 +598,7 @@ export const circuitEditorModule = {
                     controls[k] += 1;
                   }
                 }
-                gate.controls = [...controls];
+                gate.controls = controls;
               }
             }
           }
@@ -637,10 +631,10 @@ export const circuitEditorModule = {
     insertGates(context, dataTransferObj) {
       let dtos = dataTransferObj["dtos"];
       let existingStep = dataTransferObj["existingStep"];
-      let existingQbit = dataTransferObj["existingQbit"];
+      let existingQbits = dataTransferObj["existingQbits"];
       let state = circuitEditorModule.state;
-      if (isDefined(existingStep) && isDefined(existingQbit)){
-        removingGateFromCircuit(state, {"step": existingStep, "qbit": existingQbit});
+      if (isDefined(existingStep) && existingQbits && existingQbits.length > 0){
+        removingGateFromCircuit(state, {"step": existingStep, "qbits": [...existingQbits]});
       }
       for (let i = 0; i < dtos.length; i++){
         insertingOneGateInCircuit(state, dtos[i]);
@@ -670,17 +664,19 @@ export const circuitEditorModule = {
           let gates = state.steps[i]["gates"];
           for (let j = 0; j < gates.length; j++) {
             let gate = gates[j];
-            if (Object.prototype.hasOwnProperty.call(gate, "target")) {
-              if (gate.target == qbit) {
+            if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+              if (gate.targets.includes(qbit)) {
                 gates.splice(j, 1);
               } 
             }
           }
           for (let j = 0; j < gates.length; j++) {
             let gate = gates[j];
-            if (Object.prototype.hasOwnProperty.call(gate, "target")) {
-              if (parseInt(gate.target) > qbit){
-                gate.target = parseInt(gate.target) - 1;
+            if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+              let targets = gate.targets;
+              for (let i = 0; i < targets.length; i++){
+                if (targets[i] > qbit)
+                targets[i] -= 1;
               }
             }
           }

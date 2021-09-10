@@ -22,11 +22,11 @@ export function retriveHelpHtml(gateName) {
     } else if (gateName == "t-dagger") {
         return 'The "t-dagger" gate acts on a single qubit and is defined as: u1(-π/4). It is the conjugate transpose of "t" gate. Leaves the basis state |0⟩ unchanged and map |1⟩ to exp(-i*π/4) |1⟩. The probability of measuring a |0⟩ or |1⟩ is unchanged after applying this gate, however it modifies the phase of the quantum state.';
     } else if (gateName == "rx-theta") {
-        return 'The "rx-theta" gate acts on a single qubit and is defined as: u3(θ, -π/2, π/2). It is a rotation through angle θ radians around the X-axis of the Bloch sphere.';
+        return 'The "rx-theta" gate acts on a single qubit and is defined as: u3(θ, -π/2, π/2). It is a rotation through angle θ radians around the X-axis of the Bloch sphere and can be expressed in terms of X Pauli operator as: exp(i * θ/2 * X).';
     } else if (gateName == "ry-theta") {
-        return 'The "ry-theta" gate acts on a single qubit and is defined as: u3(θ, 0, 0). It is a rotation through angle θ radians around the Y-axis of the Bloch sphere';
+        return 'The "ry-theta" gate acts on a single qubit and is defined as: u3(θ, 0, 0). It is a rotation through angle θ radians around the Y-axis of the Bloch sphere and can be expressed in terms of Y Pauli operator as: exp(i * θ/2 *Y).';
     } else if (gateName == "rz-theta") {
-        return 'The "rz-theta" gate acts on a single qubit and is different from u1(θ) by a global phase given by exp(-iθ/2). It is a rotation through angle θ radians around the Z-axis of the Bloch sphere.';
+        return 'The "rz-theta" gate acts on a single qubit and is different from u1(θ) by a global phase given by exp(-iθ/2). It is a rotation through angle θ radians around the Z-axis of the Bloch sphere  and can be expressed in terms of Z Pauli operator as: exp(i * θ/2 * Z).';
     } else if (gateName == "s") {
         return 'The "s" gate acts on a single qubit and is defined as: u1(π/2). It represents as π/2 radians rotation around the Z-axis of the Bloch sphere. The "s" gate is related to the "t" gate by the relationship s = t * t. It is also the square root of pauli-z gate. The "s" gate is a special cases of "u1" for λ equal to π/2.';
     } else if (gateName == "s-dagger") {

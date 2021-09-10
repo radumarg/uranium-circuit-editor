@@ -12,6 +12,10 @@ export function getDuplicateValues(array){
   return findDuplicatesArrow(array);
 }
 
+export function getUniqueValues(array){
+  return array.filter((v, i, a) => a.indexOf(v) === i);
+}
+
 // arrays must have the same size
 export function zipArrays(array1, array2){
   const zip = (a, b) => a.map((k, i) => [k, b[i]]);

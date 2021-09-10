@@ -4,17 +4,21 @@
 import Vue from 'vue';
 import $ from "jquery";
 
+import { 
+  arraysAreEqual,
+} from "./javaScriptUtils.js";
+
 export function removingGateFromCircuit(circuitState, dto){
   let step = dto["step"];
-  let qbit = dto["qbit"];
+  let qbits = dto["qbits"];
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
     for (let i = 0; i < circuitState.steps.length; i++) {
       if (circuitState.steps[i].index == step) {
         let gates = circuitState.steps[i]["gates"];
         for (let j = 0; j < gates.length; j++) {
           let gate = gates[j];
-          if (Object.prototype.hasOwnProperty.call(gate, "target")) {
-            if (gate.target == qbit) {
+          if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+            if (arraysAreEqual(gate.targets, qbits)) {
               gates.splice(j, 1);
             }
           }
@@ -26,14 +30,10 @@ export function removingGateFromCircuit(circuitState, dto){
 
 export function insertingOneGateInCircuit(circuitState, dto) {
   let step = dto["step"];
-  let qbit = dto["qbit"];
+  let qbits = dto["qbits"];
   let name = dto["name"];
   
-  let gate = { "name": name, "target": qbit };
-  if (Object.prototype.hasOwnProperty.call(dto, "qbit2")) {
-      let qbit2 = dto["qbit2"];
-      gate["target2"] = qbit2;
-  }
+  let gate = { "name": name, "targets": [...qbits] };
   if (Object.prototype.hasOwnProperty.call(dto, "controls")) {
       let controls = dto["controls"];
       gate["controls"] = [...controls];
@@ -72,7 +72,7 @@ export function insertingOneGateInCircuit(circuitState, dto) {
       if (circuitState.steps[i].index == step) {
       let gates = circuitState.steps[i]["gates"];
       gates.push(gate);
-      gates.sort((l, r) => (l.target - r.target));
+      gates.sort((l, r) => (Math.min(...l.targets) - Math.min(...r.targets)));
       return;
       } 
   }
@@ -203,27 +203,27 @@ export function saveCopiedGates(circuitState, qbitStart, qbitStop, stepStart, st
         let gates = circuitState.steps[i]["gates"];
         for (let j = 0; j < gates.length; j++) {
           let gate = gates[j];
-          if (gate.target >= qbitStart && 
-              gate.target <= qbitStop &&
+          if (Math.min(...gate.targets) >= qbitStart &&
+              Math.max(...gate.targets) <= qbitStop &&
               stepIndex >= stepStart &&
               stepIndex <= stepStop) {
-            //TODO: remove all parsed ints? If circuit created. If circuit loaded
-            let copiedGate = {"qbit": parseInt(gate.target) - qbitStart, "step": stepIndex - stepStart, "name": gate.name };
 
-            if (Object.prototype.hasOwnProperty.call(gate, "target2")) {
-              copiedGate.qbit2 = parseInt(gate.target2) - qbitStart;
+            //TODO: remove all parsed ints? If circuit created. If circuit loaded
+            let copiedGate = {"step": stepIndex - stepStart, "name": gate.name };
+
+            if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+              //TODO: do I need a type cast for controls here: ?
+              let targets = gate.targets;
+              copiedGate.targets = targets.map(function(value) {return value - qbitStart;});
             }
-            if (Object.prototype.hasOwnProperty.call(gate, "control")) {
-              copiedGate.control = parseInt(gate.control) - qbitStart;
+
+            if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+              //TODO: do I need a type cast for controls here: ?
+              let controls = gate.controls;
+              copiedGate.controls = controls.map(function(value) {return value - qbitStart;});
             }
-            if (Object.prototype.hasOwnProperty.call(gate, "control2")) {
-              copiedGate.control2 = parseInt(gate.control2) - qbitStart;
-            }
-            if (Object.prototype.hasOwnProperty.call(gate, "controlstate")) {
-              copiedGate.controlstate = parseInt(gate.controlstate);
-            }
-            if (Object.prototype.hasOwnProperty.call(gate, "controlstate2")) {
-              copiedGate.controlstate2 = parseInt(gate.controlstate2);
+            if (Object.prototype.hasOwnProperty.call(gate, "controlstates")) {
+              copiedGate.controlstates = [...gate.controlstates];
             }
             if (Object.prototype.hasOwnProperty.call(gate, "theta")) {
               copiedGate.theta = gate.theta;
@@ -255,16 +255,14 @@ export function gatePastedGates(qbitStart, stepStart){
 
   for (let i = 0; i < window.copiedGates.length; i++){
     let gate = { ... window.copiedGates[i]};
-    gate.qbit = gate.qbit + qbitStart;
     gate.step = gate.step + stepStart;
-    if (Object.prototype.hasOwnProperty.call(gate, "qbit2")) {
-      gate.qbit2 = gate.qbit2 + qbitStart;
+    if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+      let targets = gate.targets;
+      gate.qbits = targets.map(function(value) {return value + qbitStart;});
     }
-    if (Object.prototype.hasOwnProperty.call(gate, "control")) {
-      gate.control = gate.control + qbitStart;
-    }
-    if (Object.prototype.hasOwnProperty.call(gate, "control2")) {
-      gate.control2 = gate.control2 + qbitStart;
+    if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+      let controls = gate.controls;
+      gate.controls = controls.map(function(value) {return value + qbitStart;});
     }
     gates.push(gate);
   }
@@ -297,4 +295,73 @@ export function extractSelectionRange() {
   let smax = Math.max(stepStart, stepStop);
   
   return [qmin, qmax, smin, smax]
+}
+
+// Detect situations where proposed gates do not allocate
+// distinct qubits for targets, controls
+export function proposedNewGatesAreInvalid(dtos) {
+  for (let i = 0; i < dtos.length; i++) {
+
+    let noExpectedQubits = 1;
+    let qbits = [];
+    let controls = [];
+
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "qbits")) {
+      qbits = dtos[i]["qbits"];
+      noExpectedQubits += qbits.length;
+    }
+
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "controls")) {
+      controls = dtos[i]["controls"];
+      noExpectedQubits += controls.length;
+    }
+
+    let distinctQbits = [...qbits, ...controls]
+      // x - item in array
+      // i - index of item
+      // a - array reference
+      .filter((x, i, a) => a.indexOf(x) == i);
+
+    if (distinctQbits.length != noExpectedQubits) return true;
+  }
+  return false; 
+}
+
+// Verify if the some of the new proposed seats overlap
+export function proposedNewSeatsOverlap(dtos) {
+  for (let i = 0; i < dtos.length; i++) {
+    let step = dtos[i]["step"];
+    let controls = [];
+    let targets = [];
+
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "qbits")) {
+      targets = dtos[i]["qbits"];
+    }
+
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "controls")) {
+      controls = dtos[i].controls;
+    }
+    let qbits = [...targets, ...controls];
+
+    for (let j = i + 1; j < dtos.length; j++) {
+      let step2 = dtos[j]["step"];
+      if (step != step2) continue;
+      let targetsSecond = [];
+      let controlsSecond = [];
+      if (Object.prototype.hasOwnProperty.call(dtos[j], "qbits")) {
+        targetsSecond = dtos[j].qbits;
+      }
+      if (Object.prototype.hasOwnProperty.call(dtos[j], "controls")) {
+        controlsSecond = dtos[j].controls;
+      }
+      let qbitsSecond = [...targetsSecond, ...controlsSecond];
+      for (let k = 0; k < qbits.length ; k++){
+        let qbit = qbits[k];
+        if (qbitsSecond.includes(qbit)){
+          return true;
+        }
+      }
+    }
+  }
+  return false; 
 }

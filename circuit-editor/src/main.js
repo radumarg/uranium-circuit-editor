@@ -109,7 +109,7 @@ $(document).on('keyup', function(e) {
     }
 
     let gates = gatePastedGates(window.selectQbitStart, window.selectStepStart);
-    if (seatsInArrayAreAlreadyTaken(store.state.circuitEditorModule, gates, null, null)){
+    if (seatsInArrayAreAlreadyTaken(store.state.circuitEditorModule, gates)){
       alert("Not all the proposed seats are empty.");
     } else {
       store.dispatch('circuitEditorModule/insertGatesInCircuit', {"dtos": gates, "existingStep": null, "existingQbit": null});
