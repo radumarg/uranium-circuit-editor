@@ -173,10 +173,9 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapActions } from 'vuex';
 import SingleBitGate from "./SingleBitGate";
-import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "GateSwap",
   extends: SingleBitGate,
@@ -191,7 +190,7 @@ export default {
   },
   computed: {
     gateImageSrcPopup: function() {
-      if (Vue.$cookies.get('colored-gates') === 'true'){
+      if (getUserInterfaceSetting('colored-gates') === 'true'){
         return require("../assets/colored-gates/swap.svg");
       } else {
         return require("../assets/blue-gates/swap.svg");

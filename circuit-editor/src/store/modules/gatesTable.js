@@ -1,4 +1,4 @@
-import Vue from 'vue';
+import { getUserInterfaceSetting } from "./applicationWideReusableUnits.js";
 
 /* Holds information necessary to diplay a cell in gates table */
 class GatesTableCell {
@@ -693,7 +693,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           gatesTableRowState.cells[column].img = gate.name.replace("ctrl-", ""); 
 
           // all elements in circuit must be updated when switching from colored to blue gates:
-          gatesTableRowState.cells[column].key = Vue.$cookies.get('colored-gates');
+          gatesTableRowState.cells[column].key = getUserInterfaceSetting('colored-gates');
 
           gatesTableRowState.cells[column].tooltip = "";
           if (gate.name == "sqrt-swap"

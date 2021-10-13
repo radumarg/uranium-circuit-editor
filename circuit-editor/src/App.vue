@@ -42,12 +42,12 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import Circuit from "./components/Circuit";
 import GatesPallete from "./components/GatesPallete";
 import Logo from "./components/Logo";
 import ToolBar from "./components/ToolBar";
 import { retriveHelpHtml, retriveGateMatrixHtml } from "./help/help.js";
+import { getUserInterfaceSetting } from "./store/modules/applicationWideReusableUnits.js";
 
 export default {
   name: "App",
@@ -82,7 +82,7 @@ export default {
         this.gateImage = require("./assets/uranium.png");
       } else{
         this.gateName = gateName;
-        if (Vue.$cookies.get('colored-gates') === 'true'){
+        if (getUserInterfaceSetting('colored-gates') === 'true'){
           if (gateName.includes("ctrl-")){
             this.gateImage = require("./assets/colored-gates/" + gateName + "-1.svg");     
           } else if (gateName == "toffoli") { 

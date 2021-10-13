@@ -113,23 +113,22 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import * as htmlToImage from 'html-to-image';
 import JQuery from 'jquery';
 import { mapActions, mapGetters } from 'vuex';
 import { getNoQbits, getNoSteps, getNumberOfRowsThatFit, getNumberOfColumnsThatFit } from "../store/modules/gatesTable.js";
 import {save_circuit} from "../store/modules/circuitSaveAndRetrieve.js";
-import { setCookiesIfNotAltreadySet } from "../store/modules/applicationWideReusableUnits.js";
+import { setCookiesIfNotAlreadySet, getUserInterfaceSetting, setUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 import {sendWorkerMessage} from '../store/modules/worker-api';
 export default {
   name: "ToolBar",
   data() {
-    setCookiesIfNotAltreadySet();
+    setCookiesIfNotAlreadySet();
     return {
-      darkTheme: Vue.$cookies.get("dark-theme") === 'true',
-      colorGates: Vue.$cookies.get("colored-gates") === 'true',
-      liveSimulation: Vue.$cookies.get("live-simulation") === 'true',
-      statesAreShownInBase2: Vue.$cookies.get("legend-base") === '2',
+      darkTheme: getUserInterfaceSetting("dark-theme") === 'true',
+      colorGates: getUserInterfaceSetting("colored-gates") === 'true',
+      liveSimulation: getUserInterfaceSetting("live-simulation") === 'true',
+      statesAreShownInBase2: getUserInterfaceSetting("legend-base") === '2',
       closeIsHovered: false,
       saveIsHovered:  false,
       qbitsNew: 0,
@@ -157,7 +156,7 @@ export default {
     });
   },
   mounted() {
-    let darkTheme = (Vue.$cookies.get("dark-theme") === 'true')
+    let darkTheme = (getUserInterfaceSetting("dark-theme") === 'true')
     this.$root.$emit("switchThemeDark", darkTheme);
     if (this.$store.state.circuitEditorModule.steps.length > 0){
       this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
@@ -301,25 +300,25 @@ it does not make much sense doing that unless you intend to save the circuit as 
       this.$root.$emit("circuitModifiedFromMenu");
     },
     switchTheme: function(){
-      Vue.$cookies.set('dark-theme', this.darkTheme);
+      setUserInterfaceSetting('dark-theme', this.darkTheme);
       this.$root.$emit("switchThemeDark", this.darkTheme);
     },
     switchGateColors: function(){
-      Vue.$cookies.set('colored-gates', this.colorGates);
+      setUserInterfaceSetting('colored-gates', this.colorGates);
       this.$root.$emit("switchThemeDark", this.darkTheme);
       this.$root.$emit("switchGateColors");
       this.refreshCircuit();
     },
     switchLegendBase: function(){
       if (this.statesAreShownInBase2 == true){
-        Vue.$cookies.set('legend-base', '2');
+        setUserInterfaceSetting('legend-base', '2');
       } else {
-        Vue.$cookies.set('legend-base', '10');
+        setUserInterfaceSetting('legend-base', '10');
       }
       this.$root.$emit("switchLegendBase");
     },
     switchSimulationMode: function(){
-      Vue.$cookies.set('live-simulation', this.liveSimulation);
+      setUserInterfaceSetting('live-simulation', this.liveSimulation);
       this.$root.$emit("switchToLiveSimulationMode", this.liveSimulation);
     },
     commitCircuitState: function(event) {

@@ -5,8 +5,7 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "FredkinGateControlMiddle",
   props: {
@@ -22,7 +21,7 @@ export default {
   },
   computed: {
     gateImageSource: function() {
-      if (Vue.$cookies.get('colored-gates') === 'true'){
+      if (getUserInterfaceSetting('colored-gates') === 'true'){
         return require("../assets/colored-gates/fredkin-control-middle-" + this.controlstate + ".svg");
       } else {
         return require("../assets/blue-gates/fredkin-control-middle-" + this.controlstate + ".svg");

@@ -155,9 +155,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapActions, mapGetters } from 'vuex';
-import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 import { handleSelectEvent, isDefined } from "../store/modules/editorHelper.js";
 export default {
   name: "SingleBitGate",
@@ -196,7 +195,7 @@ export default {
   computed: {
     gateImageSrcEditor: function() {
       if (this.img) {
-        if (Vue.$cookies.get('colored-gates') === 'true'){
+        if (getUserInterfaceSetting('colored-gates') === 'true'){
           return require("../assets/colored-gates/" + this.img + ".svg");
         } else {
           return require("../assets/blue-gates/" + this.img + ".svg");
@@ -207,7 +206,7 @@ export default {
     },
     gateImageSrcPopup: function() {
       if (this.name) {
-        if (Vue.$cookies.get('colored-gates') === 'true'){
+        if (getUserInterfaceSetting('colored-gates') === 'true'){
           return require("../assets/colored-gates/" + this.name + ".svg");
         } else {
           return require("../assets/blue-gates/" + this.name + ".svg");

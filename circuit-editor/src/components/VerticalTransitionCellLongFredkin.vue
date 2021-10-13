@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import Vue from 'vue';
+import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 import { mapActions } from 'vuex';
 export default {
   name: "VerticalTransitionCellLongFredkin",
@@ -18,7 +18,7 @@ export default {
   },
   computed: {
     gateImageSource: function() {
-      if (Vue.$cookies.get('colored-gates') === 'true'){
+      if (getUserInterfaceSetting('colored-gates') === 'true'){
         return require("../assets/colored-gates/swap-line-long.svg");
       } else {
         return require("../assets/blue-gates/swap-line-long.svg");
@@ -29,7 +29,7 @@ export default {
     ...mapActions('circuitEditorModule/', ['insertGateInCircuit', 'removeGateFromCircuit']),
     handleDragLeave() {
       var image = window.document.getElementById(this.id);
-      if (Vue.$cookies.get('colored-gates') === 'true'){
+      if (getUserInterfaceSetting('colored-gates') === 'true'){
         image.src = require("../assets/colored-gates/swap-line-long.svg");
       } else {
         image.src = require("../assets/blue-gates/swap-line-long.svg");

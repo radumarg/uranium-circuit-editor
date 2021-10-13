@@ -236,8 +236,7 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   methods: {
     gateSelected: function (event) {
@@ -281,7 +280,7 @@ export default {
   },
   data() {
     return {
-        coloredGatesCookie: Vue.$cookies.get("colored-gates") == 'true',
+        coloredGatesCookie: getUserInterfaceSetting("colored-gates") === 'true',
     };
   },
   created() {
@@ -301,7 +300,7 @@ export default {
       var cells = document.getElementById("gates-pallete").getElementsByTagName("td");
       for(let i = 0; i < cells.length; i++) {
         let img = cells[i].childNodes[0];
-        if (Vue.$cookies.get('colored-gates') === 'true'){
+        if (getUserInterfaceSetting('colored-gates') === 'true'){
           if (img.title.includes("ctrl-")){
             img.src = require("../assets/colored-gates/" + img.title + "-1.svg");     
           } else if (img.title == "toffoli") { 

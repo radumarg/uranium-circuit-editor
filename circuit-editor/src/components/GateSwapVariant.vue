@@ -173,7 +173,6 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import GateSwap from "./GateSwap";
 export default {
   name: "GateSwapVariant",
@@ -186,7 +185,7 @@ export default {
   },
   computed: {
     gateImageSource: function() {
-      if (Vue.$cookies.get('colored-gates') === 'true'){
+      if (getUserInterfaceSetting('colored-gates') === 'true'){
         return require("../assets/colored-gates/" + this.name + ".svg");
       } else {
         return require("../assets/blue-gates/" + this.name + ".svg");

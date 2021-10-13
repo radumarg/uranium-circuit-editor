@@ -28,13 +28,13 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapGetters } from "vuex";
 import Editor from "./Editor";
 import HorizontalColumnChart from "./HorizontalColumnChart";
 import VerticalColumnChart from "./VerticalColumnChart";
 import PieChart from "./PieChart";
 import { getStateProbabilities, getTopEntriesStateProbabilities } from "../store/modules/simulationCharts.js";
+import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 
 export default {
   name: "App",
@@ -47,7 +47,7 @@ export default {
   data() {
     return {
       lastSimulatedCircuit: undefined,
-      liveSimulation: Vue.$cookies.get("live-simulation") === 'true',
+      liveSimulation: getUserInterfaceSetting("live-simulation") === 'true',
     }
   },
   methods: {

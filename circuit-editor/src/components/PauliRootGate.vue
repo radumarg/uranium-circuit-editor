@@ -189,9 +189,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import SingleBitGate from "./SingleBitGate";
-import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "PauliRootGate",
   extends: SingleBitGate,
@@ -217,7 +216,7 @@ export default {
   computed: {
     gateImageSrcEditor: function() {
       if (this.img) {
-        if (Vue.$cookies.get('colored-gates') === 'true'){
+        if (getUserInterfaceSetting('colored-gates') === 'true'){
           if (this.root.includes("1/2^")){
              let k = parseInt(this.root.replace("1/2^", ""));
              if (k >= 0 && k <= 35){

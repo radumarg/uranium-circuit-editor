@@ -66,9 +66,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapActions } from 'vuex';
-import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 import { handleSelectEvent, isDefined } from "../store/modules/editorHelper.js";
 export default {
   name: "ControlledGateStub",
@@ -104,7 +103,7 @@ export default {
   },
   computed: {
     gateImageSource: function() {
-      if (Vue.$cookies.get('colored-gates') === 'true'){
+      if (getUserInterfaceSetting('colored-gates') === 'true'){
         return require("../assets/colored-gates/" + this.name + ".svg");
       } else {
         return require("../assets/blue-gates/" + this.name + ".svg");
@@ -223,7 +222,7 @@ export default {
     },
     stubImageSrcPopup: function() {
       if (this.gate) {
-        if (Vue.$cookies.get('colored-gates') === 'true'){
+        if (getUserInterfaceSetting('colored-gates') === 'true'){
           return require("../assets/colored-gates/" + this.gate + "-stub-" + this.controlstateNew + ".svg");
         } else {
           return require("../assets/blue-gates/" + this.gate + "-stub-" + this.controlstateNew + ".svg");

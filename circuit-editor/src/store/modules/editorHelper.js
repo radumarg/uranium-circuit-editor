@@ -1,8 +1,10 @@
 /* 
    Helper code for vuex store.
 */
-import Vue from 'vue';
 import $ from "jquery";
+import { 
+  getUserInterfaceSetting 
+} from "./applicationWideReusableUnits.js";
 
 import { 
   arraysAreEqual,
@@ -124,10 +126,10 @@ function hexToRgb(hex) {
 export function undoGatesSelection(resetQubits=true, overrideAll=false) {
   
   let backgroundColor = undefined;
-  if (Vue.$cookies.get("dark-theme") === 'true'){
+  if (getUserInterfaceSetting("dark-theme") === 'true'){
     backgroundColor = window.darkBackgroundColor;
   } else {
-    if (Vue.$cookies.get("colored-gates") === 'true'){
+    if (getUserInterfaceSetting("colored-gates") === 'true'){
       backgroundColor = window.lightBackgroundColor;
     } else {
       backgroundColor = window.whiteBackgroundColor;

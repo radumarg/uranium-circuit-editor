@@ -8,11 +8,11 @@
 // JavaScript chart library: https://jscharting.com/
 // Vue-js plugin: https://github.com/jscharting/jscharting-vue/blob/master/README.md
 
-import Vue from 'vue';
 import { mapGetters } from "vuex";
 import JSCharting from 'jscharting-vue';
 import { JSC } from 'jscharting-vue';
 import { getStateProbabilities, getBinnedProbabilities, getMeasureGates} from "../store/modules/simulationCharts.js";
+import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 
 export default {
    name: 'columnChart',
@@ -50,7 +50,7 @@ export default {
          qubits: 0,
          measureGates: {},
          defaultNumberOfBins: 128,
-         liveSimulation: Vue.$cookies.get("live-simulation") === 'true',
+         liveSimulation: getUserInterfaceSetting("live-simulation") === 'true',
       }
    },
    methods: {

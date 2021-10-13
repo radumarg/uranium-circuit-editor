@@ -1,5 +1,5 @@
-import Vue from 'vue';
 import init, { get_probabilities } from './wasm/moara_js.js'
+import { getUserInterfaceSetting } from "./applicationWideReusableUnits.js";
 
 function toState(dec, totalLength, base) {
 
@@ -88,7 +88,7 @@ export function getTopEntriesStateProbabilities(stateProbabilities) {
 
     let result = [];
     let probability = 0.0;
-    let quantumStatesBase = Vue.$cookies.get('legend-base');
+    let quantumStatesBase = getUserInterfaceSetting('legend-base');
 
     for (let i = 0; i < topEntries.length; i++){
         probability += topEntries[i][1];
@@ -115,7 +115,7 @@ export function getBinnedProbabilities(fullStateProbabilities, min, max, numberO
         qubits = Math.log2(fullStateProbabilities.length);
     }
     
-    let quantumStatesBase = Vue.$cookies.get('legend-base');
+    let quantumStatesBase = getUserInterfaceSetting('legend-base');
 
     let binWidth = Math.round((max - min) / numberOfBins); 
     let binsBeforeMiddle = Math.floor(numberOfBins/2.0);

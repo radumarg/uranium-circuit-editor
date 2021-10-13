@@ -5,8 +5,7 @@
 </template>
 
 <script>
-import Vue from 'vue';
-import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "FredkinGateControlStubUp",
   props: {
@@ -22,7 +21,7 @@ export default {
   },
   computed: {
     gateImageSource: function() {
-      if (Vue.$cookies.get('colored-gates') === 'true'){
+      if (getUserInterfaceSetting('colored-gates') === 'true'){
         return require("../assets/colored-gates/ctrl-swap-stub-up-1.svg");
       } else {
         return require("../assets/blue-gates/ctrl-swap-stub-up-1.svg");

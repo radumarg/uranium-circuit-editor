@@ -21,7 +21,7 @@ Vue.use(MdTooltip);
 import { IconsPlugin, ImagePlugin, FormInputPlugin, FormSelectPlugin, LayoutPlugin, ModalPlugin, SidebarPlugin, SpinnerPlugin, TabsPlugin, TablePlugin, TooltipPlugin, VBHoverPlugin } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
-import { setCookiesIfNotAltreadySet } from "./store/modules/applicationWideReusableUnits.js";
+import { setCookiesIfNotAlreadySet } from "./store/modules/applicationWideReusableUnits.js";
 
 Vue.use(IconsPlugin);
 Vue.use(ImagePlugin);
@@ -48,7 +48,7 @@ new Vue({
 // Used when toggling between showing/hiding ALL tooltips
 window.toolTipsAreShown = false;
 
-setCookiesIfNotAltreadySet();
+setCookiesIfNotAlreadySet();
 
 // Color scheme used by Editor for background
 window.selectBackgroundColor = "#C0C0C0";

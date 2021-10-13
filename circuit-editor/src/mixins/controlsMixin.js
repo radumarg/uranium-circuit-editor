@@ -1,8 +1,10 @@
-import Vue from 'vue';
-
 import { 
   getDuplicateValues,
 } from "../store/modules/javaScriptUtils";
+
+import { 
+  getUserInterfaceSetting
+} from "../store/modules/applicationWideReusableUnits.js";
 
 import {
   isDefined,
@@ -35,7 +37,7 @@ export const controlsMixin = {
   computed: {
     gateImageSrcPopup: function() {
       if (this.name) {
-        if (Vue.$cookies.get('colored-gates') === 'true'){
+        if (getUserInterfaceSetting('colored-gates') === 'true'){
           return require("../assets/colored-gates/" + this.name + "-1.svg");
         } else {
           return require("../assets/blue-gates/" + this.name + "-1.svg");
@@ -127,7 +129,7 @@ export const controlsMixin = {
     },
     stubImageSrcPopup: function(controlIndex) {
       if (this.name) {
-        if (Vue.$cookies.get('colored-gates') === 'true'){
+        if (getUserInterfaceSetting('colored-gates') === 'true'){
           return require("../assets/colored-gates/" + this.name + "-stub-" + this.controlstatesNew[controlIndex] + ".svg");
         } else {
           return require("../assets/blue-gates/" + this.name + "-stub-" + this.controlstatesNew[controlIndex] + ".svg");

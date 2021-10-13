@@ -223,8 +223,8 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapGetters } from "vuex";
+import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 import { undoGatesSelection } from "../store/modules/editorHelper.js";
 import EmptyCell from "./EmptyCell";
 import ZeroState from "./ZeroState";
@@ -307,7 +307,7 @@ export default {
         this.$refs["gatesTable"].style.borderTopColor = window.darkBackgroundColor;
         this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.darkBackgroundColor}`;
       } else {
-        if(Vue.$cookies.get('colored-gates') === 'true'){
+        if(getUserInterfaceSetting('colored-gates') === 'true'){
           this.$refs["gatesTable"].style.backgroundColor = window.lightBackgroundColor;
           this.$refs["gatesTable"].style.borderTopColor = window.lightBackgroundColor;
           this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.lightBackgroundColor}`;
