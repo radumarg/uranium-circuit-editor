@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -55,7 +55,7 @@
           <td></td>
           <td v-b-tooltip.hover title="2nd Target qubit" width="100px" style="padding: 5px;">Target<sub>2</sub></td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbit2New" placeholder="qbit2" type="number" id="qbit2-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitsNew[1]" placeholder="qbit2" type="number" id="qbit2-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -217,16 +217,15 @@ export default {
         alert("Please enter an integer number!");
         return;
       }
-      let qbitOld = this.qbit;
+      let qbitsOld = [...this.qbits];
       let qbit2Old = this.qbit2;
       let thetaOld = this.theta;
       let promise = this.repositionTwoTargetQubitGateInCircuit({
         'step': this.step, 
-        'qbit': this.qbit, 
+        'qbits': [...this.qbits],
         'qbit2': this.qbit2,
         'name': this.name, 
-        'qbitNew': this.$data.qbitNew, 
-        'qbit2New': this.$data.qbit2New, 
+        'qbitsNew': [...this.$data.qbitsNew],
         'thetaNew': this.$data.thetaNew,
       });
       promise.then(
@@ -234,7 +233,8 @@ export default {
         result => {}, 
         // eslint-disable-next-line no-unused-vars
         error => {
-          this.$data.qbitNew = this.qbit = qbitOld;
+          this.$data.qbitsNew = [...qbitsOld];
+          this.qbits = [...qbitsOld];
           this.$data.qbit2New = this.qbit2 = qbit2Old;
           this.$data.thetaNew = this.theta = thetaOld;
         }
@@ -244,7 +244,7 @@ export default {
     handleReplicateGateModalSave: function(){
       let promise = this.replicateGate({
         'step': this.step,
-        'qbit': this.qbit,
+        'qbits': [...this.qbits],
         'name': this.name, 
         'stepFirst': this.stepFirst,
         'stepLast': this.stepLast,

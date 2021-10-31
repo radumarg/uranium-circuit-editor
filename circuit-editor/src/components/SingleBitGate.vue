@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:75px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:75px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -162,7 +162,7 @@ export default {
   name: "SingleBitGate",
   props: {
     'step' : Number,
-    'qbit': Number,
+    'qbits': Array,
     'qrow': Number,
     'img': String,
     'title': String,
@@ -182,9 +182,9 @@ export default {
       expandDownIsHovered:  false,
       expandGateIsHovered:  false,
       editControlsIsHovered:  false,
-      qbitNew: this.qbit,
-      qbitFirst: this.qbit,
-      qbitLast: this.qbit,
+      qbitsNew: [...this.qbits],
+      qbitFirst: this.qbits[0],
+      qbitLast: this.qbits[0],
       stepFirst: this.step,
       stepLast: this.step,
       stepConditionExpression: "s >= 0",
@@ -359,10 +359,10 @@ export default {
         alert("Please enter an integer number!");
         return;
       }
-      let qbitOld = this.qbit;
+      let qbitsOld = [...this.qbits];
       let promise = this.repositionSimpleGateInCircuit({
         'step': this.step, 
-        'qbit': this.qbit,
+        'qbits': [...this.qbits],
         'name': this.name, 
         'img': this.img,
         'qbitNew': this.$data.qbitNew
@@ -372,7 +372,8 @@ export default {
         result => {}, 
         // eslint-disable-next-line no-unused-vars
         error => {
-          this.$data.qbitNew = this.qbit = qbitOld;
+          this.$data.qbitsNew = [...qbitsOld];
+          this.qbits = [...qbitsOld];
         }
       );
       this.$refs['initial-modal-dialog'].hide();
@@ -380,7 +381,7 @@ export default {
     handleReplicateGateModalSave: function(){
       let promise = this.replicateGate({
         'step': this.step,
-        'qbit': this.qbit,
+        'qbits': [...this.qbits],
         'name': this.name, 
         'stepFirst': this.stepFirst,
         'stepLast': this.stepLast,

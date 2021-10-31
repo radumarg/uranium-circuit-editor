@@ -47,7 +47,7 @@
           <td></td>
           <td title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -229,7 +229,7 @@
           <td title="Control qubit" class="edit-controls-cell">Target:</td>
           <td class="edit-controls-cell">
             <div class="d-flex justify-content-center align-items-center">
-              <b-form-input readonly min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="qbitNew" placeholder="target" type="number" id="target-qbit" style="width:70px;"></b-form-input>
+              <b-form-input readonly min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="qbitsNew[0]" placeholder="target" type="number" id="target-qbit" style="width:70px;"></b-form-input>
             </div>
           </td>
           <td></td>
@@ -333,15 +333,15 @@ export default {
         alert("Please enter an integer number!");
         return;
       }
-      let qbitOld = this.qbit;
+      let qbitsOld = [...this.qbits];
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
       let promise = this.repositionControlledGateInCircuit({
         'step': this.step, 
-        'qbit': this.qbit, 
+        'qbits': [...this.qbits],
         'name': this.name,
         'controls': [...this.controls], 
-        'qbitNew': this.$data.qbitNew, 
+        'qbitsNew': [...this.$data.qbitsNew],
         'controlsNew': this.$data.controlsNew,
         'controlstatesNew': this.$data.controlstatesNew,
       });
@@ -350,7 +350,8 @@ export default {
         result => {}, 
         // eslint-disable-next-line no-unused-vars
         error => {
-          this.$data.qbitNew = this.qbit = qbitOld;
+          this.$data.qbitsNew = [...qbitsOld];
+          this.qbits = [...qbitsOld];
           this.controls = [...controlsOld];
           this.$data.controlsNew = [...controlsOld];
           this.controlstates = [...controlstatesOld];
@@ -362,7 +363,7 @@ export default {
     handleReplicateGateModalSave: function(){
       let promise = this.replicateGate({
         'step': this.step,
-        'qbit': this.qbit,
+        'qbits': [...this.qbits],
         'name': this.name, 
         'stepFirst': this.stepFirst,
         'stepLast': this.stepLast,

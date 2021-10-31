@@ -13,7 +13,7 @@ export default {
     'name': String,
     'step': Number,
     'qrow': Number,
-    'qbit': Number,
+    'qbits': Array,
     'id': String,
   },
   computed: {

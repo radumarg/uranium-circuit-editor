@@ -1,5 +1,5 @@
-import init, { get_probabilities } from './wasm/moara_js.js'
-import { getUserInterfaceSetting } from "./applicationWideReusableUnits.js";
+import init, { get_probabilities, get_statevector } from './wasm/moara_js.js'
+import { getUserInterfaceSetting } from "./utils.js";
 
 function toState(dec, totalLength, base) {
 
@@ -51,6 +51,42 @@ export async function getStateProbabilities(circuitState) {
     }
 
     return []
+}
+
+async function getStateVector(circuitState) {
+
+  if (circuitState != undefined) {
+    let serializedCircuit = JSON.stringify(circuitState);
+    await init('./wasm/moara_js_bg.wasm');
+    return get_statevector(serializedCircuit);
+  }
+  
+  return []
+}
+
+export async function getStateVectorEntries(circuitState, qubits) {
+
+  let realValues = [];
+  let imaginaryValues = [];
+  let max = 0;
+  let quantumStatesBase = getUserInterfaceSetting('legend-base');
+  let stateVector = await getStateVector(circuitState);
+  
+  for (let i = 0; i < stateVector.length; i++) {
+      let complexString = stateVector[i];
+      let separatorIndex = complexString.indexOf('+', 1);
+      if (separatorIndex == -1) {
+        separatorIndex = complexString.indexOf('-', 1);
+      }
+      let real = parseFloat(complexString.substring(0, separatorIndex));
+      let imaginary = parseFloat(complexString.substring(separatorIndex, complexString.length - 1));
+      realValues.push({ x: toState(i, qubits, quantumStatesBase), y: real });
+      imaginaryValues.push({ x: toState(i, qubits, quantumStatesBase), y: imaginary });
+      max = Math.max(Math.abs(real), max);
+      max = Math.max(Math.abs(imaginary), max);
+  }
+
+  return {"real": realValues, "imaginary": imaginaryValues, "max": max}
 }
 
 export function getTopEntriesStateProbabilities(stateProbabilities) {

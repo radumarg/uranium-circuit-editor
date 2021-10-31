@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -55,7 +55,7 @@
           <td></td>
           <td v-b-tooltip.hover title="2nd Target qubit" width="100px" style="padding: 5px;">Target<sub>2</sub></td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbit2New" placeholder="qbit2" type="number" id="qbit2-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitsNew[1]" placeholder="qbit2" type="number" id="qbit2-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -173,6 +173,7 @@
 </template>
 
 <script>
+import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 import GateSwap from "./GateSwap";
 export default {
   name: "GateSwapVariant",

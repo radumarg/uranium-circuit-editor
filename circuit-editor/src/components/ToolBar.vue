@@ -240,12 +240,15 @@ it does not make much sense doing that unless you intend to save the circuit as 
       }
     },
     openFile: function() {
-      document
-        .getElementById("file-input")
-        .addEventListener("change", this.readSingleFile, false);
-      document.getElementById("file-input").click();
-      this.history = [];
-      this.historyUnRoll = [];
+      let fileInput = document.getElementById("file-input");
+      fileInput.value = null;
+      fileInput.onchange = () => {
+            let files =  Array.from(fileInput.files);
+            if (files.length == 1) {
+              this.readSingleFile(files[0]);
+            }
+        };
+      fileInput.click();
     },
     saveImages: function() {
       var node = document.getElementById('gatesTable');
@@ -280,11 +283,7 @@ it does not make much sense doing that unless you intend to save the circuit as 
       element.click();
       document.body.removeChild(element);
     },  
-    readSingleFile: function(event) {
-      if (event.target.files.length !== 1) {
-        return;
-      }
-      var file = event.target.files[0];
+    readSingleFile: function(file) {
       var reader = new FileReader();
       reader.onload = this.commitCircuitState;
       reader.readAsText(file);
@@ -329,6 +328,8 @@ it does not make much sense doing that unless you intend to save the circuit as 
       let steps = getNoSteps(jsonObj);
       window.gatesTable.rows = Math.max(2 * qbits + 2, window.initialRows);
       window.gatesTable.columns = Math.max(2 * steps + 2, window.initialColumns);
+      this.history = [];
+      this.historyUnRoll = [];
       this.updateCircuit(jsonObj);
       this.history.push(JSON.stringify(this.$store.state));
       this.$root.$emit("triggerSimulationRun", jsonObj);

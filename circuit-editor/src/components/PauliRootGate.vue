@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -250,7 +250,7 @@ export default {
         alert("Please enter an integer number!");
         return;
       }
-      let qbitOld = this.qbit;
+      let qbitsOld = [...this.qbits];
       let rootOld = this.root;
       let newRoot = this.getRoot();
       if (newRoot == '1/0') {
@@ -259,10 +259,10 @@ export default {
       }
       let promise = this.repositionSimpleGateInCircuit({
         'step': this.step, 
-        'qbit': this.qbit, 
+        'qbits': [...this.qbits],
         'root': this.root,
         'name': this.name, 
-        'qbitNew': this.$data.qbitNew, 
+        'qbitsNew': [...this.$data.qbitsNew],
         'rootNew': newRoot,
       });
       promise.then(
@@ -270,7 +270,8 @@ export default {
         result => {}, 
         // eslint-disable-next-line no-unused-vars
         error => {
-          this.$data.qbitNew = this.qbit = qbitOld;
+          this.$data.qbitsNew = [...qbitsOld];
+          this.qbits = [...qbitsOld];
           this.root = rootOld;
           this.$data.rootKNew = this.getKRoot();
           this.$data.rootTNew = this.getTRoot();
@@ -281,7 +282,7 @@ export default {
     handleReplicateGateModalSave: function(){
       let promise = this.replicateGate({
         'step': this.step,
-        'qbit': this.qbit,
+        'qbits': [...this.qbits],
         'name': this.name, 
         'stepFirst': this.stepFirst,
         'stepLast': this.stepLast,

@@ -10,7 +10,7 @@ export default {
   name: "FredkinGateControlStubDown",
   props: {
     'step' : Number, 
-    'qbit': Number,
+    'qbits': Array,
     'qbit2': Number,
     'title': String,
     'name': String,

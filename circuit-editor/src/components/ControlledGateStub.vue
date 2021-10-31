@@ -73,7 +73,7 @@ export default {
   name: "ControlledGateStub",
   props: {
     'step' : Number, 
-    'qbit': Number,
+    'qbits': Array,
     'qbit2': Number,
     'qrow': Number,
     'title': String,
@@ -137,9 +137,9 @@ export default {
       let dto = {
         'name': this.gate,
         'step': this.step, 
-        'qbit': this.qbit, 
+        'qbits': [...this.qbits],
         'controls': [...this.controls],
-        'qbitNew': this.qbit,
+        'qbitsNew': [...this.qbits],
         'controlsNew': [...this.controls],
         'controlstatesNew': controlStatesNew,
       }
@@ -182,9 +182,9 @@ export default {
         let dto = {
           'name': this.gate,
           'step': this.step, 
-          'qbit': this.qbit, 
+          'qbits': [...this.qbits],
           'controls': [...this.controls],
-          'qbitNew': this.qbit,
+          'qbitsNew': [...this.qbits],
           'controlsNew': [...controlsNew],
           'controlstatesNew': [...controlStatesNew],
         }
