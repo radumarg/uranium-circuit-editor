@@ -34,10 +34,10 @@ export default {
       event.dataTransfer.setData("drag-origin", "stub");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
       event.dataTransfer.setData("gateName", this.gate);
-      event.dataTransfer.setData("originalQbit", this.qbit);
+      event.dataTransfer.setData("originalQbits", [...this.qbits]);
       event.dataTransfer.setData("originalQbit2", this.qbit2);
       event.dataTransfer.setData("originalStep", this.step);
-      event.dataTransfer.setData("originalControl", this.control);
+      event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstate", this.controlstate);
       const target = event.target;
       let dragImageGhost = createDragImageGhost(target);  

@@ -655,7 +655,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           let targets = [];
           let controls = [];
 
-          if (Object.prototype.hasOwnProperty.call(gate, "target")) {
+          if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
             targets = [...gate.targets]
           }
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
@@ -667,8 +667,8 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
 
           let qmin = Math.min(...qbits);
           let qmax = Math.max(...qbits);
-          let rowMin = getRowFromQbit(Math.min(...qbits));
-          let rowMax = getRowFromQbit(Math.max(...qbits));
+          let rowMin = getRowFromQbit(qmin);
+          let rowMax = getRowFromQbit(qmax);
 
           // test if this gate impacts current row
           if ((inputRow < rowMin) || (inputRow > rowMax)) {

@@ -153,8 +153,8 @@ export const circuitEditorModule = {
         let step = dataTransferObj["step"];
         
         let qbits = [];
-        if (Object.prototype.hasOwnProperty.call(dataTransferObj, "targets")) {
-          qbits = [...dataTransferObj["targets"]];
+        if (Object.prototype.hasOwnProperty.call(dataTransferObj, "qbits")) {
+          qbits = [...dataTransferObj["qbits"]];
         }
 
         let controls = [];

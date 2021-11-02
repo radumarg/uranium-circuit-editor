@@ -342,19 +342,17 @@ export default {
     },
     addNewControlToControlledGate: function (event) {
       let gateName = event.dataTransfer.getData("gateName");
-      let qbit = event.dataTransfer.getData("originalQbit");
+      let qbits = JSON.parse("[" +  event.dataTransfer.getData("originalQbits") + "]");
       let step = parseInt(event.currentTarget.getAttribute("step"));
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));         
 
       // add the new gate mandatory params
-      let dto = { step: step, qbit: qbit, name: gateName };
+      let dto = { step: step, qbits: [...qbits], name: gateName };
 
-      let controls =  JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
-      dto["controls"] = [...controls];
+      dto["controls"] = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
       dto["controls"].push(dropQbit);
 
-      let controlstates = event.dataTransfer.getData("controlstates").split(",");
-      dto["controlstates"] = [...controlstates];
+      dto["controlstates"] = event.dataTransfer.getData("controlstates").split(",");
       dto["controlstates"].push('1');
       
       if (event.dataTransfer.types.includes("phi")) {
@@ -382,21 +380,23 @@ export default {
       let qbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let step = parseInt(event.currentTarget.getAttribute("step"));            
       let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
+      let originalQbits = JSON.parse("[" +  event.dataTransfer.getData("originalQbits") + "]");
 
       // add the new gate mandatory params
-      let dto = { step: step, qbit: qbit, name: gateName };
+      let dto = { step: step, qbits: [qbit], controls: [], name: gateName, };
 
       let qbitDelta = draggedQbit - qbit;
 
       // add optional params, notice lower case needed for types.includes
-      if (event.dataTransfer.types.includes("originalqbit2")) {
-        let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
-        let originalQbit2 = parseInt(event.dataTransfer.getData("originalQbit2"));
+      if (originalQbits.length > 1) {
+        let originalQbit = parseInt(originalQbits[0]);
+        let originalQbit2 = parseInt(originalQbits[1]);
         if (draggedQbit == originalQbit) {
-          dto["qbit2"] = parseInt(originalQbit2) - qbitDelta;
+          dto["qbits"].push(originalQbit2 - qbitDelta);
         } else if (draggedQbit == originalQbit2) {
-          dto["qbit"] = originalQbit - qbitDelta;
-          dto["qbit2"] = qbit;
+          dto["qbits"].length = 0; // reset array
+          dto["qbits"][0] = originalQbit - qbitDelta;
+          dto["qbits"].push(qbit);
         }
       }
       if (event.dataTransfer.types.includes("originalcontrols")) {
@@ -429,10 +429,9 @@ export default {
       }
 
       let proposedQbits = [
-        dto["qbit"],
-        dto["qbit2"],
+        ...dto["qbits"],
         ...dto["controls"],
-      ].filter((qbit) => isDefined(qbit));
+      ]
 
       if (
         seatsAreTaken(
@@ -442,7 +441,7 @@ export default {
         )
       ) {
         alert(
-          "Cannot replicate this gate here, not all required qubits are available!"
+          "Cannot add this gate here, not all required qubits are available!"
         );
         this.handleDragLeave();
         return;
@@ -455,11 +454,10 @@ export default {
       let qbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let step = parseInt(event.currentTarget.getAttribute("step"));
       let gateName = event.dataTransfer.getData("gateName");
-      let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
-      let originalQbit2 = parseInt(event.dataTransfer.getData("originalQbit2"));
-      let originalControls = [];
+      let originalQbits = JSON.parse("[" +  event.dataTransfer.getData("originalQbits") + "]");
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let dragOrigin = event.dataTransfer.getData("drag-origin");
+      let originalControls = [];
       
       let draggedQbit = null;
       if (event.dataTransfer.types.includes("dragged-qbit")) {
@@ -467,17 +465,18 @@ export default {
       }
       
       // add the new gate mandatory params
-      let dto = { step: step, qbit: qbit, name: gateName };
+      let dto = { step: step, qbits: [qbit], name: gateName };
 
       if (dragOrigin == "stub") {
-        dto["qbit"] = originalQbit;
+        dto["qbits"] = originalQbits;
       }
       
       // add optional params, notice lower case needed for types.includes
-      if (event.dataTransfer.types.includes("originalqbit2")) {
-        let qbit2 = parseInt(event.dataTransfer.getData("originalQbit2"));
-        dto["qbit2"] = qbit2;
-      }
+      // TODO: fix
+      // if (event.dataTransfer.types.includes("originalqbit2")) {
+      //   let qbit2 = parseInt(event.dataTransfer.getData("originalQbit2"));
+      //   dto["qbit2"] = qbit2;
+      // }
       if (event.dataTransfer.types.includes("originalcontrols")) {
         originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
         dto["controls"] = originalControls;
@@ -508,8 +507,7 @@ export default {
       }
       
       let existingQbits = [
-        originalQbit,
-        originalQbit2,
+        ...originalQbits,
         ...originalControls,
       ].filter((qbit) => isDefined(qbit));
 
@@ -532,7 +530,8 @@ export default {
             dto["controlstates"] = ['1'];
           }
           if (dragOrigin != "stub"){
-            let delta = qbit - originalQbit;
+            //TODO: review
+            let delta = qbit - originalQbits[0];
             dto["controls"] = originalControls.map(val => val + delta).filter(val => val >= 0);
           } else {
             dto["controls"] = dto["controls"].map(function(item) { return item == draggedQbit ? qbit : item; });
@@ -547,21 +546,22 @@ export default {
           gateName == "zz"
         ) {
 
-          if (
-            (draggedQbit == originalQbit2 && qbit == originalQbit) ||
-            (draggedQbit == originalQbit && qbit == originalQbit2)
-          ) {
-              dto["qbit2"] = null;
-          } else if (draggedQbit != null) {
-            if (draggedQbit == originalQbit) {
-              dto["qbit2"] = originalQbit2;
-            } else if (draggedQbit == originalQbit2) {
-              dto["qbit"] = originalQbit;
-              dto["qbit2"] = qbit;
-            }
-          }
+          // TODO: fix
+          // if (
+          //   (draggedQbit == originalQbit2 && qbit == originalQbit) ||
+          //   (draggedQbit == originalQbit && qbit == originalQbit2)
+          // ) {
+          //     dto["qbit2"] = null;
+          // } else if (draggedQbit != null) {
+          //   if (draggedQbit == originalQbit) {
+          //     dto["qbit2"] = originalQbit2;
+          //   } else if (draggedQbit == originalQbit2) {
+          //     dto["qbit"] = originalQbit;
+          //     dto["qbit2"] = qbit;
+          //   }
+          // }
 
-          success = this.repositionTwoTargetQubitsGate(dto, qbit, step, originalStep, existingQbits);
+          // success = this.repositionTwoTargetQubitsGate(dto, qbit, step, originalStep, existingQbits);
         }
       }
       
@@ -571,8 +571,8 @@ export default {
 
         // step1 - remove original gate if drag event started from a cell
         // in editor (not originating from gates pallete)
-        if (isDefined(originalQbit) && isDefined(originalStep)) {
-          let dto = { step: originalStep, qbit: originalQbit };
+        if (isDefined(originalQbits) && isDefined(originalStep)) {
+          let dto = { step: originalStep, qbits: [...originalQbits] };
           this.removeGateFromCircuit(dto);
         }
 
@@ -592,8 +592,7 @@ export default {
       }
 
       let proposedQbits = [
-        dto["qbit"],
-        dto["qbit2"],
+        ...dto["qbits"],
         ...dto["controls"],
       ].filter((qbit) => isDefined(qbit));
 
@@ -621,8 +620,7 @@ export default {
       // TODO:fix
       dto["controls"] = [parseInt(qbit) - 1];
       let proposedQbits = [
-        dto["qbit"],
-        dto["qbit2"],
+        ...dto["qbits"],
         ...dto["controls"],
       ].filter((qbit) => isDefined(qbit));
       if (
@@ -631,8 +629,7 @@ export default {
         // TODO:fix
         dto["controls"] = [parseInt(qbit) + 1];
         proposedQbits = [
-          dto["qbit"],
-          dto["qbit2"],
+          ...dto["qbits"],
           ...dto["controls"],
         ].filter((qbit) => isDefined(qbit));
         if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)
@@ -644,16 +641,13 @@ export default {
       return true;
     },
     repositionTwoTargetQubitsGate: function(dto, qbit, step, originalStep, existingQbits){
-      if (dto["qbit2"] == null) {
+      if (dto["qbits"].length == 1) {
         if (!this.findBestFitForTwoTargetQubitsGate(dto, qbit, step, existingQbits)) {
           return false;
         }
       }
-
-      let proposedQbits = [
-        dto["qbit"],
-        dto["qbit2"],
-      ].filter((qbit) => isDefined(qbit));
+      //TODO: review
+      let proposedQbits = [ ...dto["qbits"]];
 
       if (
         seatsAreTaken(
@@ -679,9 +673,9 @@ export default {
       return true;
     },
     findBestFitForTwoTargetQubitsGate: function (dto, qbit, step, existingQbits) {
-      dto["qbit"] = parseInt(qbit);
-      dto["qbit2"] = dto["qbit"] + 1;
-      let proposedQbits = [dto["qbit"], dto["qbit2"]];
+      let q = parseInt(qbit);
+      dto["qbits"] = [q, q + 1];
+      let proposedQbits = [...dto["qbits"]];
       if (
         seatsAreTaken(
           this.$store.state.circuitEditorModule,
@@ -690,12 +684,12 @@ export default {
           existingQbits
         )
       ) {
-          dto["qbit2"] = dto["qbit"] - 1;
-          if (dto["qbit2"] < 0) {
+          if (q == 0) {
             alert("Cannot allocate second target qubit for this gate!");
             return false;
           }
-          let proposedQbits = [dto["qbit"], dto["qbit2"]];
+          dto["qbits"] = [q, q - 1];
+          let proposedQbits = [...dto["qbits"]];
           if (
             seatsAreTaken(
               this.$store.state.circuitEditorModule,

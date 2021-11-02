@@ -244,7 +244,7 @@ export default {
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalQbit", this.qbit);
+      event.dataTransfer.setData("originalQbits", [...this.qbits]);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("bit", this.bit);
       let dragImageGhost = createDragImageGhost(target);  

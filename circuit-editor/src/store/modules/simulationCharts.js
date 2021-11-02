@@ -1,5 +1,5 @@
 import init, { get_probabilities, get_statevector } from './wasm/moara_js.js'
-import { getUserInterfaceSetting } from "./utils.js";
+import { getUserInterfaceSetting } from "./applicationWideReusableUnits.js";
 
 function toState(dec, totalLength, base) {
 

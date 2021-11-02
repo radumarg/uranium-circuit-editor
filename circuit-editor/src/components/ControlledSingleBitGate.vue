@@ -303,6 +303,7 @@ import { mapActions } from 'vuex';
 import SingleBitGate from "./SingleBitGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";
 import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { arraysHaveElementsInCommon } from "../store/modules/javaScriptUtils.js";
 export default {
   name: "ControlledSingleBitGate",
   extends: SingleBitGate,
@@ -325,11 +326,11 @@ export default {
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionControlledGateInCircuit']),
     handleSave: function(){
-      if (this.$data.controlsNew.includes(this.$data.qbitNew)){
+      if (arraysHaveElementsInCommon(this.$data.controlsNew, this.$data.qbitsNew)){
         alert("Control and target qubits must differ!");
         return;
       }
-      if (!Number.isInteger(this.$data.qbitNew)){
+      if (!Number.isInteger(this.$data.qbitsNew[0])){
         alert("Please enter an integer number!");
         return;
       }
@@ -389,7 +390,7 @@ export default {
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalQbit", this.qbit);
+      event.dataTransfer.setData("originalQbits", [...this.qbits]);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstates", [...this.controlstates]);

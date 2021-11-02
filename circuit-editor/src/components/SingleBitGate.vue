@@ -242,10 +242,11 @@ export default {
       this.expandGateIsHovered = false;
       this.editControlsIsHovered = false;
       this.$data.qbitNew = this.qbit;
-      if (this.qbit2 || this.qbit2 === 0){
-        this.$data.qbit2New = this.qbit2;
-        this.$data.qbit2Expression = this.qbit2.toString();
-      }
+      // TODO: fix
+      // if (this.qbit2 || this.qbit2 === 0){
+      //   this.$data.qbit2New = this.qbit2;
+      //   this.$data.qbit2Expression = this.qbit2.toString();
+      // }
       if (this.root){
         if (this.root.includes("1/2^")){
           this.$data.rootNewK = this.root.replace("1/2^", "");
@@ -355,7 +356,7 @@ export default {
       this.removeGateFromCircuitByUser({'step': this.step, 'qbit': this.qbit});
     },
     handleSave: function(){
-      if (!Number.isInteger(this.$data.qbitNew)){
+      if (!Number.isInteger(this.$data.qbitsNew[0])){
         alert("Please enter an integer number!");
         return;
       }
@@ -409,7 +410,7 @@ export default {
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalQbit", this.qbit);
+      event.dataTransfer.setData("originalQbits", [...this.qbits]);
       event.dataTransfer.setData("originalStep", this.step);
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);

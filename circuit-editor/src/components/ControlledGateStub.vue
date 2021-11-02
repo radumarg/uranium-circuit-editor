@@ -74,7 +74,6 @@ export default {
   props: {
     'step' : Number, 
     'qbits': Array,
-    'qbit2': Number,
     'qrow': Number,
     'title': String,
     'name': String,
@@ -143,12 +142,6 @@ export default {
         'controlsNew': [...this.controls],
         'controlstatesNew': controlStatesNew,
       }
-      if (isDefined(this.qbit2)) {
-        dto['qbit2'] = this.qbit2;
-      }
-      if (isDefined(this.qbit2)) {
-        dto['qbit2New'] = this.qbit2;
-      }
       if (isDefined(this.phi)) {
         dto['phiNew'] = this.phi;
       }
@@ -187,12 +180,6 @@ export default {
           'qbitsNew': [...this.qbits],
           'controlsNew': [...controlsNew],
           'controlstatesNew': [...controlStatesNew],
-        }
-        if (isDefined(this.qbit2)) {
-          dto['qbit2'] = this.qbit2;
-        }
-        if (isDefined(this.qbit2)) {
-          dto['qbit2New'] = this.qbit2;
         }
         if (isDefined(this.phi)) {
           dto['phiNew'] = this.phi;
@@ -246,13 +233,10 @@ export default {
       event.dataTransfer.setData("drag-origin", "stub");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
       event.dataTransfer.setData("gateName", this.gate);
-      event.dataTransfer.setData("originalQbit", this.qbit);
+      event.dataTransfer.setData("originalQbits", [...this.qbits]);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstates", [...this.controlstates]);
-      if (isDefined(this.qbit2)){
-        event.dataTransfer.setData("originalQbit2", this.qbit2);
-      }
       if (isDefined(this.theta)) {
         event.dataTransfer.setData("theta", this.theta);
       }

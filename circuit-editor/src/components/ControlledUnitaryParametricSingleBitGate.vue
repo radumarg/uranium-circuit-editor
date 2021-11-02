@@ -246,7 +246,7 @@ export default {
         alert("Control and target qubits must differ!");
         return;
       }
-      if (!Number.isInteger(this.$data.qbitNew)){
+      if (!Number.isInteger(this.$data.qbitsNew[0])){
         alert("Please enter an integer number!");
         return;
       }
@@ -309,9 +309,9 @@ export default {
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalQbit", this.qbit);
+      event.dataTransfer.setData("originalQbits", [...this.qbits]);
       event.dataTransfer.setData("originalStep", this.step);
-      event.dataTransfer.setData("originalControl", this.control);
+      event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstate", this.controlstate);
       event.dataTransfer.setData("lambda", this.lambda);
       let dragImageGhost = createDragImageGhost(target);  

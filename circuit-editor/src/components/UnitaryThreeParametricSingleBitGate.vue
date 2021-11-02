@@ -224,7 +224,7 @@ export default {
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
     handleSave: function(){
-      if (!Number.isInteger(this.$data.qbitNew)){
+      if (!Number.isInteger(this.$data.qbitsNew[0])){
         alert("Please enter an integer number!");
         return;
       }
@@ -288,7 +288,7 @@ export default {
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalQbit", this.qbit);
+      event.dataTransfer.setData("originalQbits", [...this.qbits]);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("phi", this.phi);
       event.dataTransfer.setData("theta", this.theta);
