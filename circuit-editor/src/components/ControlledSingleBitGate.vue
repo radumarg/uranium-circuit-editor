@@ -47,7 +47,7 @@
           <td></td>
           <td title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -229,7 +229,7 @@
           <td title="Control qubit" class="edit-controls-cell">Target:</td>
           <td class="edit-controls-cell">
             <div class="d-flex justify-content-center align-items-center">
-              <b-form-input readonly min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="qbitsNew[0]" placeholder="target" type="number" id="target-qbit" style="width:70px;"></b-form-input>
+              <b-form-input readonly min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="targetsNew[0]" placeholder="target" type="number" id="target-qbit" style="width:70px;"></b-form-input>
             </div>
           </td>
           <td></td>
@@ -326,23 +326,23 @@ export default {
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionControlledGateInCircuit']),
     handleSave: function(){
-      if (arraysHaveElementsInCommon(this.$data.controlsNew, this.$data.qbitsNew)){
+      if (arraysHaveElementsInCommon(this.$data.controlsNew, this.$data.targetsNew)){
         alert("Control and target qubits must differ!");
         return;
       }
-      if (!Number.isInteger(this.$data.qbitsNew[0])){
+      if (!Number.isInteger(this.$data.targetsNew[0])){
         alert("Please enter an integer number!");
         return;
       }
-      let qbitsOld = [...this.qbits];
+      let targetsOld = [...this.targets];
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
       let promise = this.repositionControlledGateInCircuit({
         'step': this.step, 
-        'qbits': [...this.qbits],
+        'targets': [...this.targets],
         'name': this.name,
         'controls': [...this.controls], 
-        'qbitsNew': [...this.$data.qbitsNew],
+        'targetsNew': [...this.$data.targetsNew],
         'controlsNew': this.$data.controlsNew,
         'controlstatesNew': this.$data.controlstatesNew,
       });
@@ -351,8 +351,8 @@ export default {
         result => {}, 
         // eslint-disable-next-line no-unused-vars
         error => {
-          this.$data.qbitsNew = [...qbitsOld];
-          this.qbits = [...qbitsOld];
+          this.$data.targetsNew = [...targetsOld];
+          this.targets = [...targetsOld];
           this.controls = [...controlsOld];
           this.$data.controlsNew = [...controlsOld];
           this.controlstates = [...controlstatesOld];
@@ -364,7 +364,7 @@ export default {
     handleReplicateGateModalSave: function(){
       let promise = this.replicateGate({
         'step': this.step,
-        'qbits': [...this.qbits],
+        'targets': [...this.targets],
         'name': this.name, 
         'stepFirst': this.stepFirst,
         'stepLast': this.stepLast,
@@ -390,7 +390,7 @@ export default {
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalQbits", [...this.qbits]);
+      event.dataTransfer.setData("originalTargets", [...this.targets]);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstates", [...this.controlstates]);

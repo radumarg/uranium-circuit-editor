@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -280,11 +280,11 @@ export default {
         alert("Control and target qubits must differ!");
         return;
       }
-      if (!Number.isInteger(this.$data.qbitsNew[0])){
+      if (!Number.isInteger(this.$data.targetsNew[0])){
         alert("Please enter an integer number!");
         return;
       }
-      let qbitsOld = [...this.qbits];
+      let targetsOld = [...this.targets];
       let controlOld = this.control;
       let controlstateOld = this.controlstate;
       let phiOld = this.phi;
@@ -292,11 +292,11 @@ export default {
       let lambdaOld = this.lambda;
       let promise = this.repositionControlledGateInCircuit({
         'step': this.step, 
-        'qbits': [...this.qbits],
+        'targets': [...this.targets],
         'control': this.control,
         'controlstate': this.controlstate,
         'name': this.name, 
-        'qbitsNew': [...this.$data.qbitsNew],
+        'targetsNew': [...this.$data.targetsNew],
         'phiNew': this.$data.phiNew,
         'thetaNew': this.$data.thetaNew,
         'lambdaNew': this.$data.lambdaNew,
@@ -308,8 +308,8 @@ export default {
         result => {}, 
         // eslint-disable-next-line no-unused-vars
         error => {
-          this.$data.qbitsNew = [...qbitsOld];
-          this.qbits = [...qbitsOld];
+          this.$data.targetsNew = [...targetsOld];
+          this.targets = [...targetsOld];
           this.$data.controlNew = this.control = controlOld;
           this.$data.controlstateNew = this.controlstate = controlstateOld;
           this.$data.phiNew = this.phi = phiOld;
@@ -322,7 +322,7 @@ export default {
     handleReplicateGateModalSave: function(){
       let promise = this.replicateGate({
         'step': this.step,
-        'qbits': [...this.qbits],
+        'targets': [...this.targets],
         'name': this.name, 
         'stepFirst': this.stepFirst,
         'stepLast': this.stepLast,
@@ -351,7 +351,7 @@ export default {
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalQbits", [...this.qbits]);
+      event.dataTransfer.setData("originalTargets", [...this.targets]);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstate", this.controlstate);

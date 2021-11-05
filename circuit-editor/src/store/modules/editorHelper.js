@@ -12,7 +12,7 @@ import {
 
 export function removingGateFromCircuit(circuitState, dto){
   let step = dto["step"];
-  let qbits = dto["qbits"];
+  let targets = dto["targets"];
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
     for (let i = 0; i < circuitState.steps.length; i++) {
       if (circuitState.steps[i].index == step) {
@@ -20,7 +20,7 @@ export function removingGateFromCircuit(circuitState, dto){
         for (let j = 0; j < gates.length; j++) {
           let gate = gates[j];
           if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
-            if (arraysAreEqual(gate.targets, qbits)) {
+            if (arraysAreEqual(gate.targets, targets)) {
               gates.splice(j, 1);
             }
           }
@@ -32,10 +32,10 @@ export function removingGateFromCircuit(circuitState, dto){
 
 export function insertingOneGateInCircuit(circuitState, dto) {
   let step = dto["step"];
-  let qbits = dto["qbits"];
+  let targets = dto["targets"];
   let name = dto["name"];
   
-  let gate = { "name": name, "targets": [...qbits] };
+  let gate = { "name": name, "targets": [...targets] };
   if (Object.prototype.hasOwnProperty.call(dto, "controls")) {
       let controls = dto["controls"];
       gate["controls"] = [...controls];
@@ -260,7 +260,7 @@ export function gatePastedGates(qbitStart, stepStart){
     gate.step = gate.step + stepStart;
     if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
       let targets = gate.targets;
-      gate.qbits = targets.map(function(value) {return value + qbitStart;});
+      gate.targets = targets.map(function(value) {return value + qbitStart;});
     }
     if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
       let controls = gate.controls;
@@ -305,12 +305,12 @@ export function proposedNewGatesAreInvalid(dtos) {
   for (let i = 0; i < dtos.length; i++) {
 
     let noExpectedQubits = 1;
-    let qbits = [];
+    let targets = [];
     let controls = [];
 
-    if (Object.prototype.hasOwnProperty.call(dtos[i], "qbits")) {
-      qbits = dtos[i]["qbits"];
-      noExpectedQubits += qbits.length;
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "targets")) {
+      targets = dtos[i]["targets"];
+      noExpectedQubits += targets.length;
     }
 
     if (Object.prototype.hasOwnProperty.call(dtos[i], "controls")) {
@@ -318,7 +318,7 @@ export function proposedNewGatesAreInvalid(dtos) {
       noExpectedQubits += controls.length;
     }
 
-    let distinctQbits = [...qbits, ...controls]
+    let distinctQbits = [...targets, ...controls]
       // x - item in array
       // i - index of item
       // a - array reference
@@ -336,8 +336,8 @@ export function proposedNewSeatsOverlap(dtos) {
     let controls = [];
     let targets = [];
 
-    if (Object.prototype.hasOwnProperty.call(dtos[i], "qbits")) {
-      targets = dtos[i]["qbits"];
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "targets")) {
+      targets = dtos[i]["targets"];
     }
 
     if (Object.prototype.hasOwnProperty.call(dtos[i], "controls")) {
@@ -350,8 +350,8 @@ export function proposedNewSeatsOverlap(dtos) {
       if (step != step2) continue;
       let targetsSecond = [];
       let controlsSecond = [];
-      if (Object.prototype.hasOwnProperty.call(dtos[j], "qbits")) {
-        targetsSecond = dtos[j].qbits;
+      if (Object.prototype.hasOwnProperty.call(dtos[j], "targets")) {
+        targetsSecond = dtos[j].targets;
       }
       if (Object.prototype.hasOwnProperty.call(dtos[j], "controls")) {
         controlsSecond = dtos[j].controls;

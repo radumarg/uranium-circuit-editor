@@ -1,5 +1,5 @@
 <template>
-   <div :step="step" :qrow="qrow" :qbits="qbits" @dragover.prevent @drop.prevent="handleDropEvent" @dragover="handleDragOver" @dragleave="handleDragLeave">
+   <div :step="step" :qrow="qrow" :targets="targets" @dragover.prevent @drop.prevent="handleDropEvent" @dragover="handleDragOver" @dragleave="handleDragLeave">
     <img :src="gateImageSource" :id="id" draggable="false" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;" />
   </div>
 </template>
@@ -36,8 +36,8 @@ export default {
       }
     },
     handleDropEvent: function (event) {
-      let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
-      let originalQbit2 = parseInt(event.dataTransfer.getData("originalQbit2"));
+      let originalTarget = parseInt(event.dataTransfer.getData("originalTarget"));
+      let originalTarget2 = parseInt(event.dataTransfer.getData("originalTarget2"));
       let originalControl = parseInt(event.dataTransfer.getData("originalControl"));
       let controlstate = event.dataTransfer.getData("controlstate");
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
@@ -48,18 +48,18 @@ export default {
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
   
-      if (originalStep == null || step != originalStep || qbit != originalQbit) {
+      if (originalStep == null || step != originalStep || qbit != originalTarget) {
         this.handleDragLeave();
         return;
       }
 
       // add the new gate mandatory params
-      let dto = { step: step, name: gateName, qbit: originalQbit, qbit2: originalQbit2, control: originalControl, controlstate: controlstate };
+      let dto = { step: step, name: gateName, qbit: originalTarget, qbit2: originalTarget2, control: originalControl, controlstate: controlstate };
       
       if (dragOrigin == "stub"){
         dto["control"] = dropQbit;
       } else {
-        if (draggedQbit == originalQbit){
+        if (draggedQbit == originalTarget){
           dto["qbit"] = dropQbit;
         } else {
           dto["qbit2"] = dropQbit;
@@ -73,7 +73,7 @@ export default {
 
       // step1 - remove original gate if drag event started from a cell 
       // in editor (not originating from gates pallete)
-      this.removeGateFromCircuit({'step': originalStep, 'qbit': originalQbit});
+      this.removeGateFromCircuit({'step': originalStep, 'qbit': originalTarget});
 
       // step2 - add the new gate to the circuit
       this.insertGateInCircuit(dto);

@@ -117,7 +117,7 @@ export const controlsMixin = {
     },
     handleEditControlsModalSave: function(){
       let duplicateControls = getDuplicateValues(this.controlsNew);
-      if (arraysHaveElementsInCommon(this.$data.controlsNew, this.$data.qbitsNew)){
+      if (arraysHaveElementsInCommon(this.$data.controlsNew, this.$data.targetsNew)){
         alert("Control and target qubits must differ!");
       } else if (isDefined(this.$data.qbit2New) && this.$data.controlsNew.includes(this.$data.qbit2New)){
         alert("Control and target qubits must differ!");

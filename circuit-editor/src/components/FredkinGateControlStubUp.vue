@@ -10,7 +10,7 @@ export default {
   name: "FredkinGateControlStubUp",
   props: {
     'step' : Number, 
-    'qbits': Array,
+    'targets': Array,
     'qbit2': Number,
     'title': String,
     'name': String,
@@ -34,8 +34,8 @@ export default {
       event.dataTransfer.setData("drag-origin", "stub");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
       event.dataTransfer.setData("gateName", this.gate);
-      event.dataTransfer.setData("originalQbits", [...this.qbits]);
-      event.dataTransfer.setData("originalQbit2", this.qbit2);
+      event.dataTransfer.setData("originalTargets", [...this.targets]);
+      event.dataTransfer.setData("originalTarget2", this.qbit2);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstate", this.controlstate);

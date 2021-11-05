@@ -90,6 +90,12 @@ export default {
             },
             formatString: 'F2',
           },
+          annotations: [
+            {
+              label: { text: 'Real Values', style_fontSize: '15px' },
+              position: 'top center',
+            },
+          ],
         },
         this.$data.chartOptionsImaginary = {
           type: 'horizontal column',
@@ -111,6 +117,12 @@ export default {
             },
             formatString: 'F2',
           },
+          annotations: [
+            {
+              label: { text: 'Imaginary Values', style_fontSize: '15px' },
+              position: 'top center',
+            },
+          ],
         }
       },
       runSimulation: async function (circuitState) {

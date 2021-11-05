@@ -1,5 +1,5 @@
 <template>
-  <div :step="step" :qrow="qrow" :qbits="qbits" @dragover.prevent @drop.prevent="handleDropEvent" @dragover="handleDragOver" @dragleave="handleDragLeave">
+  <div :step="step" :qrow="qrow" :targets="targets" @dragover.prevent @drop.prevent="handleDropEvent" @dragover="handleDragOver" @dragleave="handleDragLeave">
     <img :src="gateImageSource" :id="id" draggable="false" style="width: 100%; height: 100%; max-width: 40px; max-height: 40px; min-width: 40px; min-height: 40px;"/>
   </div>
 </template>
@@ -13,7 +13,7 @@ export default {
     'name': String,
     'step': Number,
     'qrow': Number,
-    'qbits': Array,
+    'targets': Array,
     'id': String,
   },
   computed: {
@@ -31,8 +31,8 @@ export default {
       let step = parseInt(event.currentTarget.getAttribute("step"));
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
-      let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
-      if (step == originalStep || qbit == originalQbit) {
+      let originalTarget = parseInt(event.dataTransfer.getData("originalTarget"));
+      if (step == originalStep || qbit == originalTarget) {
         if (event.shiftKey) {
           this.addNewControl(event);
         } else {
@@ -45,13 +45,13 @@ export default {
     addNewControl: function (event) {
       let gateName = event.dataTransfer.getData("gateName");
       let step = parseInt(event.currentTarget.getAttribute("step"));
-      let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
+      let originalTarget = parseInt(event.dataTransfer.getData("originalTarget"));
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let controls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
       let controlstates = event.dataTransfer.getData("controlstates").split(",");
 
       // add the new gate mandatory params
-      let dto = { "step": step, "name": gateName, "qbit": originalQbit, "controls": controls, "controlstates": controlstates};
+      let dto = { "step": step, "name": gateName, "qbit": originalTarget, "controls": controls, "controlstates": controlstates};
 
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
       dto["controls"].push(dropQbit);
@@ -77,7 +77,7 @@ export default {
 
       // step1 - remove original gate if drag event started from a cell 
       // in editor (not originating from gates pallete)
-      this.removeGateFromCircuit({'step': originalStep, 'qbit': originalQbit});
+      this.removeGateFromCircuit({'step': originalStep, 'qbit': originalTarget});
 
       // step2 - add the new gate to the circuit
       this.insertGateInCircuit(dto);
@@ -86,7 +86,7 @@ export default {
       let gateName = event.dataTransfer.getData("gateName");
       let step = parseInt(event.currentTarget.getAttribute("step"));
       let dragOrigin = event.dataTransfer.getData("drag-origin");
-      let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
+      let originalTarget = parseInt(event.dataTransfer.getData("originalTarget"));
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let controls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
       let controlstates = event.dataTransfer.getData("controlstates").split(",");
@@ -94,7 +94,7 @@ export default {
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
 
       // add the new gate mandatory params
-      let dto = { "step": step, "name": gateName, "qbit": originalQbit, "controls": controls, "controlstates": controlstates};
+      let dto = { "step": step, "name": gateName, "qbit": originalTarget, "controls": controls, "controlstates": controlstates};
 
       // adjust dto based on drop location
       if (dragOrigin == "stub") {
@@ -124,7 +124,7 @@ export default {
 
       // step1 - remove original gate if drag event started from a cell 
       // in editor (not originating from gates pallete)
-      this.removeGateFromCircuit({'step': originalStep, 'qbit': originalQbit});
+      this.removeGateFromCircuit({'step': originalStep, 'qbit': originalTarget});
 
       // step2 - add the new gate to the circuit
       this.insertGateInCircuit(dto);

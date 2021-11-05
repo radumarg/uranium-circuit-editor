@@ -1,5 +1,5 @@
 <template>
-  <div :step="step" :qrow="qrow" :qbits="qbits" @dragover.prevent @drop.prevent="handleDropEvent" @dragover="handleDragOver" @dragleave="handleDragLeave">
+  <div :step="step" :qrow="qrow" :targets="targets" @dragover.prevent @drop.prevent="handleDropEvent" @dragover="handleDragOver" @dragleave="handleDragLeave">
     <img :src="gateImageSource" :id="id" draggable="false" style="width: 100%; height: 100%; max-width: 40px; max-height: 40px; min-width: 40px; min-height: 40px;"/>
   </div>
 </template>
@@ -27,7 +27,7 @@ export default {
   methods: {
     ...mapActions('circuitEditorModule/', ['insertGateInCircuit', 'removeGateFromCircuit']),
     handleDropEvent: function (event) {
-      let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
+      let originalTarget = parseInt(event.dataTransfer.getData("originalTarget"));
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let originalControl = parseInt(event.dataTransfer.getData("originalControl"));
       let controlstate = event.dataTransfer.getData("controlstate");
@@ -40,13 +40,13 @@ export default {
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
    
-      if (originalStep == null || step != originalStep || qbit != originalQbit) {
+      if (originalStep == null || step != originalStep || qbit != originalTarget) {
         this.handleDragLeave();
         return;
       }
 
       // add the new gate mandatory params
-      let dto = { step: step, name: gateName, qbit: originalQbit, control: originalControl, controlstate: controlstate, control2: originalControl2, controlstate2: controlstate2};
+      let dto = { step: step, name: gateName, qbit: originalTarget, control: originalControl, controlstate: controlstate, control2: originalControl2, controlstate2: controlstate2};
       
 
       if (dragOrigin == "stub"){
@@ -66,7 +66,7 @@ export default {
 
       // step1 - remove original gate if drag event started from a cell 
       // in editor (not originating from gates pallete)
-      this.removeGateFromCircuit({'step': originalStep, 'qbit': originalQbit});
+      this.removeGateFromCircuit({'step': originalStep, 'qbit': originalTarget});
 
       // step2 - add the new gate to the circuit
       this.insertGateInCircuit(dto);

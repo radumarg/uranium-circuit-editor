@@ -16,7 +16,7 @@ class GatesTableCell {
     /* the qbit associated to current row (null in case row does not hold gates) */
     this.qrow = 0;
     /* the target qbits associated with gate present on this cell */
-    this.qbits = [];
+    this.targets = [];
     /* name of Vue component displayed by this cell. For example for a controlled
     gate we have one component used to render target qubit and another component
     used to render the controll qubit*/
@@ -295,7 +295,7 @@ export function seatsAreTaken(circuitState, proposedQbits, step, reallocatableQb
 export function seatsInArrayAreAlreadyTaken(circuitState, dtos, ignoreStep = null, ignoreQubits = []) {
   for (let i = 0; i < dtos.length; i++) {
 
-    let qbits = dtos[i]["qbits"];
+    let qbits = dtos[i]["targets"];
     let step = dtos[i]["step"];
 
     for (let j = 0; j < qbits.length; j++){
@@ -675,7 +675,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             continue;
           }
 
-          gatesTableRowState.cells[column].qbits = targets;
+          gatesTableRowState.cells[column].targets = targets;
           gatesTableRowState.cells[column].controls = controls;
 
           // this is the name of the gate

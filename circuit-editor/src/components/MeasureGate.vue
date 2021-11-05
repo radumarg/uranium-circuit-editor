@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target Qbit:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -195,13 +195,13 @@ export default {
         alert("Please enter an integer number!");
         return;
       }
-      let qbitsOld = [...this.qbits];
+      let targetsOld = [...this.targets];
       let bitOld = this.bitOld;
       let promise = this.repositionSimpleGateInCircuit({
         'step': this.step, 
-        'qbits': [...this.qbits],
+        'targets': [...this.targets],
         'name': this.name, 
-        'qbitsNew': [...this.$data.qbitsNew],
+        'targetsNew': [...this.$data.targetsNew],
         'bitNew': this.$data.bitNew
       });
       promise.then(
@@ -209,8 +209,8 @@ export default {
         result => {}, 
         // eslint-disable-next-line no-unused-vars
         error => {
-          this.$data.qbitsNew = [...qbitsOld];
-          this.qbits = [...qbitsOld];
+          this.$data.targetsNew = [...targetsOld];
+          this.targets = [...targetsOld];
           this.$data.bitNew = this.bit = bitOld;
         }
       );
@@ -219,7 +219,7 @@ export default {
     handleReplicateGateModalSave: function(){
       let promise = this.replicateGate({
         'step': this.step,
-        'qbits': [...this.qbits],
+        'targets': [...this.targets],
         'name': this.name, 
         'stepFirst': this.stepFirst,
         'stepLast': this.stepLast,
@@ -244,7 +244,7 @@ export default {
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalQbits", [...this.qbits]);
+      event.dataTransfer.setData("originalTargets", [...this.targets]);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("bit", this.bit);
       let dragImageGhost = createDragImageGhost(target);  

@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:75px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:75px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -162,7 +162,7 @@ export default {
   name: "SingleBitGate",
   props: {
     'step' : Number,
-    'qbits': Array,
+    'targets': Array,
     'qrow': Number,
     'img': String,
     'title': String,
@@ -182,9 +182,9 @@ export default {
       expandDownIsHovered:  false,
       expandGateIsHovered:  false,
       editControlsIsHovered:  false,
-      qbitsNew: [...this.qbits],
-      qbitFirst: this.qbits[0],
-      qbitLast: this.qbits[0],
+      targetsNew: [...this.targets],
+      qbitFirst: this.targets[0],
+      qbitLast: this.targets[0],
       stepFirst: this.step,
       stepLast: this.step,
       stepConditionExpression: "s >= 0",
@@ -340,14 +340,14 @@ export default {
     },
      expandCircuitUp: function(){
       if (window.gatesTable.rows/2 == this.getMaximumQbitIndex() + 1){
-         alert("Please increase the number qbits in the circuit first.");
+         alert("Please increase the number targets in the circuit first.");
         return;
       }
       this.insertQbitInCircuit(this.qrow);
     },
     expandCircuitDown: function(){
       if (window.gatesTable.rows/2 == this.getMaximumQbitIndex() + 1 ){
-         alert("Please increase the number qbits in the circuit first.");
+         alert("Please increase the number targets in the circuit first.");
         return;
       }
       this.insertQbitInCircuit(this.qbit + 1);
@@ -356,14 +356,14 @@ export default {
       this.removeGateFromCircuitByUser({'step': this.step, 'qbit': this.qbit});
     },
     handleSave: function(){
-      if (!Number.isInteger(this.$data.qbitsNew[0])){
+      if (!Number.isInteger(this.$data.targetsNew[0])){
         alert("Please enter an integer number!");
         return;
       }
-      let qbitsOld = [...this.qbits];
+      let targetsOld = [...this.targets];
       let promise = this.repositionSimpleGateInCircuit({
         'step': this.step, 
-        'qbits': [...this.qbits],
+        'targets': [...this.targets],
         'name': this.name, 
         'img': this.img,
         'qbitNew': this.$data.qbitNew
@@ -373,8 +373,8 @@ export default {
         result => {}, 
         // eslint-disable-next-line no-unused-vars
         error => {
-          this.$data.qbitsNew = [...qbitsOld];
-          this.qbits = [...qbitsOld];
+          this.$data.targetsNew = [...targetsOld];
+          this.targets = [...targetsOld];
         }
       );
       this.$refs['initial-modal-dialog'].hide();
@@ -382,7 +382,7 @@ export default {
     handleReplicateGateModalSave: function(){
       let promise = this.replicateGate({
         'step': this.step,
-        'qbits': [...this.qbits],
+        'targets': [...this.targets],
         'name': this.name, 
         'stepFirst': this.stepFirst,
         'stepLast': this.stepLast,
@@ -410,7 +410,7 @@ export default {
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalQbits", [...this.qbits]);
+      event.dataTransfer.setData("originalTargets", [...this.targets]);
       event.dataTransfer.setData("originalStep", this.step);
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);

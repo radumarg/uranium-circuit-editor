@@ -12,8 +12,8 @@ export default {
   methods: {
     ...mapActions('circuitEditorModule/', ['insertGateInCircuit', 'removeGateFromCircuit']),
     handleDropEvent: function (event) {
-      let originalQbit = parseInt(event.dataTransfer.getData("originalQbit"));
-      let originalQbit2 = parseInt(event.dataTransfer.getData("originalQbit2"));
+      let originalTarget = parseInt(event.dataTransfer.getData("originalTarget"));
+      let originalTarget2 = parseInt(event.dataTransfer.getData("originalTarget2"));
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       let gateName = event.dataTransfer.getData("gateName");
@@ -21,13 +21,13 @@ export default {
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let qbit = parseInt(event.currentTarget.getAttribute("qbit"));
    
-      if (originalStep == null || step != originalStep || qbit != originalQbit) {
+      if (originalStep == null || step != originalStep || qbit != originalTarget) {
         this.handleDragLeave();
         return;
       }
 
       // add the new gate mandatory params
-      let dto = { step: step, name: gateName, qbit: originalQbit, qbit2: originalQbit2 };
+      let dto = { step: step, name: gateName, qbit: originalTarget, qbit2: originalTarget2 };
       
       // add optional params, notice lower case needed for types.includes
       if (event.dataTransfer.types.includes("phi")) {
@@ -39,7 +39,7 @@ export default {
         dto["theta"] = theta;
       }
 
-      if (draggedQbit == originalQbit){
+      if (draggedQbit == originalTarget){
         dto["qbit"] = dropQbit;
       } else {
         dto["qbit2"] = dropQbit;
@@ -52,7 +52,7 @@ export default {
 
       // step1 - remove original gate if drag event started from a cell 
       // in editor (not originating from gates pallete)
-      this.removeGateFromCircuit({'step': originalStep, 'qbit': originalQbit});
+      this.removeGateFromCircuit({'step': originalStep, 'qbit': originalTarget});
 
       // step2 - add the new gate to the circuit
       this.insertGateInCircuit(dto);

@@ -73,7 +73,7 @@ export default {
   name: "ControlledGateStub",
   props: {
     'step' : Number, 
-    'qbits': Array,
+    'targets': Array,
     'qrow': Number,
     'title': String,
     'name': String,
@@ -136,9 +136,9 @@ export default {
       let dto = {
         'name': this.gate,
         'step': this.step, 
-        'qbits': [...this.qbits],
+        'targets': [...this.targets],
         'controls': [...this.controls],
-        'qbitsNew': [...this.qbits],
+        'targetsNew': [...this.targets],
         'controlsNew': [...this.controls],
         'controlstatesNew': controlStatesNew,
       }
@@ -175,9 +175,9 @@ export default {
         let dto = {
           'name': this.gate,
           'step': this.step, 
-          'qbits': [...this.qbits],
+          'targets': [...this.targets],
           'controls': [...this.controls],
-          'qbitsNew': [...this.qbits],
+          'targetsNew': [...this.targets],
           'controlsNew': [...controlsNew],
           'controlstatesNew': [...controlStatesNew],
         }
@@ -233,7 +233,7 @@ export default {
       event.dataTransfer.setData("drag-origin", "stub");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
       event.dataTransfer.setData("gateName", this.gate);
-      event.dataTransfer.setData("originalQbits", [...this.qbits]);
+      event.dataTransfer.setData("originalTargets",  [...this.targets]);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstates", [...this.controlstates]);

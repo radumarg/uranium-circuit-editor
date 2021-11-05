@@ -27,31 +27,31 @@
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'pauli-line-long'">
-              <VerticalTransitionCellLong :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'pauli-root-line-long'">
-              <VerticalTransitionCellLong :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'toffoli-line-long'">
-              <VerticalTransitionCellLongToffoli :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLongToffoli :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'r-line-short'">
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'r-line-long'">
-              <VerticalTransitionCellLong :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'st-line-short'">
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'st-line-long'">
-              <VerticalTransitionCellLong :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'hadamard-line-short'">
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'hadamard-line-long'">
-              <VerticalTransitionCellLong :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'u-line-short'">
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
@@ -84,136 +84,136 @@
               <ZeroState :title="cell.tooltip" />
             </div>
             <div v-else-if="cell.name === 'hadamard'">
-              <SingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <SingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'identity'">
-              <SingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <SingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'measure-x'">
-              <MeasureGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :bit="cell.bit" :key="cell.key"/>
+              <MeasureGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :bit="cell.bit" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'measure-y'">
-              <MeasureGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :bit="cell.bit" :key="cell.key"/>
+              <MeasureGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :bit="cell.bit" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'measure-z'">
-              <MeasureGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :bit="cell.bit" :key="cell.key"/>
+              <MeasureGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :bit="cell.bit" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'pauli-x'">
-              <SingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <SingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'pauli-y'">
-              <SingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <SingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'pauli-z'">
-              <SingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <SingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 's'">
-              <SingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <SingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 's-dagger'">
-              <SingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <SingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 't'">
-              <SingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <SingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 't-dagger'">
-              <SingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <SingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'rx-theta'">
-              <ParametricSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
+              <ParametricSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ry-theta'">
-              <ParametricSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
+              <ParametricSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'rz-theta'">
-              <ParametricSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
+              <ParametricSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'u1'">
-              <UnitaryParametricSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :lambda="cell.lambda" :key="cell.key"/>
+              <UnitaryParametricSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :lambda="cell.lambda" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'u2'">
-              <UnitaryBiParametricSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
+              <UnitaryBiParametricSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'u3'">
-              <UnitaryThreeParametricSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
+              <UnitaryThreeParametricSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-hadamard'">
-              <ControlledSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-pauli-x'">
-              <ControlledSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-pauli-y'">
-              <ControlledSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-pauli-z'">
-              <ControlledSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-sqrt-not'">
-              <ControlledSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-s'">
-              <ControlledSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-s-dagger'">
-              <ControlledSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-t'">
-              <ControlledSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-t-dagger'">
-              <ControlledSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-rx-theta'">
-              <ControlledParametricSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
+              <ControlledParametricSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-ry-theta'">
-              <ControlledParametricSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
+              <ControlledParametricSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-rz-theta'">
-              <ControlledParametricSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
+              <ControlledParametricSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-u1'">
-              <ControlledUnitaryParametricSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :lambda="cell.lambda" :key="cell.key"/>
+              <ControlledUnitaryParametricSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :lambda="cell.lambda" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-u2'">
-              <ControlledUnitaryBiParametricSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
+              <ControlledUnitaryBiParametricSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-u3'">
-              <ControlledUnitaryThreeParametricSingleBitGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
+              <ControlledUnitaryThreeParametricSingleBitGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name.includes('ctrl') && cell.name.includes('stub')">
-              <ControlledGateStub :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledGateStub :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="!cell.name.includes('ctrl') && cell.name.includes('pauli') && cell.name.includes('root')">
-              <PauliRootGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <PauliRootGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name.includes('ctrl') && cell.name.includes('pauli') && cell.name.includes('root')">
-              <ControlledPauliRootGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledPauliRootGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'swap'">
-              <GateSwap :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <GateSwap :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'swap-phi'">
-              <ParametricGateSwap :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :phi="cell.phi" :key="cell.key"/>
+              <ParametricGateSwap :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :phi="cell.phi" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'sqrt-swap'">
-              <GateSwapVariant :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <GateSwapVariant :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'iswap'">
-              <GateSwapVariant :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <GateSwapVariant :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-swap-stub-up'">
-              <FredkinGateControlStubUp :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <FredkinGateControlStubUp :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-swap-stub-down'">
-              <FredkinGateControlStubDown :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <FredkinGateControlStubDown :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'fredkin-control-middle'">
-              <FredkinGateControlMiddle :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <FredkinGateControlMiddle :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'xx' || cell.name === 'yy' || cell.name === 'zz'">
-              <IsingGate :id="cell.id" :qbits="cell.qbits" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
+              <IsingGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>  
           </td>
         </tr>
