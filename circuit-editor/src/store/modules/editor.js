@@ -88,8 +88,11 @@ export const circuitEditorModule = {
                 maxQbit = Math.max(maxQbit, ...targets);
               }
               if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-                let controls = gate.controls;
-                maxQbit = Math.max(maxQbit, ...controls);
+                for (let i = 0; i < gate["controls"].length; i++) {
+                  let controlInfo = gate["controls"][i];
+                  let target = controlInfo["target"];
+                  maxQbit = Math.max(maxQbit, target);
+                }
               }
             } 
           }
@@ -592,13 +595,13 @@ export const circuitEditorModule = {
               }
 
               if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-                let controls = [...gate.controls];
-                for (let k = 0; k < controls.length; k++){
-                  if (controls[k] >= qbit) {
-                    controls[k] += 1;
+                for (let i = 0; i < gate["controls"].length; i++) {
+                  let controlInfo = gate["controls"][i];
+                  let target = controlInfo["target"];
+                  if (target >= qbit) {
+                    controlInfo["target"] += 1;
                   }
                 }
-                gate.controls = controls;
               }
             }
           }

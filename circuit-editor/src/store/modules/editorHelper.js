@@ -36,13 +36,17 @@ export function insertingOneGateInCircuit(circuitState, dto) {
   let name = dto["name"];
   
   let gate = { "name": name, "targets": [...targets] };
-  if (Object.prototype.hasOwnProperty.call(dto, "controls")) {
+
+  if (Object.prototype.hasOwnProperty.call(dto, "controls") &&
+      Object.prototype.hasOwnProperty.call(dto, "controlstates")) {
       let controls = dto["controls"];
-      gate["controls"] = [...controls];
-  }
-  if (Object.prototype.hasOwnProperty.call(dto, "controlstates")) {
       let controlstates = dto["controlstates"];
-      gate["controlstates"] = [...controlstates];
+      gate["controls"] = []
+      for (let i = 0; i < controls.length; i++) {
+          gate["controls"].push(
+              { "target": controls[i], "state": controlstates[i] }
+          );
+      }
   }
   if (Object.prototype.hasOwnProperty.call(dto, "phi")) {
       let phi = dto["phi"];
@@ -210,22 +214,23 @@ export function saveCopiedGates(circuitState, qbitStart, qbitStop, stepStart, st
               stepIndex >= stepStart &&
               stepIndex <= stepStop) {
 
-            //TODO: remove all parsed ints? If circuit created. If circuit loaded
             let copiedGate = {"step": stepIndex - stepStart, "name": gate.name };
 
             if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
-              //TODO: do I need a type cast for controls here: ?
               let targets = gate.targets;
               copiedGate.targets = targets.map(function(value) {return value - qbitStart;});
             }
 
             if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-              //TODO: do I need a type cast for controls here: ?
-              let controls = gate.controls;
+              let controls = [];
+              let controlstates = [];
+              for (let i = 0; i < gate["controls"].length; i++) {
+                let controlInfo = gate["controls"][i];
+                controls.push(controlInfo["target"]);
+                controlstates.push(controlInfo["state"]);
+              }
               copiedGate.controls = controls.map(function(value) {return value - qbitStart;});
-            }
-            if (Object.prototype.hasOwnProperty.call(gate, "controlstates")) {
-              copiedGate.controlstates = [...gate.controlstates];
+              copiedGate.controlstates = controlstates;
             }
             if (Object.prototype.hasOwnProperty.call(gate, "theta")) {
               copiedGate.theta = gate.theta;
@@ -263,8 +268,11 @@ export function gatePastedGates(qbitStart, stepStart){
       gate.targets = targets.map(function(value) {return value + qbitStart;});
     }
     if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-      let controls = gate.controls;
-      gate.controls = controls.map(function(value) {return value + qbitStart;});
+      for (let i = 0; i < gate["controls"].length; i++) {
+        let controlInfo = gate["controls"][i];
+        let target = controlInfo["target"];
+        controlInfo["target"] = target + qbitStart;
+      }
     }
     gates.push(gate);
   }

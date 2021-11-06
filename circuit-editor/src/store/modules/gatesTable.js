@@ -96,7 +96,11 @@ export function getNoQbits(circuitState) {
             maxQbitIndex = Math.max(maxQbitIndex, ...gate.targets);
           }
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-            maxQbitIndex = Math.max(maxQbitIndex, ...gate.controls);
+            for (let i = 0; i < gate["controls"].length; i++) {
+              let controlInfo = gate["controls"][i];
+              let target = controlInfo["target"];
+              maxQbitIndex = Math.max(maxQbitIndex, target);
+            }
           }
         }
       }
@@ -143,9 +147,10 @@ export function measureGatesArePositionedLast(circuitState){
           }
         }
         if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-          let controls = gate.controls;
-          for (let j = 0; j < controls.length; j++){
-            if (measureGates.includes(controls[j])) {
+          for (let i = 0; i < gate["controls"].length; i++) {
+            let controlInfo = gate["controls"][i];
+            let target = controlInfo["target"];
+            if (measureGates.includes(target)) {
               return false;
             }
           }
@@ -175,7 +180,6 @@ export function positionIsFilled(circuitState, step, qubit) {
 
           let gates = circuitState.steps[i]["gates"];
           for (let j = 0; j < gates.length; j++) {
-
             let gate = gates[j];
             if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
               let targets = gate.targets;
@@ -184,9 +188,10 @@ export function positionIsFilled(circuitState, step, qubit) {
               }
             }
             if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-              let controls = gate.controls;
-              for (let j = 0; j < controls.length; j++){
-                if (controls[j] == qubit) return true;
+              for (let i = 0; i < gate["controls"].length; i++) {
+                let controlInfo = gate["controls"][i];
+                let target = controlInfo["target"];
+                if (target == qubit) return true;
               }
             }
           }
@@ -218,7 +223,11 @@ export function seatIsTaken(circuitState, qbit, step) {
               targets = [...gate.targets];
             }
             if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-              controls = [...gate.controls];
+              for (let i = 0; i < gate["controls"].length; i++) {
+                let controlInfo = gate["controls"][i];
+                let target = controlInfo["target"];
+                controls.push(target);
+              }
             }
 
             // get range of qbits affected when displaying this gate
@@ -257,7 +266,11 @@ export function seatsAreTaken(circuitState, proposedQbits, step, reallocatableQb
               targets = [...gate.targets];
             }
             if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-              controls = [...gate.controls];
+              for (let i = 0; i < gate["controls"].length; i++) {
+                let controlInfo = gate["controls"][i];
+                let target = controlInfo["target"];
+                controls.push(target);
+              }
             }
             // get range of qbits affected when displaying this gate
             let qbits = [...targets, ...controls];
@@ -654,12 +667,17 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           let gate = gates[j];
           let targets = [];
           let controls = [];
+          let controlstates = [];
 
           if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
             targets = [...gate.targets]
           }
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-            controls = [...gate.controls];
+            for (let i = 0; i < gate["controls"].length; i++) {
+              let controlInfo = gate["controls"][i];
+              controls.push(controlInfo["target"]);
+              controlstates.push(controlInfo["state"]);
+            }
           }
 
           // get range of qbits affected when displaying this gate
@@ -676,7 +694,6 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           }
 
           gatesTableRowState.cells[column].targets = targets;
-          gatesTableRowState.cells[column].controls = controls;
 
           // this is the name of the gate
           gatesTableRowState.cells[column].gate = gate.name;
@@ -707,9 +724,6 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             }
           }
 
-          if (Object.prototype.hasOwnProperty.call(gate, "controlstates")) {
-            gatesTableRowState.cells[column].controlstates = [...gate.controlstates];
-          }
           if (Object.prototype.hasOwnProperty.call(gate, "theta")) {
             gatesTableRowState.cells[column].theta = parseFloat(gate.theta);
             gatesTableRowState.cells[column].tooltip += `θ:${gate.theta} `
@@ -741,15 +755,17 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             continue;
           }
 
+          if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+            gatesTableRowState.cells[column].controls = controls;
+            gatesTableRowState.cells[column].controlstates = controlstates;
+          }
+
           let controlstate = null;
           let rowQbit = getQbitFromRow(inputRow);
           if (controls.includes(rowQbit)){
-
             let controlIndex = controls.indexOf(rowQbit);
-            gatesTableRowState.cells[column].control = rowQbit;
-
-            let controlstates = [...gate.controlstates];
             controlstate = controlstates[controlIndex];
+            gatesTableRowState.cells[column].control = rowQbit;
             gatesTableRowState.cells[column].controlstate = controlstate;
           }
 

@@ -226,7 +226,9 @@ export default {
       }
     },
     selectImage: function() {
-      handleSelectEvent(this.qbit, this.step);
+      //TODO: review this
+      let qbit = Math.min(this.targets);
+      handleSelectEvent(qbit, this.step);
     },
     dragStart: function(event) {
       hideTooltips();

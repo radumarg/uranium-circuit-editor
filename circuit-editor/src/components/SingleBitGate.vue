@@ -227,7 +227,7 @@ export default {
       }
     },
     selectImage: function() {
-      handleSelectEvent(this.qbit, this.step);
+      handleSelectEvent(this.targets[0], this.step);
     },
     showModal: function() {
       this.trashIsHovered = false;
@@ -353,7 +353,7 @@ export default {
       this.insertQbitInCircuit(this.qbit + 1);
     },
     handleDeleteGate: function(){
-      this.removeGateFromCircuitByUser({'step': this.step, 'qbit': this.qbit});
+      this.removeGateFromCircuitByUser({'step': this.step, 'targets': this.targets});
     },
     handleSave: function(){
       if (!Number.isInteger(this.$data.targetsNew[0])){
