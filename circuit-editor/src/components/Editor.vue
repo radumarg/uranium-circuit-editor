@@ -192,16 +192,16 @@
               <ControlledPauliRootGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'swap'">
-              <GateSwap :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <SwapGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'swap-phi'">
-              <ParametricGateSwap :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :phi="cell.phi" :key="cell.key"/>
+              <ParametricSwapGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :phi="cell.phi" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'sqrt-swap'">
-              <GateSwapVariant :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <SwapVariantGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'iswap'">
-              <GateSwapVariant :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <SwapVariantGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'ctrl-swap-stub-up'">
               <FredkinGateControlStubUp :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
@@ -251,9 +251,9 @@ import ControlledUnitaryBiParametricSingleBitGate from "./ControlledUnitaryBiPar
 import ControlledUnitaryThreeParametricSingleBitGate from "./ControlledUnitaryThreeParametricSingleBitGate";
 import EmptyCellRectangle from "./EmptyCellRectangle";
 import EmptyCellSquare from "./EmptyCellSquare";
-import GateSwap from "./GateSwap";
-import GateSwapVariant from "./GateSwapVariant";
-import ParametricGateSwap from "./ParametricGateSwap";
+import SwapGate from "./SwapGate";
+import SwapVariantGate from "./SwapVariantGate";
+import ParametricSwapGate from "./ParametricSwapGate";
 import IsingGate from "./IsingGate";
 import SwapCircle from "./SwapCircle";
 import FredkinGateControlStubUp from "./FredkinGateControlStubUp";
@@ -287,9 +287,9 @@ export default {
     ControlledGateStub,
     EmptyCellRectangle,
     EmptyCellSquare,
-    GateSwap,
-    GateSwapVariant,
-    ParametricGateSwap,
+    SwapGate,
+    SwapVariantGate,
+    ParametricSwapGate,
     IsingGate,
     SwapCircle,
     FredkinGateControlStubUp,

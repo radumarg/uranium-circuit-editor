@@ -60,6 +60,14 @@
           <td></td>
         </tr>
         <tr>
+          <td></td>
+          <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Phi:</td>
+          <td width="100px" style="padding: 5px;"> 
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="phiNew" placeholder="phi" type="number" id="phi-new" style="width:90px;"></b-form-input>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
           <td class="no-resize-cell">
              <div v-b-hover="handleExpandGateHover">
               <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" v-b-tooltip.hover title="Replicate gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
@@ -156,6 +164,15 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Phi Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="phiExpression" placeholder="" type="text" id="phi-expression" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
           <td colspan="6" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
@@ -173,27 +190,102 @@
 </template>
 
 <script>
-import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
-import GateSwap from "./GateSwap";
+import { mapActions } from 'vuex';
+import SwapGate from "./SwapGate";
+import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 export default {
-  name: "GateSwapVariant",
-  extends: GateSwap,
+  name: "ParametricSwapGate",
+  extends: SwapGate,
   props: {
+    'phi': Number,
   },
   data() {
     return {
+      phiNew: this.phi,
+      phiExpression: this.phi,
+      qbit2Expression: this.qbit2,
     }
   },
   computed: {
     gateImageSource: function() {
       if (getUserInterfaceSetting('colored-gates') === 'true'){
-        return require("../assets/colored-gates/" + this.name + ".svg");
+        return require("../assets/colored-gates/swap-phi.svg");
       } else {
-        return require("../assets/blue-gates/" + this.name + ".svg");
+        return require("../assets/blue-gates/swap-phi.svg");
       }
     },
   },
   methods: {
+    ...mapActions('circuitEditorModule/', ['repositionTwoTargetQubitGateInCircuit']),
+    handleSave: function(){
+      if (!Number.isInteger(this.$data.targetsNew[0]) || !Number.isInteger(this.$data.targetsNew[1])){
+        alert("Please enter an integer number!");
+        return;
+      }
+      let targetsOld = [...this.targets];
+      let qbit2Old = this.qbit2;
+      let phiOld = this.phi;
+      let promise = this.repositionTwoTargetQubitGateInCircuit({
+        'step': this.step, 
+        'targets': [...this.targets],
+        'qbit2': this.qbit2,
+        'name': this.name, 
+        'targetsNew': [...this.$data.targetsNew],
+        'phiNew': this.$data.phiNew,
+      });
+      promise.then(
+        // eslint-disable-next-line no-unused-vars
+        result => {}, 
+        // eslint-disable-next-line no-unused-vars
+        error => {
+          this.$data.targetsNew = [...targetsOld];
+          this.targets = [...targetsOld];
+          this.$data.qbit2New = this.qbit2 = qbit2Old;
+          this.$data.phiNew = this.phi = phiOld;
+        }
+      );
+      this.$refs['initial-modal-dialog'].hide();
+    },
+    handleReplicateGateModalSave: function(){
+      let promise = this.replicateGate({
+        'step': this.step,
+        'targets': [...this.targets],
+        'name': this.name, 
+        'stepFirst': this.stepFirst,
+        'stepLast': this.stepLast,
+        'stepConditionExpression': this.stepConditionExpression,
+        'qbitFirst': this.qbitFirst,
+        'qbitLast': this.qbitLast,
+        'qbitConditionExpression': this.qbitConditionExpression,
+        'conjugateConditionExpression': this.conjugateConditionExpression,
+        'qbit2Expression': this.qbit2Expression,
+        'phiExpression': this.phiExpression,
+      });
+      promise.then(
+        // eslint-disable-next-line no-unused-vars
+        result => {}, 
+        // eslint-disable-next-line no-unused-vars
+        error => {},
+      );
+      this.$refs['replicate-gate-modal-dialog'].hide();
+    },
+    dragStart: function(event) {
+      hideTooltips();
+      const target = event.target;
+      event.dataTransfer.setData("gateName", target.name);
+      event.dataTransfer.setData("drag-origin", "gate");
+      event.dataTransfer.setData("dragged-qbit", this.qrow);
+      event.dataTransfer.setData("originalTargets", [...this.targets]);
+      event.dataTransfer.setData("originalTarget2", this.qbit2);
+      event.dataTransfer.setData("originalStep", this.step);
+      event.dataTransfer.setData("phi", this.phi);
+      let dragImageGhost = createDragImageGhost(target);  
+      event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
+    },
+    dragEnd: function() {
+      let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
+      document.body.removeChild(dragImageGhost);
+    },
   },
 }
 </script>
@@ -216,7 +308,6 @@ td {
   height: 35px;
   max-height: 35px;
 }
-
 img {
   display: inline-block;
 }

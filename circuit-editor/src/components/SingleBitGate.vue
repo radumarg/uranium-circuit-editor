@@ -189,7 +189,7 @@ export default {
       stepLast: this.step,
       stepConditionExpression: "s >= 0",
       qbitConditionExpression: "q >= 0",
-      conjugateConditionExpression: `(q - ${this.qbit}) == (s - ${this.step})`
+      conjugateConditionExpression: `(q - ${this.targets[0]}) == (s - ${this.step})`
     }
   },
   computed: {
@@ -241,12 +241,10 @@ export default {
       this.expandDownIsHovered = false;
       this.expandGateIsHovered = false;
       this.editControlsIsHovered = false;
-      this.$data.qbitNew = this.qbit;
-      // TODO: fix
-      // if (this.qbit2 || this.qbit2 === 0){
-      //   this.$data.qbit2New = this.qbit2;
-      //   this.$data.qbit2Expression = this.qbit2.toString();
-      // }
+      this.$data.targetsNew = [...this.targets];
+      if (this.targets.length > 1){
+        this.$data.qbit2Expression = this.targets[1].toString();
+      }
       if (this.root){
         if (this.root.includes("1/2^")){
           this.$data.rootNewK = this.root.replace("1/2^", "");
@@ -260,7 +258,6 @@ export default {
           this.$data.rootKExpression = null;
         }
       }
-      //TODO: fix
       if (this.controls && this.controls.length > 0){
         this.$data.controlsNew = [...this.controls];
         this.$data.controlsExpression = this.controls[0].toString();
@@ -350,7 +347,7 @@ export default {
          alert("Please increase the number targets in the circuit first.");
         return;
       }
-      this.insertQbitInCircuit(this.qbit + 1);
+      this.insertQbitInCircuit(this.targets[0] + 1);
     },
     handleDeleteGate: function(){
       this.removeGateFromCircuitByUser({'step': this.step, 'targets': this.targets});
@@ -366,7 +363,7 @@ export default {
         'targets': [...this.targets],
         'name': this.name, 
         'img': this.img,
-        'qbitNew': this.$data.qbitNew
+        'targetsNew': [...this.$data.targetsNew]
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars

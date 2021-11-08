@@ -1,7 +1,7 @@
 <template>
   <div v-on:click="handleClick">
 
-    <img :src="gateImageSrcEditor" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
+    <img :src="gateImageSrcEditor" :id="id" :title="title" data-toggle="tooltip" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
     <b-modal ref="initial-modal-dialog" size="sm" centered hide-footer hide-header>
 
@@ -34,7 +34,7 @@
             </div>
           </td>
           <td colspan="2" style="padding: 10px;">
-            <img :src="gateImageSrcPopup" style="width:120px;" />
+            <img :src="gateImageSource" style="width:120px;" />
           </td>
           <td>
             <div v-b-hover="handleExpandRightHover">
@@ -173,97 +173,27 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
-import SingleBitGate from "./SingleBitGate";
-import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
+import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
+import SwapGate from "./SwapGate";
 export default {
-  name: "GateSwap",
-  extends: SingleBitGate,
+  name: "SwapVariantGate",
+  extends: SwapGate,
   props: {
-    'qbit2': Number,
   },
   data() {
     return {
-      qbit2New: this.qbit2,
-      qbit2Expression: this.qbit2,
     }
   },
   computed: {
-    gateImageSrcPopup: function() {
+    gateImageSource: function() {
       if (getUserInterfaceSetting('colored-gates') === 'true'){
-        return require("../assets/colored-gates/swap.svg");
+        return require("../assets/colored-gates/" + this.name + ".svg");
       } else {
-        return require("../assets/blue-gates/swap.svg");
+        return require("../assets/blue-gates/" + this.name + ".svg");
       }
     },
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionTwoTargetQubitGateInCircuit']),
-    handleSave: function(){
-      if (!Number.isInteger(this.$data.targetsNew[0]) || !Number.isInteger(this.$data.targetsNew[1])){
-        alert("Please enter an integer number!");
-        return;
-      }
-      let targetsOld = [...this.targets];
-      let qbit2Old = this.qbit2;
-      let promise = this.repositionTwoTargetQubitGateInCircuit({
-        'step': this.step, 
-        'targets': [...this.targets],
-        'qbit2': this.qbit2,
-        'name': this.name, 
-        'targetsNew': [...this.$data.targetsNew],
-      });
-      promise.then(
-        // eslint-disable-next-line no-unused-vars
-        result => {}, 
-        // eslint-disable-next-line no-unused-vars
-        error => {
-          this.$data.targetsNew = [...targetsOld];
-          this.targets = [...targetsOld];
-          this.$data.qbit2New = this.qbit2 = qbit2Old;
-        }
-      );
-      this.$refs['initial-modal-dialog'].hide();
-    },
-    handleReplicateGateModalSave: function(){
-      let promise = this.replicateGate({
-        'step': this.step,
-        'targets': [...this.targets],
-        'name': this.name, 
-        'stepFirst': this.stepFirst,
-        'stepLast': this.stepLast,
-        'stepConditionExpression': this.stepConditionExpression,
-        'qbitFirst': this.qbitFirst,
-        'qbitLast': this.qbitLast,
-        'qbitConditionExpression': this.qbitConditionExpression,
-        'conjugateConditionExpression': this.conjugateConditionExpression,
-        'qbit2Expression': this.qbit2Expression,
-      });
-      promise.then(
-        // eslint-disable-next-line no-unused-vars
-        result => {}, 
-        // eslint-disable-next-line no-unused-vars
-        error => {},
-      );
-      this.$refs['replicate-gate-modal-dialog'].hide();
-    },
-    dragStart: function(event) {
-      hideTooltips();
-      const target = event.target;
-      event.dataTransfer.setData("gateName", target.name);
-      event.dataTransfer.setData("drag-origin", "gate");
-      event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalTargets", [...this.targets]);
-      event.dataTransfer.setData("originalTarget2", this.qbit2);
-      event.dataTransfer.setData("originalStep", this.step);
-      event.dataTransfer.setData("dragged-qbit", this.qrow);
-      let dragImageGhost = createDragImageGhost(target);  
-      event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
-    },
-    dragEnd: function() {
-      let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
-      document.body.removeChild(dragImageGhost);
-    },
   },
 }
 </script>
@@ -286,6 +216,7 @@ td {
   height: 35px;
   max-height: 35px;
 }
+
 img {
   display: inline-block;
 }

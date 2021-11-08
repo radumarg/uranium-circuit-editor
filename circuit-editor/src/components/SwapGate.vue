@@ -1,7 +1,7 @@
 <template>
   <div v-on:click="handleClick">
 
-    <img :src="gateImageSrcEditor" :id="id" :title="title" data-toggle="tooltip" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
+    <img :src="gateImageSrcEditor" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
     <b-modal ref="initial-modal-dialog" size="sm" centered hide-footer hide-header>
 
@@ -34,7 +34,7 @@
             </div>
           </td>
           <td colspan="2" style="padding: 10px;">
-            <img :src="gateImageSource" style="width:120px;" />
+            <img :src="gateImageSrcPopup" style="width:120px;" />
           </td>
           <td>
             <div v-b-hover="handleExpandRightHover">
@@ -56,14 +56,6 @@
           <td v-b-tooltip.hover title="2nd Target qubit" width="100px" style="padding: 5px;">Target<sub>2</sub></td>
           <td width="100px" style="padding: 5px;"> 
             <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[1]" placeholder="qbit2" type="number" id="qbit2-new" style="width:90px;"></b-form-input>
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Phi:</td>
-          <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="phiNew" placeholder="phi" type="number" id="phi-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -164,15 +156,6 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
-          <td colspan="3" width="300px" class="td-2nd-modal">
-            Phi Value - 'q, s' based <br/>javascript expression:
-          </td>
-          <td colspan="3" width="400px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="phiExpression" placeholder="" type="text" id="phi-expression" style="min-width:400px;"></b-form-input>
-          </td>
-          <td class="no-resize-cell"></td>
-        </tr>
-        <tr>
           <td colspan="6" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
@@ -191,27 +174,24 @@
 
 <script>
 import { mapActions } from 'vuex';
-import GateSwap from "./GateSwap";
+import SingleBitGate from "./SingleBitGate";
 import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 export default {
-  name: "ParametricGateSwap",
-  extends: GateSwap,
+  name: "SwapGate",
+  extends: SingleBitGate,
   props: {
-    'phi': Number,
   },
   data() {
     return {
-      phiNew: this.phi,
-      phiExpression: this.phi,
-      qbit2Expression: this.qbit2,
+      qbit2Expression: this.targets[1],
     }
   },
   computed: {
-    gateImageSource: function() {
+    gateImageSrcPopup: function() {
       if (getUserInterfaceSetting('colored-gates') === 'true'){
-        return require("../assets/colored-gates/swap-phi.svg");
+        return require("../assets/colored-gates/swap.svg");
       } else {
-        return require("../assets/blue-gates/swap-phi.svg");
+        return require("../assets/blue-gates/swap.svg");
       }
     },
   },
@@ -223,15 +203,11 @@ export default {
         return;
       }
       let targetsOld = [...this.targets];
-      let qbit2Old = this.qbit2;
-      let phiOld = this.phi;
       let promise = this.repositionTwoTargetQubitGateInCircuit({
         'step': this.step, 
         'targets': [...this.targets],
-        'qbit2': this.qbit2,
         'name': this.name, 
         'targetsNew': [...this.$data.targetsNew],
-        'phiNew': this.$data.phiNew,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -240,8 +216,6 @@ export default {
         error => {
           this.$data.targetsNew = [...targetsOld];
           this.targets = [...targetsOld];
-          this.$data.qbit2New = this.qbit2 = qbit2Old;
-          this.$data.phiNew = this.phi = phiOld;
         }
       );
       this.$refs['initial-modal-dialog'].hide();
@@ -259,7 +233,6 @@ export default {
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
         'qbit2Expression': this.qbit2Expression,
-        'phiExpression': this.phiExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -276,9 +249,8 @@ export default {
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
       event.dataTransfer.setData("originalTargets", [...this.targets]);
-      event.dataTransfer.setData("originalTarget2", this.qbit2);
       event.dataTransfer.setData("originalStep", this.step);
-      event.dataTransfer.setData("phi", this.phi);
+      event.dataTransfer.setData("dragged-qbit", this.qrow);
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
     },
