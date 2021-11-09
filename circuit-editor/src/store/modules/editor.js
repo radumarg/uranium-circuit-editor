@@ -274,9 +274,7 @@ export const circuitEditorModule = {
         let qbitLast = dataTransferObj["qbitLast"];
         let qbitConditionExpression = dataTransferObj["qbitConditionExpression"];
         let conjugateConditionExpression = dataTransferObj["conjugateConditionExpression"];
-        //alert(typeof(dataTransferObj["controls"]))
-        //TODO: fix!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-        let controls = dataTransferObj["controls"];
+        let controls = dataTransferObj["controls"] ? dataTransferObj["controls"] : [];
 
         stepFirst = Math.min(stepFirst, stepLast);
         stepLast = Math.max(stepFirst, stepLast);
@@ -298,26 +296,25 @@ export const circuitEditorModule = {
                 
                 let dto = { "step": s, "targets": [q], "name": name };
 
-                // TODO: fix
-                // if (Object.prototype.hasOwnProperty.call(dataTransferObj, "qbit2Expression")) {
-                //   let qbit2Expression = dataTransferObj["qbit2Expression"];
-                //   dto["qbit2"] = limitedEvaluate(interpolateJavaScriptExpression(qbit2Expression, s, q));
-                // }
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "qbit2Expression")) {
+                  let qbit2Expression = dataTransferObj["qbit2Expression"];
+                  dto["targets"].push(limitedEvaluate(interpolateJavaScriptExpression(qbit2Expression, s, q)));
+                }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controlsExpression")) {
                   dto["controls"] = [];
                   let controlsExpression = dataTransferObj["controlsExpression"];
-                  for (let i = 0; i < controls.length(); i++) {
+                  for (let i = 0; i < controls.length; i++) {
                     dto["controls"].push(limitedEvaluate(interpolateJavaScriptExpression(controlsExpression, s, q, i)));
                   }
                 }
                   if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controlstatesExpression")) {
                     dto["controlstates"] = [];
                     let controlstatesExpression = dataTransferObj["controlstatesExpression"];
-                    for (let i = 0; i < controls.length(); i++) {
+                    for (let i = 0; i < controls.length; i++) {
                       let controlstate = limitedEvaluate(interpolateJavaScriptExpression(controlstatesExpression, s, q, i)).toString();
                       dto["controlstates"].push(controlstate);
                     }
-                    if (dto["controlstate"].some((element) => !['0', '1'].includes(element))) {
+                    if (dto["controlstates"].some((element) => !['0', '1'].includes(element))) {
                       throw new Error(`Control state q=${q}, s=${s} does not evaluate to 0 or 1.`);
                     }
                   }

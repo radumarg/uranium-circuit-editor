@@ -335,19 +335,29 @@ export default {
       }
       this.insertStepInCircuit(this.step + 1);
     },
-     expandCircuitUp: function(){
-      if (window.gatesTable.rows/2 == this.getMaximumQbitIndex() + 1){
-         alert("Please increase the number targets in the circuit first.");
+    expandCircuitUp: function () {
+      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex() + 1) {
+        alert("Please increase the number targets in the circuit first.");
         return;
       }
-      this.insertQbitInCircuit(this.qrow);
+      let controls = [];
+      if (this.controls){
+        controls = [...this.controls];
+      }
+      let qbit = Math.min(...this.targets, ...controls);
+      this.insertQbitInCircuit(qbit);
     },
-    expandCircuitDown: function(){
-      if (window.gatesTable.rows/2 == this.getMaximumQbitIndex() + 1 ){
-         alert("Please increase the number targets in the circuit first.");
+    expandCircuitDown: function () {
+      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex() + 1) {
+        alert("Please increase the number targets in the circuit first.");
         return;
       }
-      this.insertQbitInCircuit(this.targets[0] + 1);
+      let controls = [];
+      if (this.controls){
+        controls = [...this.controls];
+      }
+      let qbit = Math.max(...this.targets, ...controls);
+      this.insertQbitInCircuit(qbit + 1);
     },
     handleDeleteGate: function(){
       this.removeGateFromCircuitByUser({'step': this.step, 'targets': this.targets});

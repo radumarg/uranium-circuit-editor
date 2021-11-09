@@ -283,7 +283,8 @@ export default {
       let promise = this.replicateGate({
         'step': this.step,
         'targets': [...this.targets],
-        'name': this.name, 
+        'name': this.name,
+        'controls': [...this.controls],
         'stepFirst': this.stepFirst,
         'stepLast': this.stepLast,
         'stepConditionExpression': this.stepConditionExpression,

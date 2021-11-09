@@ -308,11 +308,11 @@ export function extractSelectionRange() {
 }
 
 // Detect situations where proposed gates do not allocate
-// distinct qubits for targets, controls
+// distinct qubits for each target and each control 
 export function proposedNewGatesAreInvalid(dtos) {
   for (let i = 0; i < dtos.length; i++) {
 
-    let noExpectedQubits = 1;
+    let noExpectedQubits = 0;
     let targets = [];
     let controls = [];
 
