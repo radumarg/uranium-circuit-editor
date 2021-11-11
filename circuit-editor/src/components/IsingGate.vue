@@ -199,13 +199,11 @@ export default {
   extends: SingleBitGate,
   props: {
     'qrow': Number,
-    'qbit2': Number,
     'theta': Number,
   },
   data() {
     return {
-      qbit2New: this.qbit2,
-      qbit2Expression: this.qbit2,
+      qbit2Expression: this.targets[1],
       thetaNew: this.theta,
       thetaExpression: this.theta,
     }
@@ -218,12 +216,10 @@ export default {
         return;
       }
       let targetsOld = [...this.targets];
-      let qbit2Old = this.qbit2;
       let thetaOld = this.theta;
       let promise = this.repositionTwoTargetQubitGateInCircuit({
         'step': this.step, 
         'targets': [...this.targets],
-        'qbit2': this.qbit2,
         'name': this.name, 
         'targetsNew': [...this.$data.targetsNew],
         'thetaNew': this.$data.thetaNew,
@@ -235,7 +231,6 @@ export default {
         error => {
           this.$data.targetsNew = [...targetsOld];
           this.targets = [...targetsOld];
-          this.$data.qbit2New = this.qbit2 = qbit2Old;
           this.$data.thetaNew = this.theta = thetaOld;
         }
       );
@@ -271,7 +266,6 @@ export default {
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
       event.dataTransfer.setData("originalTargets", [...this.targets]);
-      event.dataTransfer.setData("originalTarget2", this.qbit2);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("theta", this.theta);
       let dragImageGhost = createDragImageGhost(target);  

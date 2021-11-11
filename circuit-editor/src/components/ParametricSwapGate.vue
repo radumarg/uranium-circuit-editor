@@ -203,7 +203,6 @@ export default {
     return {
       phiNew: this.phi,
       phiExpression: this.phi,
-      qbit2Expression: this.qbit2,
     }
   },
   computed: {
@@ -223,12 +222,10 @@ export default {
         return;
       }
       let targetsOld = [...this.targets];
-      let qbit2Old = this.qbit2;
       let phiOld = this.phi;
       let promise = this.repositionTwoTargetQubitGateInCircuit({
         'step': this.step, 
         'targets': [...this.targets],
-        'qbit2': this.qbit2,
         'name': this.name, 
         'targetsNew': [...this.$data.targetsNew],
         'phiNew': this.$data.phiNew,
@@ -240,7 +237,6 @@ export default {
         error => {
           this.$data.targetsNew = [...targetsOld];
           this.targets = [...targetsOld];
-          this.$data.qbit2New = this.qbit2 = qbit2Old;
           this.$data.phiNew = this.phi = phiOld;
         }
       );
@@ -276,7 +272,6 @@ export default {
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
       event.dataTransfer.setData("originalTargets", [...this.targets]);
-      event.dataTransfer.setData("originalTarget2", this.qbit2);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("phi", this.phi);
       let dragImageGhost = createDragImageGhost(target);  

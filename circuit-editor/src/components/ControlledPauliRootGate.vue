@@ -228,6 +228,7 @@ import { mapActions } from 'vuex';
 import PauliRootGate from "./PauliRootGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";
 import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { arraysHaveElementsInCommon } from "../store/modules/javaScriptUtils.js";
 export default {
   name: "ControlledPauliRootGate",
   extends: PauliRootGate,
@@ -265,7 +266,7 @@ export default {
       this.$data.rootTExpression = null;
     },
     handleSave: function(){
-      if (this.$data.qbitNew == this.$data.controlNew){
+      if (arraysHaveElementsInCommon(this.$data.controlsNew, this.$data.targetsNew)){
         alert("Control and target qubits must differ!");
         return;
       }

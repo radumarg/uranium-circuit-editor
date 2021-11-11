@@ -245,6 +245,7 @@ import { mapActions } from 'vuex';
 import UnitaryThreeParametricSingleBitGate from "./UnitaryThreeParametricSingleBitGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";
 import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { arraysHaveElementsInCommon } from "../store/modules/javaScriptUtils.js";
 export default {
   name: "ControlledUnitaryThreeParametricSingleBitGate",
   extends: UnitaryThreeParametricSingleBitGate,
@@ -276,7 +277,7 @@ export default {
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionControlledGateInCircuit']),
     handleSave: function(){
-      if (this.$data.qbitNew == this.$data.controlNew){
+      if (arraysHaveElementsInCommon(this.$data.controlsNew, this.$data.targetsNew)){
         alert("Control and target qubits must differ!");
         return;
       }

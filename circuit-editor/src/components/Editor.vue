@@ -33,7 +33,7 @@
               <VerticalTransitionCellLong :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'toffoli-line-long'">
-              <VerticalTransitionCellLongToffoli :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'r-line-short'">
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
@@ -66,16 +66,16 @@
               <VerticalTransitionCellShort :name="cell.name" />
             </div>
             <div v-else-if="cell.name === 'swap-line-long'">
-              <VerticalTransitionCellLongSwap :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'fredkin-line-long'">
-              <VerticalTransitionCellLongFredkin :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
              <div v-else-if="cell.name === 'ising-line-short'" :key="cell.key">
               <VerticalTransitionCellShort :name="cell.name" />
             </div>
             <div v-else-if="cell.name === 'ising-line-long'">
-              <VerticalTransitionCellLongIsing :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+              <VerticalTransitionCellLong :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'empty-cell'">
               <EmptyCell :id="cell.id" :qrow="cell.qrow" :step="cell.step"/>
@@ -203,15 +203,6 @@
             <div v-else-if="cell.name === 'iswap'">
               <SwapVariantGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
-            <div v-else-if="cell.name === 'ctrl-swap-stub-up'">
-              <FredkinGateControlStubUp :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
-            </div>
-            <div v-else-if="cell.name === 'ctrl-swap-stub-down'">
-              <FredkinGateControlStubDown :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
-            </div>
-            <div v-else-if="cell.name === 'fredkin-control-middle'">
-              <FredkinGateControlMiddle :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
-            </div>
             <div v-else-if="cell.name === 'xx' || cell.name === 'yy' || cell.name === 'zz'">
               <IsingGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>  
@@ -231,10 +222,6 @@ import ZeroState from "./ZeroState";
 import HorizontalTransitionCell from "./HorizontalTransitionCell";
 import VerticalTransitionCellShort from "./VerticalTransitionCellShort"
 import VerticalTransitionCellLong from "./VerticalTransitionCellLong";
-import VerticalTransitionCellLongSwap from "./VerticalTransitionCellLongSwap";
-import VerticalTransitionCellLongFredkin from "./VerticalTransitionCellLongFredkin";
-import VerticalTransitionCellLongIsing from "./VerticalTransitionCellLongIsing";
-import VerticalTransitionCellLongToffoli from "./VerticalTransitionCellLongToffoli";
 import SingleBitGate from "./SingleBitGate";
 import PauliRootGate from "./PauliRootGate";
 import ParametricSingleBitGate from "./ParametricSingleBitGate";
@@ -256,9 +243,6 @@ import SwapVariantGate from "./SwapVariantGate";
 import ParametricSwapGate from "./ParametricSwapGate";
 import IsingGate from "./IsingGate";
 import SwapCircle from "./SwapCircle";
-import FredkinGateControlStubUp from "./FredkinGateControlStubUp";
-import FredkinGateControlStubDown from "./FredkinGateControlStubDown";
-import FredkinGateControlMiddle from "./FredkinGateControlMiddle";
 export default {
   name: "Editor",
   components: {
@@ -267,10 +251,6 @@ export default {
     HorizontalTransitionCell,
     VerticalTransitionCellShort,
     VerticalTransitionCellLong,
-    VerticalTransitionCellLongSwap,
-    VerticalTransitionCellLongFredkin,
-    VerticalTransitionCellLongIsing,
-    VerticalTransitionCellLongToffoli,
     SingleBitGate,
     PauliRootGate,
     ParametricSingleBitGate,
@@ -292,9 +272,6 @@ export default {
     ParametricSwapGate,
     IsingGate,
     SwapCircle,
-    FredkinGateControlStubUp,
-    FredkinGateControlStubDown,
-    FredkinGateControlMiddle,
   },
   computed: mapGetters("circuitEditorModule/", [
     "getGatesTableCells",

@@ -7,10 +7,6 @@ import {
   getUserInterfaceSetting
 } from "../store/modules/applicationWideReusableUnits.js";
 
-import {
-  isDefined,
-} from "../store/modules/editorHelper.js";
-
 export const controlsMixin = {
   props: {
     'controls': Array,
@@ -119,8 +115,6 @@ export const controlsMixin = {
       let duplicateControls = getDuplicateValues(this.controlsNew);
       if (arraysHaveElementsInCommon(this.$data.controlsNew, this.$data.targetsNew)){
         alert("Control and target qubits must differ!");
-      } else if (isDefined(this.$data.qbit2New) && this.$data.controlsNew.includes(this.$data.qbit2New)){
-        alert("Control and target qubits must differ!");
       } else if (duplicateControls.length > 0){
         alert("Duplicate controls: " + JSON.stringify(duplicateControls));
       } else {
@@ -157,8 +151,7 @@ export const controlsMixin = {
         let lastControl = this.controlsNew[this.controlsNew.length - 1];
         for (let i = 0; i < this.numberOfControls - this.controlsNew.length; i++){
           lastControl++;
-          while (lastControl == this.$data.qbitNew 
-            || lastControl == this.$data.qbit2New) {
+          while (this.$data.targetsNew.includes(lastControl)) {
             lastControl++;
           }
           this.controlsNew.push(lastControl);
@@ -170,8 +163,7 @@ export const controlsMixin = {
     addControl(){
       this.numberOfControls += 1;
       let lastControl = this.controlsNew[this.controlsNew.length - 1] + 1;
-      while (lastControl == this.$data.qbitNew 
-          || lastControl == this.$data.qbit2New) {
+      while (this.$data.targetsNew.includes(lastControl)) {
         lastControl++;
       }
       this.controlsNew.push(lastControl);
@@ -185,30 +177,30 @@ export const controlsMixin = {
       }
     },
     moveGateOneQubitUpwards(){
-      if (this.$data.qbitNew > 0 && Math.min(...this.controlsNew) > 0){
-        this.$data.qbitNew -= 1;
-        if (isDefined(this.$data.qbit2New)) this.$data.qbit2New -= 1;
-        for (let i = 0; i < this.controlsNew.length; i++){
+      if (Math.min(...this.$data.targetsNew) > 0 && Math.min(...this.$data.controlsNew) > 0){
+        for (let i = 0; i < this.$data.targetsNew.length; i++){
+          this.targetsNew[i] -= 1;
+        }
+        for (let i = 0; i < this.$data.controlsNew.length; i++){
           this.controlsNew[i] -= 1;
         }
       } else {
         alert("The 0 qubit index has been reached.")
       }
+      this.$forceUpdate();
     },
     moveGateOneQubitDownwards(){
-      this.$data.qbitNew += 1;
-      if (isDefined(this.$data.qbit2New)) this.$data.qbit2New += 1;
+      for (let i = 0; i < this.targetsNew.length; i++){
+        this.targetsNew[i] += 1;
+      }
       for (let i = 0; i < this.controlsNew.length; i++){
         this.controlsNew[i] += 1;
       }
+      this.$forceUpdate();
     },
     alignControlsUpwardsFromTargetQubit(){
-      let startUp = this.$data.qbitNew;
-      let startDown = this.$data.qbitNew;
-      if (isDefined(this.$data.qbit2New)){
-        startUp = Math.min(startUp, this.$data.qbit2New);
-        startDown = Math.max(startDown, this.$data.qbit2New);
-      }
+      let startUp = Math.min(...this.$data.targetsNew);
+      let startDown = Math.max(...this.$data.targetsNew);
       for (let i = 0; i < this.controlsNew.length; i++){
         if (startUp - i >= 1){
           this.controlsNew[i] = startUp - i - 1;
@@ -219,10 +211,7 @@ export const controlsMixin = {
       this.$forceUpdate();
     },
     alignControlsDownwardsFromTargetQubit(){
-      let start = this.$data.qbitNew;
-      if (isDefined(this.$data.qbit2New)){
-        start = Math.max(start, this.$data.qbit2New)
-      }
+      let start = Math.max(...this.$data.targetsNew);
       for (let i = 0; i < this.controlsNew.length; i++){
         this.controlsNew[i] = start + i + 1;
       }
