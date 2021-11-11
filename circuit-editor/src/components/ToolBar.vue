@@ -297,6 +297,10 @@ it does not make much sense doing that unless you intend to save the circuit as 
       window.gatesTable.columns = window.initialColumns;
       this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
       this.$root.$emit("circuitModifiedFromMenu");
+      if (window.toolTipsAreShown){
+        JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");
+        window.toolTipsAreShown = false;
+      }
     },
     switchTheme: function(){
       setUserInterfaceSetting('dark-theme', this.darkTheme);

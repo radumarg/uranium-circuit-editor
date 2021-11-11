@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :src="gateImageSource" :id="id" draggable="false" style="width:100%;height:100%;" />
+    <img :src="gateImageSource" draggable="false" style="width:100%;height:100%;" />
   </div>
 </template>
 

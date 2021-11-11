@@ -195,7 +195,7 @@ import { mapActions } from 'vuex';
 import SingleBitGate from "./SingleBitGate";
 import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 export default {
-  name: "SwapGate",
+  name: "IsingGate",
   extends: SingleBitGate,
   props: {
     'qrow': Number,
@@ -203,7 +203,7 @@ export default {
   },
   data() {
     return {
-      qbit2Expression: this.targets[1],
+      qbit2Expression: `${this.targets[1]} + q - ${this.targets[0]}`,
       thetaNew: this.theta,
       thetaExpression: this.theta,
     }

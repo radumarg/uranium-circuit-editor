@@ -243,7 +243,7 @@ export default {
       this.editControlsIsHovered = false;
       this.$data.targetsNew = [...this.targets];
       if (this.targets.length > 1){
-        this.$data.qbit2Expression = this.targets[1].toString();
+        this.$data.qbit2Expression = `${this.targets[1]} + q - ${this.targets[0]}`;
       }
       if (this.root){
         if (this.root.includes("1/2^")){

@@ -183,7 +183,7 @@ export default {
   },
   data() {
     return {
-      qbit2Expression: this.targets[1],
+      qbit2Expression: `${this.targets[1]} + q - ${this.targets[0]}`,
     }
   },
   computed: {
