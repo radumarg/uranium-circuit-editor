@@ -23,7 +23,7 @@ import { getStateVectorEntries} from "../store/modules/simulationCharts.js";
 import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 
 export default {
-   name: 'columnChart',
+   name: 'StateVectorChart',
    data() {
       return {
         chartOptionsReal: {

@@ -27,7 +27,7 @@ import { JSC } from 'jscharting-vue';
 import { getBinnedProbabilities, getMeasureGates } from "../store/modules/simulationCharts.js";
 
 export default {
-   name: 'columnChart',
+   name: 'VerticalColumnChart',
    data() {
       return {
          chartOptions: {

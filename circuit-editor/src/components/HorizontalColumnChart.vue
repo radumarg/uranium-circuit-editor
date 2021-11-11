@@ -16,7 +16,7 @@ import { getUserInterfaceSetting } from "../store/modules/applicationWideReusabl
 
 
 export default {
-   name: 'columnChart',
+   name: 'HorizontalColumnChart',
    data() {
       return {
         activated: true,
