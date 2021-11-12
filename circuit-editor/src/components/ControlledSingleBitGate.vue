@@ -341,7 +341,7 @@ export default {
         'step': this.step, 
         'targets': [...this.targets],
         'name': this.name,
-        'controls': [...this.controls], 
+        'controls': [...this.controls],
         'targetsNew': [...this.$data.targetsNew],
         'controlsNew': this.$data.controlsNew,
         'controlstatesNew': this.$data.controlstatesNew,

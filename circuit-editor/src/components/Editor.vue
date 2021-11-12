@@ -320,6 +320,11 @@ table {
   border: 0px;
   border-spacing: 0px;
   table-layout: fixed;
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
   text-align: center;
 }
 
