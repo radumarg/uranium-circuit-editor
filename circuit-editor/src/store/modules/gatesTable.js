@@ -442,7 +442,7 @@ var hadamardCtrlGates = ["ctrl-hadamard"];
 var unitaryCtrlGates = ["ctrl-u1", "ctrl-u2", "ctrl-u3"];
 var isingGates = ["xx", "yy", "zz"];
 var isingCtrlGates = ["ctrl-xx", "ctrl-yy", "ctrl-zz"];
-var swapCtrlGates = ["ctrl-swap", "ctrl-sqrt-swap", "ctrl-swap-phi", "ctrl-iswap" ];
+var swapCtrlGates = ["ctrl-swap", "ctrl-sqrt-swap", "ctrl-swap-theta", "ctrl-iswap" ];
 
 function getSwapIntermediateLineName(thisRowHoldsGates, qmin, qrow, gateName) {
   if (thisRowHoldsGates) {
@@ -710,10 +710,10 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
 
           gatesTableRowState.cells[column].tooltip = "";
           if (gate.name == "sqrt-swap"
-              || gate.name == "swap-phi"
+              || gate.name == "swap-theta"
               || gate.name == "iswap"
               || gate.name == "ctrl-sqrt-swap"
-              || gate.name == "ctrl-swap-phi"
+              || gate.name == "ctrl-swap-theta"
               || gate.name == "ctrl-iswap"){
             if ((inputRow - 1) / 2 == Math.min(...targets)){
               gatesTableRowState.cells[column].tooltip += `${gate.name} ` 
@@ -725,7 +725,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             gatesTableRowState.cells[column].tooltip += `θ:${gate.theta} `
           }
           if (Object.prototype.hasOwnProperty.call(gate, "phi")) {
-            if (gate.name != "swap-phi" || ((inputRow - 1) / 2 == Math.min(...targets))){
+            if (gate.name != "swap-theta" || ((inputRow - 1) / 2 == Math.min(...targets))){
               gatesTableRowState.cells[column].phi = parseFloat(gate.phi);
               gatesTableRowState.cells[column].tooltip += `φ:${gate.phi} `
             }

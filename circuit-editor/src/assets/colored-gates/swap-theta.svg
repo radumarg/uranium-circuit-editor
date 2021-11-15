@@ -8,7 +8,7 @@
     <line x1="23" y1="9" x2="23" y2="26" style="stroke:salmon;stroke-width:2;stroke-opacity:1;" />
 
     <circle cx="23" cy="35" r="10" style="stroke:salmon;stroke-width:2;stroke-opacity:1;fill:none;" />
-    <text x="18.8" y="39" style="fill: salmon; font-size: 16px;">ϕ</text>
+    <text x="17.2" y="40.4" style="fill: salmon; font-size: 16px;">ϴ</text>
 
     <line x1="23" y1="44" x2="23" y2="60" style="stroke:salmon;stroke-width:2;stroke-opacity:1;" />
 

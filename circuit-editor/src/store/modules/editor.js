@@ -132,23 +132,23 @@ export const circuitEditorModule = {
     },
     insertGateInCircuit: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
-        let singleBitGates = ["hadamard", "identity", "pauli-x", "pauli-y", "pauli-z", "sqrt-not", "t", "t-dagger", "s", "s-dagger"];
+        let singleQbitGates = ["hadamard", "identity", "pauli-x", "pauli-y", "pauli-z", "sqrt-not", "t", "t-dagger", "s", "s-dagger"];
         let pauliRootGates = ["pauli-x-root", "pauli-y-root", "pauli-z-root", "pauli-x-root-dagger", "pauli-y-root-dagger", "pauli-z-root-dagger"]
-        let parametricSingleBitGates = ["rx-theta", "ry-theta", "rz-theta"];
-        let unitarySingleBitGates = ["u1"];
+        let parametricSingleQbitGates = ["rx-theta", "ry-theta", "rz-theta"];
+        let unitarySingleQbitGates = ["u1"];
         let unitaryTwoParamGates = ["u2"];
         let unitaryThreeParamGates = ["u3"]
         let measureGates = ["measure-x", "measure-y", "measure-z"];
-        let controlledSingleBitGates = ["ctrl-hadamard", "ctrl-pauli-x", "ctrl-pauli-y", "ctrl-pauli-z", "ctrl-sqrt-not", "ctrl-t", "ctrl-t-dagger", "ctrl-s", "ctrl-s-dagger"];
+        let controlledSingleQbitGates = ["ctrl-hadamard", "ctrl-pauli-x", "ctrl-pauli-y", "ctrl-pauli-z", "ctrl-sqrt-not", "ctrl-t", "ctrl-t-dagger", "ctrl-s", "ctrl-s-dagger"];
         let controlledPauliRootGates = ["ctrl-pauli-x-root", "ctrl-pauli-y-root", "ctrl-pauli-z-root", "ctrl-pauli-x-root-dagger", "ctrl-pauli-y-root-dagger", "ctrl-pauli-z-root-dagger"]
-        let controlledParametricSingleBitGates = ["ctrl-rx-theta", "ctrl-ry-theta", "ctrl-rz-theta"];
-        let controlledUnitarySingleBitGates = ["ctrl-u1"];
+        let controlledParametricSingleQbitGates = ["ctrl-rx-theta", "ctrl-ry-theta", "ctrl-rz-theta"];
+        let controlledUnitarySingleQbitGates = ["ctrl-u1"];
         let controlledUnitaryTwoParamGates = ["ctrl-u2"];
         let controlledUnitaryThreeParamGates = ["ctrl-u3"];
         let swapGates = ["swap", "sqrt-swap", "iswap"];
         let controlledSwapGates = ["ctrl-swap", "ctrl-sqrt-swap", "ctrl-iswap"];
-        let parametricSwapGates = ["swap-phi"];
-        let controlledParametricSwapGates = ["ctrl-swap-phi"];
+        let parametricSwapGates = ["swap-theta"];
+        let controlledParametricSwapGates = ["ctrl-swap-theta"];
         let isingGates = ["xx", "yy", "zz"];
         let controlledIsingGates = ["ctrl-xx", "ctrl-yy", "ctrl-zz"];
         
@@ -183,13 +183,13 @@ export const circuitEditorModule = {
           alert("A gate already exists at this location!");
         } else {
           let dto = {};
-          if (singleBitGates.includes(name)) {
+          if (singleQbitGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name };
-          } else if (parametricSingleBitGates.includes(name)) {
+          } else if (parametricSingleQbitGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0 };
           } else if (pauliRootGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "root": "1/1" };
-          } else if (unitarySingleBitGates.includes(name)) {
+          } else if (unitarySingleQbitGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "lambda": 0 };
           } else if (unitaryTwoParamGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "phi": 0, "lambda": 0 };
@@ -197,13 +197,13 @@ export const circuitEditorModule = {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "lambda": 0 };
           } else if (measureGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "bit": targets[0] };
-          } else if (controlledSingleBitGates.includes(name)) {
+          } else if (controlledSingleQbitGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "controls": controls, "controlstates": controlstates };
           } else if (controlledPauliRootGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "controls": controls, "controlstates": controlstates, "root": "1/1" };
-          } else if (controlledParametricSingleBitGates.includes(name)) {
+          } else if (controlledParametricSingleQbitGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "controls": controls, "controlstates": controlstates };
-          } else if (controlledUnitarySingleBitGates.includes(name)) {
+          } else if (controlledUnitarySingleQbitGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "lambda": 0, "controls": controls, "controlstates": controlstates };
           } else if (controlledUnitaryTwoParamGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
@@ -314,8 +314,8 @@ export const circuitEditorModule = {
                       let controlstate = limitedEvaluate(interpolateJavaScriptExpression(controlstatesExpression, s, q, i)).toString();
                       dto["controlstates"].push(controlstate);
                     }
-                    if (dto["controlstates"].some((element) => !['0', '1'].includes(element))) {
-                      throw new Error(`Control state q=${q}, s=${s} does not evaluate to 0 or 1.`);
+                    if (dto["controlstates"].some((element) => !['0', '1', '+', '-', '+i', '-i'].includes(element))) {
+                      throw new Error(`Control state q=${q}, s=${s} does not evaluate to 0, 1, +, -, +i or -i.`);
                     }
                   }
                 

@@ -159,7 +159,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 import { handleSelectEvent, isDefined } from "../store/modules/editorHelper.js";
 export default {
-  name: "SingleBitGate",
+  name: "SingleQbitGate",
   props: {
     'step' : Number,
     'targets': Array,

@@ -189,11 +189,11 @@
 </template>
 
 <script>
-import SingleBitGate from "./SingleBitGate";
+import SingleQbitGate from "./SingleQbitGate";
 import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "PauliRootGate",
-  extends: SingleBitGate,
+  extends: SingleQbitGate,
   props: {
     'root': String,
   },

@@ -300,13 +300,13 @@
 
 <script>
 import { mapActions } from 'vuex';
-import SingleBitGate from "./SingleBitGate";
+import SingleQbitGate from "./SingleQbitGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";
 import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 import { arraysHaveElementsInCommon } from "../store/modules/javaScriptUtils.js";
 export default {
-  name: "ControlledSingleBitGate",
-  extends: SingleBitGate,
+  name: "ControlledSingleQbitGate",
+  extends: SingleQbitGate,
   mixins: [controlsMixin],
   data() {
     return {

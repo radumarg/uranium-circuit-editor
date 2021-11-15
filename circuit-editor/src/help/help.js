@@ -63,7 +63,7 @@ export function retriveHelpHtml(gateName) {
         return 'This gate swaps two qubits.';
     } else if (gateName == "sqrt-swap") {
         return 'This gate performs half-way a two-qubit swap.  It the square root of swap gate.';
-    } else if (gateName == "swap-phi") {
+    } else if (gateName == "swap-theta") {
         return 'This gate performs partial a two-qubit swap.';
     } else if (gateName == "iswap") {
         return 'This gate performs partial a two-qubit swap.';
@@ -756,7 +756,7 @@ export function retriveGateMatrixHtml(gateName) {
             <td style='padding: 5px; text-align: center;'>1</td>\
         </tr>\
         </table>";
-    } else if (gateName == "swap-phi") {
+    } else if (gateName == "swap-theta") {
         return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
         <table class='matrix'> \
         <tr>\
@@ -768,12 +768,12 @@ export function retriveGateMatrixHtml(gateName) {
         <tr>\
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>e<sup>iφ</sup></td>\
+            <td style='padding: 5px; text-align: center;'>e<sup>iθ</sup></td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
         </tr>\
         <tr>\
             <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>e<sup>iφ</sup></td>\
+            <td style='padding: 5px; text-align: center;'>e<sup>iθ</sup></td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
             <td style='padding: 5px; text-align: center;'>0</td>\
         </tr>\

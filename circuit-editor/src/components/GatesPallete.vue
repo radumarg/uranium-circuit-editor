@@ -187,8 +187,8 @@
             <img v-else src="../assets/blue-gates/ctrl-u1-1.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-u1" alt="Controlled U1 Gate" />
           </td>
           <td v-on:click="gateSelected" id="ctrl-u2">
-            <img v-if="coloredGatesCookie" src="../assets/colored-gates/ctrl-u2-1.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-u2" alt="Controlled Two Parameters Single Bit Unitary Gate" />
-            <img v-else src="../assets/blue-gates/ctrl-u2-1.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-u2" alt="Controlled Two Parameters Single Bit Unitary Gate" />
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/ctrl-u2-1.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-u2" alt="Controlled Two Parameters Single Qbit Unitary Gate" />
+            <img v-else src="../assets/blue-gates/ctrl-u2-1.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-u2" alt="Controlled Two Parameters Single Qbit Unitary Gate" />
           </td>
           <td  v-on:click="gateSelected" id="ctrl-u3">
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/ctrl-u3-1.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-u3" alt="Controlled Generic Unitary Gate" />
@@ -208,9 +208,9 @@
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/sqrt-swap.svg" @dragend="dragEnd" @dragstart="dragStart" title="sqrt-swap" alt="Sqrt Swap Gate"/>
             <img v-else src="../assets/blue-gates/sqrt-swap.svg" @dragend="dragEnd" @dragstart="dragStart" title="sqrt-swap" alt="Sqrt Swap Gate"/>
           </td> 
-          <td v-on:click="gateSelected" id="swap-phi">
-            <img v-if="coloredGatesCookie" src="../assets/colored-gates/swap-phi.svg" @dragend="dragEnd" @dragstart="dragStart" title="swap-phi" alt="Phi Swap Gate"/>
-            <img v-else src="../assets/blue-gates/swap-phi.svg" @dragend="dragEnd" @dragstart="dragStart" title="swap-phi" alt="Phi Swap Gate"/>
+          <td v-on:click="gateSelected" id="swap-theta">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/swap-theta.svg" @dragend="dragEnd" @dragstart="dragStart" title="swap-theta" alt="Phi Swap Gate"/>
+            <img v-else src="../assets/blue-gates/swap-theta.svg" @dragend="dragEnd" @dragstart="dragStart" title="swap-theta" alt="Phi Swap Gate"/>
           </td>
           <td v-on:click="gateSelected" id="iswap">
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/iswap.svg" @dragend="dragEnd" @dragstart="dragStart" title="iswap" alt="I Swap Gate"/>

@@ -45,6 +45,14 @@
         </tr>
         <tr>
           <td></td>
+          <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Lambda:</td>
+          <td width="100px" style="padding: 5px;"> 
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="lambdaNew" placeholder="lambda" type="number" id="lambda-new" style="width:90px;"></b-form-input>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
             <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
@@ -59,22 +67,6 @@
               <b-icon v-if="editControlsIsHovered" icon="pencil-fill" v-on:click="handleEditControls()" title="Edit controls" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="pencil" style="color: #7952b3;" font-scale="1.4"></b-icon>
              </div>
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Phi:</td>
-          <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="phiNew" placeholder="phi" type="number" id="phi-new" style="width:90px;"></b-form-input>
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Lambda:</td>
-          <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="lambdaNew" placeholder="lambda" type="number" id="lambda-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -109,7 +101,7 @@
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleReplicateGateModalCloseHover">
-              <b-icon v-if="replicateGateModalCloseIsHovered" v-on:click="hideReplicateGateModal()" icon="x-square" title="Close dialog" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-if="replicateGateModalCloseIsHovered" v-on:click="hideReplicateGateModal()" title="Close dialog" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
               <b-icon v-else icon="x-square" v-on:click="hideReplicateGateModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
@@ -185,15 +177,6 @@
         </tr>
         <tr>
           <td colspan="3" width="300px" class="td-2nd-modal">
-            Phi Value - 'q, s' based <br/>javascript expression:
-          </td>
-          <td colspan="3" width="400px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="phiExpression" placeholder="" type="text" id="phi-expression" style="min-width:400px;"></b-form-input>
-          </td>
-          <td class="no-resize-cell"></td>
-        </tr>
-        <tr>
-          <td colspan="3" width="300px" class="td-2nd-modal">
             Lambda Value - 'q, s' based <br/>javascript expression:
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
@@ -214,7 +197,7 @@
       </table>
     </b-modal>
 
-        <b-modal ref="edit-controls-modal-dialog" :size="editControlsModalSize()" centered hide-footer hide-header>
+    <b-modal ref="edit-controls-modal-dialog" :size="editControlsModalSize()" centered hide-footer hide-header>
       <table>
         <tr>
           <td class="no-resize-cell">
@@ -334,13 +317,13 @@
 
 <script>
 import { mapActions } from 'vuex';
-import UnitaryBiParametricSingleBitGate from "./UnitaryBiParametricSingleBitGate";
+import UnitaryParametricSingleQbitGate from "./UnitaryParametricSingleQbitGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";
 import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 import { arraysHaveElementsInCommon } from "../store/modules/javaScriptUtils.js";
 export default {
-  name: "ControlledUnitaryBiParametricSingleBitGate",
-  extends: UnitaryBiParametricSingleBitGate,
+  name: "ControlledUnitaryParametricSingleQbitGate",
+  extends: UnitaryParametricSingleQbitGate,
   mixins: [controlsMixin],
   data() {
     return {
@@ -371,7 +354,6 @@ export default {
       let targetsOld = [...this.targets];
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
-      let phiOld = this.phi;
       let lambdaOld = this.lambda;
       let promise = this.repositionControlledGateInCircuit({
         'step': this.step, 
@@ -381,7 +363,6 @@ export default {
         'targetsNew': [...this.$data.targetsNew],
         'controlsNew': this.$data.controlsNew,
         'controlstatesNew': this.$data.controlstatesNew,
-        'phiNew': this.$data.phiNew,
         'lambdaNew': this.$data.lambdaNew,
       });
       promise.then(
@@ -390,13 +371,11 @@ export default {
         // eslint-disable-next-line no-unused-vars
         error => {
           this.$data.targetsNew = [...targetsOld];
-          this.$data.targetsNew = [...targetsOld];
           this.targets = [...targetsOld];
           this.controls = [...controlsOld];
           this.$data.controlsNew = [...controlsOld];
           this.controlstates = [...controlstatesOld];
           this.$data.controlstatesNew = [...controlstatesOld];
-          this.$data.phiNew = this.phi = phiOld;
           this.$data.lambdaNew = this.lambda = lambdaOld;
         }
       );
@@ -418,7 +397,6 @@ export default {
         'controlsExpression': this.controlsExpression,
         'controlstatesExpression': this.controlstatesExpression,
         'lambdaExpression': this.lambdaExpression,
-        'phiExpression': this.phiExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -438,7 +416,6 @@ export default {
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstates", [...this.controlstates]);
-      event.dataTransfer.setData("phi", this.phi);
       event.dataTransfer.setData("lambda", this.lambda);
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);

@@ -207,11 +207,11 @@
 
 <script>
 import { mapActions } from 'vuex';
-import UnitaryBiParametricSingleBitGate from "./UnitaryBiParametricSingleBitGate";
+import UnitaryBiParametricSingleQbitGate from "./UnitaryBiParametricSingleQbitGate";
 import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 export default {
-  name: "UnitaryThreeParametricSingleBitGate",
-  extends: UnitaryBiParametricSingleBitGate,
+  name: "UnitaryThreeParametricSingleQbitGate",
+  extends: UnitaryBiParametricSingleQbitGate,
   props: {
     'theta': Number,
   },

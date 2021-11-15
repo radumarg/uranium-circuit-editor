@@ -174,11 +174,11 @@
 
 <script>
 import { mapActions } from 'vuex';
-import SingleBitGate from "./SingleBitGate";
+import SingleQbitGate from "./SingleQbitGate";
 import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "MeasureGate",
-  extends: SingleBitGate,
+  extends: SingleQbitGate,
   props: {
     'bit': Number,
   },

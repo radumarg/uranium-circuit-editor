@@ -320,7 +320,7 @@ export default {
       if (event.dataTransfer.types.includes("dragged-qbit")) {
         draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       }
-      if (event.shiftKey && draggedQbit) {
+      if (event.shiftKey && isDefined(draggedQbit)) {
         // shift key is pressed and draggedQbit not null means
         // we are not doing drag & drop from the gates pallete
         let dragOrigin = event.dataTransfer.getData("drag-origin");
@@ -344,16 +344,18 @@ export default {
       let gateName = event.dataTransfer.getData("gateName");
       let targets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
       let step = parseInt(event.currentTarget.getAttribute("step"));
-      let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));         
+      let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
+      let draggedQubit = parseInt(event.dataTransfer.getData("dragged-qbit"));
 
       // add the new gate mandatory params
       let dto = { step: step, targets: [...targets], name: gateName };
 
       dto["controls"] = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
+      let controlIndex = dto["controls"].indexOf(draggedQubit);
       dto["controls"].push(dropQbit);
 
       dto["controlstates"] = event.dataTransfer.getData("controlstates").split(",");
-      dto["controlstates"].push('1');
+      dto["controlstates"].push(dto["controlstates"][controlIndex]);
       
       if (event.dataTransfer.types.includes("phi")) {
         let phi = parseFloat(event.dataTransfer.getData("phi"));

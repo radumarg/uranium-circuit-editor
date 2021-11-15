@@ -45,6 +45,30 @@
         </tr>
         <tr>
           <td></td>
+          <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Theta:</td>
+          <td width="100px" style="padding: 5px;"> 
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="thetaNew" placeholder="theta" type="number" id="theta-new" style="width:90px;"></b-form-input>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Phi:</td>
+          <td width="100px" style="padding: 5px;"> 
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="phiNew" placeholder="phi" type="number" id="phi-new" style="width:90px;"></b-form-input>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Lambda:</td>
+          <td width="100px" style="padding: 5px;"> 
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="lambdaNew" placeholder="lambda" type="number" id="lambda-new" style="width:90px;"></b-form-input>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
             <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
@@ -59,14 +83,6 @@
               <b-icon v-if="editControlsIsHovered" icon="pencil-fill" v-on:click="handleEditControls()" title="Edit controls" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="pencil" style="color: #7952b3;" font-scale="1.4"></b-icon>
              </div>
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Lambda:</td>
-          <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="lambdaNew" placeholder="lambda" type="number" id="lambda-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -172,6 +188,24 @@
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
             <b-form-input min="0" v-model="controlstatesExpression" placeholder="" type="text" id="ctrl-state" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Theta Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="thetaExpression" placeholder="" type="text" id="theta-expression" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Phi Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="phiExpression" placeholder="" type="text" id="phi-expression" style="min-width:400px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>
@@ -317,13 +351,13 @@
 
 <script>
 import { mapActions } from 'vuex';
-import UnitaryParametricSingleBitGate from "./UnitaryParametricSingleBitGate";
+import UnitaryThreeParametricSingleQbitGate from "./UnitaryThreeParametricSingleQbitGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";
 import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 import { arraysHaveElementsInCommon } from "../store/modules/javaScriptUtils.js";
 export default {
-  name: "ControlledUnitaryParametricSingleBitGate",
-  extends: UnitaryParametricSingleBitGate,
+  name: "ControlledUnitaryThreeParametricSingleQbitGate",
+  extends: UnitaryThreeParametricSingleQbitGate,
   mixins: [controlsMixin],
   data() {
     return {
@@ -354,6 +388,8 @@ export default {
       let targetsOld = [...this.targets];
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
+      let phiOld = this.phi;
+      let thetaOld = this.theta;
       let lambdaOld = this.lambda;
       let promise = this.repositionControlledGateInCircuit({
         'step': this.step, 
@@ -363,6 +399,8 @@ export default {
         'targetsNew': [...this.$data.targetsNew],
         'controlsNew': this.$data.controlsNew,
         'controlstatesNew': this.$data.controlstatesNew,
+        'phiNew': this.$data.phiNew,
+        'thetaNew': this.$data.thetaNew,
         'lambdaNew': this.$data.lambdaNew,
       });
       promise.then(
@@ -376,6 +414,8 @@ export default {
           this.$data.controlsNew = [...controlsOld];
           this.controlstates = [...controlstatesOld];
           this.$data.controlstatesNew = [...controlstatesOld];
+          this.$data.phiNew = this.phi = phiOld;
+          this.$data.thetaNew = this.theta = thetaOld;
           this.$data.lambdaNew = this.lambda = lambdaOld;
         }
       );
@@ -397,6 +437,8 @@ export default {
         'controlsExpression': this.controlsExpression,
         'controlstatesExpression': this.controlstatesExpression,
         'lambdaExpression': this.lambdaExpression,
+        'phiExpression': this.phiExpression,
+        'thetaExpression': this.thetaExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -416,6 +458,8 @@ export default {
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstates", [...this.controlstates]);
+      event.dataTransfer.setData("phi", this.phi);
+      event.dataTransfer.setData("theta", this.theta);
       event.dataTransfer.setData("lambda", this.lambda);
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
