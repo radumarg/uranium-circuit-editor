@@ -45,17 +45,17 @@
         </tr>
         <tr>
           <td></td>
-          <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
+          <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Theta:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="thetaNew" placeholder="theta" type="number" id="theta-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
         <tr>
           <td></td>
-          <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Theta:</td>
+          <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="thetaNew" placeholder="theta" type="number" id="theta-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>

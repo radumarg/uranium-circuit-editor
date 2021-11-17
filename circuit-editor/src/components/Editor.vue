@@ -32,9 +32,6 @@
             <div v-else-if="cell.name === 'pauli-root-line-long'">
               <VerticalTransitionCellLong :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
-            <div v-else-if="cell.name === 'toffoli-line-long'">
-              <VerticalTransitionCellLong :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
-            </div>
             <div v-else-if="cell.name === 'r-line-short'">
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
             </div>

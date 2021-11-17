@@ -338,7 +338,7 @@ export default {
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
       let promise = this.repositionControlledGateInCircuit({
-        'step': this.step, 
+        'step': this.step,
         'targets': [...this.targets],
         'name': this.name,
         'controls': [...this.controls],

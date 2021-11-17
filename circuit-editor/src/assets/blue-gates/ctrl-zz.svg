@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="46" height="92" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <circle cx="23" cy="7" r="6" stroke="cornflowerblue" fill="cornflowerblue" />
+
+    <line x1="23" y1="11" x2="23" y2="24" style="stroke:cornflowerblue;stroke-width:2; stroke-opacity:1;" />
+
+    <circle cx="23" cy="35" r="12" style="stroke:cornflowerblue;stroke-width:2;" fill="transparent" />
+    <text x="16" y="42" style="font-size: 21px; font-weight: bold; fill: cornflowerblue; white-space: pre;">Z</text>
+    <line x1="23" y1="46" x2="23" y2="67" style="stroke:cornflowerblue;stroke-width:2; stroke-opacity:1;" />
+    <text x="16" y="85" style="font-size: 21px; font-weight: bold; fill: cornflowerblue; white-space: pre;">Z</text>
+    <circle cx="23" cy="78" r="12" style="stroke:cornflowerblue;stroke-width:2;" fill="transparent" />
+  </g>
+</svg>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
   <g>
-    <circle cx="10" cy="10" r="3.5" style="stroke:cornflowerblue;stroke-width:1.5;" fill="transparent" />
+    <circle cx="10" cy="10" r="6" style="stroke:cornflowerblue;stroke-width:1.5;" fill="transparent" />
   </g>
 </svg>

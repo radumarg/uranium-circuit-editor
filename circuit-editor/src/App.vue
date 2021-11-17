@@ -85,16 +85,12 @@ export default {
         if (getUserInterfaceSetting('colored-gates') === 'true'){
           if (gateName.includes("ctrl-")){
             this.gateImage = require("./assets/colored-gates/" + gateName + "-1.svg");     
-          } else if (gateName == "toffoli") { 
-            this.gateImage = require("./assets/colored-gates/toffoli-1-1.svg");
           } else {
             this.gateImage = require("./assets/colored-gates/" + gateName + ".svg");
           }
         } else {
           if (gateName.includes("ctrl-")){
             this.gateImage = require("./assets/blue-gates/" + gateName + "-1.svg");     
-          } else if (gateName == "toffoli") { 
-            this.gateImage= require("./assets/blue-gates/toffoli-1-1.svg");
           } else {
             this.gateImage = require("./assets/blue-gates/" + gateName + ".svg");
           }

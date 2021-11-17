@@ -303,16 +303,12 @@ export default {
         if (getUserInterfaceSetting('colored-gates') === 'true'){
           if (img.title.includes("ctrl-")){
             img.src = require("../assets/colored-gates/" + img.title + "-1.svg");     
-          } else if (img.title == "toffoli") { 
-            img.src = require("../assets/colored-gates/toffoli-1-1.svg");
           } else {
             img.src = require("../assets/colored-gates/" + img.title + ".svg");
           }
         } else {
           if (img.title.includes("ctrl-")){
             img.src = require("../assets/blue-gates/" + img.title + "-1.svg");     
-          } else if (img.title == "toffoli") { 
-            img.src = require("../assets/blue-gates/toffoli-1-1.svg");
           } else {
             img.src = require("../assets/blue-gates/" + img.title + ".svg");
           }
