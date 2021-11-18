@@ -231,6 +231,38 @@
             <img v-else src="../assets/blue-gates/zz.svg" @dragend="dragEnd" @dragstart="dragStart" title="zz" alt="ZZ Gate" />
           </td>    
         </tr>
+        <tr>
+          <td v-on:click="gateSelected" id="ctrl-swap">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/ctrl-swap.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-swap" alt="Controlled Swap Gate"/>
+            <img v-else src="../assets/blue-gates/ctrl-swap.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-swap" alt="Controlled Swap Gate"/>
+          </td>
+          <td v-on:click="gateSelected" id="ctrl-sqrt-swap">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/ctrl-sqrt-swap.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-sqrt-swap" alt="Controlled Sqrt Swap Gate"/>
+            <img v-else src="../assets/blue-gates/ctrl-sqrt-swap.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-sqrt-swap" alt="Controlled Sqrt Swap Gate"/>
+          </td>
+          <td v-on:click="gateSelected" id="ctrl-swap-theta">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/ctrl-swap-theta.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-swap-theta" alt="Controlled Phi Swap Gate"/>
+            <img v-else src="../assets/blue-gates/ctrl-swap-theta.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-swap-theta" alt="Controlled Phi Swap Gate"/>
+          </td>
+          <td v-on:click="gateSelected" id="ctrl-iswap">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/ctrl-iswap.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-iswap" alt="Controlled I Swap Gate"/>
+            <img v-else src="../assets/blue-gates/ctrl-iswap.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-iswap" alt="Controlled I Swap Gate"/>
+          </td>
+        </tr>
+        <tr>
+          <td v-on:click="gateSelected" id="ctrl-xx">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/ctrl-xx.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-xx" alt="Controlled XX Gate" />
+            <img v-else src="../assets/blue-gates/ctrl-xx.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-xx" alt="Controlled XX Gate" />
+          </td>
+          <td v-on:click="gateSelected" id="ctrl-yy">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/ctrl-yy.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-yy" alt="Controlled YY Gate" />
+            <img v-else src="../assets/blue-gates/ctrl-yy.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-yy" alt="Controlled YY Gate" />
+          </td>
+          <td  v-on:click="gateSelected" id="ctrl-zz">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/ctrl-zz.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-zz" alt="Controlled ZZ Gate" />
+            <img v-else src="../assets/blue-gates/ctrl-zz.svg" @dragend="dragEnd" @dragstart="dragStart" title="ctrl-zz" alt="Controlled ZZ Gate" />
+          </td>
+        </tr>
     </table>
   </div>
 </template>
