@@ -434,15 +434,14 @@ export function retrieveRowsInGatesTable(circuitState) {
  * Also used for rendering swap gates.
  ******************************************************************/
 
-var pauliCtrlGates = ["ctrl-pauli-x", "ctrl-pauli-y", "ctrl-pauli-z"];
-var pauliRootCtrlGates = ["ctrl-pauli-x-root", "ctrl-pauli-y-root", "ctrl-pauli-z-root", "ctrl-pauli-x-root-dagger", "ctrl-pauli-y-root-dagger", "ctrl-pauli-z-root-dagger"];
-var stCtrlGates = ["ctrl-t", "ctrl-t-dagger", "ctrl-s", "ctrl-s-dagger"];
-var rCtrlGates = ["ctrl-rx-theta", "ctrl-ry-theta", "ctrl-rz-theta"];
-var hadamardCtrlGates = ["ctrl-hadamard"];
-var unitaryCtrlGates = ["ctrl-u1", "ctrl-u2", "ctrl-u3"];
+var pauliGates = ["pauli-x", "pauli-y", "pauli-z"];
+var pauliRootGates = ["pauli-x-root", "pauli-y-root", "pauli-z-root", "pauli-x-root-dagger", "pauli-y-root-dagger", "pauli-z-root-dagger"];
+var stGates = ["t", "t-dagger", "s", "s-dagger"];
+var rGates = ["rx-theta", "ry-theta", "rz-theta"];
+var hadamardGates = ["hadamard"];
+var unitaryGates = ["u1", "u2", "u3"];
 var isingGates = ["xx", "yy", "zz"];
-var isingCtrlGates = ["ctrl-xx", "ctrl-yy", "ctrl-zz"];
-var swapCtrlGates = ["ctrl-swap", "ctrl-sqrt-swap", "ctrl-swap-theta", "ctrl-iswap" ];
+var swapGates = ["swap", "sqrt-swap", "swap-theta", "iswap" ];
 
 function getSwapIntermediateLineName(thisRowHoldsGates, qmin, qrow, gateName) {
   if (thisRowHoldsGates) {
@@ -457,109 +456,109 @@ function getSwapIntermediateLineName(thisRowHoldsGates, qmin, qrow, gateName) {
 }
 
 function getCtrlStubDownName(gate, controlstate) {
-  if (pauliCtrlGates.includes(gate.name)) {
+  if (pauliGates.includes(gate.name)) {
     return "ctrl-pauli-stub-down-" + controlstate;
-  } else if (pauliRootCtrlGates.includes(gate.name)) {
+  } else if (pauliRootGates.includes(gate.name)) {
     return "ctrl-pauli-root-stub-down-" + controlstate;
-  } else if (stCtrlGates.includes(gate.name)) {
+  } else if (stGates.includes(gate.name)) {
     return "ctrl-st-stub-down-" + controlstate;
-  } else if (rCtrlGates.includes(gate.name)) {
+  } else if (rGates.includes(gate.name)) {
     return "ctrl-r-theta-stub-down-" + controlstate;
-  } else if (hadamardCtrlGates.includes(gate.name)) {
+  } else if (hadamardGates.includes(gate.name)) {
     return "ctrl-hadamard-stub-down-" + controlstate;
-  } else if (unitaryCtrlGates.includes(gate.name)) {
+  } else if (unitaryGates.includes(gate.name)) {
     return "ctrl-u-stub-down-" + controlstate;
-  } else if (swapCtrlGates.includes(gate.name)) {
+  } else if (swapGates.includes(gate.name)) {
     return "ctrl-swap-stub-down-" + controlstate;
-  } else if (isingCtrlGates.includes(gate.name)) {
+  } else if (isingGates.includes(gate.name)) {
     return "ctrl-ising-down-up-" + controlstate;
   }
 }
 
 function getCtrlStubUpName(gate, controlstate) {
-  if (pauliCtrlGates.includes(gate.name)) {
+  if (pauliGates.includes(gate.name)) {
     return "ctrl-pauli-stub-up-" + controlstate;
-  } else if (pauliRootCtrlGates.includes(gate.name)) {
+  } else if (pauliRootGates.includes(gate.name)) {
     return "ctrl-pauli-root-stub-up-" + controlstate;
-  } else if (stCtrlGates.includes(gate.name)) {
+  } else if (stGates.includes(gate.name)) {
     return "ctrl-st-stub-up-" + controlstate;
-  } else if (rCtrlGates.includes(gate.name)) {
+  } else if (rGates.includes(gate.name)) {
     return "ctrl-r-theta-stub-up-" + controlstate;
-  } else if (hadamardCtrlGates.includes(gate.name)) {
+  } else if (hadamardGates.includes(gate.name)) {
     return "ctrl-hadamard-stub-up-" + controlstate;
-  } else if (unitaryCtrlGates.includes(gate.name)) {
+  } else if (unitaryGates.includes(gate.name)) {
     return "ctrl-u-stub-up-" + controlstate;
-  } else if (swapCtrlGates.includes(gate.name)) {
+  } else if (swapGates.includes(gate.name)) {
     return "ctrl-swap-stub-up-" + controlstate;
-  } else if (isingCtrlGates.includes(gate.name)) {
+  } else if (isingGates.includes(gate.name)) {
     return "ctrl-ising-stub-up-" + controlstate;
   }
 }
 
 function getCtrlStubMidName(gate, controlstate) {
-  if (pauliCtrlGates.includes(gate.name)) {
+  if (pauliGates.includes(gate.name)) {
     return "ctrl-pauli-stub-mid-" + controlstate;
-  } else if (pauliRootCtrlGates.includes(gate.name)) {
+  } else if (pauliRootGates.includes(gate.name)) {
     return "ctrl-pauli-root-stub-mid-" + controlstate;
-  } else if (stCtrlGates.includes(gate.name)) {
+  } else if (stGates.includes(gate.name)) {
     return "ctrl-st-stub-mid-" + controlstate;
-  } else if (rCtrlGates.includes(gate.name)) {
+  } else if (rGates.includes(gate.name)) {
     return "ctrl-r-theta-stub-mid-" + controlstate;
-  } else if (hadamardCtrlGates.includes(gate.name)) {
+  } else if (hadamardGates.includes(gate.name)) {
     return "ctrl-hadamard-stub-mid-" + controlstate;
-  } else if (unitaryCtrlGates.includes(gate.name)) {
+  } else if (unitaryGates.includes(gate.name)) {
     return "ctrl-u-stub-mid-" + controlstate;
-  } else if (swapCtrlGates.includes(gate.name)) {
+  } else if (swapGates.includes(gate.name)) {
     return "ctrl-swap-stub-mid-" + controlstate;
-  } else if (isingCtrlGates.includes(gate.name)) {
+  } else if (isingGates.includes(gate.name)) {
     return "ctrl-ising-stub-mid-" + controlstate;
   }
 }
 
 function getIntermediateLineName(gateName, thisRowHoldsGates) {
-  if (isingGates.includes(gateName) || isingCtrlGates.includes(gateName)) {
+  if (isingGates.includes(gateName) || isingGates.includes(gateName)) {
     if (thisRowHoldsGates) {
       return "ising-line-long";
     } else {
       return "ising-line-short";
     }
-  } else if (pauliCtrlGates.includes(gateName)) {
+  } else if (pauliGates.includes(gateName)) {
     if (thisRowHoldsGates) {
       return "pauli-line-long";
     } else {
       return "pauli-line-short";
     }
-  } else if (pauliRootCtrlGates.includes(gateName)) {
+  } else if (pauliRootGates.includes(gateName)) {
     if (thisRowHoldsGates) {
       return "pauli-root-line-long";
     } else {
       return "pauli-root-line-short";
     }
-  } else if (stCtrlGates.includes(gateName)) {
+  } else if (stGates.includes(gateName)) {
     if (thisRowHoldsGates) {
       return "st-line-long";
     } else {
       return "st-line-short";
     }
-  } else if (rCtrlGates.includes(gateName)) {
+  } else if (rGates.includes(gateName)) {
     if (thisRowHoldsGates) {
       return "r-line-long";
     } else {
       return "r-line-short";
     }
-  } else if (hadamardCtrlGates.includes(gateName)) {
+  } else if (hadamardGates.includes(gateName)) {
     if (thisRowHoldsGates) {
       return "hadamard-line-long";
     } else {
       return "hadamard-line-short";
     }
-  } else if (unitaryCtrlGates.includes(gateName)) {
+  } else if (unitaryGates.includes(gateName)) {
     if (thisRowHoldsGates) {
       return "u-line-long";
     } else {
       return "u-line-short";
     }
-  } else if (swapCtrlGates.includes(gateName)) {
+  } else if (swapGates.includes(gateName)) {
     if (thisRowHoldsGates) {
       return "swap-line-long";
     } else {
@@ -699,11 +698,11 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           // and another component used to render the controll qubit
           gatesTableRowState.cells[column].name = gate.name;                     
 
-          // image that will be shown inside this cell which is different
-          // from gate name for controlled gates or two target qubit gates.
+          // image that will be shown inside this cell which is 
+          // different from gate name for two target qubit gates.
           // In the case of pauli root gates when root is 'k', this is used
           // to resolved gate image name based on values for 'k' and 'img'
-          gatesTableRowState.cells[column].img = gate.name.replace("ctrl-", ""); 
+          gatesTableRowState.cells[column].img = gate.name
 
           // all elements in circuit must be updated when switching from colored to blue gates:
           gatesTableRowState.cells[column].key = getUserInterfaceSetting('colored-gates');
@@ -711,10 +710,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           gatesTableRowState.cells[column].tooltip = "";
           if (gate.name == "sqrt-swap"
               || gate.name == "swap-theta"
-              || gate.name == "iswap"
-              || gate.name == "ctrl-sqrt-swap"
-              || gate.name == "ctrl-swap-theta"
-              || gate.name == "ctrl-iswap"){
+              || gate.name == "iswap"){
             if ((inputRow - 1) / 2 == Math.min(...targets)){
               gatesTableRowState.cells[column].tooltip += `${gate.name} ` 
             }

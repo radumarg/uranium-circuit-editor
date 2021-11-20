@@ -358,7 +358,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionControlledGateInCircuit']),
+    ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
     handleSave: function(){
       if (arraysHaveElementsInCommon(this.$data.controlsNew, this.$data.targetsNew)){
         alert("Control and target qubits must differ!");
@@ -373,7 +373,7 @@ export default {
       let controlstatesOld = [...this.controlstates];
       let phiOld = this.phi;
       let lambdaOld = this.lambda;
-      let promise = this.repositionControlledGateInCircuit({
+      let promise = this.repositionSimpleGateInCircuit({
         'step': this.step, 
         'targets': [...this.targets],
         'name': this.name,

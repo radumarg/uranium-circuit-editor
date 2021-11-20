@@ -358,7 +358,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionControlledGateInCircuit']),
+    ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
     resetRootKExpression(){
       this.$data.rootKExpression = null;
     },
@@ -378,7 +378,7 @@ export default {
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
       let rootOld = this.root;
-      let promise = this.repositionControlledGateInCircuit({
+      let promise = this.repositionSimpleGateInCircuit({
         'step': this.step, 
         'targets': [...this.targets],
         'name': this.name,

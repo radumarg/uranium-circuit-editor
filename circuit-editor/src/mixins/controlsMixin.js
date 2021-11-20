@@ -7,6 +7,14 @@ import {
   getUserInterfaceSetting
 } from "../store/modules/applicationWideReusableUnits.js";
 
+import { 
+  seatIsTaken 
+} from "../store/modules/gatesTable.js";
+
+import { 
+  isDefined 
+} from "../store/modules/editorHelper.js";
+
 export const controlsMixin = {
   props: {
     'controls': Array,
@@ -39,9 +47,9 @@ export const controlsMixin = {
     gateImageSrcPopup: function() {
       if (this.name) {
         if (getUserInterfaceSetting('colored-gates') === 'true'){
-          return require("../assets/colored-gates/" + this.name + "-1.svg");
+          return require("../assets/colored-gates/" + this.name + ".svg");
         } else {
-          return require("../assets/blue-gates/" + this.name + "-1.svg");
+          return require("../assets/blue-gates/" + this.name + ".svg");
         }
       } else {
         return String.empty;
@@ -129,9 +137,9 @@ export const controlsMixin = {
     stubImageSrcPopup: function(controlIndex) {
       if (this.name) {
         if (getUserInterfaceSetting('colored-gates') === 'true'){
-          return require("../assets/colored-gates/" + this.name + "-stub-" + this.controlstatesNew[controlIndex] + ".svg");
+          return require("../assets/colored-gates/ctrl-" + this.name + "-stub-" + this.controlstatesNew[controlIndex] + ".svg");
         } else {
-          return require("../assets/blue-gates/" + this.name + "-stub-" + this.controlstatesNew[controlIndex] + ".svg");
+          return require("../assets/blue-gates/ctrl-" + this.name + "-stub-" + this.controlstatesNew[controlIndex] + ".svg");
         }
       } else {
         return String.empty;
@@ -143,41 +151,46 @@ export const controlsMixin = {
     },
     onNumberControlsChange(){ 
       if (this.numberOfControls < this.controlsNew.length){
-        if (this.numberOfControls > 0){
-          this.controlsNew = this.controlsNew.slice(0, this.numberOfControls);
-          this.controlstatesNew = this.controlstatesNew.slice(0, this.numberOfControls);
-        } else {
-          this.numberOfControls = 1;
-          this.controlsNew = [this.controlsNew[0]];
-          this.controlstatesNew = [this.controlstatesNew[0]];
-        }
+        this.controlsNew = this.controlsNew.slice(0, this.numberOfControls);
+        this.controlstatesNew = this.controlstatesNew.slice(0, this.numberOfControls);
       } else {
-        let lastControl = this.controlsNew[this.controlsNew.length - 1];
-        for (let i = 0; i < this.numberOfControls - this.controlsNew.length; i++){
-          lastControl++;
-          while (this.$data.targetsNew.includes(lastControl)) {
-            lastControl++;
-          }
-          this.controlsNew.push(lastControl);
-          this.controlstatesNew.push('1');
-        }
+        this.addControl();
       }
       this.$forceUpdate();
     },
     addControl(){
-      this.numberOfControls += 1;
-      let lastControl = this.controlsNew[this.controlsNew.length - 1] + 1;
-      while (this.$data.targetsNew.includes(lastControl)) {
-        lastControl++;
+      let newControl = null;
+      let minQubit = Math.min(...this.targetsNew, ...this.controlsNew);
+      let maxQubit = Math.max(...this.targetsNew, ...this.controlsNew);
+      
+      if (minQubit > 0 && !seatIsTaken(this.$store.state.circuitEditorModule, minQubit - 1, this.step)){
+        newControl = minQubit - 1;
+      } else if (!seatIsTaken(this.$store.state.circuitEditorModule, maxQubit + 1, this.step)){
+        newControl = maxQubit + 1;
+      } else {
+        let qbit = minQubit + 1;
+        while (qbit < maxQubit) {
+          if (!seatIsTaken(this.$store.state.circuitEditorModule, qbit, this.step)){
+            newControl = qbit;
+            break;
+          }
+          qbit += 1;
+        }
       }
-      this.controlsNew.push(lastControl);
-      this.controlstatesNew.push('1');
+
+      if (isDefined(newControl)){
+        this.controlsNew.push(newControl);
+        this.controlstatesNew.push('1');
+        this.numberOfControls = this.controlsNew.length;
+      } else {
+        alert("No empty seat left to add new control!");
+      }
     },
     removeControl(){ 
-      if (this.numberOfControls > 1){
-        this.numberOfControls -= 1;
+      if (this.numberOfControls >= 1){
         this.controlsNew = this.controlsNew.slice(0, this.numberOfControls);
         this.controlstatesNew = this.controlstatesNew.slice(0, this.numberOfControls);
+        this.numberOfControls = this.controlsNew.length;
       }
     },
     moveGateOneQubitUpwards(){

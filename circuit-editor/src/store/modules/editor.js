@@ -132,6 +132,7 @@ export const circuitEditorModule = {
     },
     insertGateInCircuit: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
+        let elementaryGates = ["identity"];
         let singleQbitGates = ["hadamard", "identity", "pauli-x", "pauli-y", "pauli-z", "sqrt-not", "t", "t-dagger", "s", "s-dagger"];
         let pauliRootGates = ["pauli-x-root", "pauli-y-root", "pauli-z-root", "pauli-x-root-dagger", "pauli-y-root-dagger", "pauli-z-root-dagger"]
         let parametricSingleQbitGates = ["rx-theta", "ry-theta", "rz-theta"];
@@ -139,18 +140,9 @@ export const circuitEditorModule = {
         let unitaryTwoParamGates = ["u2"];
         let unitaryThreeParamGates = ["u3"]
         let measureGates = ["measure-x", "measure-y", "measure-z"];
-        let controlledSingleQbitGates = ["ctrl-hadamard", "ctrl-pauli-x", "ctrl-pauli-y", "ctrl-pauli-z", "ctrl-sqrt-not", "ctrl-t", "ctrl-t-dagger", "ctrl-s", "ctrl-s-dagger"];
-        let controlledPauliRootGates = ["ctrl-pauli-x-root", "ctrl-pauli-y-root", "ctrl-pauli-z-root", "ctrl-pauli-x-root-dagger", "ctrl-pauli-y-root-dagger", "ctrl-pauli-z-root-dagger"]
-        let controlledParametricSingleQbitGates = ["ctrl-rx-theta", "ctrl-ry-theta", "ctrl-rz-theta"];
-        let controlledUnitarySingleQbitGates = ["ctrl-u1"];
-        let controlledUnitaryTwoParamGates = ["ctrl-u2"];
-        let controlledUnitaryThreeParamGates = ["ctrl-u3"];
         let swapGates = ["swap", "sqrt-swap", "iswap"];
-        let controlledSwapGates = ["ctrl-swap", "ctrl-sqrt-swap", "ctrl-iswap"];
         let parametricSwapGates = ["swap-theta"];
-        let controlledParametricSwapGates = ["ctrl-swap-theta"];
         let isingGates = ["xx", "yy", "zz"];
-        let controlledIsingGates = ["ctrl-xx", "ctrl-yy", "ctrl-zz"];
         
         let name = dataTransferObj["name"];
         let step = dataTransferObj["step"];
@@ -183,43 +175,45 @@ export const circuitEditorModule = {
           alert("A gate already exists at this location!");
         } else {
           let dto = {};
-          if (singleQbitGates.includes(name)) {
+          if (elementaryGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name };
-          } else if (parametricSingleQbitGates.includes(name)) {
+          } else if (singleQbitGates.includes(name) && controls.length == 0) {
+            dto = { "step": step, "targets": targets, "name": name };
+          } else if (parametricSingleQbitGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0 };
-          } else if (pauliRootGates.includes(name)) {
+          } else if (pauliRootGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, "root": "1/1" };
-          } else if (unitarySingleQbitGates.includes(name)) {
+          } else if (unitarySingleQbitGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, "lambda": 0 };
-          } else if (unitaryTwoParamGates.includes(name)) {
+          } else if (unitaryTwoParamGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, "phi": 0, "lambda": 0 };
-          } else if (unitaryThreeParamGates.includes(name)) {
+          } else if (unitaryThreeParamGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "lambda": 0 };
           } else if (measureGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "bit": targets[0] };
-          } else if (controlledSingleQbitGates.includes(name)) {
+          } else if (singleQbitGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "controls": controls, "controlstates": controlstates };
-          } else if (controlledPauliRootGates.includes(name)) {
+          } else if (pauliRootGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "controls": controls, "controlstates": controlstates, "root": "1/1" };
-          } else if (controlledParametricSingleQbitGates.includes(name)) {
+          } else if (parametricSingleQbitGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "controls": controls, "controlstates": controlstates };
-          } else if (controlledUnitarySingleQbitGates.includes(name)) {
+          } else if (unitarySingleQbitGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "lambda": 0, "controls": controls, "controlstates": controlstates };
-          } else if (controlledUnitaryTwoParamGates.includes(name)) {
+          } else if (unitaryTwoParamGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
-          } else if (controlledUnitaryThreeParamGates.includes(name)) {
+          } else if (unitaryThreeParamGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
-          } else if (swapGates.includes(name)) {
+          } else if (swapGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, };
-          } else if (parametricSwapGates.includes(name)) {
+          } else if (parametricSwapGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, "phi": 0, };
-          } else if (isingGates.includes(name)) {
+          } else if (isingGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, };
-          } else if (controlledSwapGates.includes(name)) {
+          } else if (swapGates.includes(name)) {
               dto = { "step": step, "targets": targets, "name": name, "controls": controls, "controlstates": controlstates };
-          } else if (controlledParametricSwapGates.includes(name)) {
+          } else if (parametricSwapGates.includes(name)) {
               dto = { "step": step, "targets": targets, "name": name, "phi": 0, "controls": controls, "controlstates": controlstates };
-          } else if (controlledIsingGates.includes(name)) {
+          } else if (isingGates.includes(name)) {
               dto = { "step": step, "targets": targets, "name": name, "theta": 0, "controls": controls, "controlstates": controlstates };
           } else {
             console.log("This (new?) gate is not handled in code. Gate name: " + name);
@@ -246,9 +240,9 @@ export const circuitEditorModule = {
             let bit = dataTransferObj["bit"];
             dto["bit"] = bit;
           }
-          
+
           this.commit("circuitEditorModule/insertGate", dto);
-          
+
           // inserting the gate was successful
           resolve(true);
         }
@@ -380,7 +374,7 @@ export const circuitEditorModule = {
         reject(false);
       })
     },
-    repositionSimpleGateInCircuit: function (context, dataTransferObj) {
+    repositionElementaryGateInCircuit: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
         let step = dataTransferObj["step"];
         let targets = dataTransferObj["targets"];
@@ -394,22 +388,7 @@ export const circuitEditorModule = {
           this.commit("circuitEditorModule/removeGateNoTrack", { step: step, targets: targets });
 
           dataTransferObj["targets"] = [...targetsNew];
-          if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiNew")) {
-            let phi = dataTransferObj["phiNew"];
-            dataTransferObj["phi"] = phi;
-          }
-          if (Object.prototype.hasOwnProperty.call(dataTransferObj, "thetaNew")) {
-            let theta = dataTransferObj["thetaNew"];
-            dataTransferObj["theta"] = theta;
-          }
-          if (Object.prototype.hasOwnProperty.call(dataTransferObj, "lambdaNew")) {
-            let lambda = dataTransferObj["lambdaNew"];
-            dataTransferObj["lambda"] = lambda;
-          }
-          if (Object.prototype.hasOwnProperty.call(dataTransferObj, "rootNew")) {
-            let root = dataTransferObj["rootNew"];
-            dataTransferObj["root"] = root;
-          }
+          
           if (Object.prototype.hasOwnProperty.call(dataTransferObj, "bitNew")) {
             let bit = dataTransferObj["bitNew"];
             dataTransferObj["bit"] = bit;
@@ -424,7 +403,7 @@ export const circuitEditorModule = {
         reject(false);
       })
     },
-    repositionControlledGateInCircuit: function (context, dataTransferObj) {
+    repositionSimpleGateInCircuit: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
         let step = dataTransferObj["step"];
         let targets = dataTransferObj["targets"];
@@ -464,7 +443,7 @@ export const circuitEditorModule = {
           }
           
           this.dispatch('circuitEditorModule/insertGateInCircuit', dataTransferObj);
-
+          
           // inserting the gate was successful
           resolve(true);
         }

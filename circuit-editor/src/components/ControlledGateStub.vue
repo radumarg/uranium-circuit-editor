@@ -25,7 +25,7 @@
           <td></td>
           <td colspan="2" style="padding: 17px;">
             <div class="d-flex justify-content-center align-items-center">
-              <img :src="stubImageSrcPopup()" style="width:30px; height:auto;" />
+              <img :src="stubImageSrc()" style="width:30px; height:auto;" />
             </div>
           </td>
           <td></td>
@@ -114,7 +114,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionControlledGateInCircuit']),
+    ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
     showModal: function() {
       this.trashIsHovered = false;
       this.closeIsHovered = false;
@@ -158,7 +158,7 @@ export default {
       if (isDefined(this.root)) {
         dto['rootNew'] = this.root;
       }
-      let promise = this.repositionControlledGateInCircuit(dto);
+      let promise = this.repositionSimpleGateInCircuit(dto);
       promise.then(
         // eslint-disable-next-line no-unused-vars
         result => {}, 
@@ -197,7 +197,7 @@ export default {
         if (isDefined(this.root)) {
           dto['rootNew'] = this.root;
         }
-        let promise = this.repositionControlledGateInCircuit(dto);
+        let promise = this.repositionSimpleGateInCircuit(dto);
         promise.then(
           // eslint-disable-next-line no-unused-vars
           result => {}, 
@@ -211,12 +211,12 @@ export default {
       // need to refresh control state icon image
       this.$forceUpdate();
     },
-    stubImageSrcPopup: function() {
+    stubImageSrc: function() {
       if (this.gate) {
         if (getUserInterfaceSetting('colored-gates') === 'true'){
-          return require("../assets/colored-gates/" + this.gate + "-stub-" + this.controlstateNew + ".svg");
+          return require("../assets/colored-gates/ctrl-" + this.gate + "-stub-" + this.controlstateNew + ".svg");
         } else {
-          return require("../assets/blue-gates/" + this.gate + "-stub-" + this.controlstateNew + ".svg");
+          return require("../assets/blue-gates/ctrl-" + this.gate + "-stub-" + this.controlstateNew + ".svg");
         }
       } else {
         return String.empty;

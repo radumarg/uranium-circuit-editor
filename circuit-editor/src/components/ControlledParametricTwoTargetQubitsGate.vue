@@ -226,7 +226,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionControlledGateInCircuit']),
+    ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
     handleSave: function(){
       if (!Number.isInteger(this.$data.targetsNew[0]) || !Number.isInteger(this.$data.targetsNew[1])){
         alert("Please enter an integer number!");

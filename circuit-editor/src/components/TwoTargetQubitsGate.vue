@@ -60,6 +60,17 @@
           <td></td>
         </tr>
         <tr>
+          <td></td>
+           <td title="Edit control qubits" width="100px" style="padding: 5px;">Controls:</td>
+           <td width="100px" style="padding: 5px;">
+             <div v-b-hover="handleEditControlsHover">
+              <b-icon v-if="editControlsIsHovered" icon="pencil-fill" v-on:click="handleEditControls()" title="Edit controls" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="pencil" style="color: #7952b3;" font-scale="1.4"></b-icon>
+             </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
           <td class="no-resize-cell">
              <div v-b-hover="handleExpandGateHover">
               <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" v-b-tooltip.hover title="Replicate gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
@@ -175,12 +186,13 @@
 <script>
 import { mapActions } from 'vuex';
 import SingleQbitGate from "./SingleQbitGate";
+import {controlsMixin} from "../mixins/controlsMixin.js";
 import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { arraysHaveElementsInCommon } from "../store/modules/javaScriptUtils.js";
 export default {
   name: "TwoTargetQubitsGate",
   extends: SingleQbitGate,
-  props: {
-  },
+  mixins: [controlsMixin],
   data() {
     return {
       qbit2Expression: `${this.targets[1]} + q - ${this.targets[0]}`,
@@ -193,12 +205,21 @@ export default {
         alert("Please enter an integer number!");
         return;
       }
+      if (arraysHaveElementsInCommon(this.$data.controlsNew, this.$data.targetsNew)){
+        alert("Control and target qubits must differ!");
+        return;
+      }
       let targetsOld = [...this.targets];
+      let controlsOld = [...this.controls];
+      let controlstatesOld = [...this.controlstates];
       let promise = this.repositionTwoTargetQubitGateInCircuit({
-        'step': this.step, 
+        'step': this.step,
+        'name': this.name,
         'targets': [...this.targets],
-        'name': this.name, 
+        'controls': [...this.controls],
         'targetsNew': [...this.$data.targetsNew],
+        'controlsNew': this.$data.controlsNew,
+        'controlstatesNew': this.$data.controlstatesNew,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -207,6 +228,10 @@ export default {
         error => {
           this.$data.targetsNew = [...targetsOld];
           this.targets = [...targetsOld];
+          this.controls = [...controlsOld];
+          this.$data.controlsNew = [...controlsOld];
+          this.controlstates = [...controlstatesOld];
+          this.$data.controlstatesNew = [...controlstatesOld];
         }
       );
       this.$refs['initial-modal-dialog'].hide();
@@ -224,6 +249,8 @@ export default {
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
         'qbit2Expression': this.qbit2Expression,
+        'controlsExpression': this.controlsExpression,
+        'controlstatesExpression': this.controlstatesExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -239,12 +266,15 @@ export default {
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalTargets", [...this.targets]);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("dragged-qbit", this.qrow);
+      event.dataTransfer.setData("originalTargets", [...this.targets]);
+      event.dataTransfer.setData("originalControls", [...this.controls]);
+      event.dataTransfer.setData("controlstates", [...this.controlstates]);
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
     },
+
     dragEnd: function() {
       let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
       document.body.removeChild(dragImageGhost);

@@ -34,7 +34,7 @@
             </div>
           </td>
           <td colspan="2" style="padding: 10px;">
-            <img :src="gateImageSrcPopup" style="width:120px;height:120px;" />
+            <img :src="gateImageSrcPopup" id="popup-gate-image" style="width:120px;height:auto;" />
           </td>
           <td>
             <div v-b-hover="handleExpandRightHover">
@@ -56,6 +56,17 @@
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
             <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+           <td title="Edit control qubits" width="100px" style="padding: 5px;">Controls:</td>
+           <td width="100px" style="padding: 5px;">
+             <div v-b-hover="handleEditControlsHover">
+              <b-icon v-if="editControlsIsHovered" icon="pencil-fill" v-on:click="handleEditControls()" title="Edit controls" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="pencil" style="color: #7952b3;" font-scale="1.4"></b-icon>
+             </div>
           </td>
           <td></td>
         </tr>
@@ -148,6 +159,24 @@
         </tr>
         <tr>
           <td colspan="3" width="300px" class="td-2nd-modal">
+            Control Qubit - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="controlsExpression" placeholder="" type="text" id="ctrl-qbit" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Control State - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="controlstatesExpression" placeholder="" type="text" id="ctrl-state" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="3" width="300px" class="td-2nd-modal">
             Theta Value - 'q, s' based <br/>javascript expression:
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
@@ -168,16 +197,134 @@
       </table>
     </b-modal>
 
+    <b-modal ref="edit-controls-modal-dialog" :size="editControlsModalSize()" centered hide-footer hide-header>
+      <table>
+        <tr>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleEditControlsPlusHover">
+              <b-icon v-if="editControlsPlusIsHovered" v-on:click="addControl()" title="Add control" icon="plus" style="color: #7952b3;" font-scale="1.7"></b-icon>
+              <b-icon v-else icon="plus" v-on:click="addControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+          <td :colspan="numberOfColumnsInEditControlsModal() + 2" class="edit-controls-cell">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleEditControlsModalCloseHover">
+              <b-icon v-if="editControlsModalCloseIsHovered" v-on:click="hideEditControlsModal()" title="Close dialog" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="x-square" v-on:click="hideEditControlsModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td :colspan="numberOfColumnsInEditControlsModal()" rowspan="4" :style="getEmbedTableCellStyle()" class="text-center">
+            <b-table-simple :style="getEmbededTableStyle()" :responsive="true" borderless>
+              <b-tr>
+                <b-td v-for="(control, index) in controlsNew.length" v-bind:key="index" style="min-width: 79px; max-width: 79px; border: 1px solid #E0E0E0;">
+                  <img :src="stubImageSrcPopup(control - 1)" style="width:30px; height:auto;" />
+                </b-td>
+                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 1000" style="min-width: 79px; max-width: 79px;" />
+              </b-tr>
+              <b-tr>
+                <b-td v-for="(controlstate, index) in controlstatesNew" v-bind:key="index + 4000" style="min-width: 79px; max-width: 79px;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <b-form-select v-model="controlstatesNew[index]" @change="onControlStateChange()"  placeholder="controlstate" :options="options" id="controlstate-new" style="min-width: 72px; max-width: 72px;"></b-form-select>
+                  </div>
+                </b-td>
+                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 5000" style="min-width: 79px; max-width: 79px;" />
+              </b-tr>
+              <b-tr>
+                <b-td v-for="(control, index) in controlsNew" v-bind:key="index + 2000" style="min-width: 79px; max-width: 79px;">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="controlsNew[index]" placeholder="control" type="number" id="control-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
+                  </div>
+                </b-td>
+                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 3000"  style="min-width: 79px; max-width: 79px;" />
+              </b-tr>
+            </b-table-simple>
+          </td>
+          <td title="Control qubit" class="edit-controls-cell">Target:</td>
+          <td class="edit-controls-cell">
+            <div class="d-flex justify-content-center align-items-center">
+              <b-form-input readonly min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="targetsNew[0]" placeholder="target" type="number" id="target-qbit" style="width:70px;"></b-form-input>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td title="No control qubits" class="edit-controls-cell">Controls:</td>
+          <td class="edit-controls-cell">
+            <div class="d-flex justify-content-center align-items-center">
+              <b-form-input min="0" v-model.number="numberOfControls" @change="onNumberControlsChange()" placeholder="controls" type="number" id="number-controls" style="width:70px;"></b-form-input>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="edit-controls-cell">
+            <div v-b-hover="handleAlignControlsUpwardsHover">
+              <b-icon v-if="alignControlsUpwardsIsHovered" icon="caret-up-fill" v-on:click="alignControlsUpwardsFromTargetQubit()" title="Align controls upwards from target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="caret-up" style="color: #7952b3;" font-scale="1.4"></b-icon>
+             </div>
+          </td>
+          <td class="edit-controls-cell">
+            <div v-b-hover="handleMoveGateOneQubitUpwardsHover">
+              <b-icon v-if="moveGateOneQubitUpwardsIsHovered" icon="arrow-up-square-fill" v-on:click="moveGateOneQubitUpwards()" title="Move gate one qubit upwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="arrow-up-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
+             </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="edit-controls-cell" >
+            <div v-b-hover="handleAlignControlsDownwardsHover">
+              <b-icon v-if="alignControlsDownwardsIsHovered" icon="caret-down-fill" v-on:click="alignControlsDownwardsFromTargetQubit()" title="Align controls downwards from target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="caret-down" style="color: #7952b3;" font-scale="1.4"></b-icon>
+             </div>
+          </td>
+          <td class="edit-controls-cell">
+            <div v-b-hover="handleMoveGateOneQubitDownwardsHover">
+              <b-icon v-if="moveGateOneQubitDownwardsIsHovered" icon="arrow-down-square-fill" v-on:click="moveGateOneQubitDownwards()" title="Move gate one qubit downwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="arrow-down-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
+             </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleEditControlsMinusHover">
+              <b-icon v-if="editControlsMinusIsHovered" v-on:click="removeControl()" title="Remove control" icon="dash" style="color: #7952b3;" font-scale="1.7"></b-icon>
+              <b-icon v-else icon="dash" v-on:click="removeControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+          <td :colspan="numberOfColumnsInEditControlsModal() + 2" class="edit-controls-cell">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleEditControlsModalSaveHover">
+              <b-icon v-if="editControlsModalSaveIsHovered" v-on:click="handleEditControlsModalSave()" title="Save changes" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
+              <b-icon v-else icon="check" v-on:click="handleEditControlsModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </b-modal>
+
   </div>
 </template>
 
 <script>
 import { mapActions } from 'vuex';
 import SingleQbitGate from "./SingleQbitGate";
+import {controlsMixin} from "../mixins/controlsMixin.js";
 import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { arraysHaveElementsInCommon } from "../store/modules/javaScriptUtils.js";
 export default {
   name: "ParametricSingleQbitGate",
   extends: SingleQbitGate,
+  mixins: [controlsMixin],
   props: {
     'theta': Number,
   },
@@ -194,14 +341,23 @@ export default {
         alert("Please enter an integer number!");
         return;
       }
+      if (arraysHaveElementsInCommon(this.$data.controlsNew, this.$data.targetsNew)){
+        alert("Control and target qubits must differ!");
+        return;
+      }
       let targetsOld = [...this.targets];
+      let controlsOld = [...this.controls];
+      let controlstatesOld = [...this.controlstates];
       let thetaOld = this.theta;
       let promise = this.repositionSimpleGateInCircuit({
         'step': this.step, 
         'targets': [...this.targets],
-        'name': this.name, 
+        'name': this.name,
+        'controls': [...this.controls],
         'targetsNew': [...this.$data.targetsNew],
-        'thetaNew': this.$data.thetaNew
+        'controlsNew': this.$data.controlsNew,
+        'controlstatesNew': this.$data.controlstatesNew,
+        'thetaNew': this.$data.thetaNew,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -210,6 +366,10 @@ export default {
         error => {
           this.$data.targetsNew = [...targetsOld];
           this.targets = [...targetsOld];
+          this.controls = [...controlsOld];
+          this.$data.controlsNew = [...controlsOld];
+          this.controlstates = [...controlstatesOld];
+          this.$data.controlstatesNew = [...controlstatesOld];
           this.$data.thetaNew = this.theta = thetaOld;
         }
       );
@@ -219,7 +379,8 @@ export default {
       let promise = this.replicateGate({
         'step': this.step,
         'targets': [...this.targets],
-        'name': this.name, 
+        'name': this.name,
+        'controls': [...this.controls],
         'stepFirst': this.stepFirst,
         'stepLast': this.stepLast,
         'stepConditionExpression': this.stepConditionExpression,
@@ -227,6 +388,8 @@ export default {
         'qbitLast': this.qbitLast,
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
+        'controlsExpression': this.controlsExpression,
+        'controlstatesExpression': this.controlstatesExpression,
         'thetaExpression': this.thetaExpression,
       });
       promise.then(
@@ -245,6 +408,8 @@ export default {
       event.dataTransfer.setData("dragged-qbit", this.qrow);
       event.dataTransfer.setData("originalTargets", [...this.targets]);
       event.dataTransfer.setData("originalStep", this.step);
+      event.dataTransfer.setData("originalControls", [...this.controls]);
+      event.dataTransfer.setData("controlstates", [...this.controlstates]);
       event.dataTransfer.setData("theta", this.theta);
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
