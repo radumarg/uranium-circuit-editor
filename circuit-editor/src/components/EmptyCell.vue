@@ -575,7 +575,8 @@ export default {
           dto["targets"] = [qbit];
           dto["controls"] = [];
         } else {
-          alert("Not all required qubits are available!");
+          alert("Some of the required qubits are already occupied by another gate! Note that transformation applied when dragging a gate within the same \
+step differ from those which applied when doing drag & drop to a different step.");
           success = false;
         }
       }

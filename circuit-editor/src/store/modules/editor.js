@@ -416,6 +416,8 @@ export const circuitEditorModule = {
         
         if (targetsNew.some((element) => element < 0) || controlsNew.some((element) => element < 0)) {
           alert("Negative qubits not permitted!");
+        } else if (targetsNew.length != getUniqueValues(targetsNew).length) {
+          alert("The target qubits must be different!");
         } else if ((!arraysAreEqual(targets, targetsNew) || !arraysAreEqual(controls, controlsNew)) &&
           seatsAreTaken(circuitEditorModule.state, proposedQbits, step, existingQbits)) {
           alert("At least a gate already exists in the qubits ranging from proposed target to proposed control!");
@@ -444,45 +446,6 @@ export const circuitEditorModule = {
           
           this.dispatch('circuitEditorModule/insertGateInCircuit', dataTransferObj);
           
-          // inserting the gate was successful
-          resolve(true);
-        }
-        // inserting the gate failed
-        reject(false);
-      })
-    },
-    repositionTwoTargetQubitGateInCircuit: function (context, dataTransferObj) {
-      return new Promise((resolve, reject) => {
-        let step = dataTransferObj["step"];
-        let targets = dataTransferObj["targets"];
-        let targetsNew = dataTransferObj["targetsNew"];
-        let existingQbits = [...targets];
-        let proposedQbits = [...targetsNew];
-        
-        if (targetsNew.some((element) => element < 0)) {
-          alert("Negative qubits not permitted!");
-        } else if (targetsNew.length != getUniqueValues(targetsNew).length) {
-          alert("The target qubits must be different!");
-        } else if ((!arraysAreEqual(targets, targetsNew)) &&
-          seatsAreTaken(circuitEditorModule.state, proposedQbits, step, existingQbits)) {
-          alert("At least a gate already exists in the qubits ranging from proposed target to proposed control!");
-        } else {
-          this.commit("circuitEditorModule/removeGateNoTrack", { step: step, targets: targets });
-
-          dataTransferObj["targets"] = [...targetsNew];
-
-          if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiNew")) {
-            let phi = dataTransferObj["phiNew"];
-            dataTransferObj["phi"] = phi;
-          }
-
-          if (Object.prototype.hasOwnProperty.call(dataTransferObj, "thetaNew")) {
-            let theta = dataTransferObj["thetaNew"];
-            dataTransferObj["theta"] = theta;
-          }
-
-          this.dispatch('circuitEditorModule/insertGateInCircuit', dataTransferObj);
-
           // inserting the gate was successful
           resolve(true);
         }

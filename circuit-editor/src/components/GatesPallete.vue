@@ -233,8 +233,9 @@ export default {
 <style scoped>
 
 .gates-pallete {
-  overflow: scroll;
-  max-height: calc( 100vh - 96px );
+  overflow: auto;
+  min-height: calc( 100vh - 98px );
+  max-height: calc( 100vh - 98px );
   width: 100%;
   height: 100%;
 }
@@ -251,7 +252,7 @@ table {
   text-align: center;
   background-color: #374048; 
   table-layout: fixed;
-  height: calc(100vh - 96px);
+  /* height: calc(100vh - 96px); */
 
   /* disable selection on mouse drag over */
   -webkit-touch-callout: none;

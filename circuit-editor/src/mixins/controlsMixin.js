@@ -66,7 +66,7 @@ export const controlsMixin = {
     },
     getEmbededTableStyle(){
       let maxWidth = (this.controlsNew.length > 7) ? 880 : 600;
-      return `overflow-x:scroll; max-width: ${maxWidth}px;`
+      return `overflow-x:scroll; max-width: ${maxWidth}px; min-height: 195px; max-height: 195px;`
     },
     getEmbedTableCellStyle(){
       let width = (this.controlsNew.length > 7) ? 880 : 560;
@@ -188,8 +188,8 @@ export const controlsMixin = {
     },
     removeControl(){ 
       if (this.numberOfControls >= 1){
-        this.controlsNew = this.controlsNew.slice(0, this.numberOfControls);
-        this.controlstatesNew = this.controlstatesNew.slice(0, this.numberOfControls);
+        this.controlsNew = this.controlsNew.slice(0, this.numberOfControls - 1);
+        this.controlstatesNew = this.controlstatesNew.slice(0, this.numberOfControls - 1);
         this.numberOfControls = this.controlsNew.length;
       }
     },
