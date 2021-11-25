@@ -31,7 +31,7 @@ export async function getMeasureGates(circuitState) {
           for (let j = 0; j < gates.length; j++) {
             let gate = gates[j];
             if (gate.name.includes("measure-")){
-              measureGates[gate.target] = [gate.name, gate.bit];
+              measureGates[gate.targets[0]] = [gate.name, gate.bit];
             }
           }
         }

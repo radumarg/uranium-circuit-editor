@@ -132,7 +132,7 @@ export function measureGatesArePositionedLast(circuitState){
     for (let j = 0; j < gates.length; j++) {
       let gate = gates[j];
       if (gate.name.includes("measure-")){
-        measureGates.push(gate.target);
+        measureGates.push(gate.targets[0]);
       } else {
         if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
           let targets = gate.targets;
@@ -712,34 +712,34 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
               || gate.name == "swap-theta"
               || gate.name == "iswap"){
             if ((inputRow - 1) / 2 == Math.min(...targets)){
-              gatesTableRowState.cells[column].tooltip += `${gate.name} ` 
+              gatesTableRowState.cells[column].tooltip += `${gate.name} `;
             }
           }
 
           if (Object.prototype.hasOwnProperty.call(gate, "theta")) {
             gatesTableRowState.cells[column].theta = parseFloat(gate.theta);
-            gatesTableRowState.cells[column].tooltip += `θ:${gate.theta} `
+            if (gate.name != "swap-theta" || ((inputRow - 1) / 2 == Math.min(...targets))){
+              gatesTableRowState.cells[column].tooltip += `θ:${gate.theta} `;
+            }
           }
           if (Object.prototype.hasOwnProperty.call(gate, "phi")) {
-            if (gate.name != "swap-theta" || ((inputRow - 1) / 2 == Math.min(...targets))){
-              gatesTableRowState.cells[column].phi = parseFloat(gate.phi);
-              gatesTableRowState.cells[column].tooltip += `φ:${gate.phi} `
-            }
+            gatesTableRowState.cells[column].phi = parseFloat(gate.phi);
+            gatesTableRowState.cells[column].tooltip += `φ:${gate.phi} `;
           }
           if (Object.prototype.hasOwnProperty.call(gate, "lambda")) {
             gatesTableRowState.cells[column].lambda = parseFloat(gate.lambda);
-            gatesTableRowState.cells[column].tooltip += `λ:${gate.lambda} `
+            gatesTableRowState.cells[column].tooltip += `λ:${gate.lambda} `;
           }
           if (Object.prototype.hasOwnProperty.call(gate, "root")) {
             gatesTableRowState.cells[column].root = gate.root;
             if (!gate.root.includes("1/2^")){
               let root = gate.root.replace("1/", "");
-              gatesTableRowState.cells[column].tooltip += `t:${root} `
+              gatesTableRowState.cells[column].tooltip += `t:${root} `;
             }
           }
           if (Object.prototype.hasOwnProperty.call(gate, "bit")) {
             gatesTableRowState.cells[column].bit = parseFloat(gate.bit);
-            gatesTableRowState.cells[column].tooltip += `bit=${gate.bit} `
+            gatesTableRowState.cells[column].tooltip += `bit=${gate.bit} `;
           }
 
           // if this is not a multiple bit gate we are done

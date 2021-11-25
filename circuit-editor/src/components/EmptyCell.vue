@@ -458,7 +458,7 @@ export default {
       }
 
       // add the new gate mandatory params
-      let dto = { step: step, targets: [qbit], name: gateName };
+      let dto = { step: step, targets: [qbit], name: gateName, controls: [], controlstates: [] };
       
       if (dragOrigin == "stub") {
         dto["targets"] = originalTargets;
@@ -511,17 +511,9 @@ export default {
         dto["root"] = root;
       }
       if (event.dataTransfer.types.includes("bit")) {
-        let bit = parseInt(event.dataTransfer.getData("bit"));
-        dto["bit"] = bit;
-      }
-
-      if (gateName.includes("ctrl-")) {
-        if (!dto["controls"]) {
-          dto["controls"] = [];
-        }
-        if (!dto["controlstates"]) {
-          dto["controlstates"] = ['1'];
-        }
+        // in case we relocate the gate, it makes much
+        //  more sense to assign bit to the new qbit
+        dto["bit"] = qbit;
       }
 
       let existingQbits = [
@@ -541,7 +533,7 @@ export default {
       }
 
       if (success){
-        success = this.maybeAdjustGatePosition(gateName, dto, qbit, step, originalStep, existingQbits); 
+        success = this.maybeAdjustGate(gateName, dto, qbit, step, originalStep, existingQbits); 
       }
       
       if (success) {
@@ -562,71 +554,44 @@ export default {
         this.handleDragLeave();
       }
     },
-    maybeAdjustGatePosition: function (gateName, dto, qbit, step, originalStep, existingQbits) {
+    maybeAdjustGate: function (gateName, dto, qbit, step, originalStep, existingQbits) {
 
       let success = true;
-      
-      let controls = dto["controls"] ? dto["controls"] : [];
-      let proposedQbits = [...dto["targets"], ...controls];
-      
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)){
 
-        if (step != originalStep) {
-          dto["targets"] = [qbit];
-          dto["controls"] = [];
-        } else {
-          alert("Some of the required qubits are already occupied by another gate! Note that transformation applied when dragging a gate within the same \
-step differ from those which applied when doing drag & drop to a different step.");
-          success = false;
-        }
-      }
-
-      if (success 
-          && (gateName.includes("swap") || gateName == "xx" || gateName == "yy" || gateName == "zz")
-          && dto["targets"].length == 1) {
+      if ((gateName.includes("swap") || gateName == "xx" || gateName == "yy" || gateName == "zz") && dto["targets"].length == 1) {
         success = this.tryAppendingSecondTargetQubit(dto, qbit, step, existingQbits);
-      } 
-
-      if (success 
-          && gateName.includes("ctrl-") 
-          && dto["controls"].length == 0) {
-        // If this was a controlled gate and was draged from 
-        // the gate panel than the control bit is not assigned
-        success = this.tryAppendingFirstControlQubit(dto, step, existingQbits);
       }
+
+      let proposedQbits = [...dto["targets"], ...dto["controls"]];
       
+      if (success && seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)){
+        if (step != originalStep) {
+          alert("There are not enough free seats in order to move the gate here.")
+        } else {
+          alert("Some of the requested qubits are already occupied by another gate(s)! Note that since you have dragged the gate within the same step\
+the action which was attempted was to adjust the dragged qubit not to move the gate to a new position"); 
+        }
+        success = false;
+      }
+
       return success;
     },
     tryAppendingSecondTargetQubit(dto, qbit, step, existingQbits) {
-      dto["controls"] = [];
       dto["targets"] = [qbit, qbit + 1];
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, dto["targets"], step, existingQbits)) {
+      let proposedQbits = [...dto["targets"], ...dto["controls"]];
+      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)) {
         if (qbit == 0) {
           alert("Cannot allocate second target qubit for this gate!");
           return false;
         }
         dto["targets"] = [qbit, qbit - 1];
-        if (seatsAreTaken(this.$store.state.circuitEditorModule, dto["targets"], step, existingQbits)) {
+        proposedQbits = [...dto["targets"], ...dto["controls"]];
+        if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)) {
           alert("Cannot allocate second target qubit for this gate!");
           return false;
         }
       }
       return true;
-    },
-    tryAppendingFirstControlQubit: function (dto, step, existingQbits) {
-      let min = Math.min(...dto["targets"])
-      let max = Math.max(...dto["targets"]);
-      for (let q = min - 1; q <= max + 1 ; q++) {
-        if (q >= 0 && !dto["targets"].includes(q)) {
-          dto["controls"] = [ q ];
-          let proposedQbits = [...dto["targets"], ...dto["controls"]];
-          if (!seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)){
-            return true;
-          }
-        }
-      }
-      alert("Cannot allocate a control qubit");
-      return false;
     },
   },
 };

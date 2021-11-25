@@ -141,7 +141,7 @@
               <TwoTargetQubitsGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'swap-theta'">
-              <ParametricTwoTargetQubitsGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :phi="cell.phi" :key="cell.key"/>
+              <ParametricTwoTargetQubitsGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'sqrt-swap'">
               <TwoTargetQubitsGate :id="cell.id" :targets="cell.targets" :qrow="cell.qrow" :controls="cell.controls" :controlstates="cell.controlstates" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>

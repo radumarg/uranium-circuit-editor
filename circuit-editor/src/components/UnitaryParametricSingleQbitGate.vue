@@ -256,7 +256,7 @@
           <td title="No control qubits" class="edit-controls-cell">Controls:</td>
           <td class="edit-controls-cell">
             <div class="d-flex justify-content-center align-items-center">
-              <b-form-input min="0" v-model.number="numberOfControls" @change="onNumberControlsChange()" placeholder="controls" type="number" id="number-controls" style="width:70px;"></b-form-input>
+              <b-form-input min="0" v-model.number="numberOfControls" @change="onNumberControlsChange()" @keyup.enter.native="handleEditControlsModalSave()" placeholder="controls" type="number" id="number-controls" style="width:70px;"></b-form-input>
             </div>
           </td>
           <td></td>

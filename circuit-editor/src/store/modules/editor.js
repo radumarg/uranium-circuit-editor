@@ -149,7 +149,7 @@ export const circuitEditorModule = {
         
         let targets = [];
         if (Object.prototype.hasOwnProperty.call(dataTransferObj, "targets")) {
-          targets = [...dataTransferObj["targets"]];
+          targets = [...dataTransferObj["targets"]].sort();
         }
 
         let controls = [];
@@ -206,13 +206,13 @@ export const circuitEditorModule = {
           } else if (swapGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, };
           } else if (parametricSwapGates.includes(name) && controls.length == 0) {
-            dto = { "step": step, "targets": targets, "name": name, "phi": 0, };
+            dto = { "step": step, "targets": targets, "name": name, "theta": 0, };
           } else if (isingGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, };
           } else if (swapGates.includes(name)) {
               dto = { "step": step, "targets": targets, "name": name, "controls": controls, "controlstates": controlstates };
           } else if (parametricSwapGates.includes(name)) {
-              dto = { "step": step, "targets": targets, "name": name, "phi": 0, "controls": controls, "controlstates": controlstates };
+              dto = { "step": step, "targets": targets, "name": name, "theta": 0, "controls": controls, "controlstates": controlstates };
           } else if (isingGates.includes(name)) {
               dto = { "step": step, "targets": targets, "name": name, "theta": 0, "controls": controls, "controlstates": controlstates };
           } else {
@@ -420,7 +420,11 @@ export const circuitEditorModule = {
           alert("The target qubits must be different!");
         } else if ((!arraysAreEqual(targets, targetsNew) || !arraysAreEqual(controls, controlsNew)) &&
           seatsAreTaken(circuitEditorModule.state, proposedQbits, step, existingQbits)) {
-          alert("At least a gate already exists in the qubits ranging from proposed target to proposed control!");
+          if (controlsNew.length > 0){
+            alert("At least a gate already exists in the qubits ranging from proposed target to proposed control!");
+          } else {
+            alert("The requested seat is occupied!");
+          }
         } else {
           this.commit("circuitEditorModule/removeGateNoTrack", { step: step, targets: targets });
 
@@ -473,7 +477,11 @@ export const circuitEditorModule = {
           alert("The target and control qubits must be different!");
         } else if ((!arraysAreEqual(targets, targetsNew)|| !arraysAreEqual(controls, controlsNew)) &&
           seatsAreTaken(circuitEditorModule.state, proposedQbits, step, existingQbits)) {
-          alert("At least a gate already exists in the qubits ranging from proposed target to proposed control!");
+          if (controlsNew.length > 0){
+            alert("At least a gate already exists in the qubits ranging from proposed target to proposed control!");
+          } else {
+            alert("Some of the requested seats are occupied!");
+          }
         } else {
           this.commit("circuitEditorModule/removeGateNoTrack", { step: step, targets: targets });
           

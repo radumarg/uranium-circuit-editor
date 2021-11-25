@@ -239,7 +239,7 @@
           <td title="No control qubits" class="edit-controls-cell">Controls:</td>
           <td class="edit-controls-cell">
             <div class="d-flex justify-content-center align-items-center">
-              <b-form-input min="0" v-model.number="numberOfControls" @change="onNumberControlsChange()" placeholder="controls" type="number" id="number-controls" style="width:70px;"></b-form-input>
+              <b-form-input min="0" v-model.number="numberOfControls" @change="onNumberControlsChange()" @keyup.enter.native="handleEditControlsModalSave()" placeholder="controls" type="number" id="number-controls" style="width:70px;"></b-form-input>
             </div>
           </td>
           <td></td>
@@ -485,6 +485,7 @@ export default {
         alert("Please increase the number of steps in the circuit first.");
         return;
       }
+      this.hideModal();
       this.insertStepInCircuit(this.step);
     },
     expandCircuitRight: function(){
@@ -492,6 +493,7 @@ export default {
         alert("Please increase the number of steps in the circuit first.");
         return;
       }
+      this.hideModal();
       this.insertStepInCircuit(this.step + 1);
     },
     expandCircuitUp: function () {
@@ -503,6 +505,7 @@ export default {
       if (this.controls){
         controls = [...this.controls];
       }
+      this.hideModal();
       let qbit = Math.min(...this.targets, ...controls);
       this.insertQbitInCircuit(qbit);
     },
@@ -515,6 +518,7 @@ export default {
       if (this.controls){
         controls = [...this.controls];
       }
+      this.hideModal();
       let qbit = Math.max(...this.targets, ...controls);
       this.insertQbitInCircuit(qbit + 1);
     },
