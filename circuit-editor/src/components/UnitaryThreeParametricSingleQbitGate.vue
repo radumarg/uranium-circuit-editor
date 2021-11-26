@@ -87,6 +87,22 @@
           <td></td>
         </tr>
         <tr>
+          <td></td>
+          <td class="edit-controls-cell" style="padding: 5px;">
+            <div v-b-hover="handleMoveGateOneQubitDownwardsHover">
+              <b-icon v-if="moveGateOneQubitDownwardsIsHovered" icon="arrow-down-square-fill" v-on:click="moveGateOneQubitDownwards()" title="Move gate one qubit downwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="arrow-down-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
+             </div>
+          </td>
+          <td class="edit-controls-cell" style="padding: 5px;">
+            <div v-b-hover="handleMoveGateOneQubitUpwardsHover">
+              <b-icon v-if="moveGateOneQubitUpwardsIsHovered" icon="arrow-up-square-fill" v-on:click="moveGateOneQubitUpwards()" title="Move gate one qubit upwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="arrow-up-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
+             </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
           <td class="no-resize-cell">
              <div v-b-hover="handleExpandGateHover">
               <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" v-b-tooltip.hover title="Replicate gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
