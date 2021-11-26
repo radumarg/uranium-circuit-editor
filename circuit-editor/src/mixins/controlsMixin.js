@@ -8,7 +8,9 @@ import {
 } from "../store/modules/applicationWideReusableUnits.js";
 
 import { 
-  seatIsTaken 
+  seatIsTaken,
+  qbitIsTaken,
+  seatsAreTaken
 } from "../store/modules/gatesTable.js";
 
 import { 
@@ -170,7 +172,7 @@ export const controlsMixin = {
       } else {
         let qbit = minQubit + 1;
         while (qbit < maxQubit) {
-          if (!seatIsTaken(this.$store.state.circuitEditorModule, qbit, this.step)){
+          if (!qbitIsTaken(this.$store.state.circuitEditorModule, qbit, this.step)){
             newControl = qbit;
             break;
           }
@@ -194,26 +196,53 @@ export const controlsMixin = {
       }
     },
     moveGateOneQubitUpwards(){
-      if (Math.min(...this.$data.targetsNew) > 0 && Math.min(...this.$data.controlsNew) > 0){
-        for (let i = 0; i < this.$data.targetsNew.length; i++){
-          this.targetsNew[i] -= 1;
+      let proposedTargets = [...this.targetsNew];
+      let proposedControls = [...this.controlsNew];
+
+      if (Math.min(...proposedTargets) > 0 && Math.min(...proposedControls) > 0){
+        for (let i = 0; i < proposedTargets.length; i++){
+          proposedTargets[i] -= 1;
         }
-        for (let i = 0; i < this.$data.controlsNew.length; i++){
-          this.controlsNew[i] -= 1;
+        for (let i = 0; i < proposedControls.length; i++){
+          proposedControls[i] -= 1;
         }
       } else {
-        alert("The 0 qubit index has been reached.")
+        alert("The 0 qubit index has been reached!");
+        return;
       }
-      this.$forceUpdate();
+
+      let existingQbits = [...this.targets, ...this.controls];
+      let proposedQbits = [...proposedTargets, ...proposedControls];
+
+      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)){
+        alert("There are no free seats to move control upwards!");
+      } else {
+        this.targetsNew = proposedTargets;
+        this.controlsNew = proposedControls;
+        this.$forceUpdate(); 
+      }
     },
     moveGateOneQubitDownwards(){
-      for (let i = 0; i < this.targetsNew.length; i++){
-        this.targetsNew[i] += 1;
+      let proposedTargets = [...this.targetsNew];
+      let proposedControls = [...this.controlsNew];
+
+      for (let i = 0; i < proposedTargets.length; i++){
+        proposedTargets[i] += 1;
       }
-      for (let i = 0; i < this.controlsNew.length; i++){
-        this.controlsNew[i] += 1;
+      for (let i = 0; i < proposedControls.length; i++){
+        proposedControls[i] += 1;
       }
-      this.$forceUpdate();
+
+      let existingQbits = [...this.targets, ...this.controls];
+      let proposedQbits = [...proposedTargets, ...proposedControls];
+
+      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)){
+        alert("There are no free seats to move control downwards!");
+      } else {
+        this.targetsNew = proposedTargets;
+        this.controlsNew = proposedControls;
+        this.$forceUpdate(); 
+      }
     },
     alignControlsUpwardsFromTargetQubit(){
       let startUp = Math.min(...this.$data.targetsNew);

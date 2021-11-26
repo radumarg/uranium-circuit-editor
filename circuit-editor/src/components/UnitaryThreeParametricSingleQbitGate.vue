@@ -403,14 +403,11 @@ export default {
         // eslint-disable-next-line no-unused-vars
         error => {
           this.$data.targetsNew = [...targetsOld];
-          this.targets = [...targetsOld];
-          this.controls = [...controlsOld];
           this.$data.controlsNew = [...controlsOld];
-          this.controlstates = [...controlstatesOld];
           this.$data.controlstatesNew = [...controlstatesOld];
-          this.$data.phiNew = this.phi = phiOld;
-          this.$data.thetaNew = this.theta = thetaOld;
-          this.$data.lambdaNew = this.lambda = lambdaOld;
+          this.$data.phiNew = phiOld;
+          this.$data.thetaNew = thetaOld;
+          this.$data.lambdaNew = lambdaOld;
         }
       );
       this.$refs['initial-modal-dialog'].hide();

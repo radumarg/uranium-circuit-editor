@@ -365,12 +365,9 @@ export default {
         // eslint-disable-next-line no-unused-vars
         error => {
           this.$data.targetsNew = [...targetsOld];
-          this.targets = [...targetsOld];
-          this.controls = [...controlsOld];
           this.$data.controlsNew = [...controlsOld];
-          this.controlstates = [...controlstatesOld];
           this.$data.controlstatesNew = [...controlstatesOld];
-          this.$data.thetaNew = this.theta = thetaOld;
+          this.$data.thetaNew = thetaOld;
         }
       );
       this.$refs['initial-modal-dialog'].hide();

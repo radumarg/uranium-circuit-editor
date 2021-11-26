@@ -385,13 +385,10 @@ export default {
         error => {
           this.$data.targetsNew = [...targetsOld];
           this.$data.targetsNew = [...targetsOld];
-          this.targets = [...targetsOld];
-          this.controls = [...controlsOld];
           this.$data.controlsNew = [...controlsOld];
-          this.controlstates = [...controlstatesOld];
           this.$data.controlstatesNew = [...controlstatesOld];
-          this.$data.phiNew = this.phi = phiOld;
-          this.$data.lambdaNew = this.lambda = lambdaOld;
+          this.$data.phiNew = phiOld;
+          this.$data.lambdaNew = lambdaOld;
         }
       );
       this.$refs['initial-modal-dialog'].hide();

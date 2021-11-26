@@ -244,6 +244,43 @@ export function seatIsTaken(circuitState, qbit, step) {
   return false;
 }
 
+export function qbitIsTaken(circuitState, qbit, step) {
+  if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+    for (let i = 0; i < circuitState.steps.length; i++) {
+      if (circuitState.steps[i].index == step) {
+        if (Object.prototype.hasOwnProperty.call(circuitState.steps[i], "gates")) {
+          let gates = circuitState.steps[i]["gates"];
+          for (let j = 0; j < gates.length; j++) {
+
+            let gate = gates[j];
+            let targets = [];
+            let controls = [];
+
+            if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+              targets = [...gate.targets];
+            }
+            if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+              for (let i = 0; i < gate["controls"].length; i++) {
+                let controlInfo = gate["controls"][i];
+                let target = controlInfo["target"];
+                controls.push(target);
+              }
+            }
+
+            // get range of qbits affected when displaying this gate
+            let qbits = [...targets, ...controls];
+            if (qbits.includes(qbit)) {
+              return true;
+            }
+          }
+        }
+        return false;
+      }
+    }
+  }
+  return false;
+}
+
 // Verify if a gate already exist in qbit range between target(s) and control(s), target(s) and control(s) included
 export function seatsAreTaken(circuitState, proposedQbits, step, reallocatableQbits = []) {
 

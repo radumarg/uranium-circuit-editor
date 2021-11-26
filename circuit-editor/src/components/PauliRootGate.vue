@@ -407,7 +407,6 @@ export default {
       let targetsOld = [...this.targets];
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
-      let rootOld = this.root;
       let promise = this.repositionSimpleGateInCircuit({
         'step': this.step, 
         'targets': [...this.targets],
@@ -424,12 +423,8 @@ export default {
         // eslint-disable-next-line no-unused-vars
         error => {
           this.$data.targetsNew = [...targetsOld];
-          this.targets = [...targetsOld];
-          this.controls = [...controlsOld];
           this.$data.controlsNew = [...controlsOld];
-          this.controlstates = [...controlstatesOld];
           this.$data.controlstatesNew = [...controlstatesOld];
-          this.root = rootOld;
           this.$data.rootKNew = this.getKRoot();
           this.$data.rootTNew = this.getTRoot();
         }

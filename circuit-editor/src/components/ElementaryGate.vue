@@ -182,7 +182,6 @@ export default {
         // eslint-disable-next-line no-unused-vars
         error => {
           this.$data.targetsNew = [...targetsOld];
-          this.targets = [...targetsOld];
         }
       );
       this.$refs['initial-modal-dialog'].hide();
