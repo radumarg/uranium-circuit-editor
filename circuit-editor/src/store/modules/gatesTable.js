@@ -354,6 +354,7 @@ export function seatsInArrayAreAlreadyTaken(circuitState, dtos, ignoreStep = nul
       let controls = dtos[i]["controls"];
       for (let j = 0; j < controls.length; j++){
         let control = controls[j];
+        if (ignoreStep == step && ignoreQubits.includes(control)) continue;
         if (seatIsTaken(circuitState, control, step)) return true;
       }
     }

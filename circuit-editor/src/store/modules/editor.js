@@ -259,8 +259,9 @@ export const circuitEditorModule = {
     replicateGate: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
         let step = dataTransferObj["step"];
-        let targets = dataTransferObj["targets"];
         let name = dataTransferObj["name"];
+        let targets = dataTransferObj["targets"];
+        let controls = dataTransferObj["controls"] ? dataTransferObj["controls"] : [];
         let stepFirst = dataTransferObj["stepFirst"];
         let stepLast = dataTransferObj["stepLast"];
         let stepConditionExpression = dataTransferObj["stepConditionExpression"];
@@ -268,8 +269,8 @@ export const circuitEditorModule = {
         let qbitLast = dataTransferObj["qbitLast"];
         let qbitConditionExpression = dataTransferObj["qbitConditionExpression"];
         let conjugateConditionExpression = dataTransferObj["conjugateConditionExpression"];
-        let controls = dataTransferObj["controls"] ? dataTransferObj["controls"] : [];
 
+        // make sure min/max steps and qubits are ordered
         stepFirst = Math.min(stepFirst, stepLast);
         stepLast = Math.max(stepFirst, stepLast);
         qbitFirst = Math.min(qbitFirst, qbitLast);
@@ -294,24 +295,48 @@ export const circuitEditorModule = {
                   let qbit2Expression = dataTransferObj["qbit2Expression"];
                   dto["targets"].push(limitedEvaluate(interpolateJavaScriptExpression(qbit2Expression, s, q)));
                 }
-                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controlsExpression")) {
-                  dto["controls"] = [];
-                  let controlsExpression = dataTransferObj["controlsExpression"];
-                  for (let i = 0; i < controls.length; i++) {
-                    dto["controls"].push(limitedEvaluate(interpolateJavaScriptExpression(controlsExpression, s, q, i)));
+                
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "numberOfControlsExpression")) {
+
+                  let numberOfControlsExpression = dataTransferObj["numberOfControlsExpression"];
+                  let noControls = parseInt(limitedEvaluate(interpolateJavaScriptExpression(numberOfControlsExpression, s, q)));
+                  if (isNaN(noControls)) {
+                    throw new Error("Number of controls does not evaluate to a number!");
                   }
-                }
-                  if (Object.prototype.hasOwnProperty.call(dataTransferObj, "controlstatesExpression")) {
+
+                  if (noControls > 0) {
+                    let controlsExpression = dataTransferObj["controlsExpression"].trim();
+                    let controlstatesExpression = dataTransferObj["controlstatesExpression"].trim();
+
+                    if (!controlsExpression) {
+                      throw new Error(`Since the number of controls is ${noControls} you must specify an expression for controls!`);
+                    }
+                    if (!controlstatesExpression) {
+                      throw new Error(`Since the number of controls is ${noControls} you must specify an expression for control states!`);
+                    }
+
+                    dto["controls"] = [];
+                    for (let j = 0; j < noControls; j++) {
+                      let control = parseInt(limitedEvaluate(interpolateJavaScriptExpression(controlsExpression, s, q, j)));
+                      if (isNaN(control)) {
+                        throw new Error(`The ${j}'th' control does not evaluate to a number`);
+                       }
+                      dto["controls"].push(control);
+                    }
+
                     dto["controlstates"] = [];
-                    let controlstatesExpression = dataTransferObj["controlstatesExpression"];
-                    for (let i = 0; i < controls.length; i++) {
-                      let controlstate = limitedEvaluate(interpolateJavaScriptExpression(controlstatesExpression, s, q, i)).toString();
+                    for (let j = 0; j < noControls; j++) {
+                      let controlstate = limitedEvaluate(interpolateJavaScriptExpression(controlstatesExpression, s, q, j)).toString().trim();
+                      if (!controlstate){
+                        throw new Error(`The ${j}'th' control state is an empty string.`);
+                      }
+                      if (!['0', '1', '+', '-', '+i', '-i'].includes(controlstate)) {
+                        throw new Error(`The ${j}'th control state for q=${q}, s=${s} does not evaluate to '0', '1', '+', '-', '+i' or '-i'.`);
+                      }
                       dto["controlstates"].push(controlstate);
                     }
-                    if (dto["controlstates"].some((element) => !['0', '1', '+', '-', '+i', '-i'].includes(element))) {
-                      throw new Error(`Control state q=${q}, s=${s} does not evaluate to 0, 1, +, -, +i or -i.`);
-                    }
                   }
+                }
                 
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiExpression")) {
                   let phiExpression = dataTransferObj["phiExpression"];
@@ -349,19 +374,20 @@ export const circuitEditorModule = {
           }
         }
         
+        let existingQbits = [...targets, ...controls];
         if (stepFirst < 0 || stepLast < 0) {
           alert("Negative steps not permitted!");
         } else if (qbitFirst < 0 || qbitLast < 0) {
           alert("Negative qubits not permitted!");
         } else if (proposedNewGatesAreInvalid(dtos)){
-          alert("Some of the proposed new gates do not allocate distinct seats for target/target2/control/control2 qubits!");
-        } else if (seatsInArrayAreAlreadyTaken(circuitEditorModule.state, dtos, step, targets)) {
+          alert("Some of the proposed new gates do not allocate distinct seats for each target and each control qubit!");
+        } else if (seatsInArrayAreAlreadyTaken(circuitEditorModule.state, dtos, step, existingQbits)) {
           alert("Some of the proposed new gates have seats already occupied!");
         } else if (proposedNewSeatsOverlap(dtos)) {
           alert("Some of the proposed new gates overlap!");
         } else {
           if (dtos.length > 0){
-            this.commit("circuitEditorModule/insertGates", {"dtos": dtos, "existingStep": step, "existingQbits": targets});
+            this.commit("circuitEditorModule/insertGates", {"dtos": dtos, "existingStep": step, "existingQbits": existingQbits});
           } else {
             alert("No gate has been deployed, please review your expressions.")
           }

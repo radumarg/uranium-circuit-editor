@@ -88,7 +88,7 @@ export function insertingOneGateInCircuit(circuitState, dto) {
   circuitState.steps.sort((l, r) => (l.index - r.index));
 } 
 
-export function interpolateJavaScriptExpression(expression, s, q) {
+export function interpolateJavaScriptExpression(expression, s, q, j) {
   
   if (typeof expression == "number") return expression;
 
@@ -98,21 +98,24 @@ export function interpolateJavaScriptExpression(expression, s, q) {
   expression = expression.replaceAll("True", "true");
   expression = expression.replaceAll("TRUE", "true");
   expression = expression.replace(/q/g, `${q}`);
+  if (j !== undefined){
+    expression = expression.replace(/j/g, `${j}`);
+  }
 
   let result = "";
 
   // replace all s-es except s in False
   for (var i = 0; i < expression.length; i++) {
 
-      if (i < 3) {
+    if (i < 3) {
       if (expression[i] == "s") result += `${s}`;
       else result += expression[i];
-      } else if (expression.length >= i + 2 && expression.substring(i - 3, i + 2).toLowerCase() == "false"){
+    } else if (expression.length >= i + 2 && expression.substring(i - 3, i + 2).toLowerCase() == "false"){
       result += "s";
-      } else {
+    } else {
       if (expression[i] == "s") result += `${s}`;
       else result += expression[i];
-      }
+    }
   }
 
   return result;

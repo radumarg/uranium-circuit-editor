@@ -113,6 +113,12 @@
     <b-modal ref="replicate-gate-modal-dialog" size="lg" width="100px" centered hide-footer hide-header>
       <table>
         <tr>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleReplicateGateHelpHover">
+              <b-icon v-if="replicateGateHelpIsHovered" v-on:click="handleReplicateDialogHelp()" icon="question-circle" v-b-tooltip.hover title="Help" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="question-circle" v-on:click="handleReplicateDialogHelp()" style="color: #7952b3;" font-scale="1.2"></b-icon>
+            </div>
+          </td>
           <td colspan="6">
           </td>
           <td class="no-resize-cell">
@@ -123,6 +129,7 @@
           </td>
         </tr>
         <tr>
+          <td></td>
           <td width="100px" class="td-2nd-modal">
             First Qubit:
           </td>
@@ -144,6 +151,7 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td></td>
           <td width="100px" class="td-2nd-modal">
             First Step:
           </td>
@@ -165,6 +173,7 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td></td>
           <td colspan="3" width="300px" class="td-2nd-modal">
             Conjugate Condition - 'q, s' based <br/>javascript expression:
           </td>
@@ -174,8 +183,19 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td></td>
           <td colspan="3" width="300px" class="td-2nd-modal">
-            Control Qubit - 'q, s' based <br/>javascript expression:
+            Number of controls - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="numberOfControlsExpression" @change="onNumberOfControlsExpressionChange()" placeholder="" type="text" id="no-controls-cond" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            j'th Control Qubit - 'j, q, s' based <br/>javascript expression:
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
             <b-form-input min="0" v-model="controlsExpression" placeholder="" type="text" id="ctrl-qbit" style="min-width:400px;"></b-form-input>
@@ -183,8 +203,9 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td></td>
           <td colspan="3" width="300px" class="td-2nd-modal">
-            Control State - 'q, s' based <br/>javascript expression:
+            j'th Control State - 'j, q, s' based <br/>javascript expression:
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
             <b-form-input min="0" v-model="controlstatesExpression" placeholder="" type="text" id="ctrl-state" style="min-width:400px;"></b-form-input>
@@ -192,6 +213,7 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td></td>
           <td colspan="3" width="300px" class="td-2nd-modal">
             Lambda Value - 'q, s' based <br/>javascript expression:
           </td>
@@ -201,7 +223,7 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
-          <td colspan="6" class="td-2nd-modal">
+          <td colspan="7" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleReplicateGateModalSaveHover">
@@ -401,17 +423,19 @@ export default {
         'qbitLast': this.qbitLast,
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
+        'numberOfControlsExpression': this.numberOfControlsExpression,
         'controlsExpression': this.controlsExpression,
         'controlstatesExpression': this.controlstatesExpression,
         'lambdaExpression': this.lambdaExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
-        result => {}, 
+        result => {
+          this.$refs['replicate-gate-modal-dialog'].hide();
+        },
         // eslint-disable-next-line no-unused-vars
         error => {},
       );
-      this.$refs['replicate-gate-modal-dialog'].hide();
     },
     dragStart: function(event) {
       hideTooltips();
