@@ -633,7 +633,7 @@ export const circuitEditorModule = {
       }
     },
     removeQbit(context, dto) {
-      let qbit = dto["qbit"];
+      let qbit = dto["targets"][0];
       let state = circuitEditorModule.state;
       if (Object.prototype.hasOwnProperty.call(state, "steps")) {
         for (let i = 0; i < state.steps.length; i++) {

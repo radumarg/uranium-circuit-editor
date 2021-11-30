@@ -489,7 +489,7 @@ export default {
     handleReplicateDialogHelp: function() {
       alert("Expressions can be any valid JavaScript expressions including the simple expression: 'true', in case you are looking for a condition \
 which is always valid. Here 'q' stands for qubit index, 's' stands for step index and 'j' stands for j'th control where 'j' starts with 0. The latter applies only if the \
-number of controls is chosen to be greater than zero. Control state expression must evaluate one of the following strings: '0', '1', '+', '-', '+i' or '-i'.");
+number of controls is chosen to be greater than zero. Control state expression must evaluate one of the following strings: '0', '1', '+', '-', '+i' or '-i' where quotes are necessary.");
     },
     hideReplicateGateModal: function() {
       this.$refs['replicate-gate-modal-dialog'].hide();

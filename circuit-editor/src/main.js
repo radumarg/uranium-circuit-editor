@@ -9,7 +9,7 @@ import { MdButton, MdCheckbox, MdToolbar, MdTooltip } from 'vue-material/dist/co
 import 'vue-material/dist/vue-material.min.css';
 import 'vue-material/dist/theme/default.css';
 import VueCookies from 'vue-cookies';
-import { extractSelectionRange, gatePastedGates, isDefined, undoGatesSelection,  saveCopiedGates  } from "./store/modules/editorHelper.js";
+import { extractSelectionRange, getPastedGates, isDefined, undoGatesSelection,  saveCopiedGates  } from "./store/modules/editorHelper.js";
 import { seatIsTaken, seatsInArrayAreAlreadyTaken } from "./store/modules/gatesTable.js";
 
 Vue.use(MdButton);
@@ -72,7 +72,7 @@ $(document).on('keyup', function(e) {
       let dtos = [];
       for (let q = selectionRange[0]; q <= selectionRange[1]; q++){
         for (let s = selectionRange[2]; s <= selectionRange[3]; s++){
-          let dto = { "step": s, "qbit": q, "name": "any" };
+          let dto = { "step": s, "targets": [q], "name": "any" };
           dtos.push(dto);
         }
       }
@@ -108,13 +108,18 @@ $(document).on('keyup', function(e) {
       return;
     }
 
-    let gates = gatePastedGates(window.selectQbitStart, window.selectStepStart);
-    if (seatsInArrayAreAlreadyTaken(store.state.circuitEditorModule, gates)){
-      alert("Not all the proposed seats are empty.");
-    } else {
-      store.dispatch('circuitEditorModule/insertGatesInCircuit', {"dtos": gates, "existingStep": null, "existingQbit": null});
-      undoGatesSelection();
-    }
+    getPastedGates(window.selectQbitStart, window.selectStepStart)
+    .then(function(gates) {
+      if (seatsInArrayAreAlreadyTaken(store.state.circuitEditorModule, gates)){
+        alert("Not all the proposed seats are empty.");
+      } else {
+        store.dispatch('circuitEditorModule/insertGatesInCircuit', {"dtos": gates, "existingStep": null, "existingQbit": null});
+        undoGatesSelection();
+      }
+    })
+    .catch(function(x) {
+      console.log("Unexpected error when pasting gates: " + x)
+    });
 
   } else if ((e.key == 'x' || e.key == 'X') && e.ctrlKey){
    
@@ -125,7 +130,7 @@ $(document).on('keyup', function(e) {
       let dtos = [];
       for (let q = selectionRange[0]; q <= selectionRange[1]; q++){
         for (let s = selectionRange[2]; s <= selectionRange[3]; s++){
-          let dto = { "step": s, "qbit": q, "name": "any" };
+          let dto = { "step": s, "targets": [q], "name": "any" };
           dtos.push(dto);
         }
       }

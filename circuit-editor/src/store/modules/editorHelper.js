@@ -6,13 +6,10 @@ import {
   getUserInterfaceSetting 
 } from "./applicationWideReusableUnits.js";
 
-import { 
-  arraysAreEqual,
-} from "./javaScriptUtils.js";
 
 export function removingGateFromCircuit(circuitState, dto){
   let step = dto["step"];
-  let targets = dto["targets"];
+  let target = dto["targets"][0];
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
     for (let i = 0; i < circuitState.steps.length; i++) {
       if (circuitState.steps[i].index == step) {
@@ -20,8 +17,9 @@ export function removingGateFromCircuit(circuitState, dto){
         for (let j = 0; j < gates.length; j++) {
           let gate = gates[j];
           if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
-            if (arraysAreEqual(gate.targets, targets)) {
+            if (gate.targets.includes(target)) {
               gates.splice(j, 1);
+              return;
             }
           }
         }
@@ -203,7 +201,7 @@ export function handleSelectEvent(qbit, step) {
 
 export function saveCopiedGates(circuitState, qbitStart, qbitStop, stepStart, stepStop) {
   
-  window.copiedGates = [];
+  let copiedGates = [];
   
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
     for (let i = 0; i < circuitState.steps.length; i++) {
@@ -250,37 +248,60 @@ export function saveCopiedGates(circuitState, qbitStart, qbitStop, stepStart, st
             if (Object.prototype.hasOwnProperty.call(gate, "bit")) {
               copiedGate.bit = gate.bit;
             }
-   
-            window.copiedGates.push(copiedGate);
+
+            copiedGates.push(copiedGate);
           }
         }
       }
     }
-  } 
-}
-
-export function gatePastedGates(qbitStart, stepStart){
-
-  let gates = [];
-
-  for (let i = 0; i < window.copiedGates.length; i++){
-    let gate = { ... window.copiedGates[i]};
-    gate.step = gate.step + stepStart;
-    if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
-      let targets = gate.targets;
-      gate.targets = targets.map(function(value) {return value + qbitStart;});
-    }
-    if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-      for (let i = 0; i < gate["controls"].length; i++) {
-        let controlInfo = gate["controls"][i];
-        let target = controlInfo["target"];
-        controlInfo["target"] = target + qbitStart;
-      }
-    }
-    gates.push(gate);
   }
 
-  return gates;
+  window.navigator.clipboard.writeText(JSON.stringify(copiedGates))
+  .then(() => {
+    // Success!
+  })
+  .catch(() => {
+    alert("Failed to save text to clipboard. Perhaps your browser does not support the Async Clipboard API.");
+  });
+}
+
+export function getPastedGates(qbitStart, stepStart){
+  return window.navigator.clipboard.readText()
+  .then(text => {
+    try {
+      let gates = [];
+      let copiedGates = JSON.parse(text);
+
+      if (Object.prototype.hasOwnProperty.call(copiedGates, "length")) {
+        for (let i = 0; i < copiedGates.length; i++){
+          let gate = { ... copiedGates[i]};
+          if (Object.prototype.hasOwnProperty.call(gate, "step")){
+            gate.step = gate.step + stepStart;
+            if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+              let targets = gate.targets;
+              gate.targets = targets.map(function(value) {return value + qbitStart;});
+            }
+            if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+              for (let i = 0; i < gate["controls"].length; i++) {
+                let controlInfo = gate["controls"][i];
+                let target = controlInfo["target"];
+                controlInfo["target"] = target + qbitStart;
+              }
+            }
+            gates.push(gate);
+          }
+        }
+      }
+
+      return gates;
+    } catch (e) {
+      console.log(e);
+      return [];
+    }
+  })
+  .catch(err => {
+    alert("Failed to retrieve data from clipboard: " + err);
+  });
 }
 
 export function extractSelectionRange() {
