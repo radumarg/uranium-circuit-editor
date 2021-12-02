@@ -86,7 +86,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             drop location in the circuit. For any gate, a single click on a gate pictogram over a target qubit opens a pop-up control which \
             allows editing the gate settings and permits adding or removing controls. This is also the method to assign values for parameters\
             in parametric gates or to assign the index of the classic bit used as mesurement target by measure gates. Clicking over a control \
-            qubit opens up a pop-up dialog where control settings can be adjusted. A control can be draged simolar to a gate. If the Shift \
+            qubit opens up a pop-up dialog where control settings can be adjusted. A control can be draged similar to how it's done for regular gate. If the Shift \
             key is pressed during performing a drag & drop gesture, the original control is not removed and a copy of the control is placed \
             at the drop location. Steps or qubits can be removed from a pop-up which is opened by double clicking on an empty cell in \
             the circuit. Ctrl + Click gesture(s) applied on a gate or an empty cell can be used to select a gate or a group of gates. \
