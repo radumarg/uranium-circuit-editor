@@ -99,45 +99,45 @@ each qubit is measured into a classical bit with index equal to the qubit index 
 export function retriveControlledGateHelpHtml(gateName) {
 
   if (gateName == "u3") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "u3" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "u3" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "u2") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "u2" gate typically performs a generic (two parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "u2" gate typically performs a generic (two parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "hadamard") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "hadamard" gate typically applies a "hadamard" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "hadamard" gate typically applies a "hadamard" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "pauli-x") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-x" gate typically performs the "pauli-x" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. With one control this gate is also known as CNOT gate. With two controls this gate is also known as CCNOT or Toffoli gate';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-x" gate typically performs the "pauli-x" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. With one control this gate is also known as CNOT gate. With two controls this gate is also known as CCNOT or Toffoli gate';
   } else if (gateName == "pauli-y") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-y" gate typically performs the "pauli-y" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-y" gate typically performs the "pauli-y" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "pauli-z") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-z" gate typically performs the "pauli-z" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. This gate is also known as CPHASE gate.';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-z" gate typically performs the "pauli-z" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. This gate is also known as CPHASE gate.';
   } else if (gateName == "u1") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "u1" gate typically applies the "u1" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "u1" gate typically applies the "u1" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "rx-theta") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "rx-theta" gate typically applies the "rx-theta" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "rx-theta" gate typically applies the "rx-theta" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "ry-theta") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "ry-theta" gate typically applies the "ry-theta" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "ry-theta" gate typically applies the "ry-theta" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "rz-theta") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "rz-theta" gate typically applies the "rz-theta" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "rz-theta" gate typically applies the "rz-theta" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "s") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "s" gate typically applies the "s" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "s" gate typically applies the "s" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "s-dagger") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "s-dagger" gate typically applies the "s-dagger" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "s-dagger" gate typically applies the "s-dagger" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "t") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "t" gate typically applies the "t" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "t" gate typically applies the "t" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "t-dagger") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "t-dagger" gate typically applies the "t-dagger" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "t-dagger" gate typically applies the "t-dagger" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "pauli-x-root") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-x-root" gate typically performs the "pauli-x-root" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-x-root" gate typically performs the "pauli-x-root" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
   } else if (gateName == "pauli-y-root") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-y-root" gate typically performs the "pauli-y-root" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-y-root" gate typically performs the "pauli-y-root" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
   } else if (gateName == "pauli-z-root") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-z-root" gate typically performs the "pauli-z-root" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-z-root" gate typically performs the "pauli-z-root" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
   } else if (gateName == "pauli-x-root-dagger") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-x-root-dagger" gate typically performs the "pauli-x-root-dagger" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-x-root-dagger" gate typically performs the "pauli-x-root-dagger" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
   } else if (gateName == "pauli-y-root-dagger") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-y-root-dagger" gate typically performs the "pauli-y-root-dagger" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-y-root-dagger" gate typically performs the "pauli-y-root-dagger" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
   } else if (gateName == "pauli-z-root-dagger") {
-      return 'Controlled gates act on 2 or more qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-z-root-dagger" gate typically performs the "pauli-z-root-dagger" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
+      return 'A gate may have any number of controls. The single controlled gate acts on 2 qubits, where usually the first acts as a control and the second acts as target. The controlled "pauli-z-root-dagger" gate typically performs the "pauli-z-root-dagger" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
   } else if (gateName == "swap") {
     return 'The simplest controlled swap gate, also known as Fredkin gate, acts on three qubits and performs a controlled swap when the control qubit is |1⟩ otherwise leaves it unchanged. It is however possible to setup such that the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. The matrix representation of the Fredkin gate is:';
   }
@@ -613,7 +613,7 @@ export function retriveGateMatrixHtml(gateName) {
 export function retriveControlledGateMatrixHtml(gateName) {
 
   if (gateName == "u3") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ u3, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ u3, as:</div> <br/> \
       <table class='matrix' > \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -641,7 +641,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "u2") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ u2, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ u2, as:</div> <br/> \
       1/√2&nbsp;<table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -669,7 +669,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "hadamard") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ hadamard, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ hadamard, as:</div> <br/> \
       <div style='font-size: 13px;'>1/√2&nbsp;</div></div><table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -697,7 +697,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "pauli-x") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-x, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-x, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -725,7 +725,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "pauli-y") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-y, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-y, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -753,7 +753,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "pauli-z") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-z, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-z, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -781,7 +781,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "rx-theta") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ rx-theta, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ rx-theta, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -809,7 +809,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "ry-theta") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ ry-theta, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ ry-theta, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -837,7 +837,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "rz-theta") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ rz-theta, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ rz-theta, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -865,7 +865,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "s") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ ctrl-s, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ ctrl-s, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -893,7 +893,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "s-dagger") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ s-dagger, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ s-dagger, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -921,7 +921,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "u1") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ u1, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ u1, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -949,7 +949,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "t") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ t, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ t, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -977,7 +977,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "t-dagger") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ t-dagger, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ t-dagger, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -1005,7 +1005,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "pauli-x-root") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-x-root, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-x-root, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -1033,7 +1033,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "pauli-y-root") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-y-root, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-y-root, as:</div> <br/> \
       <table class='matrix' > \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -1061,7 +1061,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "pauli-z-root") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-z-root, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-z-root, as:</div> <br/> \
       <table class='matrix' > \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -1089,7 +1089,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "pauli-x-root-dagger") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-x-root-dagger, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-x-root-dagger, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -1117,7 +1117,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "pauli-y-root-dagger") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-y-root-dagger, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-y-root-dagger, as:</div> <br/> \
       <table class='matrix' > \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
@@ -1145,7 +1145,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
       </tr>\
       </table>";
   } else if (gateName == "pauli-z-root-dagger") {
-      return "<div style='text-align: left;'> For the simplest case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-z-root, as:</div> <br/> \
+      return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ pauli-z-root, as:</div> <br/> \
       <table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\

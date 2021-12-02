@@ -2,7 +2,7 @@
   
   <b-container fluid="xs" class="h-100" style="background-color: #374048; overflow: hidden; ">
     <b-row>
-      <div>
+      <div class="help">
         <b-sidebar id="sidebar-right" :title="gateName" width="360px" right shadow>
           <div class="px-3 py-2" id="sidebar-right-div">
             <b-img :src="gateImage" width="280px" height="auto" fluid thumbnail></b-img>
@@ -109,6 +109,11 @@ export default {
 
 <style>
 
+.help {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+}
+
 .bordered-box {
     background-color: #374048;
     border-left: solid 0.1em #374048;
@@ -121,6 +126,8 @@ export default {
 .matrix {
   position: relative;
   font-size: 13px;
+  margin-left:auto;
+  margin-right:auto;
 }
 .matrix:before,
 .matrix:after {
