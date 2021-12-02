@@ -7,15 +7,19 @@
           <div class="px-3 py-2" id="sidebar-right-div">
             <b-img :src="gateImage" width="280px" height="auto" fluid thumbnail></b-img>
             <br/><br/>
+            <div>
+              <p style="font-size:14px;color:gray;" id="note"> 
+                {{noteHtml}}
+              </p>
+            </div>
             <p>{{helpHtml}}</p>
             <div align=center>
               <span v-html="gateMatrixHtml"></span>
             </div>
             <br/>
-            <div>
-              <p style="font-size:14px;color:gray;visibility:hidden" id="note"> 
-                Note: unselect this gate in gates pallete to see general hints for using the Circuit Editor.
-              </p>
+            <p>{{controlHelpHtml}}</p>
+            <div align=center>
+              <span v-html="controlledGateMatrixHtml"></span>
             </div>
           </div>
         </b-sidebar>
@@ -46,7 +50,7 @@ import Circuit from "./components/Circuit";
 import GatesPallete from "./components/GatesPallete";
 import Logo from "./components/Logo";
 import ToolBar from "./components/ToolBar";
-import { retriveHelpHtml, retriveGateMatrixHtml } from "./help/help.js";
+import { retriveNoteHtml, retriveSimpleGateHelpHtml, retriveControlledGateHelpHtml, retriveGateMatrixHtml, retriveControlledGateMatrixHtml } from "./help/help.js";
 import { getUserInterfaceSetting } from "./store/modules/applicationWideReusableUnits.js";
 
 export default {
@@ -59,24 +63,31 @@ export default {
   },
   data() {
     return {
-      helpHtml: retriveHelpHtml(""),
+      noteHtml: retriveNoteHtml(""),
+      helpHtml: retriveSimpleGateHelpHtml(""),
+      controlHelpHtml: retriveControlledGateHelpHtml(""),
       gateImage: require("./assets/uranium.png"),
       gateMatrixHtml: "",
+      controlledGateMatrixHtml: "",
       gateName: "",
     };
   },
   methods: {
     updateHelpContents: function (gateName) {
 
-      var note = document.getElementById("note");
-      if (gateName){
-        note.style.visibility = "visible";
-      } else {
-        note.style.visibility = "hidden";
-      }
+      // var note = document.getElementById("note");
+      // if (gateName){
+      //   note.style.visibility = "visible";
+      // } else {
+      //   note.style.visibility = "hidden";
+      // }
 
-      this.helpHtml = retriveHelpHtml(gateName);
+      this.noteHtml = retriveNoteHtml(gateName);
+      this.helpHtml = retriveSimpleGateHelpHtml(gateName);
+      this.controlHelpHtml = retriveControlledGateHelpHtml(gateName);
       this.gateMatrixHtml = retriveGateMatrixHtml(gateName);
+      this.controlledGateMatrixHtml = retriveControlledGateMatrixHtml(gateName);
+
       if (gateName == null) {
         this.gateName = "";
         this.gateImage = require("./assets/uranium.png");
