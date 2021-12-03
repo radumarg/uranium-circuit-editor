@@ -21,6 +21,13 @@
             <div align=center>
               <span v-html="controlledGateMatrixHtml"></span>
             </div>
+            <br/>
+            <div id="on-gates" style="visibility:hidden">
+              For further details, an in-depth discussion of quantum gates can be found here:
+              <a href="https://threeplusone.com/pubs/on_gates.pdf" target=”_blank”>
+                Gates, States, and Circuits
+              </a>
+            </div>
           </div>
         </b-sidebar>
       </div>
@@ -67,20 +74,20 @@ export default {
       helpHtml: retriveSimpleGateHelpHtml(""),
       controlHelpHtml: retriveControlledGateHelpHtml(""),
       gateImage: require("./assets/uranium.png"),
-      gateMatrixHtml: "",
-      controlledGateMatrixHtml: "",
+      gateMatrixHtml: retriveGateMatrixHtml(""),
+      controlledGateMatrixHtml: retriveControlledGateMatrixHtml(""),
       gateName: "",
     };
   },
   methods: {
     updateHelpContents: function (gateName) {
 
-      // var note = document.getElementById("note");
-      // if (gateName){
-      //   note.style.visibility = "visible";
-      // } else {
-      //   note.style.visibility = "hidden";
-      // }
+      var note = document.getElementById("on-gates");
+      if (gateName){
+        note.style.visibility = "visible";
+      } else {
+        note.style.visibility = "hidden";
+      }
 
       this.noteHtml = retriveNoteHtml(gateName);
       this.helpHtml = retriveSimpleGateHelpHtml(gateName);
