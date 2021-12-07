@@ -110,7 +110,7 @@ export function retriveControlledGateHelpHtml(gateName) {
   } else if (gateName == "pauli-y") {
       return 'A "pauli-y" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "pauli-y" gate typically performs the "pauli-y" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "pauli-z") {
-      return 'A pauli-z" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "pauli-z" gate typically performs the "pauli-z" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. This gate is also known as CPHASE gate.';
+      return 'A "pauli-z" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "pauli-z" gate typically performs the "pauli-z" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. The single controlled "pauli-z" gate is also known as CPHASE gate and has the particular property that is symmetric, which means that swapping the control with the target qubit does not modify the result when applying the gate.';
   } else if (gateName == "u1") {
       return 'A "u1" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "u1" gate typically applies the "u1" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "rx-theta") {
@@ -149,6 +149,18 @@ export function retriveControlledGateHelpHtml(gateName) {
     return '';
   } else if (gateName == "measure-z") {
     return '';
+  } else if (gateName == "sqrt-swap") {
+    return 'A "sqrt-swap" gate may have any number of controls.';
+  }  else if (gateName == "swap-theta") {
+    return 'A "swap-theta" gate may have any number of controls.';
+  } else if (gateName == "iswap") {
+    return 'An "iswap" gate may have any number of controls.';
+  } else if (gateName == "xx") {
+    return 'A "xx" gate may have any number of controls.';
+  } else if (gateName == "yy") {
+    return 'A "yy" gate may have any number of controls.';
+  } else if (gateName == "zz") {
+    return 'A "zz" gate may have any number of controls.';
   }
 
   return "Note on representation of qubit states: the Bloch sphere Z-bazis states are conventionally named: |0⟩ and |1⟩. The Z-basis is usually refered to as the computational or \

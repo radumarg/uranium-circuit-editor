@@ -44,7 +44,7 @@
         alert('Failed to retrieve the circuit code. Please try to reload the page.');
     }
         
-    return JSON.parse('{"version": "1.0", "circuit-type": "simple", "steps": []}');
+    return JSON.parse('{"version": "1.1", "circuit-type": "simple", "steps": []}');
   }
   
   /* use Django REST API to save circuit */

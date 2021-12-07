@@ -83,7 +83,7 @@ export default {
     updateHelpContents: function (gateName) {
 
       var note = document.getElementById("on-gates");
-      if (gateName){
+      if (gateName && !gateName.includes("measure-")){
         note.style.visibility = "visible";
       } else {
         note.style.visibility = "hidden";

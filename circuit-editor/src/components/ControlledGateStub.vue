@@ -34,7 +34,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" style="padding: 5px;">Control state:</td>
           <td style="padding: 5px;">
-            <b-form-select  @keyup.enter.native="handleSave()" v-model="controlstateNew" @change="onControlStateChange()"  placeholder="controlstate" :options="options" id="controlstate-new" style="min-width: 72px; max-width: 72px;"></b-form-select>
+            <b-form-select  @keyup.enter.native="handleSave()" v-model="controlstateNew"  placeholder="controlstate" :options="options" id="controlstate-new" style="min-width: 72px; max-width: 72px;"></b-form-select>
           </td>
           <td></td>
         </tr>
@@ -97,10 +97,10 @@ export default {
       options: [
         { value: '1', text: '|1⟩' },
         { value: '0', text: '|0⟩' },
-        { value: '+', text: '|+⟩' },
-        { value: '-', text: '|-⟩' },
-        { value: '+i', text: '|+i⟩' },
-        { value: '-i', text: '|-i⟩' },
+        // { value: '+', text: '|+⟩' },
+        // { value: '-', text: '|-⟩' },
+        // { value: '+i', text: '|+i⟩' },
+        // { value: '-i', text: '|-i⟩' },
       ],
     }
   },
@@ -168,48 +168,40 @@ export default {
       this.$refs['modal-dialog'].hide();
     },
     handleDeleteControl: function(){
-      if (this.controls.length == 1){
-        alert("Cannot delete last control!");
-      } else {
-        let controlStatesNew = [...this.controlstates]
-        let controlsNew = [...this.controls];
-        let controlIndex = this.controls.indexOf(this.control);
-        controlStatesNew.splice(controlIndex, 1);
-        controlsNew.splice(controlIndex, 1);
-        let dto = {
-          'name': this.gate,
-          'step': this.step, 
-          'targets': [...this.targets],
-          'controls': [...this.controls],
-          'targetsNew': [...this.targets],
-          'controlsNew': [...controlsNew],
-          'controlstatesNew': [...controlStatesNew],
-        }
-        if (isDefined(this.phi)) {
-          dto['phiNew'] = this.phi;
-        }
-        if (isDefined(this.theta)) {
-          dto['thetaNew'] = this.theta;
-        }
-        if (isDefined(this.lambda)) {
-          dto['lambdaNew'] = this.lambda;
-        }
-        if (isDefined(this.root)) {
-          dto['rootNew'] = this.root;
-        }
-        let promise = this.repositionSimpleGateInCircuit(dto);
-        promise.then(
-          // eslint-disable-next-line no-unused-vars
-          result => {}, 
-          // eslint-disable-next-line no-unused-vars
-          error => {}
-        );
+      let controlStatesNew = [...this.controlstates]
+      let controlsNew = [...this.controls];
+      let controlIndex = this.controls.indexOf(this.control);
+      controlStatesNew.splice(controlIndex, 1);
+      controlsNew.splice(controlIndex, 1);
+      let dto = {
+        'name': this.gate,
+        'step': this.step, 
+        'targets': [...this.targets],
+        'controls': [...this.controls],
+        'targetsNew': [...this.targets],
+        'controlsNew': [...controlsNew],
+        'controlstatesNew': [...controlStatesNew],
       }
+      if (isDefined(this.phi)) {
+        dto['phiNew'] = this.phi;
+      }
+      if (isDefined(this.theta)) {
+        dto['thetaNew'] = this.theta;
+      }
+      if (isDefined(this.lambda)) {
+        dto['lambdaNew'] = this.lambda;
+      }
+      if (isDefined(this.root)) {
+        dto['rootNew'] = this.root;
+      }
+      let promise = this.repositionSimpleGateInCircuit(dto);
+      promise.then(
+        // eslint-disable-next-line no-unused-vars
+        result => {}, 
+        // eslint-disable-next-line no-unused-vars
+        error => {}
+      );
       this.$refs['modal-dialog'].hide();
-    },
-    onControlStateChange(){ 
-      // need to refresh control state icon image
-      this.$forceUpdate();
     },
     stubImageSrc: function() {
       if (this.gate) {
