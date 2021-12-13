@@ -68,7 +68,7 @@ export const controlsMixin = {
     },
     getEmbededTableStyle(){
       let maxWidth = (this.controlsNew.length > 7) ? 880 : 600;
-      return `overflow-x:scroll; max-width: ${maxWidth}px; min-height: 195px; max-height: 195px;`
+      return `overflow-x:scroll; max-width: ${maxWidth}px; height: 195px; min-height: 195px; max-height: 195px; border-spacing: 5px; display: inline-block; table-layout: fixed;`
     },
     getEmbedTableCellStyle(){
       let width = (this.controlsNew.length > 7) ? 880 : 560;

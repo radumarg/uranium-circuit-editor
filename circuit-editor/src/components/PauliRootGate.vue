@@ -276,26 +276,26 @@
           <td :colspan="numberOfColumnsInEditControlsModal()" rowspan="4" :style="getEmbedTableCellStyle()" class="text-center">
             <b-table-simple :style="getEmbededTableStyle()" :responsive="true" borderless>
               <b-tr>
-                <b-td v-for="(control, index) in controlsNew.length" v-bind:key="index" style="min-width: 79px; max-width: 79px; border: 1px solid #E0E0E0;">
+                <b-td v-for="(control, index) in controlsNew.length" v-bind:key="index" style="border: 1px solid #E0E0E0;" class="embedded-table-cell">
                   <img :src="stubImageSrcPopup(control - 1)" style="width:30px; height:auto;" />
                 </b-td>
-                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 1000" style="min-width: 79px; max-width: 79px;" />
+                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 1000" class="embedded-table-cell" />
               </b-tr>
               <b-tr>
-                <b-td v-for="(controlstate, index) in controlstatesNew" v-bind:key="index + 4000" style="min-width: 79px; max-width: 79px;">
+                <b-td v-for="(controlstate, index) in controlstatesNew" v-bind:key="index + 4000" class="embedded-table-cell">
                   <div class="d-flex justify-content-center align-items-center">
                     <b-form-select v-model="controlstatesNew[index]" @change="onControlStateChange()"  placeholder="controlstate" :options="options" id="controlstate-new" style="min-width: 72px; max-width: 72px;"></b-form-select>
                   </div>
                 </b-td>
-                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 5000" style="min-width: 79px; max-width: 79px;" />
+                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 5000" class="embedded-table-cell" />
               </b-tr>
               <b-tr>
-                <b-td v-for="(control, index) in controlsNew" v-bind:key="index + 2000" style="min-width: 79px; max-width: 79px;">
+                <b-td v-for="(control, index) in controlsNew" v-bind:key="index + 2000" class="embedded-table-cell">
                   <div class="d-flex justify-content-center align-items-center">
                     <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="controlsNew[index]" placeholder="control" type="number" id="control-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
                   </div>
                 </b-td>
-                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 3000"  style="min-width: 79px; max-width: 79px;" />
+                <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 3000"  class="embedded-table-cell" />
               </b-tr>
             </b-table-simple>
           </td>
@@ -563,6 +563,7 @@ export default {
 </script>
 
 <style scoped>
+
 table {
   text-align: center;
   table-layout: fixed;
@@ -572,19 +573,33 @@ table {
   -moz-user-select: none; /* Firefox */
   -ms-user-select: none; /* Internet Explorer/Edge */
 }
+
 th,
 td {
   padding: 1px;
 }
+
 .td-2nd-modal {
   padding: 5px;
 }
+
 .no-resize-cell{
   width: 35px;
   max-width: 35px;
   height: 35px;
   max-height: 35px;
   display: inline-block;
+}
+
+.embedded-table-cell {
+  padding: 10px;
+  text-align: center;
+  height: 50px;
+  min-height: 50px;
+  max-height: 50px;
+  width: 79px;
+  min-width: 79px;
+  max-width: 79px;
 }
 
 img {
