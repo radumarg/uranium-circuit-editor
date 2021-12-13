@@ -222,7 +222,7 @@
         <tr>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsPlusHover">
-              <b-icon v-if="editControlsPlusIsHovered" v-on:click="addControl()" title="Add control" icon="plus" style="color: #7952b3;" font-scale="1.7"></b-icon>
+              <b-icon v-if="editControlsPlusIsHovered" v-on:click="addControl()" title="Add control" icon="plus" style="color: #7952b3;" font-scale="1.8"></b-icon>
               <b-icon v-else icon="plus" v-on:click="addControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
@@ -316,7 +316,7 @@
         <tr>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsMinusHover">
-              <b-icon v-if="editControlsMinusIsHovered" v-on:click="removeControl()" title="Remove control" icon="dash" style="color: #7952b3;" font-scale="1.7"></b-icon>
+              <b-icon v-if="editControlsMinusIsHovered" v-on:click="removeControl()" title="Remove control" icon="dash" style="color: #7952b3;" font-scale="1.8"></b-icon>
               <b-icon v-else icon="dash" v-on:click="removeControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
