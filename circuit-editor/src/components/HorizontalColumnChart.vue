@@ -149,7 +149,9 @@ export default {
         this.runSimulation(this.$store.state.circuitEditorModule);
       },
       forceRerender() {
-        this.updateKey += 1;  
+        // Is this at all required?
+        // If enabled a memory leak occurs when updating a circuit.
+        //this.updateKey += 1;
       }
    },
    options: {

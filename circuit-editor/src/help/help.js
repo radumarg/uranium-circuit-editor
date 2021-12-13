@@ -1,9 +1,9 @@
 
 export function retriveNoteHtml(gateName) {
   if (gateName){
-    return 'Note: unselect this gate in the gates pallete to see useful general hints for using the Circuit Editor.';
+    return 'Hint: unselect this gate in the gates pallete to see useful general hints for using the Circuit Editor.';
   } else {
-    return 'Note: select any gate in the gates pallete to see the documentation for that gate.'
+    return 'Hint: select any gate in the gates pallete to see the documentation for that gate.'
   }
 }
 

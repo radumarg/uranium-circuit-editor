@@ -290,6 +290,7 @@ td {
   max-width: 35px;
   height: 35px;
   max-height: 35px;
+  display: inline-block;
 }
 img {
   display: inline-block;

@@ -366,6 +366,7 @@ it does not make much sense doing that unless you intend to save the circuit as 
   max-width: 35px;
   height: 35px;
   max-height: 35px;
+  display: inline-block;
 }
 
 .md-checkbox{
