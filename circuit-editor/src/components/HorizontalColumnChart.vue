@@ -58,7 +58,7 @@ export default {
    },
    methods: {
       ...mapGetters("circuitEditorModule/", ["getMaximumQbitIndex"]),
-      updateData(probabilitiesDTO) {
+      updateData(probabilitiesDTO, forceReRender = false) {
          const [binnedStateProbabilities, maxProbability] = probabilitiesDTO;
          this.$data.chartOptionsProbabilities = {
             type: 'horizontal column',
@@ -78,9 +78,11 @@ export default {
                }
             },
          };
-         this.forceRerender();
+         if (forceReRender) {
+           this.forceRerender();
+         }
       },
-      runSimulation: async function (circuitState) {
+      runSimulation: async function (circuitState, forceReRender = false) {
         if (this.$data.liveSimulation == true && this.$data.activated) {
           let maxQubitIndex = this.getMaximumQbitIndex();
           let measureGates = getMeasureGates(circuitState);
@@ -108,7 +110,7 @@ export default {
           }
           this.$data.qubits = maxQubitIndex + 1;
           let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateProbabilities.length);
-          this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, this.$data.minRange, this.$data.maxRange, numberOfBins));
+          this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, this.$data.minRange, this.$data.maxRange, numberOfBins), forceReRender);
         }        
       },
       selectionHandler(ev) { 
@@ -146,12 +148,11 @@ export default {
       },
       tabActivated(activated){
         this.$data.activated = activated;
-        this.runSimulation(this.$store.state.circuitEditorModule);
+        this.runSimulation(this.$store.state.circuitEditorModule, true);
       },
       forceRerender() {
-        // Is this at all required?
-        // If enabled a memory leak occurs when updating a circuit.
-        //this.updateKey += 1;
+        // this creates a memory leak
+        this.updateKey += 1;
       }
    },
    options: {

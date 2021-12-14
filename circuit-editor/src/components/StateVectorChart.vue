@@ -125,7 +125,7 @@ export default {
           ],
         }
       },
-      runSimulation: async function (circuitState) {
+      runSimulation: async function (circuitState, forceReRender = false) {
         if (this.$data.liveSimulation == true && this.$data.activated) {
           let qubits = this.getMaximumQbitIndex() + 1;
           if (qubits == -1){
@@ -135,12 +135,14 @@ export default {
             let stateVectorRealEntries = stateVectorEntries["real"];
             let stateVectorImaginaryEntries = stateVectorEntries["imaginary"];
             let maxScale = 1.1 * stateVectorEntries["max"];
-            this.updateData([], [], maxScale);
+            //this.updateData([], [], maxScale);
             this.updateData(stateVectorRealEntries, stateVectorImaginaryEntries, maxScale);
           } else {
             this.updateData([], [], 1.0);
           }
-          this.forceRerender();
+          if (forceReRender) {
+            this.forceRerender();
+          }
         }        
       },
       updateView(simulatingLive){
@@ -149,12 +151,11 @@ export default {
       },
       tabActivated(activated){
         this.$data.activated = activated;
-        this.runSimulation(this.$store.state.circuitEditorModule);
+        this.runSimulation(this.$store.state.circuitEditorModule, true);
       },
       forceRerender() {
-        // Is this at all required?
-        // If enabled a memory leak occurs when updating a circuit.
-        //this.updateKey += 1;
+        // this creates a memory leak
+        this.updateKey += 1;
       }
    },
    options: {
