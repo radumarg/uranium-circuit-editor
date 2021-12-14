@@ -37,6 +37,10 @@
           xmlHttpReq.send(null);
           if (xmlHttpReq.responseText && xmlHttpReq.status == 200){
               let jsonObj = JSON.parse(xmlHttpReq.responseText);
+              if (!jsonObj.version || jsonObj.version == "1.0"){
+                alert("Unfortunately this circuit format is outdated. We will refrain from introducing backwards incompatible changes in the future.")
+                jsonObj = JSON.parse('{"version": "1.1", "circuit-type": "simple", "steps": []}');
+              }
               return jsonObj;
           } 
           retries += 1;

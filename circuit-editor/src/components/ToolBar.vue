@@ -328,6 +328,10 @@ it does not make much sense doing that unless you intend to save the circuit as 
       const yaml = require('js-yaml');
       var contents = event.target.result;
       let jsonObj = yaml.safeLoad(contents);
+      if (!jsonObj.version || jsonObj.version == "1.0"){
+        alert("Unfortunately this circuit format is outdated. We will refrain from introducing backwards incompatible changes in the future.")
+        jsonObj = JSON.parse('{"version": "1.1", "circuit-type": "simple", "steps": []}');
+      }
       let qbits = getNoQbits(jsonObj);
       let steps = getNoSteps(jsonObj);
       window.gatesTable.rows = Math.max(2 * qbits + 2, window.initialRows);
