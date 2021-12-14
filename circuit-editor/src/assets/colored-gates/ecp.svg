@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="46" height="72" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <circle cx="23" cy="13.0" r="12.1" style="stroke:darkcyan;stroke-width:2;" fill="transparent" />
+    <text x="14" y="16" style="font-size: 9px; font-weight: bold; fill: darkcyan; white-space: pre;">ECP</text>
+    <line x1="23" y1="25" x2="23" y2="47" style="stroke:darkcyan;stroke-width:2; stroke-opacity:1;" />
+    <text x="14" y="62" style="font-size: 9px; font-weight: bold; fill: darkcyan; white-space: pre;">ECP</text>
+    <circle cx="23" cy="59" r="12.1" style="stroke:darkcyan;stroke-width:2;" fill="transparent" />
+  </g>
+</svg>

@@ -83,7 +83,7 @@
           <td width="35px"></td>
           <td v-b-tooltip.hover width="80px" style="padding: 5px;">Qbits:</td>
           <td width="110px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="qbitsNew" placeholder="qbits" type="number" id="qbits-new" style="width:80px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitsNew" placeholder="qbits" type="number" id="qbits-new" style="width:80px;"></b-form-input>
           </td>
           <td width="30px"></td>
         </tr>
@@ -91,7 +91,7 @@
           <td width="35px"></td>
           <td v-b-tooltip.hover width="80px" style="padding: 5px;">Steps:</td>
           <td width="110px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="stepsNew" placeholder="steps" type="number" id="steps" style="width:80px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="stepsNew" placeholder="steps" type="number" id="steps" style="width:80px;"></b-form-input>
           </td>
           <td width="30px"></td>
         </tr>
@@ -113,23 +113,22 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import * as htmlToImage from 'html-to-image';
 import JQuery from 'jquery';
 import { mapActions, mapGetters } from 'vuex';
 import { getNoQbits, getNoSteps, getNumberOfRowsThatFit, getNumberOfColumnsThatFit } from "../store/modules/gatesTable.js";
 import {save_circuit} from "../store/modules/circuitSaveAndRetrieve.js";
-import { setCookiesIfNotAltreadySet } from "../store/modules/utils.js";
+import { setCookiesIfNotAlreadySet, getUserInterfaceSetting, setUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 import {sendWorkerMessage} from '../store/modules/worker-api';
 export default {
   name: "ToolBar",
   data() {
-    setCookiesIfNotAltreadySet();
+    setCookiesIfNotAlreadySet();
     return {
-      darkTheme: Vue.$cookies.get("dark-theme") === 'true',
-      colorGates: Vue.$cookies.get("colored-gates") === 'true',
-      liveSimulation: Vue.$cookies.get("live-simulation") === 'true',
-      statesAreShownInBase2: Vue.$cookies.get("legend-base") === '2',
+      darkTheme: getUserInterfaceSetting("dark-theme") === 'true',
+      colorGates: getUserInterfaceSetting("colored-gates") === 'true',
+      liveSimulation: getUserInterfaceSetting("live-simulation") === 'true',
+      statesAreShownInBase2: getUserInterfaceSetting("legend-base") === '2',
       closeIsHovered: false,
       saveIsHovered:  false,
       qbitsNew: 0,
@@ -157,7 +156,7 @@ export default {
     });
   },
   mounted() {
-    let darkTheme = (Vue.$cookies.get("dark-theme") === 'true')
+    let darkTheme = (getUserInterfaceSetting("dark-theme") === 'true')
     this.$root.$emit("switchThemeDark", darkTheme);
     if (this.$store.state.circuitEditorModule.steps.length > 0){
       this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
@@ -241,12 +240,15 @@ it does not make much sense doing that unless you intend to save the circuit as 
       }
     },
     openFile: function() {
-      document
-        .getElementById("file-input")
-        .addEventListener("change", this.readSingleFile, false);
-      document.getElementById("file-input").click();
-      this.history = [];
-      this.historyUnRoll = [];
+      let fileInput = document.getElementById("file-input");
+      fileInput.value = null;
+      fileInput.onchange = () => {
+            let files =  Array.from(fileInput.files);
+            if (files.length == 1) {
+              this.readSingleFile(files[0]);
+            }
+        };
+      fileInput.click();
     },
     saveImages: function() {
       var node = document.getElementById('gatesTable');
@@ -281,11 +283,7 @@ it does not make much sense doing that unless you intend to save the circuit as 
       element.click();
       document.body.removeChild(element);
     },  
-    readSingleFile: function(event) {
-      if (event.target.files.length !== 1) {
-        return;
-      }
-      var file = event.target.files[0];
+    readSingleFile: function(file) {
       var reader = new FileReader();
       reader.onload = this.commitCircuitState;
       reader.readAsText(file);
@@ -299,37 +297,47 @@ it does not make much sense doing that unless you intend to save the circuit as 
       window.gatesTable.columns = window.initialColumns;
       this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
       this.$root.$emit("circuitModifiedFromMenu");
+      if (window.toolTipsAreShown){
+        JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");
+        window.toolTipsAreShown = false;
+      }
     },
     switchTheme: function(){
-      Vue.$cookies.set('dark-theme', this.darkTheme);
+      setUserInterfaceSetting('dark-theme', this.darkTheme);
       this.$root.$emit("switchThemeDark", this.darkTheme);
     },
     switchGateColors: function(){
-      Vue.$cookies.set('colored-gates', this.colorGates);
+      setUserInterfaceSetting('colored-gates', this.colorGates);
       this.$root.$emit("switchThemeDark", this.darkTheme);
       this.$root.$emit("switchGateColors");
       this.refreshCircuit();
     },
     switchLegendBase: function(){
       if (this.statesAreShownInBase2 == true){
-        Vue.$cookies.set('legend-base', '2');
+        setUserInterfaceSetting('legend-base', '2');
       } else {
-        Vue.$cookies.set('legend-base', '10');
+        setUserInterfaceSetting('legend-base', '10');
       }
       this.$root.$emit("switchLegendBase");
     },
     switchSimulationMode: function(){
-      Vue.$cookies.set('live-simulation', this.liveSimulation);
+      setUserInterfaceSetting('live-simulation', this.liveSimulation);
       this.$root.$emit("switchToLiveSimulationMode", this.liveSimulation);
     },
     commitCircuitState: function(event) {
       const yaml = require('js-yaml');
       var contents = event.target.result;
       let jsonObj = yaml.safeLoad(contents);
+      if (!jsonObj.version || jsonObj.version == "1.0"){
+        alert("Unfortunately this circuit format is outdated. We will refrain from introducing backwards incompatible changes in the future.")
+        jsonObj = JSON.parse('{"version": "1.1", "circuit-type": "simple", "steps": []}');
+      }
       let qbits = getNoQbits(jsonObj);
       let steps = getNoSteps(jsonObj);
       window.gatesTable.rows = Math.max(2 * qbits + 2, window.initialRows);
       window.gatesTable.columns = Math.max(2 * steps + 2, window.initialColumns);
+      this.history = [];
+      this.historyUnRoll = [];
       this.updateCircuit(jsonObj);
       this.history.push(JSON.stringify(this.$store.state));
       this.$root.$emit("triggerSimulationRun", jsonObj);
@@ -362,6 +370,7 @@ it does not make much sense doing that unless you intend to save the circuit as 
   max-width: 35px;
   height: 35px;
   max-height: 35px;
+  display: inline-block;
 }
 
 .md-checkbox{

@@ -47,7 +47,7 @@
           <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target Qbit:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="qbitNew" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -55,14 +55,14 @@
           <td></td>
           <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Classic Bit:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model="bitNew" placeholder="bit" type="number" id="bit-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="bitNew" placeholder="bit" type="number" id="bit-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
         <tr>
           <td class="no-resize-cell">
              <div v-b-hover="handleExpandGateHover">
-              <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" v-b-tooltip.hover title="Expand gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
+              <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" v-b-tooltip.hover title="Replicate gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
               <b-icon v-else icon="files" v-on:click="handleExpandGate()" style="color: #7952b3;" font-scale="1.3"></b-icon>
               </div>
           </td>
@@ -86,27 +86,34 @@
     <b-modal ref="replicate-gate-modal-dialog" size="lg" width="100px" centered hide-footer hide-header>
       <table>
         <tr>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleReplicateGateHelpHover">
+              <b-icon v-if="replicateGateHelpIsHovered" v-on:click="handleReplicateDialogHelp()" icon="question-circle" v-b-tooltip.hover title="Help" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="question-circle" v-on:click="handleReplicateDialogHelp()" style="color: #7952b3;" font-scale="1.2"></b-icon>
+            </div>
+          </td>
           <td colspan="6">
           </td>
           <td class="no-resize-cell">
-            <div v-b-hover="handleSecondModalCloseHover">
-              <b-icon v-if="secondModalCloseIsHovered" v-on:click="hideSecondModal()" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
-              <b-icon v-else icon="x-square" v-on:click="hideSecondModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            <div v-b-hover="handleReplicateGateModalCloseHover">
+              <b-icon v-if="replicateGateModalCloseIsHovered" v-on:click="hideReplicateGateModal()" title="Close dialog" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="x-square" v-on:click="hideReplicateGateModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
         </tr>
         <tr>
+          <td></td>
           <td width="100px" class="td-2nd-modal">
             First Qubit:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
           </td>
           <td width="100px" class="td-2nd-modal">
             Last Qubit:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="qbitLast" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="qbitLast" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
           </td>
           <td width="200px" class="td-2nd-modal">
             Condition - 'q' based <br/>javascript expression:
@@ -117,17 +124,18 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td></td>
           <td width="100px" class="td-2nd-modal">
             First Step:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepFirst" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="stepFirst" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
           </td>
           <td width="100px" class="td-2nd-modal">
             Last Step:
           </td>
           <td width="100px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="stepLast" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
+            <b-form-input min="0" v-model.number="stepLast" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
           </td>
           <td width="200px" class="td-2nd-modal">
             Condition - 's' based <br/>javascript expression:
@@ -138,6 +146,7 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td></td>
           <td colspan="3" width="300px" class="td-2nd-modal">
             Conjugate Condition - 'q, s' based <br/>javascript expression:
           </td>
@@ -147,6 +156,7 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td></td>
           <td colspan="3" width="300px" class="td-2nd-modal">
             Bit Value - 'q, s' based <br/>javascript expression:
           </td>
@@ -156,12 +166,12 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
-          <td colspan="6" class="td-2nd-modal">
+          <td colspan="7" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
-            <div v-b-hover="handleSecondModalSaveHover">
-              <b-icon v-if="secondModalSaveIsHovered" v-on:click="handleSecondModalSave()" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
-              <b-icon v-else icon="check" v-on:click="handleSecondModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            <div v-b-hover="handleReplicateGateModalSaveHover">
+              <b-icon v-if="replicateGateModalSaveIsHovered" v-on:click="handleReplicateGateModalSave()" title="Save changes" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
+              <b-icon v-else icon="check" v-on:click="handleReplicateGateModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
         </tr>
@@ -174,11 +184,11 @@
 
 <script>
 import { mapActions } from 'vuex';
-import SingleBitGate from "./SingleBitGate";
-import { createDragImageGhost, hideTooltips } from "../store/modules/utils.js";
+import SingleQbitGate from "./SingleQbitGate";
+import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "MeasureGate",
-  extends: SingleBitGate,
+  extends: SingleQbitGate,
   props: {
     'bit': Number,
   },
@@ -189,15 +199,19 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
+    ...mapActions('circuitEditorModule/', ['repositionElementaryGateInCircuit']),
     handleSave: function(){
-      let qbitOld = this.qbit;
+      if (!Number.isInteger(this.$data.targetsNew[0]) || !Number.isInteger(this.$data.bitNew)){
+        alert("Please enter an integer number!");
+        return;
+      }
+      let targetsOld = [...this.targets];
       let bitOld = this.bitOld;
-      let promise = this.repositionSimpleGateInCircuit({
+      let promise = this.repositionElementaryGateInCircuit({
         'step': this.step, 
-        'qbit': this.qbit, 
+        'targets': [...this.targets],
         'name': this.name, 
-        'qbitNew': this.$data.qbitNew, 
+        'targetsNew': [...this.$data.targetsNew],
         'bitNew': this.$data.bitNew
       });
       promise.then(
@@ -205,16 +219,16 @@ export default {
         result => {}, 
         // eslint-disable-next-line no-unused-vars
         error => {
-          this.$data.qbitNew = this.qbit = qbitOld;
-          this.$data.bitNew = this.bit = bitOld;
+          this.$data.targetsNew = [...targetsOld];
+          this.$data.bitNew = bitOld;
         }
       );
       this.$refs['initial-modal-dialog'].hide();
     },
-    handleSecondModalSave: function(){
-      let promise = this.duplicateGate({
+    handleReplicateGateModalSave: function(){
+      let promise = this.replicateGate({
         'step': this.step,
-        'qbit': this.qbit,
+        'targets': [...this.targets],
         'name': this.name, 
         'stepFirst': this.stepFirst,
         'stepLast': this.stepLast,
@@ -227,11 +241,12 @@ export default {
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
-        result => {}, 
+        result => {
+          this.$refs['replicate-gate-modal-dialog'].hide();
+        },
         // eslint-disable-next-line no-unused-vars
         error => {},
       );
-      this.$refs['replicate-gate-modal-dialog'].hide();
     },
     dragStart: function(event) {
       hideTooltips();
@@ -239,7 +254,7 @@ export default {
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalQbit", this.qbit);
+      event.dataTransfer.setData("originalTargets", [...this.targets]);
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("bit", this.bit);
       let dragImageGhost = createDragImageGhost(target);  
@@ -257,6 +272,11 @@ export default {
 table {
   text-align: center;
   table-layout: fixed;
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
 }
 th,
 td {
@@ -270,6 +290,7 @@ td {
   max-width: 35px;
   height: 35px;
   max-height: 35px;
+  display: inline-block;
 }
 img {
   display: inline-block;

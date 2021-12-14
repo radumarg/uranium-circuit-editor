@@ -2,20 +2,31 @@
   
   <b-container fluid="xs" class="h-100" style="background-color: #374048; overflow: hidden; ">
     <b-row>
-      <div>
+      <div class="help">
         <b-sidebar id="sidebar-right" :title="gateName" width="360px" right shadow>
           <div class="px-3 py-2" id="sidebar-right-div">
             <b-img :src="gateImage" width="280px" height="auto" fluid thumbnail></b-img>
             <br/><br/>
+            <div>
+              <p style="font-size:14px;color:gray;" id="note"> 
+                {{noteHtml}}
+              </p>
+            </div>
             <p>{{helpHtml}}</p>
             <div align=center>
               <span v-html="gateMatrixHtml"></span>
             </div>
             <br/>
-            <div>
-              <p style="font-size:14px;color:gray;visibility:hidden" id="note"> 
-                Note: unselect this gate in gates pallete to see general hints for using the Circuit Editor.
-              </p>
+            <p>{{controlHelpHtml}}</p>
+            <div align=center>
+              <span v-html="controlledGateMatrixHtml"></span>
+            </div>
+            <br/>
+            <div id="on-gates" style="visibility:hidden">
+              For further details, an in-depth discussion of quantum gates can be found here:
+              <a href="https://threeplusone.com/pubs/on_gates.pdf" target=”_blank”>
+                Gates, States, and Circuits
+              </a>
             </div>
           </div>
         </b-sidebar>
@@ -42,12 +53,12 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import Circuit from "./components/Circuit";
 import GatesPallete from "./components/GatesPallete";
 import Logo from "./components/Logo";
 import ToolBar from "./components/ToolBar";
-import { retriveHelpHtml, retriveGateMatrixHtml } from "./help/help.js";
+import { retriveNoteHtml, retriveSimpleGateHelpHtml, retriveControlledGateHelpHtml, retriveGateMatrixHtml, retriveControlledGateMatrixHtml } from "./help/help.js";
+import { getUserInterfaceSetting } from "./store/modules/applicationWideReusableUnits.js";
 
 export default {
   name: "App",
@@ -59,45 +70,40 @@ export default {
   },
   data() {
     return {
-      helpHtml: retriveHelpHtml(""),
+      noteHtml: retriveNoteHtml(""),
+      helpHtml: retriveSimpleGateHelpHtml(""),
+      controlHelpHtml: retriveControlledGateHelpHtml(""),
       gateImage: require("./assets/uranium.png"),
-      gateMatrixHtml: "",
+      gateMatrixHtml: retriveGateMatrixHtml(""),
+      controlledGateMatrixHtml: retriveControlledGateMatrixHtml(""),
       gateName: "",
     };
   },
   methods: {
     updateHelpContents: function (gateName) {
 
-      var note = document.getElementById("note");
-      if (gateName){
+      var note = document.getElementById("on-gates");
+      if (gateName && !gateName.includes("measure-")){
         note.style.visibility = "visible";
       } else {
         note.style.visibility = "hidden";
       }
 
-      this.helpHtml = retriveHelpHtml(gateName);
+      this.noteHtml = retriveNoteHtml(gateName);
+      this.helpHtml = retriveSimpleGateHelpHtml(gateName);
+      this.controlHelpHtml = retriveControlledGateHelpHtml(gateName);
       this.gateMatrixHtml = retriveGateMatrixHtml(gateName);
+      this.controlledGateMatrixHtml = retriveControlledGateMatrixHtml(gateName);
+
       if (gateName == null) {
         this.gateName = "";
         this.gateImage = require("./assets/uranium.png");
       } else{
         this.gateName = gateName;
-        if (Vue.$cookies.get('colored-gates') === 'true'){
-          if (gateName.includes("ctrl-")){
-            this.gateImage = require("./assets/colored-gates/" + gateName + "-1.svg");     
-          } else if (gateName == "toffoli") { 
-            this.gateImage = require("./assets/colored-gates/toffoli-1-1.svg");
-          } else {
-            this.gateImage = require("./assets/colored-gates/" + gateName + ".svg");
-          }
+        if (getUserInterfaceSetting('colored-gates') === 'true'){
+          this.gateImage = require("./assets/colored-gates/" + gateName + ".svg");
         } else {
-          if (gateName.includes("ctrl-")){
-            this.gateImage = require("./assets/blue-gates/" + gateName + "-1.svg");     
-          } else if (gateName == "toffoli") { 
-            this.gateImage= require("./assets/blue-gates/toffoli-1-1.svg");
-          } else {
-            this.gateImage = require("./assets/blue-gates/" + gateName + ".svg");
-          }
+          this.gateImage = require("./assets/blue-gates/" + gateName + ".svg");
         }
       }
     }
@@ -109,6 +115,11 @@ export default {
 </script>
 
 <style>
+
+.help {
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+}
 
 .bordered-box {
     background-color: #374048;
@@ -122,6 +133,8 @@ export default {
 .matrix {
   position: relative;
   font-size: 13px;
+  margin-left:auto;
+  margin-right:auto;
 }
 .matrix:before,
 .matrix:after {

@@ -1,16 +1,16 @@
 <template>
   <div>
-    <img :src="gateImageSource" :id="id" draggable="false" style="width:100%;height:100%;" />
+    <img :src="gateImageSource" draggable="false" style="width:100%;height:100%;" />
   </div>
 </template>
 
 <script>
-import Vue from 'vue';
+import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "SwapCircle", 
   computed: {
     gateImageSource: function() {
-      if (Vue.$cookies.get('colored-gates') === 'true'){
+      if (getUserInterfaceSetting('colored-gates') === 'true'){
         return require("../assets/colored-gates/swap-circle-small.svg");
       } else {
         return require("../assets/blue-gates/swap-circle-small.svg");

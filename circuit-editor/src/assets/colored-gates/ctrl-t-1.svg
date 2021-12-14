@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg width="46" height="72" xmlns="http://www.w3.org/2000/svg">
   <g>
-    <circle cx="22" cy="5" r="4" stroke="limegreen" fill="limegreen" />
+    <circle cx="22" cy="7" r="6" stroke="limegreen" fill="limegreen" />
     <line x1="22" y1="4" x2="22" y2="27" style="stroke:limegreen;stroke-width:2; stroke-opacity:1;" />
     <rect x="1" y="27" width="44.0" height="44" style="opacity:1; fill:none; stroke:limegreen; stroke-width:2; stroke-opacity:1;"/>
     <text x="13" y="59" style="font-size: 30px; font-weight: bold; fill: limegreen; white-space: pre;">T</text>

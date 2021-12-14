@@ -6,7 +6,14 @@
       <b-row no-gutters class="h-100">
         <b-col><Editor id="editor1"/></b-col>
         <b-col cols="3">
-          <HorizontalColumnChart />
+          <b-tabs content-class="mt-1" id="tabbedSplitEditor">
+            <b-tab title="Probabilities" v-on:click="onProbabilitiesTabChanged">
+              <HorizontalColumnChart />
+            </b-tab>
+            <b-tab title="State-Vector (Max 8 Qubits)" v-on:click="onStatevectorTabChanged">
+              <StateVectorChart />
+            </b-tab>
+          </b-tabs>
         </b-col>
       </b-row>
     </b-container>
@@ -28,26 +35,28 @@
 </template>
 
 <script>
-import Vue from 'vue';
 import { mapGetters } from "vuex";
 import Editor from "./Editor";
 import HorizontalColumnChart from "./HorizontalColumnChart";
+import StateVectorChart from "./StateVectorChart";
 import VerticalColumnChart from "./VerticalColumnChart";
 import PieChart from "./PieChart";
 import { getStateProbabilities, getTopEntriesStateProbabilities } from "../store/modules/simulationCharts.js";
+import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 
 export default {
   name: "App",
   components: {
     Editor,
     HorizontalColumnChart,
+    StateVectorChart,
     VerticalColumnChart,
     PieChart,
   },
   data() {
     return {
       lastSimulatedCircuit: undefined,
-      liveSimulation: Vue.$cookies.get("live-simulation") === 'true',
+      liveSimulation: getUserInterfaceSetting("live-simulation") === 'true',
     }
   },
   methods: {
@@ -77,6 +86,14 @@ export default {
         var positionInfo = element.getBoundingClientRect();
         this.triggerSimulationJob(circuitState, positionInfo); 
       } 
+    },
+    onProbabilitiesTabChanged: function() {
+      this.$root.$emit("probabilitiesTabActivated", true);
+      this.$root.$emit("statevectorTabActivated", false);
+    },
+    onStatevectorTabChanged: function() {
+      this.$root.$emit("probabilitiesTabActivated", false);
+      this.$root.$emit("statevectorTabActivated", true);
     },
     triggerSimulationJob:  async function(circuitState, positionInfo){
       let stateProbabilities = await getStateProbabilities(circuitState);

@@ -1,21 +1,25 @@
 <template>
-  <div :step="step" :qbit="qbit" @dragover.prevent @drop.prevent="handleDropEvent" @dragover="handleDragOver" @dragleave="handleDragLeave">
+  <div :step="step" :qrow="qrow" :targets="targets" @dragover.prevent @drop.prevent="handleDropEvent" @dragover="handleDragOver" @dragleave="handleDragLeave">
     <img :src="gateImageSource" :id="id" draggable="false" style="width: 100%; height: 100%; max-width: 40px; max-height: 40px; min-width: 40px; min-height: 40px;"/>
   </div>
 </template>
 
 <script>
-import Vue from 'vue';
-import ControlVerticalTransitionCellBase from "./ControlVerticalTransitionCellBase";
+import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
+import { mapActions } from 'vuex';
 export default {
   name: "VerticalTransitionCellLong",
-  extends: ControlVerticalTransitionCellBase,
   props: {
     'name': String,
+    'step': Number,
+    'qrow': Number,
+    'targets': Array,
+    'controls': Array,
+    'id': String,
   },
   computed: {
     gateImageSource: function() {
-      if (Vue.$cookies.get('colored-gates') === 'true'){
+      if (getUserInterfaceSetting('colored-gates') === 'true'){
         return require("../assets/colored-gates/" + this.name + ".svg");
       } else {
         return require("../assets/blue-gates/" + this.name + ".svg");
@@ -23,9 +27,167 @@ export default {
     },
   },
   methods: {
+    ...mapActions('circuitEditorModule/', ['insertGateInCircuit', 'removeGateFromCircuit']),
+    handleDropEvent: function (event) {
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
+      let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
+      let originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
+      let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
+      if (step == originalStep) {
+        if (event.shiftKey) {
+          if (originalControls.includes(draggedQbit)){
+            this.addNewControl(event);
+          } else {
+            this.handleDragLeave();
+          }
+        } else {
+          if (originalControls.includes(draggedQbit)){
+            this.repositionControl(event);
+          } else if (originalTargets.includes(draggedQbit)) {
+            this.repositionTarget(event);
+          } else {
+            this.handleDragLeave();
+          }
+        }
+      } else {
+        this.handleDragLeave();
+      }
+    },
+    addNewControl: function (event) {
+      let gateName = event.dataTransfer.getData("gateName");
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
+      let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
+      let originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
+      let controlstates = event.dataTransfer.getData("controlstates").split(",");
+      let draggedQubit = parseInt(event.dataTransfer.getData("dragged-qbit"));
+
+      // add the new gate mandatory params
+      let dto = { "step": step, "name": gateName, "targets": originalTargets, "controls": originalControls, "controlstates": controlstates};
+
+      let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
+      let controlIndex = originalControls.indexOf(draggedQubit);
+
+      dto["controls"].push(dropQbit);
+      dto["controlstates"].push(controlstates[controlIndex]);
+
+      // add optional params, notice lower case needed for types.includes
+      if (event.dataTransfer.types.includes("phi")) {
+        let phi = parseFloat(event.dataTransfer.getData("phi"));
+        dto["phi"] = phi;
+      }
+      if (event.dataTransfer.types.includes("theta")) {
+        let theta = parseFloat(event.dataTransfer.getData("theta"));
+        dto["theta"] = theta;
+      }
+      if (event.dataTransfer.types.includes("lambda")) {
+        let lambda = parseFloat(event.dataTransfer.getData("lambda"));
+        dto["lambda"] = lambda;
+      }
+      if (event.dataTransfer.types.includes("root")) {
+        let root = event.dataTransfer.getData("root");
+        dto["root"] = root;
+      }
+
+      // step1 - remove original gate if drag event started from a cell 
+      // in editor (not originating from gates pallete)
+      this.removeGateFromCircuit({'step': originalStep, 'targets': originalTargets});
+
+      // step2 - add the new gate to the circuit
+      this.insertGateInCircuit(dto);
+    },
+    repositionControl: function (event) {
+      let gateName = event.dataTransfer.getData("gateName");
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
+      let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
+      let originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
+      let controlstates = event.dataTransfer.getData("controlstates").split(",");
+      let draggedQubit = parseInt(event.dataTransfer.getData("dragged-qbit"));
+      let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
+
+      // add the new gate mandatory params
+      let dto = { "step": step, "name": gateName, "targets": originalTargets, "controls": [...originalControls], "controlstates": controlstates};
+
+      // adjust dto based on drop location
+      let controlIndex = originalControls.indexOf(draggedQubit);
+      dto["controls"][controlIndex] = dropQbit;
+
+      // add optional params, notice lower case needed for types.includes
+      if (event.dataTransfer.types.includes("phi")) {
+        let phi = parseFloat(event.dataTransfer.getData("phi"));
+        dto["phi"] = phi;
+      }
+      if (event.dataTransfer.types.includes("theta")) {
+        let theta = parseFloat(event.dataTransfer.getData("theta"));
+        dto["theta"] = theta;
+      }
+      if (event.dataTransfer.types.includes("lambda")) {
+        let lambda = parseFloat(event.dataTransfer.getData("lambda"));
+        dto["lambda"] = lambda;
+      }
+      if (event.dataTransfer.types.includes("root")) {
+        let root = event.dataTransfer.getData("root");
+        dto["root"] = root;
+      }
+
+      // step1 - remove original gate if drag event started from a cell 
+      // in editor (not originating from gates pallete)
+      this.removeGateFromCircuit({'step': originalStep, 'targets': originalTargets});
+
+      // step2 - add the new gate to the circuit
+      this.insertGateInCircuit(dto);
+    },
+    repositionTarget: function (event) {
+      let gateName = event.dataTransfer.getData("gateName");
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
+      let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
+      let originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
+      let controlstates = event.dataTransfer.getData("controlstates").split(",");
+      let draggedQubit = parseInt(event.dataTransfer.getData("dragged-qbit"));
+      let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
+
+      // add the new gate mandatory params
+      let dto = { "step": step, "name": gateName, "targets": [...originalTargets], "controls": originalControls, "controlstates": controlstates};
+
+      // adjust dto based on drop location
+      let targetIndex = originalTargets.indexOf(draggedQubit);
+      dto["targets"][targetIndex] = dropQbit;
+
+      // add optional params, notice lower case needed for types.includes
+      if (event.dataTransfer.types.includes("phi")) {
+        let phi = parseFloat(event.dataTransfer.getData("phi"));
+        dto["phi"] = phi;
+      }
+      if (event.dataTransfer.types.includes("theta")) {
+        let theta = parseFloat(event.dataTransfer.getData("theta"));
+        dto["theta"] = theta;
+      }
+      if (event.dataTransfer.types.includes("lambda")) {
+        let lambda = parseFloat(event.dataTransfer.getData("lambda"));
+        dto["lambda"] = lambda;
+      }
+      if (event.dataTransfer.types.includes("root")) {
+        let root = event.dataTransfer.getData("root");
+        dto["root"] = root;
+      }
+
+      // step1 - remove original gate if drag event started from a cell 
+      // in editor (not originating from gates pallete)
+      this.removeGateFromCircuit({'step': originalStep, 'targets': originalTargets});
+
+      // step2 - add the new gate to the circuit
+      this.insertGateInCircuit(dto);
+    },
+    handleDragOver() {
+      var image = window.document.getElementById(this.id);
+      image.src = require("../assets/vertical-red-line-long.svg");
+    },
     handleDragLeave() {
       var image = window.document.getElementById(this.id);
-      if (Vue.$cookies.get('colored-gates') === 'true'){
+      if (getUserInterfaceSetting('colored-gates') === 'true'){
         image.src = require("../assets/colored-gates/" + this.name + ".svg");
       } else {
         image.src = require("../assets/blue-gates/" + this.name + ".svg");
