@@ -144,7 +144,7 @@ export default {
       },
       updateView(simulatingLive){
         this.$data.liveSimulation = simulatingLive;
-        this.runSimulation(this.$store.state.circuitEditorModule);
+        this.runSimulation(this.$store.state.circuitEditorModule, simulatingLive == true);
       },
       tabActivated(activated){
         this.$data.activated = activated;

@@ -135,7 +135,7 @@ export default {
             let stateVectorRealEntries = stateVectorEntries["real"];
             let stateVectorImaginaryEntries = stateVectorEntries["imaginary"];
             let maxScale = 1.1 * stateVectorEntries["max"];
-            //this.updateData([], [], maxScale);
+            this.updateData([], [], maxScale);
             this.updateData(stateVectorRealEntries, stateVectorImaginaryEntries, maxScale);
           } else {
             this.updateData([], [], 1.0);
@@ -147,7 +147,7 @@ export default {
       },
       updateView(simulatingLive){
         this.$data.liveSimulation = simulatingLive;
-        this.runSimulation(this.$store.state.circuitEditorModule);
+        this.runSimulation(this.$store.state.circuitEditorModule, simulatingLive == true);
       },
       tabActivated(activated){
         this.$data.activated = activated;
