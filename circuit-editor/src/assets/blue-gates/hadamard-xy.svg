@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg width="46" height="46" xmlns="http://www.w3.org/2000/svg">
   <g transform="matrix(1, 0, 0, 1, 23.0, 23.0)">
-    <rect x="-22" y="-22" width="44" height="44" style="opacity:1; fill:none; stroke:cornflowerblue; stroke-width:2; stroke-opacity:1;"/>
-    <text x="-20.3" y="9" style="font-size: 30px; font-weight: bold; fill: cornflowerblue; white-space: pre;">H<tspan baseline-shift="sub" style="font-size: 16px;">xy</tspan></text>
+    <rect x="-22" y="-22" width="44" height="44" style="opacity:1; fill:none; stroke:corenflowerblue; stroke-width:2; stroke-opacity:1;"/>
+    <text x="-20.3" y="7" style="font-size: 30px; font-weight: bold; fill: corenflowerblue; white-space: pre;">H<tspan baseline-shift="sub" style="font-size: 16px;">xy</tspan></text>
   </g>
 </svg>

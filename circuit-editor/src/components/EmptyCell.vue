@@ -558,7 +558,20 @@ export default {
 
       let success = true;
 
-      if ((gateName.includes("swap") || gateName == "xx" || gateName == "yy" || gateName == "zz") && dto["targets"].length == 1) {
+      if ((gateName.includes("swap") ||
+          gateName == "xx" ||
+          gateName == "yy" ||
+          gateName == "zz" ||
+          gateName == "xy" ||
+          gateName == "malmo-sorensen" ||
+          gateName == "magic" ||
+          gateName == "canonical" ||
+          gateName == "givens" ||
+          gateName == "berkely" ||
+          gateName == "w" ||
+          gateName == "a" ||
+          gateName == "ecp"
+        ) && dto["targets"].length == 1) {
         success = this.tryAppendingSecondTargetQubit(dto, qbit, step, existingQbits);
       }
 

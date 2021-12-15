@@ -41,8 +41,15 @@
       </b-col>
     </b-row>
      <b-row no-gutters>
-        <b-col cols="12" md="auto" class="bordered-box"> 
-         <GatesPallete /> 
+        <b-col cols="12" md="auto" class="bordered-box">
+          <b-tabs pills card>
+            <b-tab title="1-Q">
+              <GatesPallete-1Q /> 
+            </b-tab>
+            <b-tab title="2-Q">
+              <GatesPallete-2Q /> 
+            </b-tab>
+          </b-tabs>
         </b-col>
         <b-col class="bordered-box">
           <Circuit />
@@ -54,7 +61,8 @@
 
 <script>
 import Circuit from "./components/Circuit";
-import GatesPallete from "./components/GatesPallete";
+import GatesPallete1Q from "./components/GatesPallete1Q";
+import GatesPallete2Q from "./components/GatesPallete2Q";
 import Logo from "./components/Logo";
 import ToolBar from "./components/ToolBar";
 import { retriveNoteHtml, retriveSimpleGateHelpHtml, retriveControlledGateHelpHtml, retriveGateMatrixHtml, retriveControlledGateMatrixHtml } from "./help/help.js";
@@ -65,7 +73,8 @@ export default {
   components: {
     Logo,
     Circuit,
-    GatesPallete,
+    GatesPallete1Q,
+    GatesPallete2Q,
     ToolBar,
   },
   data() {

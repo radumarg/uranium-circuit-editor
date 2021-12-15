@@ -474,12 +474,13 @@ export function retrieveRowsInGatesTable(circuitState) {
 
 var pauliGates = ["pauli-x", "pauli-y", "pauli-z"];
 var pauliRootGates = ["pauli-x-root", "pauli-y-root", "pauli-z-root", "pauli-x-root-dagger", "pauli-y-root-dagger", "pauli-z-root-dagger"];
-var stGates = ["t", "t-dagger", "s", "s-dagger"];
+var stGates = ["t", "t-dagger", "s", "s-dagger", "v", "v-dagger", "h", "h-dagger"];
 var rGates = ["rx-theta", "ry-theta", "rz-theta"];
-var hadamardGates = ["hadamard"];
+var cGates = ["c", "c-dagger"];
+var hadamardGates = ["hadamard", "hadamard-xy", "hadamard-yz", "hadamard-zx"];
 var unitaryGates = ["u1", "u2", "u3"];
 var isingGates = ["xx", "yy", "zz"];
-var swapGates = ["swap", "sqrt-swap", "swap-theta", "iswap" ];
+var swapGates = ["swap", "sqrt-swap", "sqrt-swap-dagger", "swap-theta", "swap-root", "iswap", "fswap"];
 
 function getSwapIntermediateLineName(thisRowHoldsGates, qmin, qrow, gateName) {
   if (thisRowHoldsGates) {
@@ -510,6 +511,8 @@ function getCtrlStubDownName(gate, controlstate) {
     return "ctrl-swap-stub-down-" + controlstate;
   } else if (isingGates.includes(gate.name)) {
     return "ctrl-ising-stub-down-" + controlstate;
+  } else if (cGates.includes(gate.name)) {
+    return "ctrl-c-stub-down-" + controlstate;
   }
 }
 
@@ -530,6 +533,8 @@ function getCtrlStubUpName(gate, controlstate) {
     return "ctrl-swap-stub-up-" + controlstate;
   } else if (isingGates.includes(gate.name)) {
     return "ctrl-ising-stub-up-" + controlstate;
+  } else if (cGates.includes(gate.name)) {
+    return "ctrl-c-stub-up-" + controlstate;
   }
 }
 
@@ -550,6 +555,8 @@ function getCtrlStubMidName(gate, controlstate) {
     return "ctrl-swap-stub-mid-" + controlstate;
   } else if (isingGates.includes(gate.name)) {
     return "ctrl-ising-stub-mid-" + controlstate;
+  } else if (cGates.includes(gate.name)) {
+    return "ctrl-c-stub-mid-" + controlstate;
   }
 }
 
@@ -601,6 +608,12 @@ function getIntermediateLineName(gateName, thisRowHoldsGates) {
       return "swap-line-long";
     } else {
       return "swap-line-short";
+    }
+  } else if (cGates.includes(gateName)) {
+    if (thisRowHoldsGates) {
+      return "c-line-long";
+    } else {
+      return "c-line-short";
     }
   }
 }

@@ -133,15 +133,15 @@ export const circuitEditorModule = {
     insertGateInCircuit: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
         let elementaryGates = ["identity"];
-        let singleQbitGates = ["hadamard", "identity", "pauli-x", "pauli-y", "pauli-z", "sqrt-not", "t", "t-dagger", "s", "s-dagger"];
+        let singleQbitGates = ["hadamard", "hadamard-xy", "hadamard-yz", "hadamard-zx", "identity", "pauli-x", "pauli-y", "pauli-z", "sqrt-not", "t", "t-dagger", "s", "s-dagger", "v", "v-dagger", "h", "h-dagger", "c", "c-dagger"];
         let pauliRootGates = ["pauli-x-root", "pauli-y-root", "pauli-z-root", "pauli-x-root-dagger", "pauli-y-root-dagger", "pauli-z-root-dagger"]
         let parametricSingleQbitGates = ["rx-theta", "ry-theta", "rz-theta"];
         let unitarySingleQbitGates = ["u1"];
         let unitaryTwoParamGates = ["u2"];
         let unitaryThreeParamGates = ["u3"]
         let measureGates = ["measure-x", "measure-y", "measure-z"];
-        let swapGates = ["swap", "sqrt-swap", "iswap"];
-        let parametricSwapGates = ["swap-theta"];
+        let swapGates = ["swap", "sqrt-swap", "sqrt-swap-dagger", "iswap", "fswap"];
+        let parametricSwapGates = ["swap-theta", "swap-root"];
         let isingGates = ["xx", "yy", "zz"];
         
         let name = dataTransferObj["name"];
