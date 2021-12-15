@@ -3,8 +3,8 @@
   <g>
     <line x1="26" y1="20" x2="40" y2="20" style="stroke:slategray;stroke-width:1" />
     <line x1="0" y1="20" x2="14" y2="20" style="stroke:slategray;stroke-width:1" />
-    <circle cx="20" cy="20" r="6" style="stroke:seagreen;stroke-width:2;" fill="transparent" />
-    <path d="M20 14 A6,6 0 0,1 20 26" style="stroke:seagreen; stroke-width:0.1;" fill="seagreen" />
-    <line x1="20" y1="26" x2="20" y2="40" style="stroke:seagreen;stroke-width:2;" />
+    <circle cx="20" cy="20" r="6" style="stroke:MediumSeaGreen;stroke-width:2;" fill="transparent" />
+    <path d="M20 14 A6,6 0 0,1 20 26" style="stroke:MediumSeaGreen; stroke-width:0.1;" fill="MediumSeaGreen" />
+    <line x1="20" y1="26" x2="20" y2="40" style="stroke:MediumSeaGreen;stroke-width:2;" />
   </g>
 </svg>
