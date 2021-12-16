@@ -563,7 +563,7 @@ export default {
           gateName == "yy" ||
           gateName == "zz" ||
           gateName == "xy" ||
-          gateName == "malmo-sorensen" ||
+          gateName == "molmer-sorensen" ||
           gateName == "magic" ||
           gateName == "canonical" ||
           gateName == "givens" ||

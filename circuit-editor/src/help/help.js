@@ -96,29 +96,29 @@ each qubit is measured into a classical bit with index equal to the qubit index 
     } else if (gateName == "c-dagger") {
       return 'This is the hermitian conjugate of "c" gate.';
     } else if (gateName == "fswap") {
-      return "";
+      return 'This is the fermionic swap gate which swaps adjacent fermionic modes in the Jordan-Wigner representation.';
     }  else if (gateName == "swap-root") {
-      return "";
+      return 'This represents a parametrized root of "swap" gate.';
     } else if (gateName == "sqrt-swap-dagger") {
-      return "";
-    } else if (gateName == "malmo-sorensen") {
-      return "";
+      return 'This is the hermitian conjugate of "sqrt-swap" gate.';
+    } else if (gateName == "molmer-sorensen") {
+      return 'The Mølmer-Sørensen gate is a natural gate for laser driven trapped ions.';
     } else if (gateName == "xy") {
-      return "";
+      return 'This is the "xy" gate.';
     } else if (gateName == "a") {
-      return "";
+      return 'This "a" gate conserves the number of 1s (versus 0s) in the computational basis';
     } else if (gateName == "berkeley") {
-      return "";
+      return 'This is the Berkeley gate.';
     } else if (gateName == "w") {
-      return "";
+      return 'The "w" gate is an orthogonal and hermitian gate and can be used to diagonalize the "swap" gate.';
     } else if (gateName == "ecp") {
-      return "";
+      return 'This is the "ecp" gate.';
     } else if (gateName == "magic") {
-      return "";
+      return 'The magic gate trasforms computational based to the magic basis.';
     } else if (gateName == "canonical") {
-      return "";
+      return 'The canonical gate is a 3-parameter quantum logic gate that acts on two qubits and appears in Kraus-Cirac decomposition.';
     } else if (gateName == "givens") {
-      return "";
+      return 'The Givens gate occurs in quantum computational chemistry.';
     }
 
     return "In order to work with the Circuit Editor use the gates pallete on the left to drag & drop gates in the circuit \
@@ -227,8 +227,8 @@ export function retriveControlledGateHelpHtml(gateName) {
     return 'A "swap-root" gate may have any number of controls.';
   } else if (gateName == "sqrt-swap-dagger") {
     return 'A "sqrt-swap-dagger" gate may have any number of controls.';
-  } else if (gateName == "malmo-sorensen") {
-    return 'A "malmo-sorensen" gate may have any number of controls.';
+  } else if (gateName == "molmer-sorensen") {
+    return 'A "molmer-sorensen" gate may have any number of controls.';
   } else if (gateName == "xy") {
     return 'A "xy" gate may have any number of controls.';
   } else if (gateName == "a") {
@@ -717,7 +717,7 @@ export function retriveGateMatrixHtml(gateName) {
       return "";
     } else if (gateName == "sqrt-swap-dagger") {
       return "";
-    } else if (gateName == "malmo-sorensen") {
+    } else if (gateName == "molmer-sorensen") {
       return "";
     } else if (gateName == "xy") {
       return "";
@@ -1498,7 +1498,7 @@ export function retriveControlledGateMatrixHtml(gateName) {
     return "";
   } else if (gateName == "sqrt-swap-dagger") {
     return "";
-  } else if (gateName == "malmo-sorensen") {
+  } else if (gateName == "molmer-sorensen") {
     return "";
   } else if (gateName == "xy") {
     return "";

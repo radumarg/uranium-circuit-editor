@@ -164,7 +164,7 @@
             <div v-else-if="cell.name.includes('root') && cell.name.includes('pauli') && !cell.name.includes('stub')">
               <PauliRootGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
-            <div v-else-if="cell.name === 'malmo-sorensen'">
+            <div v-else-if="cell.name === 'molmer-sorensen'">
               <TwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'berkeley'">
