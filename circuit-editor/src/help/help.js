@@ -222,29 +222,29 @@ export function retriveControlledGateHelpHtml(gateName) {
   } else if (gateName == "c-dagger") {
     return 'A "c-dagger" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "c-dagger" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "fswap") {
-    return "";
+    return 'A "fswap" gate may have any number of controls.';
   }  else if (gateName == "swap-root") {
-    return "";
+    return 'A "swap-root" gate may have any number of controls.';
   } else if (gateName == "sqrt-swap-dagger") {
-    return "";
+    return 'A "sqrt-swap-dagger" gate may have any number of controls.';
   } else if (gateName == "malmo-sorensen") {
-    return "";
+    return 'A "malmo-sorensen" gate may have any number of controls.';
   } else if (gateName == "xy") {
-    return "";
+    return 'A "xy" gate may have any number of controls.';
   } else if (gateName == "a") {
-    return "";
+    return 'A "a" gate may have any number of controls.';
   } else if (gateName == "berkeley") {
-    return "";
+    return 'A "berkeley" gate may have any number of controls.';
   } else if (gateName == "w") {
-    return "";
+    return 'A "w" gate may have any number of controls.';
   } else if (gateName == "ecp") {
-    return "";
+    return 'A "ecp" gate may have any number of controls.';
   } else if (gateName == "magic") {
-    return "";
+    return 'A "magic" gate may have any number of controls.';
   } else if (gateName == "canonical") {
-    return "";
+    return 'A "canonical" gate may have any number of controls.';
   } else if (gateName == "givens") {
-    return "";
+    return 'A "givens" gate may have any number of controls.';
   }
 
   return "Note on representation of qubit states: the Bloch sphere Z-bazis states are conventionally named: |0⟩ and |1⟩. The Z-basis is usually refered to as the computational or \
