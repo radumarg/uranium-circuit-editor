@@ -18,10 +18,13 @@ export const gatesPalleteMixin = {
       }
       let selectedCellBgColor = cell.style.backgroundColor.toUpperCase();
       // reset bckg for all cells
-      let table = document.getElementById("gates-pallete-table");
-      let cells = table.getElementsByTagName("TD");
-      for(var i = 0; i < cells.length; i++) {
-        cells[i].style.backgroundColor = window.darkBackgroundColor;
+      for (const id of ["gates-pallete-table-1", "gates-pallete-table-2"]) 
+      { 
+        let table = document.getElementById(id);
+        let cells = table.getElementsByTagName("TD");
+        for(var i = 0; i < cells.length; i++) {
+          cells[i].style.backgroundColor = window.darkBackgroundColor;
+        }
       }
       // set bckg black for selected cell
       if (cell != null) {
@@ -53,30 +56,26 @@ export const gatesPalleteMixin = {
   },
   created() {
     this.$root.$on("switchThemeDark", (boolFlag) => {
-      var cells = document.getElementById("gates-pallete").getElementsByTagName("td");
-      if (boolFlag) {
-        for(let i = 0; i < cells.length; i++) { 
-          cells[i].style.borderColor = "lightslategray";
-        }
-      } else {
-        for(let i = 0; i < cells.length; i++) {
-          cells[i].style.borderColor = window.lightBackgroundColor;
+      for (const id of ["gates-pallete-1", "gates-pallete-2"]) {
+        var cells = document.getElementById(id).getElementsByTagName("td");
+        if (boolFlag) {
+          for(let i = 0; i < cells.length; i++) { 
+            cells[i].style.borderColor = "lightslategray";
+          }
+        } else {
+          for(let i = 0; i < cells.length; i++) {
+            cells[i].style.borderColor = window.lightBackgroundColor;
+          }
         }
       }
     })
     this.$root.$on("switchGateColors", () => {
-      var cells = document.getElementById("gates-pallete").getElementsByTagName("td");
-      for(let i = 0; i < cells.length; i++) {
-        let img = cells[i].childNodes[0];
-        if (getUserInterfaceSetting('colored-gates') === 'true'){
-          if (img.title.includes("ctrl-")){
-            img.src = require("../assets/colored-gates/" + img.title + "-1.svg");     
-          } else {
+      for (const id of ["gates-pallete-1", "gates-pallete-2"]) {
+        var cells = document.getElementById(id).getElementsByTagName("td");
+        for(let i = 0; i < cells.length; i++) {
+          let img = cells[i].childNodes[0];
+          if (getUserInterfaceSetting('colored-gates') === 'true'){
             img.src = require("../assets/colored-gates/" + img.title + ".svg");
-          }
-        } else {
-          if (img.title.includes("ctrl-")){
-            img.src = require("../assets/blue-gates/" + img.title + "-1.svg");     
           } else {
             img.src = require("../assets/blue-gates/" + img.title + ".svg");
           }

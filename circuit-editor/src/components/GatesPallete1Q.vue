@@ -1,6 +1,6 @@
 <template>
-  <div class="gates-pallete" id="gates-pallete">
-    <table id="gates-pallete-table">
+  <div class="gates-pallete" id="gates-pallete-1">
+    <table id="gates-pallete-table-1">
         <tr>
           <td v-on:click="gateSelected" id="pauli-x"> 
               <img v-if="coloredGatesCookie" src="../assets/colored-gates/pauli-x.svg" @dragend="dragEnd" @dragstart="dragStart" title="pauli-x" alt="Pauli-X Gate"/>
