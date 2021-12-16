@@ -33,16 +33,16 @@
       </div>
     </b-row>
     <b-row no-gutters align-v="center" class="bordered-box" style="border-right: solid 0.5em #374048;">
-      <b-col cols="12" md="auto">
+      <b-col cols="12" md="auto" style="max-width: 273px;">
         <Logo />
       </b-col>
       <b-col> 
         <ToolBar /> 
       </b-col>
     </b-row>
-     <b-row no-gutters>
+    <b-row no-gutters>
         <b-col cols="12" md="auto" class="bordered-box">
-          <b-tabs pills card>
+          <b-tabs>
             <b-tab title="1-Q">
               <GatesPallete-1Q /> 
             </b-tab>

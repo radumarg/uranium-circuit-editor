@@ -16,7 +16,7 @@ export function retriveSimpleGateHelpHtml(gateName) {
     } else if (gateName == "u1") {
         return 'This is a generic, one parameter, unitary single bit gate and is defined as: u3(0, 0, λ). The "u1" gate acts on a single qubit. Leaves the basis state |0⟩ unchanged and map |1⟩ to exp(i*λ)|1⟩. The probability of measuring a |0⟩ or |1⟩ is unchanged after applying this gate, however it modifies the phase of the quantum state. The z, s and t gates are special cases of "u1" for λ values given by π, π/2 and π/4 respectively.'
     } else if (gateName == "hadamard") {
-        return 'The "hadamard" gate acts on a single qubit and is defined as: u2(0, π). This gate creates a superposition by mapping |0⟩ to |+⟩ and |1⟩ to |-⟩. It is the combination of two rotations, first a π rotation about the Z-axis of the Bloch sphere followed by a π/2 about the Y-axis. Alternatively, it can be represented as a π rotation around an axis diagonal in the X-Z plane. The Hadamard gate is the one-qubit version of the quantum Fourier transform.';
+        return 'The "hadamard" gate acts on a single qubit and is defined as: u2(0, π). This gate creates a superposition by mapping |0⟩ to |+⟩ and |1⟩ to |-⟩. It is the combination of two rotations, first a π rotation about the Z-axis of the Bloch sphere followed by a π/2 about the Y-axis. Alternatively, it can be represented as a π rotation around an axis diagonal in the Z-X plane. The Hadamard gate is the one-qubit version of the quantum Fourier transform.';
     } else if (gateName == "identity") {
         return 'The "identity" gate acts on a single qubit and preserves current state of the qubit it is applied to.';
     } else if (gateName == "pauli-x") {
@@ -77,6 +77,48 @@ each qubit is measured into a classical bit with index equal to the qubit index 
         return 'The "pauli-y-root-dagger" gate is the transpose conjugate of "pauli-y-root" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a clockwise rotation around Y-axis of Bloch sphere with an angle given by π/t or, depending on the chosen parametrization, π/2^k radians.';
     } else if (gateName == "pauli-z-root-dagger") {
         return 'The "pauli-z-root-dagger" gate is the transpose conjugate of "pauli-z-root" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a clockwise rotation around Z-axis of Bloch sphere with an angle given by π/t or depending on the chosen parametrization, π/2^k radians.';
+    } else if (gateName == "v") {
+      return 'This is the square root of the "pauli-x" gate.';
+    } else if (gateName == "v-dagger") {
+      return 'As hermitian conjugate of "v", this is the inverse square root of the "pauli-x" gate.';
+    } else if (gateName == "h") {
+      return 'This is the inverse square root of the "pauli-y" gate. It is also called pseudo-Hadamard gate since it also transforms computational basis states to X basis states.';
+    }  else if (gateName == "h-dagger") {
+      return 'As hermitian conjugate of "h" this is the square root of the "pauli-y" gate.';
+    } else if (gateName == "hadamard-xy") {
+      return 'The standard "hadamard" gate can be represented as a π rotation around an axis diagonal in the Z-X plane. This gate represented as a π rotation around an axis diagonal in the X-Y plane. It translates the X basis elements (|+⟩ and |-⟩ to the Y basis elements (|+i⟩ and |-i⟩) and back. ';
+    } else if (gateName == "hadamard-yz") {
+      return 'The standard "hadamard" gate can be represented as a π rotation around an axis diagonal in the Z-X plane. This gate represented as a π rotation around an axis diagonal in the Y-Z plane. It translates the computational basis elements to the Y basis elements (|+i⟩ and |-i⟩) and back. ';
+    }  else if (gateName == "hadamard-zx") {
+      return 'The standard "hadamard" gate can be represented as a π rotation around an axis diagonal in the Z-X plane. This gate is an alias for standard "hadamard" gate.';
+    } else if (gateName == "c") {
+      return 'This gate permutes the three axes of the Bloch sphere (X->Y, Y->Z, Z->X). It represents a 120 degree rotation of the Bloch sphere.';
+    } else if (gateName == "c-dagger") {
+      return 'This is the hermitian conjugate of "c" gate.';
+    } else if (gateName == "fswap") {
+      return "";
+    }  else if (gateName == "swap-root") {
+      return "";
+    } else if (gateName == "sqrt-swap-dagger") {
+      return "";
+    } else if (gateName == "malmo-sorensen") {
+      return "";
+    } else if (gateName == "xy") {
+      return "";
+    } else if (gateName == "a") {
+      return "";
+    } else if (gateName == "berkeley") {
+      return "";
+    } else if (gateName == "w") {
+      return "";
+    } else if (gateName == "ecp") {
+      return "";
+    } else if (gateName == "magic") {
+      return "";
+    } else if (gateName == "canonical") {
+      return "";
+    } else if (gateName == "givens") {
+      return "";
     }
 
     return "In order to work with the Circuit Editor use the gates pallete on the left to drag & drop gates in the circuit \
@@ -161,6 +203,48 @@ export function retriveControlledGateHelpHtml(gateName) {
     return 'A "yy" gate may have any number of controls.';
   } else if (gateName == "zz") {
     return 'A "zz" gate may have any number of controls.';
+  } else if (gateName == "v") {
+    return 'A "v" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "v" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+  } else if (gateName == "v-dagger") {
+    return 'A "v-dagger" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "v-dagger" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+  } else if (gateName == "h") {
+    return 'A "h" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "h" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+  }  else if (gateName == "h-dagger") {
+    return 'A "h-dagger" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "h-dagger" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+  } else if (gateName == "hadamard-xy") {
+    return 'A "hadamard-xy" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "hadamard-xy" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+  } else if (gateName == "hadamard-yz") {
+    return 'A "hadamard-yz" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "hadamard-yz" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+  }  else if (gateName == "hadamard-zx") {
+    return 'A "hadamard-zx" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "hadamard-zx" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+  } else if (gateName == "c") {
+    return 'A "c" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "c" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+  } else if (gateName == "c-dagger") {
+    return 'A "c-dagger" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "c-dagger" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+  } else if (gateName == "fswap") {
+    return "";
+  }  else if (gateName == "swap-root") {
+    return "";
+  } else if (gateName == "sqrt-swap-dagger") {
+    return "";
+  } else if (gateName == "malmo-sorensen") {
+    return "";
+  } else if (gateName == "xy") {
+    return "";
+  } else if (gateName == "a") {
+    return "";
+  } else if (gateName == "berkeley") {
+    return "";
+  } else if (gateName == "w") {
+    return "";
+  } else if (gateName == "ecp") {
+    return "";
+  } else if (gateName == "magic") {
+    return "";
+  } else if (gateName == "canonical") {
+    return "";
+  } else if (gateName == "givens") {
+    return "";
   }
 
   return "Note on representation of qubit states: the Bloch sphere Z-bazis states are conventionally named: |0⟩ and |1⟩. The Z-basis is usually refered to as the computational or \
@@ -627,6 +711,30 @@ export function retriveGateMatrixHtml(gateName) {
         return "";
     } else if (gateName == "measure-z") {
         return "";
+    } else if (gateName == "fswap") {
+      return "";
+    }  else if (gateName == "swap-root") {
+      return "";
+    } else if (gateName == "sqrt-swap-dagger") {
+      return "";
+    } else if (gateName == "malmo-sorensen") {
+      return "";
+    } else if (gateName == "xy") {
+      return "";
+    } else if (gateName == "a") {
+      return "";
+    } else if (gateName == "berkeley") {
+      return "";
+    } else if (gateName == "w") {
+      return "";
+    } else if (gateName == "ecp") {
+      return "";
+    } else if (gateName == "magic") {
+      return "";
+    } else if (gateName == "canonical") {
+      return "";
+    } else if (gateName == "givens") {
+      return "";
     }
 
     return "";
@@ -1276,7 +1384,139 @@ export function retriveControlledGateMatrixHtml(gateName) {
         <td style='padding: 5px; text-align: center;'>1</td>\
     </tr>\
     </table>";
-}
+  }  else if (gateName == "v") {
+    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+        <table><td><div style='font-size: 13px;'>1/2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>1 + i</td>\
+            <td style='padding: 5px; text-align: center;'>1 - i</td>\
+        </tr>\
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>1 - i</td>\
+            <td style='padding: 5px; text-align: center;'>1 + i</td>\
+        </tr>\
+        </table>";
+  } else if (gateName == "v-dagger") {
+    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+        <table><td><div style='font-size: 13px;'>1/2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>1 - i</td>\
+            <td style='padding: 5px; text-align: center;'>1 + i</td>\
+        </tr>\
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>1 + i</td>\
+            <td style='padding: 5px; text-align: center;'>1 - i</td>\
+        </tr>\
+        </table>";
+  } else if (gateName == "h") {
+    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+        <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>1</td>\
+            <td style='padding: 5px; text-align: center;'>1</td>\
+        </tr>\
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>-&nbsp1</td>\
+            <td style='padding: 5px; text-align: center;'>1</td>\
+        </tr>\
+        </table></td></table>";
+  }  else if (gateName == "h-dagger") {
+    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+        <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>1</td>\
+            <td style='padding: 5px; text-align: center;'>-&nbsp1</td>\
+        </tr>\
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>1</td>\
+            <td style='padding: 5px; text-align: center;'>1</td>\
+        </tr>\
+        </table></td></table>";
+  } else if (gateName == "hadamard-xy") {
+    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+        <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>0</td>\
+            <td style='padding: 5px; text-align: center;'>1 + i</td>\
+        </tr>\
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>1 - i</td>\
+            <td style='padding: 5px; text-align: center;'>0</td>\
+        </tr>\
+        </table></td></table>";
+  } else if (gateName == "hadamard-yz") {
+    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+        <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>1</td>\
+            <td style='padding: 5px; text-align: center;'>-&nbspi</td>\
+        </tr>\
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>i</td>\
+            <td style='padding: 5px; text-align: center;'>-&nbsp1</td>\
+        </tr>\
+        </table></td></table>";
+  }  else if (gateName == "hadamard-zx") {
+    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+        <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>1</td>\
+            <td style='padding: 5px; text-align: center;'>1</td>\
+        </tr>\
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>1</td>\
+            <td style='padding: 5px; text-align: center;'>-&nbsp1</td>\
+        </tr>\
+        </table></td></table>";
+  } else if (gateName == "c") {
+    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+        <table><td><div style='font-size: 13px;'>1/2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>+&nbsp1 - i</td>\
+            <td style='padding: 5px; text-align: center;'>-&nbsp1 - i</td>\
+        </tr>\
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>+&nbsp1 - i</td>\
+            <td style='padding: 5px; text-align: center;'>+&nbsp1 + i</td>\
+        </tr>\
+        </table>";
+  } else if (gateName == "c-dagger") {
+    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+        <table><td><div style='font-size: 13px;'>1/2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>+&nbsp1 + i</td>\
+            <td style='padding: 5px; text-align: center;'>+&nbsp1 + i</td>\
+        </tr>\
+        <tr>\
+            <td style='padding: 5px; text-align: center;'>-&nbsp1 + i</td>\
+            <td style='padding: 5px; text-align: center;'>+&nbsp1 - i</td>\
+        </tr>\
+        </table>";
+  } else if (gateName == "fswap") {
+    return "";
+  }  else if (gateName == "swap-root") {
+    return "";
+  } else if (gateName == "sqrt-swap-dagger") {
+    return "";
+  } else if (gateName == "malmo-sorensen") {
+    return "";
+  } else if (gateName == "xy") {
+    return "";
+  } else if (gateName == "a") {
+    return "";
+  } else if (gateName == "berkeley") {
+    return "";
+  } else if (gateName == "w") {
+    return "";
+  } else if (gateName == "ecp") {
+    return "";
+  } else if (gateName == "magic") {
+    return "";
+  } else if (gateName == "canonical") {
+    return "";
+  } else if (gateName == "givens") {
+    return "";
+  }
 
   return "";
 }

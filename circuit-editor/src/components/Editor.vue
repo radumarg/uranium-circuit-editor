@@ -164,7 +164,22 @@
             <div v-else-if="cell.name.includes('root') && cell.name.includes('pauli') && !cell.name.includes('stub')">
               <PauliRootGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
+            <div v-else-if="cell.name === 'malmo-sorensen'">
+              <TwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'berkeley'">
+              <TwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'w'">
+              <TwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'ecp'">
+              <TwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+            </div>
             <div v-else-if="cell.name === 'swap'">
+              <TwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'magic'">
               <TwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'swap-theta'">
@@ -173,12 +188,30 @@
             <div v-else-if="cell.name === 'sqrt-swap'">
               <TwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
+             <div v-else-if="cell.name === 'sqrt-swap-dagger'">
+              <TwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+            </div>
             <div v-else-if="cell.name === 'iswap'">
               <TwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
-            <div v-else-if="cell.name === 'xx' || cell.name === 'yy' || cell.name === 'zz'">
+            <div v-else-if="cell.name === 'fswap'">
+              <TwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'swap-root'">
               <ParametricTwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
-            </div>  
+            </div>
+            <div v-else-if="cell.name === 'xx' || cell.name === 'yy' || cell.name === 'zz' || cell.name === 'xy'">
+              <ParametricTwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'a'">
+              <TwoParametricTwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :phi="cell.phi" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'canonical'">
+              <CanonicalGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :tx="cell.tx" :ty="cell.ty" :tz="cell.tz" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'givens'">
+              <ParametricTwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
+            </div>
             <div v-else-if="cell.name.includes('stub')">
               <ControlledGateStub :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
@@ -211,6 +244,8 @@ import EmptyCellRectangle from "./EmptyCellRectangle";
 import EmptyCellSquare from "./EmptyCellSquare";
 import TwoTargetQubitsGate from "./TwoTargetQubitsGate";
 import ParametricTwoTargetQubitsGate from "./ParametricTwoTargetQubitsGate";
+import TwoParametricTwoTargetQubitsGate from "./TwoParametricTwoTargetQubitsGate";
+import CanonicalGate from "./CanonicalGate";
 import SwapCircle from "./SwapCircle";
 export default {
   name: "Editor",
@@ -233,6 +268,8 @@ export default {
     EmptyCellSquare,
     TwoTargetQubitsGate,
     ParametricTwoTargetQubitsGate,
+    TwoParametricTwoTargetQubitsGate,
+    CanonicalGate,
     SwapCircle,
   },
   computed: mapGetters("circuitEditorModule/", [
