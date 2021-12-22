@@ -140,9 +140,10 @@ export const circuitEditorModule = {
         let unitaryTwoParamGates = ["u2"];
         let unitaryThreeParamGates = ["u3"]
         let measureGates = ["measure-x", "measure-y", "measure-z"];
-        let swapGates = ["swap", "sqrt-swap", "sqrt-swap-dagger", "iswap", "fswap"];
-        let parametricSwapGates = ["swap-theta", "swap-root"];
-        let isingGates = ["xx", "yy", "zz"];
+        let twoTargetGates = ["swap", "sqrt-swap", "sqrt-swap-dagger", "iswap", "fswap", "magic", "molmer-sorensen", "berkeley", "ecp", "w"];
+        let parametricTwoTargetGates = ["givens", "swap-theta", "xx", "yy", "zz", "xy"];
+        let biParametricTwoTargetGates = ["a"];
+        let canonicalGates = ["canonical"]
         
         let name = dataTransferObj["name"];
         let step = dataTransferObj["step"];
@@ -203,18 +204,22 @@ export const circuitEditorModule = {
             dto = { "step": step, "targets": targets, "name": name, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
           } else if (unitaryThreeParamGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
-          } else if (swapGates.includes(name) && controls.length == 0) {
+          } else if (twoTargetGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, };
-          } else if (parametricSwapGates.includes(name) && controls.length == 0) {
+          } else if (parametricTwoTargetGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, };
-          } else if (isingGates.includes(name) && controls.length == 0) {
-            dto = { "step": step, "targets": targets, "name": name, "theta": 0, };
-          } else if (swapGates.includes(name)) {
-              dto = { "step": step, "targets": targets, "name": name, "controls": controls, "controlstates": controlstates };
-          } else if (parametricSwapGates.includes(name)) {
-              dto = { "step": step, "targets": targets, "name": name, "theta": 0, "controls": controls, "controlstates": controlstates };
-          } else if (isingGates.includes(name)) {
-              dto = { "step": step, "targets": targets, "name": name, "theta": 0, "controls": controls, "controlstates": controlstates };
+          } else if (biParametricTwoTargetGates.includes(name) && controls.length == 0) {
+            dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0 };
+          } else if (canonicalGates.includes(name) && controls.length == 0) {
+            dto = { "step": step, "targets": targets, "name": name, "tx": 0, "ty": 0, "tz": 0 };
+          } else if (twoTargetGates.includes(name)) {
+            dto = { "step": step, "targets": targets, "name": name, "controls": controls, "controlstates": controlstates };
+          } else if (parametricTwoTargetGates.includes(name)) {
+            dto = { "step": step, "targets": targets, "name": name, "theta": 0, "controls": controls, "controlstates": controlstates };
+          } else if (biParametricTwoTargetGates.includes(name)) {
+            dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "controls": controls, "controlstates": controlstates };
+          } else if (canonicalGates.includes(name)) {
+            dto = { "step": step, "targets": targets, "name": name, "tx": 0, "ty": 0, "tz": 0, "controls": controls, "controlstates": controlstates };
           } else {
             console.log("This (new?) gate is not handled in code. Gate name: " + name);
             return;

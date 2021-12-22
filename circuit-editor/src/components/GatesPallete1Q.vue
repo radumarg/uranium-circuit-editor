@@ -84,7 +84,7 @@
           </td>
           <td v-on:click="gateSelected" id="h">
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/h.svg" @dragend="dragEnd" @dragstart="dragStart" title="h" alt="h Gate" />
-            <img v-else src="../assets/blue-gates/h.svg" @dragend="dragEnd" @dragstart="dragStart" title="t" alt="h Gate" />
+            <img v-else src="../assets/blue-gates/h.svg" @dragend="dragEnd" @dragstart="dragStart" title="h" alt="h Gate" />
           </td>
           <td v-on:click="gateSelected" id="h-dagger">
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/h-dagger.svg" @dragend="dragEnd" @dragstart="dragStart" title="h-dagger" alt="h Dagger Gate"/>

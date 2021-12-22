@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg width="46" height="72" xmlns="http://www.w3.org/2000/svg">
   <g>
-    <circle cx="23" cy="13" r="12.1" style="stroke:MediumSeaGreen;stroke-width:1.5;" fill="transparent" />
-    <text x="15" y="19.5" style="font-size: 19px; font-weight: bold; fill: MediumSeaGreen; white-space: pre;">G</text>
-    <line x1="23" y1="25" x2="23" y2="47" style="stroke:MediumSeaGreen;stroke-width:1.5; stroke-opacity:1;" />
-    <text x="15" y="65.5" style="font-size: 19px; font-weight: bold; fill: MediumSeaGreen; white-space: pre;">G</text>
-    <circle cx="23" cy="59" r="12.1" style="stroke:MediumSeaGreen;stroke-width:1.5;" fill="transparent" />
+    <circle cx="23" cy="13" r="12.1" style="stroke:DarkSeaGreen;stroke-width:1.5;" fill="transparent" />
+    <text x="15" y="19.5" style="font-size: 19px; font-weight: bold; fill: DarkSeaGreen; white-space: pre;">G</text>
+    <line x1="23" y1="25" x2="23" y2="47" style="stroke:DarkSeaGreen;stroke-width:1.5; stroke-opacity:1;" />
+    <text x="15" y="65.5" style="font-size: 19px; font-weight: bold; fill: DarkSeaGreen; white-space: pre;">G</text>
+    <circle cx="23" cy="59" r="12.1" style="stroke:DarkSeaGreen;stroke-width:1.5;" fill="transparent" />
   </g>
 </svg>

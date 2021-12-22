@@ -32,6 +32,12 @@
             <div v-else-if="cell.name === 'pauli-root-line-long'">
               <VerticalTransitionCellLong :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
+            <div v-else-if="cell.name === 'c-line-short'">
+              <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'c-line-long'">
+              <VerticalTransitionCellLong :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+            </div>
             <div v-else-if="cell.name === 'r-line-short'">
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
             </div>
@@ -65,10 +71,7 @@
             <div v-else-if="cell.name === 'swap-line-long'">
               <VerticalTransitionCellLong :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
-            <div v-else-if="cell.name === 'fredkin-line-long'">
-              <VerticalTransitionCellLong :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
-            </div>
-             <div v-else-if="cell.name === 'ising-line-short'" :key="cell.key">
+            <div v-else-if="cell.name === 'ising-line-short'" :key="cell.key">
               <VerticalTransitionCellShort :name="cell.name" />
             </div>
             <div v-else-if="cell.name === 'ising-line-long'">
@@ -204,7 +207,7 @@
               <ParametricTwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'a'">
-              <TwoParametricTwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :phi="cell.phi" :key="cell.key"/>
+              <BiParametricTwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :phi="cell.phi" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'canonical'">
               <CanonicalGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :tx="cell.tx" :ty="cell.ty" :tz="cell.tz" :key="cell.key"/>
@@ -244,7 +247,7 @@ import EmptyCellRectangle from "./EmptyCellRectangle";
 import EmptyCellSquare from "./EmptyCellSquare";
 import TwoTargetQubitsGate from "./TwoTargetQubitsGate";
 import ParametricTwoTargetQubitsGate from "./ParametricTwoTargetQubitsGate";
-import TwoParametricTwoTargetQubitsGate from "./TwoParametricTwoTargetQubitsGate";
+import BiParametricTwoTargetQubitsGate from "./BiParametricTwoTargetQubitsGate";
 import CanonicalGate from "./CanonicalGate";
 import SwapCircle from "./SwapCircle";
 export default {
@@ -268,7 +271,7 @@ export default {
     EmptyCellSquare,
     TwoTargetQubitsGate,
     ParametricTwoTargetQubitsGate,
-    TwoParametricTwoTargetQubitsGate,
+    BiParametricTwoTargetQubitsGate,
     CanonicalGate,
     SwapCircle,
   },

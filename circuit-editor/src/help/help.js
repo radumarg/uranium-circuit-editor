@@ -30,23 +30,23 @@ export function retriveSimpleGateHelpHtml(gateName) {
     } else if (gateName == "t-dagger") {
         return 'The "t-dagger" gate acts on a single qubit and is defined as: u1(-π/4). It is the conjugate transpose of "t" gate. It represents a clockwise π/4 radians rotation around the Z-axis of the Bloch sphere. Leaves the basis state |0⟩ unchanged and map |1⟩ to exp(-i*π/4) |1⟩. The probability of measuring a |0⟩ or |1⟩ is unchanged after applying this gate, however it modifies the phase of the quantum state. This gate is an example of a non-Clifford gate.';
     } else if (gateName == "rx-theta") {
-        return 'The "rx-theta" gate acts on a single qubit and is defined as: u3(θ, -π/2, π/2). It is a anti-clockwise rotation through angle θ radians around the X-axis of the Bloch sphere and can be expressed in terms of X Pauli operator as: exp(-i * θ/2 * X).';
+        return 'The "rx-theta" gate acts on a single qubit and is defined as: u3(θ, -π/2, π/2). It is an anti-clockwise rotation through angle θ radians around the X-axis of the Bloch sphere and can be expressed in terms of X Pauli operator as: exp(-i * θ/2 * X).';
     } else if (gateName == "ry-theta") {
-        return 'The "ry-theta" gate acts on a single qubit and is defined as: u3(θ, 0, 0). It is a anti-clockwise rotation through angle θ radians around the Y-axis of the Bloch sphere and can be expressed in terms of Y Pauli operator as: exp(-i * θ/2 *Y).';
+        return 'The "ry-theta" gate acts on a single qubit and is defined as: u3(θ, 0, 0). It is an anti-clockwise rotation through angle θ radians around the Y-axis of the Bloch sphere and can be expressed in terms of Y Pauli operator as: exp(-i * θ/2 *Y).';
     } else if (gateName == "rz-theta") {
-        return 'The "rz-theta" gate acts on a single qubit and is different from u1(θ) by a global phase given by exp(-iθ/2). It is a anti-clockwise rotation through angle θ radians around the Z-axis of the Bloch sphere  and can be expressed in terms of Z Pauli operator as: exp(-i * θ/2 * Z).';
+        return 'The "rz-theta" gate acts on a single qubit and is different from u1(θ) by a global phase given by exp(-iθ/2). It is an anti-clockwise rotation through angle θ radians around the Z-axis of the Bloch sphere  and can be expressed in terms of Z Pauli operator as: exp(-i * θ/2 * Z).';
     } else if (gateName == "s") {
         return 'The "s" gate acts on a single qubit and is defined as: u1(π/2). It represents an anti-clockwise π/2 radians rotation around the Z-axis of the Bloch sphere. The "s" gate is related to the "t" gate by the relationship s = t * t. It is also the square root of pauli-z gate. The "s" gate is a special cases of "u1" for λ equal to π/2.';
     } else if (gateName == "s-dagger") {
         return 'The "s-dagger" gate acts on a single qubit and is defined as: u1(-π/2). It is the conjugate transpose of s gate. It represents a clockwise π/2 radians rotation around the Z-axis of the Bloch sphere.';
     } else if (gateName == "swap") {
-        return 'This gate swaps two qubits.';
+        return 'This gate swaps two qubits and is equal to Can(1/2, 1/2, 1/2).';
     } else if (gateName == "sqrt-swap") {
-        return 'This gate performs half-way a two-qubit swap.  It the square root of swap gate.';
+        return 'This gate performs half-way a two-qubit swap.  It the square root of swap gate and is equal to Can(1/4, 1/4, 1/4).';
     } else if (gateName == "swap-theta") {
-        return 'This gate performs partial a two-qubit swap.';
+        return 'This gate performs partial a two-qubit swap and is equivalent to Can(1/2, 1/2, 1/2 - θ/π).';
     } else if (gateName == "iswap") {
-        return 'This gate performs partial a two-qubit swap.';
+        return 'This gate performs partial a two-qubit swap and is equivalent to Can(-1/2, -1/2, 0).';
     } else if (gateName == "measure-x") {
         return 'Measures a qubit along the direction given by the X-axis of the Bloch sphere. This is not a unitary operation. The index of the classic bit where a qubit is measured cannot be larger than the maximum qubit index. \
 When multiple qubits are measured in the same classical bit an XOR operation is performed on the bit value. When no measure gates are present in the circuit simulation results are identical to the situation where \
@@ -60,17 +60,17 @@ each qubit is measured into a classical bit with index equal to the qubit index 
 When multiple qubits are measured in the same classical bit an XOR operation is performed on the bit value. When no measure gates are present in the circuit simulation results are identical to the situation where \
 each qubit is measured into a classical bit with index equal to the qubit index of the measure gate.';
     } else if (gateName == "xx") {
-        return 'XX Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-iπθ/2 * X⊗X). The Ising XX, YY and ZZ gates all commute with one another.';
+        return 'XX Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * X⊗X). It is equal to Can(θ, 0, 0). The Ising XX, YY and ZZ gates all commute with one another.';
     } else if (gateName == "yy") {
-        return 'YY Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-iπθ/2 * Y⊗Y). The Ising XX, YY and ZZ gates all commute with one another.';
+        return 'YY Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * Y⊗Y). It is equal to Can(0, θ, 0). The Ising XX, YY and ZZ gates all commute with one another.';
     } else if (gateName == "zz") {
-        return 'ZZ Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-iπθ/2 * Z⊗Z). The Ising XX, YY and ZZ gates all commute with one another.';
+        return 'ZZ Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * Z⊗Z). It is equal to Can(0, 0, θ). The Ising XX, YY and ZZ gates all commute with one another.';
     } else if (gateName == "pauli-x-root") {
-        return 'The "pauli-x-root" gate is the root of a "pauli-x" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a anti-clockwise rotation around X-axis of Bloch sphere with an angle given by π/t or, depending on the chosen parametrization, π/2^k radians.';
+        return 'The "pauli-x-root" gate is the root of a "pauli-x" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as an anti-clockwise rotation around X-axis of Bloch sphere with an angle given by π/t or, depending on the chosen parametrization, π/2^k radians.';
     } else if (gateName == "pauli-y-root") {
-        return 'The "pauli-y-root" gate is the root of a "pauli-y" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a anti-clockwise rotation around Y-axis of Bloch sphere with an angle given by π/t or, depending on the chosen parametrization, π/2^k radians.';
+        return 'The "pauli-y-root" gate is the root of a "pauli-y" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as an anti-clockwise rotation around Y-axis of Bloch sphere with an angle given by π/t or, depending on the chosen parametrization, π/2^k radians.';
     } else if (gateName == "pauli-z-root") {
-        return 'The "pauli-z-root" gate is the root of a "pauli-z" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a anti-clockwise rotation around Z-axis of Bloch sphere with an angle given by π/t or depending on the chosen parametrization, π/2^k radians.';
+        return 'The "pauli-z-root" gate is the root of a "pauli-z" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as an anti-clockwise rotation around Z-axis of Bloch sphere with an angle given by π/t or depending on the chosen parametrization, π/2^k radians.';
     } else if (gateName == "pauli-x-root-dagger") {
         return 'The "pauli-x-root-dagger" gate is the transpose conjugate of "pauli-x-root" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a clockwise rotation around X-axis of Bloch sphere with an angle given by π/t or, depending on the chosen parametrization, π/2^k radians.';
     } else if (gateName == "pauli-y-root-dagger") {
@@ -78,47 +78,55 @@ each qubit is measured into a classical bit with index equal to the qubit index 
     } else if (gateName == "pauli-z-root-dagger") {
         return 'The "pauli-z-root-dagger" gate is the transpose conjugate of "pauli-z-root" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as a clockwise rotation around Z-axis of Bloch sphere with an angle given by π/t or depending on the chosen parametrization, π/2^k radians.';
     } else if (gateName == "v") {
-      return 'This is the square root of the "pauli-x" gate.';
+      return 'This is the square root of the "pauli-x" gate: v * v = pauli-x. It represents an anti-clockwise π/2 radians rotation around the X-axis.';
     } else if (gateName == "v-dagger") {
-      return 'As hermitian conjugate of "v", this is the inverse square root of the "pauli-x" gate.';
+      return 'As conjugate transpose of "v", this is the inverse square root of the "pauli-x" gate. It represents a clockwise π/2 radians rotation around the X-axis.';
     } else if (gateName == "h") {
-      return 'This is the inverse square root of the "pauli-y" gate. It is also called pseudo-Hadamard gate since it also transforms computational basis states to X basis states.';
+      return 'This is the square root of the "pauli-y" gate. It represents an anti-clockwise π/2 radians rotation around the Y-axis. It is also called pseudo-Hadamard gate since it transforms computational basis states to X basis states and back.';
     }  else if (gateName == "h-dagger") {
-      return 'As hermitian conjugate of "h" this is the square root of the "pauli-y" gate.';
+      return 'As conjugate transpose of "h" this is the inverse square root of the "pauli-y" gate. It represents a clockwise π/2 radians rotation around the Y-axis. It transforms computational basis states to X basis states and back.';
     } else if (gateName == "hadamard-xy") {
-      return 'The standard "hadamard" gate can be represented as a π rotation around an axis diagonal in the Z-X plane. This gate represented as a π rotation around an axis diagonal in the X-Y plane. It translates the X basis elements (|+⟩ and |-⟩ to the Y basis elements (|+i⟩ and |-i⟩) and back. ';
+      return 'The standard "hadamard" gate can be represented as a π rotation around an axis diagonal in the Z-X plane. This gate represented as a π rotation around an axis diagonal in the X-Y plane. It translates up to a phase the X basis elements (|+⟩ and |-⟩) to the Y basis elements (|+i⟩ and |-i⟩) and back and is given by the following formula: hadamard-xy = v * hadamard * v-dagger. ';
     } else if (gateName == "hadamard-yz") {
-      return 'The standard "hadamard" gate can be represented as a π rotation around an axis diagonal in the Z-X plane. This gate represented as a π rotation around an axis diagonal in the Y-Z plane. It translates the computational basis elements to the Y basis elements (|+i⟩ and |-i⟩) and back. ';
+      return 'The standard "hadamard" gate can be represented as a π rotation around an axis diagonal in the Z-X plane. This gate represented as a π rotation around an axis diagonal in the Y-Z plane. It translates up to a phase the computational basis elements to the Y basis elements (|+i⟩ and |-i⟩) and back and is given by the following formula: hadamard-yz = s * hadamard * s-dagger. ';
     }  else if (gateName == "hadamard-zx") {
       return 'The standard "hadamard" gate can be represented as a π rotation around an axis diagonal in the Z-X plane. This gate is an alias for standard "hadamard" gate.';
     } else if (gateName == "c") {
       return 'This gate permutes the three axes of the Bloch sphere (X->Y, Y->Z, Z->X). It represents a 120 degree rotation of the Bloch sphere.';
     } else if (gateName == "c-dagger") {
-      return 'This is the hermitian conjugate of "c" gate.';
+      return 'This is the conjugate transpose of "c" gate and is also equal to the square of the "c" gate. It represents a 240 degree rotation of the Bloch sphere and permutes the three axes of the Bloch sphere (X->Z, Y->X, Z->Y).';
     } else if (gateName == "fswap") {
-      return 'This is the fermionic swap gate which swaps adjacent fermionic modes in the Jordan-Wigner representation.';
+      return 'This is the fermionic swap gate which swaps adjacent fermionic modes in the Jordan-Wigner representation and is equivalent to Can(1/2, 1/2, 0).';
     }  else if (gateName == "swap-root") {
-      return 'This represents a parametrized root of "swap" gate.';
+      return 'This represents a parametrized root of "swap" gate and is equal to Can(1/(2t), 1/(2t), 1/(2t)).';
     } else if (gateName == "sqrt-swap-dagger") {
-      return 'This is the hermitian conjugate of "sqrt-swap" gate.';
+      return 'This is the conjugate transpose of "sqrt-swap" gate and is equal to Can(3/4, 1/2, 1/2).';
     } else if (gateName == "molmer-sorensen") {
-      return 'The Mølmer-Sørensen gate is a natural gate for laser driven trapped ions.';
+      return 'The Mølmer-Sørensen gate is a natural gate for laser driven trapped ions and is equal to Can(−1/2, 0, 0).';
+    } else if (gateName == "molmer-sorensen-dagger") {
+      return 'This is the conjugate transpose of Mølmer-Sørensen gate. Ir is a natural gate for laser driven trapped ions and is equal to Can(1/2, 0, 0).';
     } else if (gateName == "xy") {
-      return 'This is the "xy" gate.';
+      return 'This is the "xy" gate and it is defined as: exp(-i * θ/2 * (X⊗X + Y⊗Y)). It is equal to Can(θ, θ, 0).';
     } else if (gateName == "a") {
-      return 'This "a" gate conserves the number of 1s (versus 0s) in the computational basis';
+      return 'The "a" gate conserves the number of 1s versus 0s in the computational basis and is used in VQE ansatz';
     } else if (gateName == "berkeley") {
       return 'This is the Berkeley gate.';
+    } else if (gateName == "berkeley-dagger") {
+      return 'This is the conjugate transpose of Berkeley gate.';
     } else if (gateName == "w") {
       return 'The "w" gate is an orthogonal and hermitian gate and can be used to diagonalize the "swap" gate.';
     } else if (gateName == "ecp") {
-      return 'This is the "ecp" gate.';
+      return 'The "ecp" gate and is equivalent to Can(1/2, 1/4, 1/4).';
+    } else if (gateName == "ecp-dagger") {
+      return 'This is the conjugate transpose of "ecp" gate.';
     } else if (gateName == "magic") {
-      return 'The magic gate trasforms computational based to the magic basis.';
+      return 'The magic gate trasforms computational based to the magic basis and is equivalent to Can(1/2, 0, 0).';
+    } else if (gateName == "magic-dagger") {
+      return 'This is the conjugate transpose of "magic" gate.';
     } else if (gateName == "canonical") {
       return 'The canonical gate is a 3-parameter quantum logic gate that acts on two qubits and appears in Kraus-Cirac decomposition.';
     } else if (gateName == "givens") {
-      return 'The Givens gate occurs in quantum computational chemistry.';
+      return 'This "givens" gate is defined as: exp(-i * θ/2 * (X⊗X - Y⊗Y)). The Givens gate occurs in quantum computational chemistry.';
     }
 
     return "In order to work with the Circuit Editor use the gates pallete on the left to drag & drop gates in the circuit \
@@ -142,9 +150,9 @@ each qubit is measured into a classical bit with index equal to the qubit index 
 export function retriveControlledGateHelpHtml(gateName) {
 
   if (gateName == "u3") {
-      return 'A "u3" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "u3" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'An "u3" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "u3" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "u2") {
-      return 'A "u2" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "u2" gate typically performs a generic (two parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'An "u2" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "u2" gate typically performs a generic (two parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "hadamard") {
       return 'A "hadamard" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "hadamard" gate typically applies a "hadamard" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "pauli-x") {
@@ -154,7 +162,7 @@ export function retriveControlledGateHelpHtml(gateName) {
   } else if (gateName == "pauli-z") {
       return 'A "pauli-z" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "pauli-z" gate typically performs the "pauli-z" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. The single controlled "pauli-z" gate is also known as CPHASE gate and has the particular property that is symmetric, which means that swapping the control with the target qubit does not modify the result when applying the gate.';
   } else if (gateName == "u1") {
-      return 'A "u1" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "u1" gate typically applies the "u1" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+      return 'An "u1" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "u1" gate typically applies the "u1" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "rx-theta") {
       return 'A "rx-theta" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "rx-theta" gate typically applies the "rx-theta" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "ry-theta") {
@@ -229,19 +237,27 @@ export function retriveControlledGateHelpHtml(gateName) {
     return 'A "sqrt-swap-dagger" gate may have any number of controls.';
   } else if (gateName == "molmer-sorensen") {
     return 'A "molmer-sorensen" gate may have any number of controls.';
+  } else if (gateName == "molmer-sorensen-dagger") {
+    return 'A "molmer-sorensen-dagger" gate may have any number of controls.';
   } else if (gateName == "xy") {
     return 'A "xy" gate may have any number of controls.';
   } else if (gateName == "a") {
-    return 'A "a" gate may have any number of controls.';
+    return 'An "a" gate may have any number of controls.';
   } else if (gateName == "berkeley") {
     return 'A "berkeley" gate may have any number of controls.';
+  } else if (gateName == "berkeley-dagger") {
+    return 'A "berkeley-dagger" gate may have any number of controls.';
   } else if (gateName == "w") {
     return 'A "w" gate may have any number of controls.';
   } else if (gateName == "ecp") {
-    return 'A "ecp" gate may have any number of controls.';
+    return 'An "ecp" gate may have any number of controls.';
+  } else if (gateName == "ecp-dagger") {
+    return 'An "ecp-dagger" gate may have any number of controls.';
   } else if (gateName == "magic") {
     return 'A "magic" gate may have any number of controls.';
-  } else if (gateName == "canonical") {
+  } else if (gateName == "magic-dagger") {
+    return 'A "magic-dagger" gate may have any number of controls.';
+  }else if (gateName == "canonical") {
     return 'A "canonical" gate may have any number of controls.';
   } else if (gateName == "givens") {
     return 'A "givens" gate may have any number of controls.';
@@ -605,6 +621,34 @@ export function retriveGateMatrixHtml(gateName) {
         return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
         <table class='matrix' style='font-size: 12px;'> \
         <tr>\
+            <td style='padding: 2px; text-align: center;'>exp(-i * θ/2)</td>\
+            <td style='padding: 2px; text-align: center;'>0</td>\
+            <td style='padding: 2px; text-align: center;'>0</td>\
+            <td style='padding: 2px; text-align: center;'>0</td>\
+        </tr>\
+        <tr>\
+            <td style='padding: 2px; text-align: center;'>0</td>\
+            <td style='padding: 2px; text-align: center;'>exp(i * θ/2)</td>\
+            <td style='padding: 2px; text-align: center;'>0</td>\
+            <td style='padding: 2x; text-align: center;'>0</td>\
+        </tr>\
+        <tr>\
+            <td style='padding: 2px; text-align: center;'>0</td>\
+            <td style='padding: 2px; text-align: center;'>0</td>\
+            <td style='padding: 2px; text-align: center;'>exp(i * θ/2)</td>\
+            <td style='padding: 2px; text-align: center;'>0</td>\
+        </tr>\
+        <tr>\
+            <td style='padding: 2px; text-align: center;'>0</td>\
+            <td style='padding: 2px; text-align: center;'>0</td>\
+            <td style='padding: 2px; text-align: center;'>0</td>\
+            <td style='padding: 2px; text-align: center;'>exp(-i * θ/2)</td>\
+        </tr>\
+        </table>";
+    } else if (gateName == "xy") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+        <table class='matrix'> \
+        <tr>\
             <td style='padding: 2px; text-align: center;'>1</td>\
             <td style='padding: 2px; text-align: center;'>0</td>\
             <td style='padding: 2px; text-align: center;'>0</td>\
@@ -612,14 +656,14 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         <tr>\
             <td style='padding: 2px; text-align: center;'>0</td>\
-            <td style='padding: 2px; text-align: center;'>exp(-i&nbsp;θ)</td>\
-            <td style='padding: 2px; text-align: center;'>0</td>\
+            <td style='padding: 2px; text-align: center;'>cos(θ)</td>\
+            <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ)</td>\
             <td style='padding: 2x; text-align: center;'>0</td>\
         </tr>\
         <tr>\
             <td style='padding: 2px; text-align: center;'>0</td>\
-            <td style='padding: 2px; text-align: center;'>0</td>\
-            <td style='padding: 2px; text-align: center;'>exp(-i&nbsp;θ)</td>\
+            <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ)</td>\
+            <td style='padding: 2px; text-align: center;'>cos(θ)</td>\
             <td style='padding: 2px; text-align: center;'>0</td>\
         </tr>\
         <tr>\
@@ -705,6 +749,114 @@ export function retriveGateMatrixHtml(gateName) {
             <td style='padding: 5px; text-align: center;'>exp(-iπ/t)</td>\
         </tr>\
         </table>";
+    } else if (gateName == "v") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table><td><div style='font-size: 13px;'>1/2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1 + i</td>\
+          <td style='padding: 5px; text-align: center;'>1 - i</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1 - i</td>\
+          <td style='padding: 5px; text-align: center;'>1 + i</td>\
+      </tr>\
+      </table>";
+    } else if (gateName == "v-dagger") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table><td><div style='font-size: 13px;'>1/2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1 - i</td>\
+          <td style='padding: 5px; text-align: center;'>1 + i</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1 + i</td>\
+          <td style='padding: 5px; text-align: center;'>1 - i</td>\
+      </tr>\
+      </table>";
+    } else if (gateName == "h") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>-&nbsp1</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+      </tr>\
+      </table></td></table>";
+    } else if (gateName == "h-dagger") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>-&nbsp1</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+      </tr>\
+      </table></td></table>";
+    } else if (gateName == "hadamard-xy") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1 + i</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1 - i</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      </table></td></table>";
+    } else if (gateName == "hadamard-yz") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>-&nbspi</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>i</td>\
+          <td style='padding: 5px; text-align: center;'>-&nbsp1</td>\
+      </tr>\
+      </table></td></table>";
+    } else if (gateName == "hadamard-zx") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>-&nbsp1</td>\
+      </tr>\
+      </table></td></table>";
+    } else if (gateName == "c") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+          <table><td><div style='font-size: 13px;'>1/2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+          <tr>\
+              <td style='padding: 5px; text-align: center;'>+&nbsp1 - i</td>\
+              <td style='padding: 5px; text-align: center;'>-&nbsp1 - i</td>\
+          </tr>\
+          <tr>\
+              <td style='padding: 5px; text-align: center;'>+&nbsp1 - i</td>\
+              <td style='padding: 5px; text-align: center;'>+&nbsp1 + i</td>\
+          </tr>\
+          </table>";
+    } else if (gateName == "c-dagger") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+          <table><td><div style='font-size: 13px;'>1/2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
+          <tr>\
+              <td style='padding: 5px; text-align: center;'>+&nbsp1 + i</td>\
+              <td style='padding: 5px; text-align: center;'>+&nbsp1 + i</td>\
+          </tr>\
+          <tr>\
+              <td style='padding: 5px; text-align: center;'>-&nbsp1 + i</td>\
+              <td style='padding: 5px; text-align: center;'>+&nbsp1 - i</td>\
+          </tr>\
+          </table>";
     } else if (gateName == "measure-x") {
         return "";
     } else if (gateName == "measure-y") {
@@ -712,29 +864,414 @@ export function retriveGateMatrixHtml(gateName) {
     } else if (gateName == "measure-z") {
         return "";
     } else if (gateName == "fswap") {
-      return "";
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>-1</td>\
+      </tr>\
+      </table>";
     }  else if (gateName == "swap-root") {
-      return "";
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <div style='font-size:13px;'>exp(-i&nbsp;π/4t)&nbsp*</div> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>exp(i&nbsp;π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>exp(i&nbsp;π/2t)</td>\
+      </tr>\
+      </table>";
     } else if (gateName == "sqrt-swap-dagger") {
-      return "";
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1/2&nbsp;(1 - i)</td>\
+          <td style='padding: 5px; text-align: center;'>1/2&nbsp;(1 + i)</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1/2&nbsp;(1 + i)</td>\
+          <td style='padding: 5px; text-align: center;'>1/2&nbsp;(1 - i)</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+      </tr>\
+      </table>";
     } else if (gateName == "molmer-sorensen") {
-      return "";
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table>\
+      <td>1/√2&nbsp;*&nbsp;&nbsp;</td> \
+      <td><table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>i</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>i</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>i</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>i</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+      </tr>\
+      </table></td>\
+      </table>";
+    } else if (gateName == "molmer-sorensen-dagger") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table>\
+      <td>1/√2&nbsp;*&nbsp;&nbsp;</td> \
+      <td><table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>-i</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>-i</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>-i</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>-i</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+      </tr>\
+      </table></td>\
+      </table>";
     } else if (gateName == "xy") {
       return "";
     } else if (gateName == "a") {
-      return "";
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>1</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>cos(θ)</td>\
+          <td style='padding: 2px; text-align: center;'>exp(iφ) * sin(θ)</td>\
+          <td style='padding: 2x; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>exp(-iφ) * sin(θ)</td>\
+          <td style='padding: 2px; text-align: center;'>-cos(θ)</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>1</td>\
+      </tr>\
+      </table>";
     } else if (gateName == "berkeley") {
-      return "";
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>cos(π/8)</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>i&nbsp;sin(π/8)</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>cos(3&nbsp;π/8)</td>\
+          <td style='padding: 2px; text-align: center;'>i&nbsp;sin(3&nbsp;π/8)</td>\
+          <td style='padding: 2x; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+      <td style='padding: 2px; text-align: center;'>0</td>\
+      <td style='padding: 2px; text-align: center;'>i&nbsp;sin(3&nbsp;π/8)</td>\
+      <td style='padding: 2px; text-align: center;'>cos(3&nbsp;π/8)</td>\
+      <td style='padding: 2x; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+      <td style='padding: 2px; text-align: center;'>i&nbsp;sin(π/8)</td>\
+      <td style='padding: 2px; text-align: center;'>0</td>\
+      <td style='padding: 2px; text-align: center;'>0</td>\
+      <td style='padding: 2px; text-align: center;'>cos(π/8)</td>\
+      </tr>\
+      </table>";
+    } else if (gateName == "berkeley-dagger") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>cos(π/8)</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(π/8)</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>cos(3&nbsp;π/8)</td>\
+          <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(3&nbsp;π/8)</td>\
+          <td style='padding: 2x; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+      <td style='padding: 2px; text-align: center;'>0</td>\
+      <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(3&nbsp;π/8)</td>\
+      <td style='padding: 2px; text-align: center;'>cos(3&nbsp;π/8)</td>\
+      <td style='padding: 2x; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+      <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(π/8)</td>\
+      <td style='padding: 2px; text-align: center;'>0</td>\
+      <td style='padding: 2px; text-align: center;'>0</td>\
+      <td style='padding: 2px; text-align: center;'>cos(π/8)</td>\
+      </tr>\
+      </table>";
     } else if (gateName == "w") {
-      return "";
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1/√2</td>\
+          <td style='padding: 5px; text-align: center;'>1/√2</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1/√2</td>\
+          <td style='padding: 5px; text-align: center;'>-1/√2</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+      </tr>\
+      </table>";
     } else if (gateName == "ecp") {
-      return "";
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>2c</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>-i2s</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>(1+i)(c-s)</td>\
+          <td style='padding: 5px; text-align: center;'>(1-i)(c+s)</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>(1+i)(c-s)</td>\
+          <td style='padding: 5px; text-align: center;'>(1+i)(c-s)</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+        <td style='padding: 5px; text-align: center;'>-i2s</td>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+        <td style='padding: 5px; text-align: center;'>2c</td>\
+        </tr>\
+      </table> where c = cos(π/8) and s =  sin(π/8)";
+    }else if (gateName == "ecp-dagger") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>2c</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>i2s</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>(1-i)(c-s)</td>\
+          <td style='padding: 5px; text-align: center;'>(1-i)(c+s)</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>(1+i)(c-s)</td>\
+          <td style='padding: 5px; text-align: center;'>(1-i)(c-s)</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+        <td style='padding: 5px; text-align: center;'>i2s</td>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+        <td style='padding: 5px; text-align: center;'>2c</td>\
+        </tr>\
+      </table> where c = cos(π/8) and s =  sin(π/8)";
     } else if (gateName == "magic") {
-      return "";
-    } else if (gateName == "canonical") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table>\
+      <td>1/√2&nbsp;*&nbsp;&nbsp;</td> \
+      <td><table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>i</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>i</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>i</td>\
+          <td style='padding: 5px; text-align: center;'>-1</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>-i</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      </table></td>\
+      </table>";
+    } else if (gateName == "magic-dagger") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table>\
+      <td>1/√2&nbsp;*&nbsp;&nbsp;</td> \
+      <td><table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>-i</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>-i</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>-i</td>\
+          <td style='padding: 5px; text-align: center;'>-1</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>i</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      </table></td>\
+      </table>";
+    }else if (gateName == "canonical") {
       return "";
     } else if (gateName == "givens") {
-      return "";
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>1</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>-&nbsp;sin(θ/2)</td>\
+          <td style='padding: 2x; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>sin(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>1</td>\
+      </tr>\
+      </table>";
     }
 
     return "";
@@ -1385,113 +1922,23 @@ export function retriveControlledGateMatrixHtml(gateName) {
     </tr>\
     </table>";
   }  else if (gateName == "v") {
-    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <table><td><div style='font-size: 13px;'>1/2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>1 + i</td>\
-            <td style='padding: 5px; text-align: center;'>1 - i</td>\
-        </tr>\
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>1 - i</td>\
-            <td style='padding: 5px; text-align: center;'>1 + i</td>\
-        </tr>\
-        </table>";
+    return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ v.</div>"
   } else if (gateName == "v-dagger") {
-    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <table><td><div style='font-size: 13px;'>1/2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>1 - i</td>\
-            <td style='padding: 5px; text-align: center;'>1 + i</td>\
-        </tr>\
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>1 + i</td>\
-            <td style='padding: 5px; text-align: center;'>1 - i</td>\
-        </tr>\
-        </table>";
-  } else if (gateName == "h") {
-    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>1</td>\
-            <td style='padding: 5px; text-align: center;'>1</td>\
-        </tr>\
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>-&nbsp1</td>\
-            <td style='padding: 5px; text-align: center;'>1</td>\
-        </tr>\
-        </table></td></table>";
-  }  else if (gateName == "h-dagger") {
-    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>1</td>\
-            <td style='padding: 5px; text-align: center;'>-&nbsp1</td>\
-        </tr>\
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>1</td>\
-            <td style='padding: 5px; text-align: center;'>1</td>\
-        </tr>\
-        </table></td></table>";
+    return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ v-dagger.</div>"
+  } else if (gateName == "h-dagger") {
+    return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ h-dagger.</div>"
+  }  else if (gateName == "h") {
+    return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ h.</div>"
   } else if (gateName == "hadamard-xy") {
-    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>1 + i</td>\
-        </tr>\
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>1 - i</td>\
-            <td style='padding: 5px; text-align: center;'>0</td>\
-        </tr>\
-        </table></td></table>";
+    return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ hadamard-xy.</div>"
   } else if (gateName == "hadamard-yz") {
-    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>1</td>\
-            <td style='padding: 5px; text-align: center;'>-&nbspi</td>\
-        </tr>\
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>i</td>\
-            <td style='padding: 5px; text-align: center;'>-&nbsp1</td>\
-        </tr>\
-        </table></td></table>";
+    return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ hadamard-yz.</div>"
   }  else if (gateName == "hadamard-zx") {
-    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <table><td><div style='font-size: 13px;'>1/√2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>1</td>\
-            <td style='padding: 5px; text-align: center;'>1</td>\
-        </tr>\
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>1</td>\
-            <td style='padding: 5px; text-align: center;'>-&nbsp1</td>\
-        </tr>\
-        </table></td></table>";
+    return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ hadamard-zx.</div>"
   } else if (gateName == "c") {
-    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <table><td><div style='font-size: 13px;'>1/2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>+&nbsp1 - i</td>\
-            <td style='padding: 5px; text-align: center;'>-&nbsp1 - i</td>\
-        </tr>\
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>+&nbsp1 - i</td>\
-            <td style='padding: 5px; text-align: center;'>+&nbsp1 + i</td>\
-        </tr>\
-        </table>";
+    return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ c.</div>"
   } else if (gateName == "c-dagger") {
-    return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <table><td><div style='font-size: 13px;'>1/2&nbsp;&nbsp;</div> </td> <td><table class='matrix'> \
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>+&nbsp1 + i</td>\
-            <td style='padding: 5px; text-align: center;'>+&nbsp1 + i</td>\
-        </tr>\
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>-&nbsp1 + i</td>\
-            <td style='padding: 5px; text-align: center;'>+&nbsp1 - i</td>\
-        </tr>\
-        </table>";
+    return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ c-dagger.</div>"
   } else if (gateName == "fswap") {
     return "";
   }  else if (gateName == "swap-root") {

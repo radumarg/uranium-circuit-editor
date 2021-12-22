@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="46" height="72" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <circle cx="23" cy="13" r="12.1" style="stroke:Plum;stroke-width:1.5;" fill="transparent" />
+    <text x="13.5" y="18" style="font-size: 15px; font-weight: bold; fill: Plum; white-space: pre;">M<tspan baseline-shift="super" style="font-size: 10px;">†</tspan></text>
+    <line x1="23" y1="25" x2="23" y2="47" style="stroke:Plum;stroke-width:1.5; stroke-opacity:1;" />
+    <text x="13.5" y="64.5" style="font-size: 15px; font-weight: bold; fill: Plum; white-space: pre;">M<tspan baseline-shift="super" style="font-size: 10px;">†</tspan></text>
+    <circle cx="23" cy="59" r="12.1" style="stroke:Plum;stroke-width:1.5;" fill="transparent" />
+  </g>
+</svg>
