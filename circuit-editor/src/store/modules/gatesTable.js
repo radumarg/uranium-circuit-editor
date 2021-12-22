@@ -479,12 +479,13 @@ var rGates = ["rx-theta", "ry-theta", "rz-theta"];
 var cGates = ["c", "c-dagger"];
 var hadamardGates = ["hadamard", "hadamard-xy", "hadamard-yz", "hadamard-zx"];
 var unitaryGates = ["u1", "u2", "u3"];
-var isingGates = ["xx", "yy", "zz", "xy", "molmer-sorensen"];
+var isingGates = ["xx", "yy", "zz", "xy", "molmer-sorensen", "molmer-sorensen-dagger", "givens"];
 var swapGates = ["swap", "sqrt-swap", "sqrt-swap-dagger", "swap-theta", "swap-root", "iswap", "fswap"];
-var bwecpGates = ["berkeley", "w", "a", "ecp"];
-var magicGates = ["magic"];
+var becpwGates = ["berkeley", "berkeley-dagger", "ecp", "ecp-dagger", "w"];
+var aGates = ["a"];
+var magicGates = ["magic", "magic-dagger"];
 var canonicalGates = ["canonical"];
-var givensGates = ["givens"];
+var crossResonanceGates = ["cross-resonance", "cross-resonance-dagger"];
 
 function getSwapIntermediateLineName(thisRowHoldsGates, qmin, qrow, gateName) {
   if (thisRowHoldsGates) {
@@ -517,14 +518,16 @@ function getCtrlStubDownName(gate, controlstate) {
     return "ctrl-ising-stub-down-" + controlstate;
   } else if (cGates.includes(gate.name)) {
     return "ctrl-c-stub-down-" + controlstate;
-  } else if (bwecpGates.includes(gate.name)) {
+  } else if (becpwGates.includes(gate.name)) {
     return "ctrl-bwecp-stub-down-" + controlstate;
   } else if (magicGates.includes(gate.name)) {
-    return "ctrl-m-stub-down-" + controlstate;
+    return "ctrl-magic-stub-down-" + controlstate;
   } else if (canonicalGates.includes(gate.name)) {
-    return "ctrl-can-stub-down-" + controlstate;
-  } else if (givensGates.includes(gate.name)) {
-    return "ctrl-g-stub-down-" + controlstate;
+    return "ctrl-canonical-stub-down-" + controlstate;
+  } else if (aGates.includes(gate.name)) {
+    return "ctrl-a-stub-down-" + controlstate;
+  } else if (crossResonanceGates.includes(gate.name)) {
+    return "ctrl-cross-resonance-stub-down-" + controlstate;
   } 
 }
 
@@ -547,14 +550,16 @@ function getCtrlStubUpName(gate, controlstate) {
     return "ctrl-ising-stub-up-" + controlstate;
   } else if (cGates.includes(gate.name)) {
     return "ctrl-c-stub-up-" + controlstate;
-  } else if (bwecpGates.includes(gate.name)) {
+  } else if (becpwGates.includes(gate.name)) {
     return "ctrl-bwecp-stub-up-" + controlstate;
   } else if (magicGates.includes(gate.name)) {
-    return "ctrl-m-stub-up-" + controlstate;
+    return "ctrl-magic-stub-up-" + controlstate;
   } else if (canonicalGates.includes(gate.name)) {
-    return "ctrl-can-stub-up-" + controlstate;
-  } else if (givensGates.includes(gate.name)) {
-    return "ctrl-g-stub-up-" + controlstate;
+    return "ctrl-canonical-stub-up-" + controlstate;
+  } else if (aGates.includes(gate.name)) {
+    return "ctrl-a-stub-up-" + controlstate;
+  } else if (crossResonanceGates.includes(gate.name)) {
+    return "ctrl-cross-resonance-stub-up-" + controlstate;
   }
 }
 
@@ -577,14 +582,16 @@ function getCtrlStubMidName(gate, controlstate) {
     return "ctrl-ising-stub-mid-" + controlstate;
   } else if (cGates.includes(gate.name)) {
     return "ctrl-c-stub-mid-" + controlstate;
-  } else if (bwecpGates.includes(gate.name)) {
+  } else if (becpwGates.includes(gate.name)) {
     return "ctrl-bwecp-stub-mid-" + controlstate;
   } else if (magicGates.includes(gate.name)) {
-    return "ctrl-m-stub-mid-" + controlstate;
+    return "ctrl-magic-stub-mid-" + controlstate;
   } else if (canonicalGates.includes(gate.name)) {
-    return "ctrl-can-stub-mid-" + controlstate;
-  } else if (givensGates.includes(gate.name)) {
-    return "ctrl-g-stub-mid-" + controlstate;
+    return "ctrl-canonical-stub-mid-" + controlstate;
+  } else if (aGates.includes(gate.name)) {
+    return "ctrl-a-stub-mid-" + controlstate;
+  } else if (crossResonanceGates.includes(gate.name)) {
+    return "ctrl-cross-resonance-stub-mid-" + controlstate;
   }
 }
 
@@ -643,7 +650,7 @@ function getIntermediateLineName(gateName, thisRowHoldsGates) {
     } else {
       return "c-line-short";
     }
-  } else if (bwecpGates.includes(gateName)) {
+  } else if (becpwGates.includes(gateName)) {
     if (thisRowHoldsGates) {
       return "bwecp-line-long";
     } else {
@@ -651,21 +658,27 @@ function getIntermediateLineName(gateName, thisRowHoldsGates) {
     }
   } else if (magicGates.includes(gateName)) {
     if (thisRowHoldsGates) {
-      return "m-line-long";
+      return "magic-line-long";
     } else {
-      return "m-line-short";
+      return "magic-line-short";
     }
   } else if (canonicalGates.includes(gateName)) {
     if (thisRowHoldsGates) {
-      return "can-line-long";
+      return "canonical-line-long";
     } else {
-      return "can-line-short";
+      return "canonical-line-short";
     }
-  } else if (givensGates.includes(gateName)) {
+  } else if (aGates.includes(gateName)) {
     if (thisRowHoldsGates) {
-      return "g-line-long";
+      return "a-line-long";
     } else {
-      return "g-line-short";
+      return "a-line-short";
+    }
+  } else if (crossResonanceGates.includes(gateName)) {
+    if (thisRowHoldsGates) {
+      return "cross-resonace-line-long";
+    } else {
+      return "cross-resonance-line-short";
     }
   }
 }
@@ -782,6 +795,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           let qbits = [...targets, ...controls];
 
           let qmin = Math.min(...qbits);
+          let targetMin = Math.min(...targets);
           let qmax = Math.max(...qbits);
           let rowMin = getRowFromQbit(qmin);
           let rowMax = getRowFromQbit(qmax);
@@ -812,8 +826,12 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
 
           gatesTableRowState.cells[column].tooltip = "";
           if (gate.name == "sqrt-swap"
+              || gate.name == "sqrt-swap-dagger"
               || gate.name == "swap-theta"
-              || gate.name == "iswap"){
+              || gate.name == "iswap"
+              || gate.name == "fswap"
+              || gate.name == "swap-root"
+              ){
             if ((inputRow - 1) / 2 == Math.min(...targets)){
               gatesTableRowState.cells[column].tooltip += `${gate.name} `;
             }
@@ -821,7 +839,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
 
           if (Object.prototype.hasOwnProperty.call(gate, "theta")) {
             gatesTableRowState.cells[column].theta = parseFloat(gate.theta);
-            if (gate.name != "swap-theta" || ((inputRow - 1) / 2 == Math.min(...targets))){
+            if (!gate.name.includes("swap") || ((inputRow - 1) / 2 == Math.min(...targets))){
               gatesTableRowState.cells[column].tooltip += `θ:${gate.theta} `;
             }
           }
@@ -868,37 +886,93 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             if (controls.includes(qmin)){
               gatesTableRowState.cells[column].name = getCtrlStubUpName(gate, controlstate);
             } else {
-              if (isingGates.includes(gate.name)){
-                if (gate.name == "xx"){
-                  gatesTableRowState.cells[column].img = "x";
-                } else if (gate.name == "yy") {
-                  gatesTableRowState.cells[column].img = "y";
-                } else if (gate.name == "zz") {
-                  gatesTableRowState.cells[column].img = "z";
-                }
+              if (gate.name == "xx"){
+                gatesTableRowState.cells[column].img = "x";
+              } else if (gate.name == "yy") {
+                gatesTableRowState.cells[column].img = "y";
+              } else if (gate.name == "zz") {
+                gatesTableRowState.cells[column].img = "z";
               } else if (gate.name.includes("swap")) {
                 gatesTableRowState.cells[column].img = "swap-up";
+              } else if (gate.name == "a") {
+                gatesTableRowState.cells[column].img = "_a_";
+              } else if (gate.name == "berkely") {
+                gatesTableRowState.cells[column].img = "_b_";
+              } else if (gate.name == "b-dagger") {
+                gatesTableRowState.cells[column].img = "_b-dagger_.";
+              } else if (gate.name == "canonical") {
+                gatesTableRowState.cells[column].img = "_canonical_";
+              } else if (gate.name == "cross-resonance") {
+                gatesTableRowState.cells[column].img = "_cross-resonance_";
+              } else if (gate.name == "cross-resonance-dagger") {
+                gatesTableRowState.cells[column].img = "_cross-resonance-dagger_";
+              } else if (gate.name == "givens") {
+                gatesTableRowState.cells[column].img = "_g_";
+              } else if (gate.name == "ecp") {
+                gatesTableRowState.cells[column].img = "_ecp_";
+              } else if (gate.name == "ecp-dagger") {
+                gatesTableRowState.cells[column].img = "_ecp-dagger_";
+              } else if (gate.name == "magic") {
+                gatesTableRowState.cells[column].img = "_magic_";
+              } else if (gate.name == "magic-dagger") {
+                gatesTableRowState.cells[column].img = "_magic-dagger_";
+              } else if (gate.name == "molmer-sorensen") {
+                gatesTableRowState.cells[column].img = "_ms_";
+              } else if (gate.name == "molmer-sorensen-dagger") {
+                gatesTableRowState.cells[column].img = "_ms-dagger_";
+              } else if (gate.name == "w") {
+                gatesTableRowState.cells[column].img = "_w_";
+              }  else if (gate.name == "xy") {
+                gatesTableRowState.cells[column].img = "_xy_";
               }
             }
           } else if (rowMin < inputRow && inputRow < rowMax) {
             if (controls.includes(rowQbit)){
               gatesTableRowState.cells[column].name = getCtrlStubMidName(gate, controlstate);
             } else if (targets.includes(rowQbit)) {
-              if (isingGates.includes(gate.name)){
-                if (gate.name == "xx"){
-                  gatesTableRowState.cells[column].img = "x";
-                } else if (gate.name == "yy") {
-                  gatesTableRowState.cells[column].img = "y";
-                } else if (gate.name == "zz") {
-                  gatesTableRowState.cells[column].img = "z";
-                }
+              if (gate.name == "xx"){
+                gatesTableRowState.cells[column].img = "x";
+              } else if (gate.name == "yy") {
+                gatesTableRowState.cells[column].img = "y";
+              } else if (gate.name == "zz") {
+                gatesTableRowState.cells[column].img = "z";
               } else if (gate.name.includes("swap")) {
                 gatesTableRowState.cells[column].img = "swap-mid";
+              } else if (gate.name == "a") {
+                gatesTableRowState.cells[column].img = "_a_";
+              } else if (gate.name == "berkely") {
+                gatesTableRowState.cells[column].img = "_b_";
+              } else if (gate.name == "b-dagger") {
+                gatesTableRowState.cells[column].img = "_b-dagger_.";
+              } else if (gate.name == "canonical") {
+                gatesTableRowState.cells[column].img = "_canonical_";
+              } else if (gate.name == "cross-resonance") {
+                gatesTableRowState.cells[column].img = "_cross-resonance_";
+              } else if (gate.name == "cross-resonance-dagger") {
+                gatesTableRowState.cells[column].img = "_cross-resonance-dagger_";
+              } else if (gate.name == "givens") {
+                gatesTableRowState.cells[column].img = "_g_";
+              } else if (gate.name == "ecp") {
+                gatesTableRowState.cells[column].img = "_ecp_";
+              } else if (gate.name == "ecp-dagger") {
+                gatesTableRowState.cells[column].img = "_ecp-dagger_";
+              } else if (gate.name == "magic") {
+                gatesTableRowState.cells[column].img = "_magic_";
+              } else if (gate.name == "magic-dagger") {
+                gatesTableRowState.cells[column].img = "_magic-dagger_";
+              } else if (gate.name == "molmer-sorensen") {
+                gatesTableRowState.cells[column].img = "_ms_";
+              } else if (gate.name == "molmer-sorensen-dagger") {
+                gatesTableRowState.cells[column].img = "_ms-dagger_";
+              } else if (gate.name == "w") {
+                gatesTableRowState.cells[column].img = "_w_";
+              }  else if (gate.name == "xy") {
+                gatesTableRowState.cells[column].img = "_xy_";
               }
             } else {
               let thisRowHoldsGates = rowHoldsGates(inputRow);
               if (gate.name.includes("swap")) {
-                gatesTableRowState.cells[column].name = getSwapIntermediateLineName(thisRowHoldsGates, qmin, rowQbit, gate.name);
+                gatesTableRowState.cells[column].name = getSwapIntermediateLineName(thisRowHoldsGates, targetMin, rowQbit, gate.name);
                 if (!thisRowHoldsGates) {
                   // force update swap gates intermediate segments/circles 
                   // which do not get rerendered properly when the one of 
@@ -913,16 +987,44 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             if (controls.includes(qmax)){
               gatesTableRowState.cells[column].name = getCtrlStubDownName(gate, controlstate);
             } else {
-              if (isingGates.includes(gate.name)){
-                if (gate.name == "xx"){
-                  gatesTableRowState.cells[column].img = "x";
-                } else if (gate.name == "yy") {
-                  gatesTableRowState.cells[column].img = "y";
-                } else if (gate.name == "zz") {
-                  gatesTableRowState.cells[column].img = "z";
-                }
+              if (gate.name == "xx"){
+                gatesTableRowState.cells[column].img = "x";
+              } else if (gate.name == "yy") {
+                gatesTableRowState.cells[column].img = "y";
+              } else if (gate.name == "zz") {
+                gatesTableRowState.cells[column].img = "z";
               } else if (gate.name.includes("swap")) {
                 gatesTableRowState.cells[column].img = "swap-down";
+              } else if (gate.name == "a") {
+                gatesTableRowState.cells[column].img = "_a_";
+              } else if (gate.name == "berkely") {
+                gatesTableRowState.cells[column].img = "_b_";
+              } else if (gate.name == "b-dagger") {
+                gatesTableRowState.cells[column].img = "_b-dagger_.";
+              } else if (gate.name == "canonical") {
+                gatesTableRowState.cells[column].img = "_canonical_";
+              } else if (gate.name == "cross-resonance") {
+                gatesTableRowState.cells[column].img = "_cross-resonance_";
+              } else if (gate.name == "cross-resonance-dagger") {
+                gatesTableRowState.cells[column].img = "_cross-resonance-dagger_";
+              } else if (gate.name == "givens") {
+                gatesTableRowState.cells[column].img = "_g_";
+              } else if (gate.name == "ecp") {
+                gatesTableRowState.cells[column].img = "_ecp_";
+              } else if (gate.name == "ecp-dagger") {
+                gatesTableRowState.cells[column].img = "_ecp-dagger_";
+              } else if (gate.name == "magic") {
+                gatesTableRowState.cells[column].img = "_magic_";
+              } else if (gate.name == "magic-dagger") {
+                gatesTableRowState.cells[column].img = "_magic-dagger_";
+              } else if (gate.name == "molmer-sorensen") {
+                gatesTableRowState.cells[column].img = "_ms_";
+              } else if (gate.name == "molmer-sorensen-dagger") {
+                gatesTableRowState.cells[column].img = "_ms-dagger_";
+              } else if (gate.name == "w") {
+                gatesTableRowState.cells[column].img = "_w_";
+              }  else if (gate.name == "xy") {
+                gatesTableRowState.cells[column].img = "_xy_";
               }
             }
           }

@@ -141,7 +141,7 @@ export const circuitEditorModule = {
         let unitaryThreeParamGates = ["u3"]
         let measureGates = ["measure-x", "measure-y", "measure-z"];
         let twoTargetGates = ["swap", "sqrt-swap", "sqrt-swap-dagger", "iswap", "fswap", "magic", "molmer-sorensen", "berkeley", "ecp", "w"];
-        let parametricTwoTargetGates = ["givens", "swap-theta", "xx", "yy", "zz", "xy"];
+        let parametricTwoTargetGates = ["givens", "swap-theta", "swap-root", "xx", "yy", "zz", "xy"];
         let biParametricTwoTargetGates = ["a"];
         let canonicalGates = ["canonical"]
         
