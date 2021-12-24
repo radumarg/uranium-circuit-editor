@@ -271,7 +271,7 @@ export function getPastedGates(qbitStart, stepStart){
     try {
       let gates = [];
       let copiedGates = JSON.parse(text);
-
+      const negative = (element) => element < 0;
       if (Object.prototype.hasOwnProperty.call(copiedGates, "length")) {
         for (let i = 0; i < copiedGates.length; i++){
           let gate = { ... copiedGates[i]};
@@ -281,12 +281,18 @@ export function getPastedGates(qbitStart, stepStart){
               let targets = gate.targets;
               gate.targets = targets.map(function(value) {return value + qbitStart;});
             }
+            if (gate.targets && gate.targets.some(negative)) {
+              throw new Error("Negative target qubits not permitted.");
+            }
             if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-              for (let i = 0; i < gate["controls"].length; i++) {
-                let controlInfo = gate["controls"][i];
-                let target = controlInfo["target"];
-                controlInfo["target"] = target + qbitStart;
-              }
+              let controls = gate.controls;
+              gate.controls = controls.map(function(value) {return value + qbitStart;});
+            }
+            if (gate.controls && gate.controls.some(negative)) {
+              throw new Error("Negative control qubits not permitted.");
+            }
+            if (gate.name.includes("measure")){
+              gate.bit = gate.targets[0];
             }
             gates.push(gate);
           }
@@ -295,7 +301,7 @@ export function getPastedGates(qbitStart, stepStart){
 
       return gates;
     } catch (e) {
-      console.log(e);
+      alert(e.message);
       return [];
     }
   })

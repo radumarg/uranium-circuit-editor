@@ -479,7 +479,8 @@ var rGates = ["rx-theta", "ry-theta", "rz-theta"];
 var cGates = ["c", "c-dagger"];
 var hadamardGates = ["hadamard", "hadamard-xy", "hadamard-yz", "hadamard-zx"];
 var unitaryGates = ["u1", "u2", "u3"];
-var isingGates = ["xx", "yy", "zz", "xy", "molmer-sorensen", "molmer-sorensen-dagger", "givens"];
+var isingGates = ["xx", "yy", "zz", "xy", "molmer-sorensen", "molmer-sorensen-dagger"];
+var givensGates = ["givens"];
 var swapGates = ["swap", "sqrt-swap", "sqrt-swap-dagger", "swap-theta", "swap-root", "iswap", "fswap"];
 var becpwGates = ["berkeley", "berkeley-dagger", "ecp", "ecp-dagger", "w"];
 var aGates = ["a"];
@@ -514,7 +515,9 @@ function getCtrlStubDownName(gate, controlstate) {
     return "ctrl-u-stub-down-" + controlstate;
   } else if (swapGates.includes(gate.name)) {
     return "ctrl-swap-stub-down-" + controlstate;
-  } else if (isingGates.includes(gate.name)) {
+  } else if (givensGates.includes(gate.name)) {
+    return "ctrl-givens-stub-down-" + controlstate;
+  }else if (isingGates.includes(gate.name)) {
     return "ctrl-ising-stub-down-" + controlstate;
   } else if (cGates.includes(gate.name)) {
     return "ctrl-c-stub-down-" + controlstate;
@@ -546,6 +549,8 @@ function getCtrlStubUpName(gate, controlstate) {
     return "ctrl-u-stub-up-" + controlstate;
   } else if (swapGates.includes(gate.name)) {
     return "ctrl-swap-stub-up-" + controlstate;
+  } else if (givensGates.includes(gate.name)) {
+    return "ctrl-givens-stub-up-" + controlstate;
   } else if (isingGates.includes(gate.name)) {
     return "ctrl-ising-stub-up-" + controlstate;
   } else if (cGates.includes(gate.name)) {
@@ -578,6 +583,8 @@ function getCtrlStubMidName(gate, controlstate) {
     return "ctrl-u-stub-mid-" + controlstate;
   } else if (swapGates.includes(gate.name)) {
     return "ctrl-swap-stub-mid-" + controlstate;
+  } else if (givensGates.includes(gate.name)) {
+    return "ctrl-givens-stub-mid-" + controlstate;
   } else if (isingGates.includes(gate.name)) {
     return "ctrl-ising-stub-mid-" + controlstate;
   } else if (cGates.includes(gate.name)) {
@@ -596,11 +603,17 @@ function getCtrlStubMidName(gate, controlstate) {
 }
 
 function getIntermediateLineName(gateName, thisRowHoldsGates) {
-  if (isingGates.includes(gateName) || isingGates.includes(gateName)) {
+  if (isingGates.includes(gateName)) {
     if (thisRowHoldsGates) {
       return "ising-line-long";
     } else {
       return "ising-line-short";
+    }
+  } else if (givensGates.includes(gateName)) {
+    if (thisRowHoldsGates) {
+      return "givens-line-long";
+    } else {
+      return "givens-line-short";
     }
   } else if (pauliGates.includes(gateName)) {
     if (thisRowHoldsGates) {
@@ -676,7 +689,7 @@ function getIntermediateLineName(gateName, thisRowHoldsGates) {
     }
   } else if (crossResonanceGates.includes(gateName)) {
     if (thisRowHoldsGates) {
-      return "cross-resonace-line-long";
+      return "cross-resonance-line-long";
     } else {
       return "cross-resonance-line-short";
     }
@@ -839,13 +852,24 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
 
           if (Object.prototype.hasOwnProperty.call(gate, "theta")) {
             gatesTableRowState.cells[column].theta = parseFloat(gate.theta);
-            if (!gate.name.includes("swap") || ((inputRow - 1) / 2 == Math.min(...targets))){
+            if ((!gate.name.includes("swap") &&
+                 gate.name != "givens" &&
+                 gate.name != "xx" &&
+                 gate.name != "yy" &&
+                 gate.name != "zz" &&
+                 gate.name != "xy" &&
+                 gate.name != "xx" &&
+                 gate.name != "a" &&
+                 !gate.name.includes("cross-resonance")
+                ) || ((inputRow - 1) / 2 == Math.min(...targets))){
               gatesTableRowState.cells[column].tooltip += `θ:${gate.theta} `;
             }
           }
           if (Object.prototype.hasOwnProperty.call(gate, "phi")) {
             gatesTableRowState.cells[column].phi = parseFloat(gate.phi);
-            gatesTableRowState.cells[column].tooltip += `φ:${gate.phi} `;
+            if (gate.name != "a" || ((inputRow - 1) / 2 == Math.min(...targets))){
+              gatesTableRowState.cells[column].tooltip += `φ:${gate.phi} `;
+            }
           }
           if (Object.prototype.hasOwnProperty.call(gate, "lambda")) {
             gatesTableRowState.cells[column].lambda = parseFloat(gate.lambda);
@@ -896,10 +920,10 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
                 gatesTableRowState.cells[column].img = "swap-up";
               } else if (gate.name == "a") {
                 gatesTableRowState.cells[column].img = "_a_";
-              } else if (gate.name == "berkely") {
+              } else if (gate.name == "berkeley") {
                 gatesTableRowState.cells[column].img = "_b_";
-              } else if (gate.name == "b-dagger") {
-                gatesTableRowState.cells[column].img = "_b-dagger_.";
+              } else if (gate.name == "berkeley-dagger") {
+                gatesTableRowState.cells[column].img = "_b-dagger_";
               } else if (gate.name == "canonical") {
                 gatesTableRowState.cells[column].img = "_canonical_";
               } else if (gate.name == "cross-resonance") {
@@ -907,7 +931,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
               } else if (gate.name == "cross-resonance-dagger") {
                 gatesTableRowState.cells[column].img = "_cross-resonance-dagger_";
               } else if (gate.name == "givens") {
-                gatesTableRowState.cells[column].img = "_g_";
+                gatesTableRowState.cells[column].img = "_givens_";
               } else if (gate.name == "ecp") {
                 gatesTableRowState.cells[column].img = "_ecp_";
               } else if (gate.name == "ecp-dagger") {
@@ -940,10 +964,10 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
                 gatesTableRowState.cells[column].img = "swap-mid";
               } else if (gate.name == "a") {
                 gatesTableRowState.cells[column].img = "_a_";
-              } else if (gate.name == "berkely") {
+              } else if (gate.name == "berkeley") {
                 gatesTableRowState.cells[column].img = "_b_";
-              } else if (gate.name == "b-dagger") {
-                gatesTableRowState.cells[column].img = "_b-dagger_.";
+              } else if (gate.name == "berkeley-dagger") {
+                gatesTableRowState.cells[column].img = "_b-dagger_";
               } else if (gate.name == "canonical") {
                 gatesTableRowState.cells[column].img = "_canonical_";
               } else if (gate.name == "cross-resonance") {
@@ -951,7 +975,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
               } else if (gate.name == "cross-resonance-dagger") {
                 gatesTableRowState.cells[column].img = "_cross-resonance-dagger_";
               } else if (gate.name == "givens") {
-                gatesTableRowState.cells[column].img = "_g_";
+                gatesTableRowState.cells[column].img = "_givens_";
               } else if (gate.name == "ecp") {
                 gatesTableRowState.cells[column].img = "_ecp_";
               } else if (gate.name == "ecp-dagger") {
@@ -997,10 +1021,10 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
                 gatesTableRowState.cells[column].img = "swap-down";
               } else if (gate.name == "a") {
                 gatesTableRowState.cells[column].img = "_a_";
-              } else if (gate.name == "berkely") {
+              } else if (gate.name == "berkeley") {
                 gatesTableRowState.cells[column].img = "_b_";
-              } else if (gate.name == "b-dagger") {
-                gatesTableRowState.cells[column].img = "_b-dagger_.";
+              } else if (gate.name == "berkeley-dagger") {
+                gatesTableRowState.cells[column].img = "_b-dagger_";
               } else if (gate.name == "canonical") {
                 gatesTableRowState.cells[column].img = "_canonical_";
               } else if (gate.name == "cross-resonance") {
@@ -1008,7 +1032,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
               } else if (gate.name == "cross-resonance-dagger") {
                 gatesTableRowState.cells[column].img = "_cross-resonance-dagger_";
               } else if (gate.name == "givens") {
-                gatesTableRowState.cells[column].img = "_g_";
+                gatesTableRowState.cells[column].img = "_givens_";
               } else if (gate.name == "ecp") {
                 gatesTableRowState.cells[column].img = "_ecp_";
               } else if (gate.name == "ecp-dagger") {

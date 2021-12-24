@@ -563,14 +563,20 @@ export default {
           gateName == "yy" ||
           gateName == "zz" ||
           gateName == "xy" ||
+          gateName == "cross-resonance" ||
+          gateName == "cross-resonance-dagger" ||
           gateName == "molmer-sorensen" ||
+          gateName == "molmer-sorensen-dagger" ||
           gateName == "magic" ||
+          gateName == "magic-dagger" ||
           gateName == "canonical" ||
           gateName == "givens" ||
-          gateName == "berkely" ||
+          gateName == "berkeley" ||
+          gateName == "berkeley-dagger" ||
           gateName == "w" ||
           gateName == "a" ||
-          gateName == "ecp"
+          gateName == "ecp" ||
+          gateName == "ecp-dagger"
         ) && dto["targets"].length == 1) {
         success = this.tryAppendingSecondTargetQubit(dto, qbit, step, existingQbits);
       }

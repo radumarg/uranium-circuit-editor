@@ -32,9 +32,9 @@
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/fswap.svg" @dragend="dragEnd" @dragstart="dragStart" title="fswap" alt="F Swap Gate"/>
             <img v-else src="../assets/blue-gates/fswap.svg" @dragend="dragEnd" @dragstart="dragStart" title="fswap" alt="F Swap Gate"/>
           </td>
-          <td v-on:click="gateSelected" id="xy">
-            <img v-if="coloredGatesCookie" src="../assets/colored-gates/xy.svg" @dragend="dragEnd" @dragstart="dragStart" title="xy" alt="XY Gate" />
-            <img v-else src="../assets/blue-gates/xy.svg" @dragend="dragEnd" @dragstart="dragStart" title="xy" alt="XY Gate" />
+          <td v-on:click="gateSelected" id="givens">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/givens.svg" @dragend="dragEnd" @dragstart="dragStart" title="givens" alt="Givens Gate" />
+            <img v-else src="../assets/blue-gates/givens.svg" @dragend="dragEnd" @dragstart="dragStart" title="givens" alt="Givens Gate" />
           </td>
         </tr>
         <tr>
@@ -50,14 +50,14 @@
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/zz.svg" @dragend="dragEnd" @dragstart="dragStart" title="zz" alt="ZZ Gate" />
             <img v-else src="../assets/blue-gates/zz.svg" @dragend="dragEnd" @dragstart="dragStart" title="zz" alt="ZZ Gate" />
           </td> 
-          <td v-on:click="gateSelected" id="givens">
-            <img v-if="coloredGatesCookie" src="../assets/colored-gates/givens.svg" @dragend="dragEnd" @dragstart="dragStart" title="givens" alt="Givens Gate" />
-            <img v-else src="../assets/blue-gates/givens.svg" @dragend="dragEnd" @dragstart="dragStart" title="givens" alt="Givens Gate" />
-          </td>  
+          <td v-on:click="gateSelected" id="xy">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/xy.svg" @dragend="dragEnd" @dragstart="dragStart" title="xy" alt="XY Gate" />
+            <img v-else src="../assets/blue-gates/xy.svg" @dragend="dragEnd" @dragstart="dragStart" title="xy" alt="XY Gate" />
+          </td>
         </tr>
         <tr>
           <td v-on:click="gateSelected" id="molmer-sorensen">
-            <img v-if="coloredGatesCookie" src="../assets/colored-gates/molmer-sorensen.svg" @dragend="dragEnd" @dragstart="dragStart" title="molmer-sorensen" alt="molmer-Sorensen Gate" />
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/molmer-sorensen.svg" @dragend="dragEnd" @dragstart="dragStart" title="molmer-sorensen" alt="Molmer-Sorensen Gate" />
             <img v-else src="../assets/blue-gates/molmer-sorensen.svg" @dragend="dragEnd" @dragstart="dragStart" title="molmer-sorensen" alt="Molmer-Sorensen Gate" />
           </td>
           <td v-on:click="gateSelected" id="molmer-sorensen-dagger">
@@ -108,12 +108,6 @@
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/cross-resonance-dagger.svg" @dragend="dragEnd" @dragstart="dragStart" title="cross-resonance-dagger" alt="Cross Resonance Dagger Gate" />
             <img v-else src="../assets/blue-gates/cross-resonance-dagger.svg" @dragend="dragEnd" @dragstart="dragStart" title="cross-resonance-dagger" alt="Cross Resonance Dagger Gate" />
           </td>
-        </tr>
-        <tr>
-          <td v-on:click="gateSelected" id="canonical">
-            <img v-if="coloredGatesCookie" src="../assets/colored-gates/canonical.svg" @dragend="dragEnd" @dragstart="dragStart" title="canonical" alt="Canonical Gate" />
-            <img v-else src="../assets/blue-gates/canonical.svg" @dragend="dragEnd" @dragstart="dragStart" title="canonical" alt="Canonical Gate" />
-          </td> 
         </tr>
     </table>
   </div>

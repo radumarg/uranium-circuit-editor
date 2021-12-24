@@ -127,6 +127,10 @@ each qubit is measured into a classical bit with index equal to the qubit index 
       return 'The canonical gate is a 3-parameter quantum logic gate that acts on two qubits and appears in Kraus-Cirac decomposition.';
     } else if (gateName == "givens") {
       return 'This "givens" gate is defined as: exp(-i * θ/2 * (X⊗X - Y⊗Y)). The Givens gate occurs in quantum computational chemistry.';
+    } else if (gateName == "cross-resonance") {
+      return 'The "cross-resonance" gate (CR) for superconducting qubits implements a ZX interaction and is defined as: exp(-i * θ/2 * (Z⊗X)). Because in real life the CR gate is implemented using weakly anharmonic transmon qubits in practice there exist other smaller interactions terms in the interaction hamiltonian besides the dominant Z⊗X term. The CR gate is maximally entangling at θ = π/2.';
+    } else if (gateName == "cross-resonance-dagger") {
+      return 'The "cross-resonance-dagger" is the conjugate transpose of "cross-resonance" gate and is defined as: exp(i * θ/2 * (Z⊗X)). Because in real life the CR gate is implemented using weakly anharmonic transmon qubits in practice there exist other smaller interactions terms in the interaction hamiltonian besides the dominant Z⊗X term. The CR gate is maximally entangling at θ = π/2.';
     }
 
     return "In order to work with the Circuit Editor use the gates pallete on the left to drag & drop gates in the circuit \
@@ -261,6 +265,10 @@ export function retriveControlledGateHelpHtml(gateName) {
     return 'A "canonical" gate may have any number of controls.';
   } else if (gateName == "givens") {
     return 'A "givens" gate may have any number of controls.';
+  } else if (gateName == "cross-resonance") {
+    return 'A "cross-resonance" gate may have any number of controls.';
+  } else if (gateName == "cross-resonance-dagger") {
+    return 'A "cross-resonance-dagger" gate may have any number of controls.';
   }
 
   return "Note on representation of qubit states: the Bloch sphere Z-bazis states are conventionally named: |0⟩ and |1⟩. The Z-basis is usually refered to as the computational or \
@@ -1270,6 +1278,62 @@ export function retriveGateMatrixHtml(gateName) {
           <td style='padding: 2px; text-align: center;'>0</td>\
           <td style='padding: 2px; text-align: center;'>0</td>\
           <td style='padding: 2px; text-align: center;'>1</td>\
+      </tr>\
+      </table>";
+    } else if (gateName == "cross-resonance") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2x; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>i&nbsp;sin(θ/2)</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>i&nbsp;sin(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
+      </tr>\
+      </table>";
+    } else if (gateName == "cross-resonance-dagger") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>i&nbsp;sin(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>i&nbsp;sin(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2x; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ/2)</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>0</td>\
+          <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
       </tr>\
       </table>";
     }
