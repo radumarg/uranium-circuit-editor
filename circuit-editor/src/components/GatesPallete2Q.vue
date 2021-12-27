@@ -20,10 +20,6 @@
           </td>
         </tr>
         <tr>
-          <td v-on:click="gateSelected" id="swap-root">
-            <img v-if="coloredGatesCookie" src="../assets/colored-gates/swap-root.svg" @dragend="dragEnd" @dragstart="dragStart" title="swap-root" alt="Phi Swap Gate"/>
-            <img v-else src="../assets/blue-gates/swap-root.svg" @dragend="dragEnd" @dragstart="dragStart" title="swap-root" alt="Swap Root Gate"/>
-          </td>
           <td v-on:click="gateSelected" id="iswap">
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/iswap.svg" @dragend="dragEnd" @dragstart="dragStart" title="iswap" alt="I Swap Gate"/>
             <img v-else src="../assets/blue-gates/iswap.svg" @dragend="dragEnd" @dragstart="dragStart" title="iswap" alt="I Swap Gate"/>
@@ -32,9 +28,13 @@
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/fswap.svg" @dragend="dragEnd" @dragstart="dragStart" title="fswap" alt="F Swap Gate"/>
             <img v-else src="../assets/blue-gates/fswap.svg" @dragend="dragEnd" @dragstart="dragStart" title="fswap" alt="F Swap Gate"/>
           </td>
-          <td v-on:click="gateSelected" id="givens">
-            <img v-if="coloredGatesCookie" src="../assets/colored-gates/givens.svg" @dragend="dragEnd" @dragstart="dragStart" title="givens" alt="Givens Gate" />
-            <img v-else src="../assets/blue-gates/givens.svg" @dragend="dragEnd" @dragstart="dragStart" title="givens" alt="Givens Gate" />
+          <td v-on:click="gateSelected" id="swap-root">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/swap-root.svg" @dragend="dragEnd" @dragstart="dragStart" title="swap-root" alt="Swap Root Gate"/>
+            <img v-else src="../assets/blue-gates/swap-root.svg" @dragend="dragEnd" @dragstart="dragStart" title="swap-root" alt="Swap Root Gate"/>
+          </td>
+          <td v-on:click="gateSelected" id="swap-root-dagger">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/swap-root-dagger.svg" @dragend="dragEnd" @dragstart="dragStart" title="swap-root-dagger" alt="Swap Root Dagger Gate"/>
+            <img v-else src="../assets/blue-gates/swap-root-dagger.svg" @dragend="dragEnd" @dragstart="dragStart" title="swap-root-dagger" alt="Swap Root Dagger Gate"/>
           </td>
         </tr>
         <tr>
@@ -109,6 +109,12 @@
             <img v-else src="../assets/blue-gates/cross-resonance-dagger.svg" @dragend="dragEnd" @dragstart="dragStart" title="cross-resonance-dagger" alt="Cross Resonance Dagger Gate" />
           </td>
         </tr>
+        <tr>
+          <td v-on:click="gateSelected" id="givens">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/givens.svg" @dragend="dragEnd" @dragstart="dragStart" title="givens" alt="Givens Gate" />
+            <img v-else src="../assets/blue-gates/givens.svg" @dragend="dragEnd" @dragstart="dragStart" title="givens" alt="Givens Gate" />
+          </td>
+        </tr>
     </table>
   </div>
 </template>
@@ -124,9 +130,9 @@ export default {
 <style scoped>
 
 .gates-pallete {
-  overflow: auto;
-  min-height: calc( 100vh - 98px );
-  max-height: calc( 100vh - 98px );
+  overflow: scroll;
+  min-height: calc( 100vh - 140px );
+  max-height: calc( 100vh - 140px );
   width: 100%;
   height: 100%;
 }

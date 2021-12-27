@@ -166,9 +166,9 @@ export default {
 <style scoped>
 
 .gates-pallete {
-  overflow: auto;
-  min-height: calc( 100vh - 98px );
-  max-height: calc( 100vh - 98px );
+  overflow: scroll;
+  min-height: calc( 100vh - 140px );
+  max-height: calc( 100vh - 140px );
   width: 100%;
   height: 100%;
 }

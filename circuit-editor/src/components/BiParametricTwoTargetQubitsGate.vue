@@ -53,6 +53,14 @@
         </tr>
         <tr>
           <td></td>
+          <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Phi:</td>
+          <td width="100px" style="padding: 5px;">
+            <b-form-input @keyup.enter.native="handleSave()" v-model.number="phiNew" placeholder="phi" type="number" id="phi-new" style="width:90px;"></b-form-input>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
             <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
@@ -241,6 +249,16 @@
           <td class="no-resize-cell"></td>
         </tr>
         <tr>
+          <td></td>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Phi Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="phiExpression" placeholder="" type="text" id="phi-expression" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
           <td colspan="7" class="td-2nd-modal">
           </td>
           <td class="no-resize-cell">
@@ -374,21 +392,21 @@
 
 <script>
 import { mapActions } from 'vuex';
-import TwoTargetQubitsGate from "./TwoTargetQubitsGate";
+import ParametricTwoTargetQubitsGate from "./ParametricTwoTargetQubitsGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";
 import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 import { arraysHaveElementsInCommon } from "../store/modules/javaScriptUtils.js";
 export default {
-  name: "ParametricTwoTargetQubitsGate",
-  extends: TwoTargetQubitsGate,
+  name: "BiParametricTwoTargetQubitsGate",
+  extends: ParametricTwoTargetQubitsGate,
   mixins: [controlsMixin],
   props: {
-    'theta': Number,
+    'phi': Number,
   },
   data() {
     return {
-      thetaNew: this.theta,
-      thetaExpression: this.theta.toString(),
+      phiNew: this.phi,
+      phiExpression: this.phi.toString(),
     }
   },
   methods: {
@@ -406,6 +424,7 @@ export default {
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
       let thetaOld = this.theta;
+      let phiOld = this.phi;
       let promise = this.repositionSimpleGateInCircuit({
         'step': this.step,
         'name': this.name,
@@ -413,6 +432,7 @@ export default {
         'controls': [...this.controls],
         'targetsNew': [...this.$data.targetsNew],
         'thetaNew': this.$data.thetaNew,
+        'phiNew': this.$data.phiNew,
         'controlsNew': this.$data.controlsNew,
         'controlstatesNew': this.$data.controlstatesNew,
       });
@@ -425,6 +445,7 @@ export default {
           this.$data.controlsNew = [...controlsOld];
           this.$data.controlstatesNew = [...controlstatesOld];
           this.$data.thetaNew = thetaOld;
+          this.$data.phiNew = phiOld;
         }
       );
       this.$refs['initial-modal-dialog'].hide();
@@ -443,6 +464,7 @@ export default {
         'conjugateConditionExpression': this.conjugateConditionExpression,
         'qbit2Expression': this.qbit2Expression,
         'thetaExpression': this.thetaExpression,
+        'phiExpression': this.phiExpression,
         'numberOfControlsExpression': this.numberOfControlsExpression,
         'controlsExpression': this.controlsExpression,
         'controlstatesExpression': this.controlstatesExpression,
@@ -467,6 +489,7 @@ export default {
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstates", [...this.controlstates]);
       event.dataTransfer.setData("theta", this.theta);
+      event.dataTransfer.setData("phi", this.phi);
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
     },

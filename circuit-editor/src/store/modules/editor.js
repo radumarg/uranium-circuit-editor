@@ -141,7 +141,8 @@ export const circuitEditorModule = {
         let unitaryThreeParamGates = ["u3"]
         let measureGates = ["measure-x", "measure-y", "measure-z"];
         let twoTargetGates = ["swap", "sqrt-swap", "sqrt-swap-dagger", "iswap", "fswap", "magic", "magic-dagger", "molmer-sorensen", "molmer-sorensen-dagger", "berkeley", "berkeley-dagger", "ecp", "ecp-dagger", "w"];
-        let parametricTwoTargetGates = ["givens", "swap-theta", "swap-root", "xx", "yy", "zz", "xy", "cross-resonance", "cross-resonance-dagger"];
+        let twoTargetRootGates = ["swap-root", "swap-root-dagger"];
+        let parametricTwoTargetGates = ["givens", "swap-theta", "xx", "yy", "zz", "xy", "cross-resonance", "cross-resonance-dagger"];
         let biParametricTwoTargetGates = ["a"];
         let canonicalGates = ["canonical"]
         
@@ -206,6 +207,8 @@ export const circuitEditorModule = {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
           } else if (twoTargetGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, };
+          } else if (twoTargetRootGates.includes(name) && controls.length == 0) {
+            dto = { "step": step, "targets": targets, "name": name, "root": "1/1", };
           } else if (parametricTwoTargetGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, };
           } else if (biParametricTwoTargetGates.includes(name) && controls.length == 0) {
@@ -214,6 +217,8 @@ export const circuitEditorModule = {
             dto = { "step": step, "targets": targets, "name": name, "tx": 0, "ty": 0, "tz": 0 };
           } else if (twoTargetGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "controls": controls, "controlstates": controlstates };
+          } else if (twoTargetRootGates.includes(name)) {
+            dto = { "step": step, "targets": targets, "name": name, "root": "1/1", "controls": controls, "controlstates": controlstates };
           } else if (parametricTwoTargetGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "controls": controls, "controlstates": controlstates };
           } else if (biParametricTwoTargetGates.includes(name)) {

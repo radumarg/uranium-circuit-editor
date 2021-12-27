@@ -33,7 +33,7 @@ class GatesTableCell {
     this.theta = null;
     this.lambda = null;
     /* root used by pauli root gates: +/-(1/t) or +/-(1/2^k) */
-    this.root = null;
+    this.root = "1/1";
     /* used by measure gates */
     this.bit = null;
     /* cell already has some content */
@@ -481,7 +481,7 @@ var hadamardGates = ["hadamard", "hadamard-xy", "hadamard-yz", "hadamard-zx"];
 var unitaryGates = ["u1", "u2", "u3"];
 var isingGates = ["xx", "yy", "zz", "xy", "molmer-sorensen", "molmer-sorensen-dagger"];
 var givensGates = ["givens"];
-var swapGates = ["swap", "sqrt-swap", "sqrt-swap-dagger", "swap-theta", "swap-root", "iswap", "fswap"];
+var swapGates = ["swap", "sqrt-swap", "sqrt-swap-dagger", "swap-theta", "swap-root", "swap-root-dagger", "iswap", "fswap"];
 var becpwGates = ["berkeley", "berkeley-dagger", "ecp", "ecp-dagger", "w"];
 var aGates = ["a"];
 var magicGates = ["magic", "magic-dagger"];
@@ -844,6 +844,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
               || gate.name == "iswap"
               || gate.name == "fswap"
               || gate.name == "swap-root"
+              || gate.name == "swap-root-dagger"
               ){
             if ((inputRow - 1) / 2 == Math.min(...targets)){
               gatesTableRowState.cells[column].tooltip += `${gate.name} `;
@@ -876,10 +877,12 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             gatesTableRowState.cells[column].tooltip += `λ:${gate.lambda} `;
           }
           if (Object.prototype.hasOwnProperty.call(gate, "root")) {
-            gatesTableRowState.cells[column].root = gate.root;
-            if (!gate.root.includes("1/2^")){
-              let root = gate.root.replace("1/", "");
-              gatesTableRowState.cells[column].tooltip += `t:${root} `;
+            if (gate.name != "swap-root" || ((inputRow - 1) / 2 == Math.min(...targets))){
+              gatesTableRowState.cells[column].root = gate.root;
+              if (!gate.root.includes("1/2^")){
+                let root = gate.root.replace("1/", "");
+                gatesTableRowState.cells[column].tooltip += `t:${root} `;
+              }
             }
           }
           if (Object.prototype.hasOwnProperty.call(gate, "bit")) {

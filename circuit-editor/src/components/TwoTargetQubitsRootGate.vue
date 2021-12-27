@@ -3,7 +3,7 @@
 
     <img :src="gateImageSrcEditor" :id="id" :title="title" data-toggle="tooltip" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
-    <b-modal ref="initial-modal-dialog" size="sm"  centered hide-footer hide-header>
+    <b-modal ref="initial-modal-dialog" size="sm" centered hide-footer hide-header>
 
       <table style="table-layout:fixed;">
         <tr>
@@ -34,7 +34,7 @@
             </div>
           </td>
           <td colspan="2" style="padding: 10px;">
-            <img :src="gateImageSrcPopup" id="popup-gate-image" style="width:120px;height:auto;" />
+            <img :src="gateImageSrcPopup" style="width:120px;" />
           </td>
           <td>
             <div v-b-hover="handleExpandRightHover">
@@ -45,9 +45,9 @@
         </tr>
         <tr>
           <td></td>
-          <td v-b-tooltip.hover title="Gate parameter" width="100px" style="padding: 5px;">Theta:</td>
+          <td v-b-tooltip.hover title="Root parametrized as 1/t" width="100px" style="padding: 5px;">Root:</td>
           <td width="100px" style="padding: 5px;"> 
-            <b-form-input @keyup.enter.native="handleSave()" v-model.number="thetaNew" placeholder="theta" type="number" id="theta-new" style="width:90px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="rootNewT" placeholder="" type="number" id="root-new-t" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -56,6 +56,14 @@
           <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
             <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td v-b-tooltip.hover title="2nd Target qubit" width="100px" style="padding: 5px;">Target<sub>2</sub></td>
+          <td width="100px" style="padding: 5px;"> 
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[1]" placeholder="qbit2" type="number" id="qbit2-new" style="width:90px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -185,6 +193,16 @@
         <tr>
           <td></td>
           <td colspan="3" width="300px" class="td-2nd-modal">
+            Target-2 Qubit - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="qbit2Expression" placeholder="" type="text" id="target-2-qbit" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="3" width="300px" class="td-2nd-modal">
             Number of controls - 'q, s' based <br/>javascript expression:
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
@@ -215,10 +233,10 @@
         <tr>
           <td></td>
           <td colspan="3" width="300px" class="td-2nd-modal">
-            Theta Value - 'q, s' based <br/>javascript expression:
+            Root Value - 'q, s' based <br/>javascript expression:
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="thetaExpression" placeholder="" type="text" id="theta-expression" style="min-width:400px;"></b-form-input>
+            <b-form-input min="0" v-model="rootTExpression" placeholder="" type="text" id="root-t-expression" style="min-width:400px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>
@@ -353,29 +371,37 @@
   </div>
 </template>
 
+
 <script>
 import { mapActions } from 'vuex';
-import SingleQbitGate from "./SingleQbitGate";
+import TwoTargetQubitsGate from "./TwoTargetQubitsGate";
 import {controlsMixin} from "../mixins/controlsMixin.js";
 import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 import { arraysHaveElementsInCommon } from "../store/modules/javaScriptUtils.js";
 export default {
-  name: "ParametricSingleQbitGate",
-  extends: SingleQbitGate,
+  name: "ParametricTwoTargetQubitsGate",
+  extends: TwoTargetQubitsGate,
   mixins: [controlsMixin],
   props: {
-    'theta': Number,
+    'root': String,
   },
   data() {
     return {
-      thetaNew: this.theta,
-      thetaExpression: this.theta.toString(),
+      rootNewT: this.getTRoot(),
+      rootTExpression: this.getTRoot(),
+    }
+  },
+  watch: {
+    control: function() {
+      // need this in order to update rootNew
+      // when doing drag & drop on the stub
+      this.$data.rootNewT = this.getTRoot();
     }
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
     handleSave: function(){
-      if (!Number.isInteger(this.$data.targetsNew[0])){
+      if (!Number.isInteger(this.$data.targetsNew[0]) || !Number.isInteger(this.$data.targetsNew[1])){
         alert("Please enter an integer number!");
         return;
       }
@@ -386,16 +412,15 @@ export default {
       let targetsOld = [...this.targets];
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
-      let thetaOld = this.theta;
       let promise = this.repositionSimpleGateInCircuit({
-        'step': this.step, 
-        'targets': [...this.targets],
+        'step': this.step,
         'name': this.name,
+        'targets': [...this.targets],
         'controls': [...this.controls],
         'targetsNew': [...this.$data.targetsNew],
         'controlsNew': this.$data.controlsNew,
         'controlstatesNew': this.$data.controlstatesNew,
-        'thetaNew': this.$data.thetaNew,
+        'rootNew': this.getRoot(),
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -405,7 +430,7 @@ export default {
           this.$data.targetsNew = [...targetsOld];
           this.$data.controlsNew = [...controlsOld];
           this.$data.controlstatesNew = [...controlstatesOld];
-          this.$data.thetaNew = thetaOld;
+          this.$data.rootTNew = this.getTRoot();
         }
       );
       this.$refs['initial-modal-dialog'].hide();
@@ -414,8 +439,7 @@ export default {
       let promise = this.replicateGate({
         'step': this.step,
         'targets': [...this.targets],
-        'name': this.name,
-        'controls': [...this.controls],
+        'name': this.name, 
         'stepFirst': this.stepFirst,
         'stepLast': this.stepLast,
         'stepConditionExpression': this.stepConditionExpression,
@@ -423,9 +447,12 @@ export default {
         'qbitLast': this.qbitLast,
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
+        'qbit2Expression': this.qbit2Expression,
+        'rootExpression': this.rootExpression,
+        'numberOfControlsExpression': this.numberOfControlsExpression,
         'controlsExpression': this.controlsExpression,
         'controlstatesExpression': this.controlstatesExpression,
-        'thetaExpression': this.thetaExpression,
+        'rootTExpression': this.rootTExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -442,17 +469,36 @@ export default {
       event.dataTransfer.setData("gateName", target.name);
       event.dataTransfer.setData("drag-origin", "gate");
       event.dataTransfer.setData("dragged-qbit", this.qrow);
-      event.dataTransfer.setData("originalTargets", [...this.targets]);
       event.dataTransfer.setData("originalStep", this.step);
+      event.dataTransfer.setData("originalTargets", [...this.targets]);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstates", [...this.controlstates]);
-      event.dataTransfer.setData("theta", this.theta);
+      event.dataTransfer.setData("root", this.getRoot());
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
     },
     dragEnd: function() {
       let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
       document.body.removeChild(dragImageGhost);
+    },
+    resetRootT(){
+      this.$data.rootNewT = null;
+    },
+    resetRootTExpression(){
+      this.$data.rootTExpression = null;
+    },
+    getRoot(){
+      if (this.$data.rootNewT){
+        return "1/" + this.$data.rootNewT;
+      } else {
+        return null;
+      }
+    },
+    getTRoot(){
+      if (this.root == "1/1"){
+        return "1";
+      }
+      return this.root.replace("1/", "");
     },
   },
 }
@@ -501,5 +547,4 @@ td {
 img {
   display: inline-block;
 }
-
 </style>

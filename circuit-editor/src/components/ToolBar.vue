@@ -83,7 +83,7 @@
           <td width="35px"></td>
           <td v-b-tooltip.hover width="80px" style="padding: 5px;">Qbits:</td>
           <td width="110px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="qbitsNew" placeholder="qbits" type="number" id="qbits-new" style="width:80px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSaveStepsAndQbits()" v-model.number="qbitsNew" placeholder="qbits" type="number" id="qbits-new" style="width:80px;"></b-form-input>
           </td>
           <td width="30px"></td>
         </tr>
@@ -91,7 +91,7 @@
           <td width="35px"></td>
           <td v-b-tooltip.hover width="80px" style="padding: 5px;">Steps:</td>
           <td width="110px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="stepsNew" placeholder="steps" type="number" id="steps" style="width:80px;"></b-form-input>
+            <b-form-input min="0" @keyup.enter.native="handleSaveStepsAndQbits()" v-model.number="stepsNew" placeholder="steps" type="number" id="steps" style="width:80px;"></b-form-input>
           </td>
           <td width="30px"></td>
         </tr>

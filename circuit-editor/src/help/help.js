@@ -40,13 +40,13 @@ export function retriveSimpleGateHelpHtml(gateName) {
     } else if (gateName == "s-dagger") {
         return 'The "s-dagger" gate acts on a single qubit and is defined as: u1(-π/2). It is the conjugate transpose of s gate. It represents a clockwise π/2 radians rotation around the Z-axis of the Bloch sphere.';
     } else if (gateName == "swap") {
-        return 'This gate swaps two qubits and is equal to Can(1/2, 1/2, 1/2).';
+        return 'This gate swaps two qubits and when expressed as a canonical gate is equal to Canonical(1/2, 1/2, 1/2).';
     } else if (gateName == "sqrt-swap") {
-        return 'This gate performs half-way a two-qubit swap.  It the square root of swap gate and is equal to Can(1/4, 1/4, 1/4).';
+        return 'This gate performs half-way a two-qubit swap.  It the square root of swap gate and when expressed as a canonical gate is equal to Canonical(1/4, 1/4, 1/4).';
     } else if (gateName == "swap-theta") {
-        return 'This gate performs partial a two-qubit swap and is equivalent to Can(1/2, 1/2, 1/2 - θ/π).';
+        return 'This gate performs partial a two-qubit swap and is equivalent to Canonical(1/2, 1/2, 1/2 - θ/π). Equivalence between two gates means they have the same unitary operator up to a global phase factor.';
     } else if (gateName == "iswap") {
-        return 'This gate performs partial a two-qubit swap and is equivalent to Can(-1/2, -1/2, 0).';
+        return 'This gate performs partial a two-qubit swap and is equivalent to Canonical(-1/2, -1/2, 0). Equivalence between two gates means they have the same unitary operator up to a global phase factor.';
     } else if (gateName == "measure-x") {
         return 'Measures a qubit along the direction given by the X-axis of the Bloch sphere. This is not a unitary operation. The index of the classic bit where a qubit is measured cannot be larger than the maximum qubit index. \
 When multiple qubits are measured in the same classical bit an XOR operation is performed on the bit value. When no measure gates are present in the circuit simulation results are identical to the situation where \
@@ -60,11 +60,11 @@ each qubit is measured into a classical bit with index equal to the qubit index 
 When multiple qubits are measured in the same classical bit an XOR operation is performed on the bit value. When no measure gates are present in the circuit simulation results are identical to the situation where \
 each qubit is measured into a classical bit with index equal to the qubit index of the measure gate.';
     } else if (gateName == "xx") {
-        return 'XX Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * X⊗X). It is equal to Can(θ, 0, 0). The Ising XX, YY and ZZ gates all commute with one another.';
+        return 'XX Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * X⊗X). When expressed in terms of  canonical gate it is equal to Canonical(θ, 0, 0). The Ising XX, YY and ZZ gates all commute with one another.';
     } else if (gateName == "yy") {
-        return 'YY Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * Y⊗Y). It is equal to Can(0, θ, 0). The Ising XX, YY and ZZ gates all commute with one another.';
+        return 'YY Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * Y⊗Y). When expressed in terms of  canonical gate it is equal to Canonical(0, θ, 0). The Ising XX, YY and ZZ gates all commute with one another.';
     } else if (gateName == "zz") {
-        return 'ZZ Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * Z⊗Z). It is equal to Can(0, 0, θ). The Ising XX, YY and ZZ gates all commute with one another.';
+        return 'ZZ Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * Z⊗Z). When expressed in terms of  canonical gate it is equal to Canonical(0, 0, θ). The Ising XX, YY and ZZ gates all commute with one another.';
     } else if (gateName == "pauli-x-root") {
         return 'The "pauli-x-root" gate is the root of a "pauli-x" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as an anti-clockwise rotation around X-axis of Bloch sphere with an angle given by π/t or, depending on the chosen parametrization, π/2^k radians.';
     } else if (gateName == "pauli-y-root") {
@@ -96,37 +96,39 @@ each qubit is measured into a classical bit with index equal to the qubit index 
     } else if (gateName == "c-dagger") {
       return 'This is the conjugate transpose of "c" gate and is also equal to the square of the "c" gate. It represents a 240 degree rotation of the Bloch sphere and permutes the three axes of the Bloch sphere (X->Z, Y->X, Z->Y).';
     } else if (gateName == "fswap") {
-      return 'This is the fermionic swap gate which swaps adjacent fermionic modes in the Jordan-Wigner representation and is equivalent to Can(1/2, 1/2, 0).';
-    }  else if (gateName == "swap-root") {
-      return 'This represents a parametrized root of "swap" gate and is equal to Can(1/(2t), 1/(2t), 1/(2t)).';
-    } else if (gateName == "sqrt-swap-dagger") {
-      return 'This is the conjugate transpose of "sqrt-swap" gate and is equal to Can(3/4, 1/2, 1/2).';
+      return 'This is the fermionic swap gate which swaps adjacent fermionic modes in the Jordan-Wigner representation and is equivalent to Canonical(1/2, 1/2, 0). Equivalence between two gates means they have the same unitary operator up to a global phase factor.';
+    } else if (gateName == "swap-root") {
+      return 'This represents a parametrized root of "swap" gate and when expressed as a canonical gate is equal to Canonical(1/(2t), 1/(2t), 1/(2t)).';
+    } else if (gateName == "swap-root-dagger") {
+      return 'This is the conjugate transpose of "swap-root" gate.';
+    }else if (gateName == "sqrt-swap-dagger") {
+      return 'This is the conjugate transpose of "sqrt-swap" gate and when expressed as a canonical gate is equal to Canonical(3/4, 1/4, 1/4).';
     } else if (gateName == "molmer-sorensen") {
-      return 'The Mølmer-Sørensen gate is a natural gate for laser driven trapped ions and is equal to Can(−1/2, 0, 0).';
+      return 'The Mølmer-Sørensen gate is a natural gate for laser driven trapped ions and when expressed as a canonical gate is equal to Canonical(−1/2, 0, 0).';
     } else if (gateName == "molmer-sorensen-dagger") {
-      return 'This is the conjugate transpose of Mølmer-Sørensen gate. Ir is a natural gate for laser driven trapped ions and is equal to Can(1/2, 0, 0).';
+      return 'This is the conjugate transpose of Mølmer-Sørensen gate. Ir is a natural gate for laser driven trapped ions and when expressed as a canonical gate is equal to Canonical(1/2, 0, 0).';
     } else if (gateName == "xy") {
-      return 'This is the "xy" gate and it is defined as: exp(-i * θ/2 * (X⊗X + Y⊗Y)). It is equal to Can(θ, θ, 0).';
+      return 'This is the "xy" gate and it is defined as: exp(-i * θ/2 * (X⊗X + Y⊗Y)). When expressed in terms of  canonical gate it is equal to Canonical(θ, θ, 0).';
     } else if (gateName == "a") {
-      return 'The "a" gate conserves the number of 1s versus 0s in the computational basis and is used in VQE ansatz';
+      return 'The "a" gate conserves the number of 1s versus 0s in the computational basis and is used in the VQE ansatz.'
     } else if (gateName == "berkeley") {
-      return 'This is the Berkeley gate.';
+      return 'This is the Berkeley gate. When expressed in terms of canonical gate it is equal to Canonical(−1/2, −1/4, 0).';
     } else if (gateName == "berkeley-dagger") {
       return 'This is the conjugate transpose of Berkeley gate.';
     } else if (gateName == "w") {
       return 'The "w" gate is an orthogonal and hermitian gate and can be used to diagonalize the "swap" gate.';
     } else if (gateName == "ecp") {
-      return 'The "ecp" gate and is equivalent to Can(1/2, 1/4, 1/4).';
+      return 'The "ecp" gate and is equivalent to Canonical(1/2, 1/4, 1/4). Equivalence between two gates means they have the same unitary operator up to a global phase factor.';
     } else if (gateName == "ecp-dagger") {
       return 'This is the conjugate transpose of "ecp" gate.';
     } else if (gateName == "magic") {
-      return 'The magic gate trasforms computational based to the magic basis and is equivalent to Can(1/2, 0, 0).';
+      return 'The magic gate trasforms computational based to the magic basis and is equivalent to Canonical(1/2, 0, 0). Equivalence between two gates means they have the same unitary operator up to a global phase factor.';
     } else if (gateName == "magic-dagger") {
       return 'This is the conjugate transpose of "magic" gate.';
     } else if (gateName == "canonical") {
       return 'The canonical gate is a 3-parameter quantum logic gate that acts on two qubits and appears in Kraus-Cirac decomposition.';
     } else if (gateName == "givens") {
-      return 'This "givens" gate is defined as: exp(-i * θ/2 * (X⊗X - Y⊗Y)). The Givens gate occurs in quantum computational chemistry.';
+      return 'This "givens" gate is defined as: exp(-i * θ/2 * (X⊗X - Y⊗Y)). The Givens gate occurs in quantum computational chemistry and when expressed as a canonical gate is equivalent to Canonical(θ/π, θ/π, 0). Equivalence between two gates means they have the same unitary operator up to a global phase factor.';
     } else if (gateName == "cross-resonance") {
       return 'The "cross-resonance" gate (CR) for superconducting qubits implements a ZX interaction and is defined as: exp(-i * θ/2 * (Z⊗X)). Because in real life the CR gate is implemented using weakly anharmonic transmon qubits in practice there exist other smaller interactions terms in the interaction hamiltonian besides the dominant Z⊗X term. The CR gate is maximally entangling at θ = π/2.';
     } else if (gateName == "cross-resonance-dagger") {
@@ -235,9 +237,11 @@ export function retriveControlledGateHelpHtml(gateName) {
     return 'A "c-dagger" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "c-dagger" gate typically performs a generic (three parameters) unitary operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "fswap") {
     return 'A "fswap" gate may have any number of controls.';
-  }  else if (gateName == "swap-root") {
+  } else if (gateName == "swap-root") {
     return 'A "swap-root" gate may have any number of controls.';
-  } else if (gateName == "sqrt-swap-dagger") {
+  } else if (gateName == "swap-root-dagger") {
+    return 'A "swap-root-dagger" gate may have any number of controls.';
+  }else if (gateName == "sqrt-swap-dagger") {
     return 'A "sqrt-swap-dagger" gate may have any number of controls.';
   } else if (gateName == "molmer-sorensen") {
     return 'A "molmer-sorensen" gate may have any number of controls.';
@@ -899,7 +903,7 @@ export function retriveGateMatrixHtml(gateName) {
           <td style='padding: 5px; text-align: center;'>-1</td>\
       </tr>\
       </table>";
-    }  else if (gateName == "swap-root") {
+    } else if (gateName == "swap-root") {
       return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
       <div style='font-size:13px;'>exp(-i&nbsp;π/4t)&nbsp*</div> \
       <table class='matrix'> \
@@ -926,6 +930,35 @@ export function retriveGateMatrixHtml(gateName) {
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>exp(i&nbsp;π/2t)</td>\
+      </tr>\
+      </table>";
+    } else if (gateName == "swap-root-dagger") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <div style='font-size:13px;'>exp(i&nbsp;π/4t)&nbsp*</div> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>exp(-i&nbsp;π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>exp(-i&nbsp;π/2t)</td>\
       </tr>\
       </table>";
     } else if (gateName == "sqrt-swap-dagger") {
@@ -1149,7 +1182,7 @@ export function retriveGateMatrixHtml(gateName) {
       </tr>\
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>(1+i)(c-s)</td>\
+          <td style='padding: 5px; text-align: center;'>(1-i)(c+s)</td>\
           <td style='padding: 5px; text-align: center;'>(1+i)(c-s)</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
       </tr>\
@@ -1172,12 +1205,12 @@ export function retriveGateMatrixHtml(gateName) {
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>(1-i)(c-s)</td>\
-          <td style='padding: 5px; text-align: center;'>(1-i)(c+s)</td>\
+          <td style='padding: 5px; text-align: center;'>(1+i)(c+s)</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
       </tr>\
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>(1+i)(c-s)</td>\
+          <td style='padding: 5px; text-align: center;'>(1+i)(c+s)</td>\
           <td style='padding: 5px; text-align: center;'>(1-i)(c-s)</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
       </tr>\
@@ -1226,26 +1259,26 @@ export function retriveGateMatrixHtml(gateName) {
       <td><table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>1</td>\
-          <td style='padding: 5px; text-align: center;'>-i</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-      </tr>\
-      <tr>\
-          <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>-i</td>\
           <td style='padding: 5px; text-align: center;'>1</td>\
       </tr>\
       <tr>\
-          <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>-i</td>\
-          <td style='padding: 5px; text-align: center;'>-1</td>\
-      </tr>\
-      <tr>\
-          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>i</td>\
+      </tr>\
+      <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>-i</td>\
+          <td style='padding: 5px; text-align: center;'>-i</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>-1</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
       </tr>\
       </table></td>\
@@ -1263,14 +1296,14 @@ export function retriveGateMatrixHtml(gateName) {
       </tr>\
       <tr>\
           <td style='padding: 2px; text-align: center;'>0</td>\
-          <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
-          <td style='padding: 2px; text-align: center;'>-&nbsp;sin(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>cos(θ)</td>\
+          <td style='padding: 2px; text-align: center;'>-&nbsp;sin(θ)</td>\
           <td style='padding: 2x; text-align: center;'>0</td>\
       </tr>\
       <tr>\
           <td style='padding: 2px; text-align: center;'>0</td>\
-          <td style='padding: 2px; text-align: center;'>sin(θ/2)</td>\
-          <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
+          <td style='padding: 2px; text-align: center;'>sin(θ)</td>\
+          <td style='padding: 2px; text-align: center;'>cos(θ)</td>\
           <td style='padding: 2px; text-align: center;'>0</td>\
       </tr>\
       <tr>\
@@ -2005,7 +2038,9 @@ export function retriveControlledGateMatrixHtml(gateName) {
     return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ c-dagger.</div>"
   } else if (gateName == "fswap") {
     return "";
-  }  else if (gateName == "swap-root") {
+  } else if (gateName == "swap-root") {
+    return "";
+  } else if (gateName == "swap-root-dagger") {
     return "";
   } else if (gateName == "sqrt-swap-dagger") {
     return "";

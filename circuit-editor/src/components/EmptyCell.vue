@@ -426,8 +426,7 @@ export default {
         dto["root"] = root;
       }
       if (event.dataTransfer.types.includes("bit")) {
-        let bit = parseInt(event.dataTransfer.getData("bit"));
-        dto["bit"] = bit;
+        dto["bit"] = qbit;
       }
 
       let proposedQbits = [...dto["targets"], ...dto["controls"]]

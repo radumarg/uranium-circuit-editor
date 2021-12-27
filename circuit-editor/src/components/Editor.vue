@@ -255,7 +255,10 @@
               <TwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'swap-root'">
-              <ParametricTwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
+              <TwoTargetQubitsRootGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :root="cell.root" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'swap-root-dagger'">
+              <TwoTargetQubitsRootGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :root="cell.root" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'xx' || cell.name === 'yy' || cell.name === 'zz' || cell.name === 'xy'">
               <ParametricTwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
@@ -298,6 +301,7 @@ import EmptyCellRectangle from "./EmptyCellRectangle";
 import EmptyCellSquare from "./EmptyCellSquare";
 import TwoTargetQubitsGate from "./TwoTargetQubitsGate";
 import ParametricTwoTargetQubitsGate from "./ParametricTwoTargetQubitsGate";
+import TwoTargetQubitsRootGate from "./TwoTargetQubitsRootGate.vue";
 import BiParametricTwoTargetQubitsGate from "./BiParametricTwoTargetQubitsGate";
 import SwapCircle from "./SwapCircle";
 export default {
@@ -321,6 +325,7 @@ export default {
     EmptyCellSquare,
     TwoTargetQubitsGate,
     ParametricTwoTargetQubitsGate,
+    TwoTargetQubitsRootGate,
     BiParametricTwoTargetQubitsGate,
     SwapCircle,
   },

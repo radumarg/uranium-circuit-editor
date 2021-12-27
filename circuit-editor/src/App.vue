@@ -33,7 +33,7 @@
       </div>
     </b-row>
     <b-row no-gutters align-v="center" class="bordered-box" style="border-right: solid 0.5em #374048;">
-      <b-col cols="12" md="auto" style="max-width: 273px;">
+      <b-col cols="12" md="auto" style="max-width: 286px;">
         <Logo />
       </b-col>
       <b-col> 
