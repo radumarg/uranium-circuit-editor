@@ -479,6 +479,7 @@ var rGates = ["rx-theta", "ry-theta", "rz-theta"];
 var cGates = ["c", "c-dagger"];
 var hadamardGates = ["hadamard", "hadamard-xy", "hadamard-yz", "hadamard-zx"];
 var unitaryGates = ["u1", "u2", "u3"];
+var aggregateGates = ["aggregate"];
 var isingGates = ["xx", "yy", "zz", "xy", "molmer-sorensen", "molmer-sorensen-dagger"];
 var givensGates = ["givens"];
 var swapGates = ["swap", "sqrt-swap", "sqrt-swap-dagger", "swap-theta", "swap-root", "swap-root-dagger", "iswap", "fswap"];
@@ -531,6 +532,8 @@ function getCtrlStubDownName(gate, controlstate) {
     return "ctrl-a-stub-down-" + controlstate;
   } else if (crossResonanceGates.includes(gate.name)) {
     return "ctrl-cross-resonance-stub-down-" + controlstate;
+  } else if (aggregateGates.includes(gate.name)) {
+    return "ctrl-aggregate-stub-down-" + controlstate;
   } 
 }
 
@@ -565,6 +568,8 @@ function getCtrlStubUpName(gate, controlstate) {
     return "ctrl-a-stub-up-" + controlstate;
   } else if (crossResonanceGates.includes(gate.name)) {
     return "ctrl-cross-resonance-stub-up-" + controlstate;
+  } else if (aggregateGates.includes(gate.name)) {
+    return "ctrl-aggregate-stub-up-" + controlstate;
   }
 }
 
@@ -599,6 +604,8 @@ function getCtrlStubMidName(gate, controlstate) {
     return "ctrl-a-stub-mid-" + controlstate;
   } else if (crossResonanceGates.includes(gate.name)) {
     return "ctrl-cross-resonance-stub-mid-" + controlstate;
+  } else if (aggregateGates.includes(gate.name)) {
+    return "ctrl-aggregate-stub-mid-" + controlstate;
   }
 }
 
@@ -692,6 +699,12 @@ function getIntermediateLineName(gateName, thisRowHoldsGates) {
       return "cross-resonance-line-long";
     } else {
       return "cross-resonance-line-short";
+    }
+  } else if (aggregateGates.includes(gateName)) {
+    if (thisRowHoldsGates) {
+      return "aggregate-line-long";
+    } else {
+      return "aggregate-line-short";
     }
   }
 }

@@ -140,11 +140,12 @@ export const circuitEditorModule = {
         let unitaryTwoParamGates = ["u2"];
         let unitaryThreeParamGates = ["u3"]
         let measureGates = ["measure-x", "measure-y", "measure-z"];
+        let aggregateGates = ["aggregate"];
         let twoTargetGates = ["swap", "sqrt-swap", "sqrt-swap-dagger", "iswap", "fswap", "magic", "magic-dagger", "molmer-sorensen", "molmer-sorensen-dagger", "berkeley", "berkeley-dagger", "ecp", "ecp-dagger", "w"];
         let twoTargetRootGates = ["swap-root", "swap-root-dagger"];
         let parametricTwoTargetGates = ["givens", "swap-theta", "xx", "yy", "zz", "xy", "cross-resonance", "cross-resonance-dagger"];
         let biParametricTwoTargetGates = ["a"];
-        let canonicalGates = ["canonical"]
+        let canonicalGates = ["canonical"];
         
         let name = dataTransferObj["name"];
         let step = dataTransferObj["step"];
@@ -191,6 +192,8 @@ export const circuitEditorModule = {
             dto = { "step": step, "targets": targets, "name": name, "phi": 0, "lambda": 0 };
           } else if (unitaryThreeParamGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "lambda": 0 };
+          } else if (aggregateGates.includes(name) && controls.length == 0) {
+            dto = { "step": step, "targets": targets, "name": name };
           } else if (measureGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "bit": targets[0] };
           } else if (singleQbitGates.includes(name)) {
@@ -205,6 +208,8 @@ export const circuitEditorModule = {
             dto = { "step": step, "targets": targets, "name": name, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
           } else if (unitaryThreeParamGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
+          } else if (aggregateGates.includes(name)) {
+            dto = { "step": step, "targets": targets, "name": name, "controls": controls, "controlstates": controlstates };
           } else if (twoTargetGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, };
           } else if (twoTargetRootGates.includes(name) && controls.length == 0) {

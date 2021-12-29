@@ -49,6 +49,9 @@
             <b-tab title="2-Q">
               <GatesPallete-2Q /> 
             </b-tab>
+            <b-tab title="n-Q">
+              <GatesPallete-nQ />
+            </b-tab>
           </b-tabs>
         </b-col>
         <b-col class="bordered-box">
@@ -63,6 +66,7 @@
 import Circuit from "./components/Circuit";
 import GatesPallete1Q from "./components/GatesPallete1Q";
 import GatesPallete2Q from "./components/GatesPallete2Q";
+import GatesPalleteNQ from "./components/GatesPalleteNQ";
 import Logo from "./components/Logo";
 import ToolBar from "./components/ToolBar";
 import { retriveNoteHtml, retriveSimpleGateHelpHtml, retriveControlledGateHelpHtml, retriveGateMatrixHtml, retriveControlledGateMatrixHtml } from "./help/help.js";
@@ -75,6 +79,7 @@ export default {
     Circuit,
     GatesPallete1Q,
     GatesPallete2Q,
+    GatesPalleteNQ,
     ToolBar,
   },
   data() {

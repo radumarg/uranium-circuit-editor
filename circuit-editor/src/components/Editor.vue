@@ -62,6 +62,12 @@
             <div v-else-if="cell.name === 'u-line-long'">
               <VerticalTransitionCellLong :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
+            <div v-else-if="cell.name === 'aggregate-line-short'">
+              <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'aggregate-line-long'">
+              <VerticalTransitionCellLong :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+            </div>
             <div v-else-if="cell.name === 'swap-circle-small'" :key="cell.key">
               <SwapCircle />
             </div>
@@ -118,6 +124,9 @@
             </div>
             <div v-else-if="cell.name === 'zero-state'">
               <ZeroState :title="cell.tooltip" />
+            </div>
+            <div v-else-if="cell.name === 'aggregate'">
+              <AggregateGate :id="cell.id" :targets="[...cell.targets]" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'hadamard'">
               <SingleQbitGate :id="cell.id" :targets="[...cell.targets]" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
@@ -288,6 +297,7 @@ import ZeroState from "./ZeroState";
 import HorizontalTransitionCell from "./HorizontalTransitionCell";
 import VerticalTransitionCellShort from "./VerticalTransitionCellShort"
 import VerticalTransitionCellLong from "./VerticalTransitionCellLong";
+import AggregateGate from "./AggregateGate";
 import ElementaryGate from "./ElementaryGate";
 import SingleQbitGate from "./SingleQbitGate";
 import PauliRootGate from "./PauliRootGate";
@@ -312,6 +322,7 @@ export default {
     HorizontalTransitionCell,
     VerticalTransitionCellShort,
     VerticalTransitionCellLong,
+    AggregateGate,
     ElementaryGate,
     SingleQbitGate,
     PauliRootGate,

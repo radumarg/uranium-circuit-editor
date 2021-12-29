@@ -17,8 +17,10 @@ export function retriveSimpleGateHelpHtml(gateName) {
         return 'This is a generic, one parameter, unitary single bit gate and is defined as: u3(0, 0, λ). The "u1" gate acts on a single qubit. Leaves the basis state |0⟩ unchanged and map |1⟩ to exp(i*λ)|1⟩. The probability of measuring a |0⟩ or |1⟩ is unchanged after applying this gate, however it modifies the phase of the quantum state. The z, s and t gates are special cases of "u1" for λ values given by π, π/2 and π/4 respectively.'
     } else if (gateName == "hadamard") {
         return 'The "hadamard" gate acts on a single qubit and is defined as: u2(0, π). This gate creates a superposition by mapping |0⟩ to |+⟩ and |1⟩ to |-⟩. It is the combination of two rotations, first a π rotation about the Z-axis of the Bloch sphere followed by a π/2 about the Y-axis. Alternatively, it can be represented as a π rotation around an axis diagonal in the Z-X plane. The Hadamard gate is the one-qubit version of the quantum Fourier transform.';
-    } else if (gateName == "identity") {
-        return 'The "identity" gate acts on a single qubit and preserves current state of the qubit it is applied to.';
+    } else if (gateName == "aggregate") {
+        return 'The "aggregate" gate permits grouping multiple single qubit target gates in one muliple targets gate.';
+    }  else if (gateName == "identity") {
+      return 'The "identity" gate acts on a single qubit and preserves current state of the qubit it is applied to.';
     } else if (gateName == "pauli-x") {
         return 'The "pauli-x" gate acts on a single qubit and is defined as: u3(π, 0, π). With respect to the computational basis it is the quantum equivalent of the NOT gate for classical computers since it maps |0⟩ to |1⟩ and |1⟩ to |0⟩. It is equivalent to a rotation around the X-axis of the Bloch sphere by π radians.';
     } else if (gateName == "pauli-y") {
@@ -197,9 +199,11 @@ export function retriveControlledGateHelpHtml(gateName) {
       return 'A "pauli-z-root-dagger" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "pauli-z-root-dagger" gate typically performs the "pauli-z-root-dagger" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
   } else if (gateName == "swap") {
     return 'The simplest controlled swap gate, also known as Fredkin gate, acts on three qubits and performs a controlled swap when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. The matrix representation of the Fredkin gate is:';
+  } else if (gateName == "aggregate") {
+    return 'An "aggregate" gate may have any number of controls. This is equivalent to a set of single target qubit gates sharing the same set of controls.';
   } else if (gateName == "identity") {
     return '';
-  } else if (gateName == "measure-x") {
+  }else if (gateName == "measure-x") {
     return '';
   } else if (gateName == "measure-y") {
     return '';
@@ -317,18 +321,20 @@ export function retriveGateMatrixHtml(gateName) {
                     <td style='padding: 5px; text-align: center;'>-&nbsp1</td>\
                 </tr>\
                 </table></td></table>";
+    } else if (gateName == "aggregate") {
+        return "";
     } else if (gateName == "identity") {
-        return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <table class='matrix'> \
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>1</td>\
-            <td style='padding: 5px; text-align: center;'>0</td>\
-        </tr>\
-        <tr>\
-            <td style='padding: 5px; text-align: center;'>0</td>\
-            <td style='padding: 5px; text-align: center;'>1</td>\
-        </tr>\
-        </table>";
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+      </tr>\
+      </table>";
     } else if (gateName == "pauli-x") {
         return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
         <table class='matrix'> \
