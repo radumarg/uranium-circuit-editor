@@ -6,7 +6,7 @@
 import Vue from 'vue';
 import JQuery from 'jquery';
 
-export function createDragImageGhost (targetImage) {
+export function createDragImageGhost (targetImage, imageWidth = null) {
 
   var fakeGhost = document.createElement("img");
   fakeGhost.src = targetImage.src;
@@ -21,7 +21,11 @@ export function createDragImageGhost (targetImage) {
       }
   }
 
-  fakeGhost.style.width = "40px";
+  if (imageWidth){
+    fakeGhost.style.width = imageWidth;
+  } else {
+    fakeGhost.style.width = "40px";
+  }
   fakeGhost.style.height = "auto";
   fakeGhost.id = "dragged-gate-ghost";
   document.body.appendChild(fakeGhost);

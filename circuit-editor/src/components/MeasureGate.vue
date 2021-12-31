@@ -205,6 +205,10 @@ export default {
         alert("Please enter an integer number!");
         return;
       }
+      if (this.$data.bitNew > this.$data.targetsNew[0]){
+        alert("Classic bit number index cannot be larger than target qubit index!");
+        return;
+      }
       let targetsOld = [...this.targets];
       let bitOld = this.bitOld;
       let promise = this.repositionElementaryGateInCircuit({

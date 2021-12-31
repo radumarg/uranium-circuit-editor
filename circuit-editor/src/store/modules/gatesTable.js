@@ -44,6 +44,8 @@ class GatesTableCell {
     this.controls = [];
     /* For controlled gates this indicates the control states defined as +/-1 along Z axis in computational basis.*/
     this.controlstates = [];
+    /* single qubit gates attached to an aggregate gate */
+    this.gates = [];
     /* the circle in parametric swap gates is not being refreshed by vue when draging the upper qbit, 
        upwards to a new position so we need to update this key to force vue to re-render that cell 
     */

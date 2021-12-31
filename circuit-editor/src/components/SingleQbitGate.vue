@@ -237,8 +237,8 @@
         </tr>
         <tr>
           <td></td>
-          <td :colspan="numberOfColumnsInEditControlsModal()" rowspan="4" :style="getEmbedTableCellStyle()" class="text-center">
-            <b-table-simple :style="getEmbededTableStyle()" :responsive="true" borderless>
+          <td :colspan="numberOfColumnsInEditControlsModal()" rowspan="4" :style="getEditControlsEmbedTableCellStyle()" class="text-center">
+            <b-table-simple :style="getEditControlsEmbededTableStyle()" :responsive="true" borderless>
               <b-tr>
                 <b-td v-for="(control, index) in controlsNew.length" v-bind:key="index" style="border: 1px solid #E0E0E0;" class="embedded-table-cell">
                   <img :src="stubImageSrcPopup(control - 1)" style="width:30px; height:auto;" />

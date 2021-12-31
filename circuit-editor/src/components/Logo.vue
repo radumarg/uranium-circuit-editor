@@ -14,6 +14,7 @@
 
 <script>
 export default {
+  name: "Logo",
   methods: {
     goBack: function() {
       var previousURL = document.referrer;

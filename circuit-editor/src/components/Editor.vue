@@ -126,7 +126,7 @@
               <ZeroState :title="cell.tooltip" />
             </div>
             <div v-else-if="cell.name === 'aggregate'">
-              <AggregateGate :id="cell.id" :targets="[...cell.targets]" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <AggregateGate :id="cell.id" :targets="[...cell.targets]" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :gates="[...cell.gates]" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'hadamard'">
               <SingleQbitGate :id="cell.id" :targets="[...cell.targets]" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>

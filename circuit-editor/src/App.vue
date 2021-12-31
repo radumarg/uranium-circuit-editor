@@ -32,7 +32,7 @@
         </b-sidebar>
       </div>
     </b-row>
-    <b-row no-gutters align-v="center" class="bordered-box" style="border-right: solid 0.5em #374048;">
+    <b-row no-gutters align-v="center" class="bordered-box" style="border-right: solid 0.5em #374048;" @dragover.prevent @drop.prevent="handleDropEvent">
       <b-col cols="12" md="auto" style="max-width: 286px;">
         <Logo />
       </b-col>
@@ -41,7 +41,29 @@
       </b-col>
     </b-row>
     <b-row no-gutters>
-        <b-col cols="12" md="auto" class="bordered-box">
+        <b-col cols="12" md="auto" class="bordered-box" @dragover.prevent @drop.prevent="handleDropEvent">
+          <table>
+            <tr>
+              <td class="controls-table-cell">
+                <img src="../src/assets/colored-gates/ctrl-stub-+i.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="control +i" alt="+i control"/>
+              </td>
+              <td class="controls-table-cell">
+                <img src="../src/assets/colored-gates/ctrl-stub--i.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="control -i" alt="-i control"/>
+              </td>
+              <td class="controls-table-cell">
+                <img src="../src/assets/colored-gates/ctrl-stub-+.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="control +" alt="+ control"/>
+              </td>
+              <td class="controls-table-cell">
+                <img src="../src/assets/colored-gates/ctrl-stub--.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="control -" alt="- control"/>
+              </td>
+              <td class="controls-table-cell">
+                <img src="../src/assets/colored-gates/ctrl-stub-0.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="control 0" alt="0 control"/>
+              </td>
+              <td class="controls-table-cell">
+                <img src="../src/assets/colored-gates/ctrl-stub-1.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="control 1" alt="1 control"/>
+              </td>
+            </tr>
+          </table>
           <b-tabs>
             <b-tab title="1-Q">
               <GatesPallete-1Q /> 
@@ -69,11 +91,13 @@ import GatesPallete2Q from "./components/GatesPallete2Q";
 import GatesPalleteNQ from "./components/GatesPalleteNQ";
 import Logo from "./components/Logo";
 import ToolBar from "./components/ToolBar";
+import { leftPanelsMixin } from "./mixins/leftPanelsMixin.js";
 import { retriveNoteHtml, retriveSimpleGateHelpHtml, retriveControlledGateHelpHtml, retriveGateMatrixHtml, retriveControlledGateMatrixHtml } from "./help/help.js";
-import { getUserInterfaceSetting } from "./store/modules/applicationWideReusableUnits.js";
+import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "./store/modules/applicationWideReusableUnits.js";
 
 export default {
   name: "App",
+  mixins: [leftPanelsMixin],
   components: {
     Logo,
     Circuit,
@@ -120,7 +144,18 @@ export default {
           this.gateImage = require("./assets/blue-gates/" + gateName + ".svg");
         }
       }
-    }
+    },
+    dragStart: function(event) {
+      hideTooltips();
+      const target = event.target;
+      event.dataTransfer.setData("gateName", target.title);
+      let dragImageGhost = createDragImageGhost(target, "28px");
+      event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
+    },
+    dragEnd: function() {
+      let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
+      document.body.removeChild(dragImageGhost);
+    },
   },
   created() {
     this.$root.$on('updateHelpEvent', (selectedGate) => {this.updateHelpContents(selectedGate)});
@@ -166,6 +201,20 @@ export default {
 .matrix:after {
   right: -6px;
   border-left: 0;
+}
+
+.controls-table-cell {
+  border: 1px solid #374048;
+  padding: 3px;
+  width: 47px;
+  height: 47px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+.stub-image {
+  width: 17px;
+  height: 17px;
 }
 
 </style>
