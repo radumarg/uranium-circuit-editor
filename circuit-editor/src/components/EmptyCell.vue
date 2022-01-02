@@ -198,7 +198,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { seatsAreTaken } from "../store/modules/gatesTable.js";
-import { handleSelectEvent, isDefined } from "../store/modules/editorHelper.js";
+import { handleSelectEvent, isDefined, getClosestGates } from "../store/modules/editorHelper.js";
 export default {
   name: "EmptyCell",
   props: {
@@ -316,28 +316,93 @@ export default {
       this.$refs["modal-dialog"].hide();
     },
     handleDropEvent: function (event) {
+
       let draggedQbit = null;
       if (event.dataTransfer.types.includes("dragged-qbit")) {
         draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       }
+
+      let dragOrigin = event.dataTransfer.getData("drag-origin");
+      if (!dragOrigin){
+        // handles the case where we are dragging by accident the gates pallete 
+        // tab title, don't know how to disable the drag action for these
+        this.handleDragLeave();
+        return;
+      }
+
       if (event.shiftKey && isDefined(draggedQbit)) {
         // shift key is pressed and draggedQbit not null means
         // we are not doing drag & drop from the gates pallete
-        let dragOrigin = event.dataTransfer.getData("drag-origin");
-        if (dragOrigin == 'stub'){
+        if (dragOrigin == "stub") {
           let step = parseInt(event.currentTarget.getAttribute("step"));
-          let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
-          if (step != originalStep){
+          let originalStep = parseInt(
+            event.dataTransfer.getData("originalStep")
+          );
+          if (step != originalStep) {
             alert("To duplicate a gate drag a target qubit not control qubit!");
             this.handleDragLeave();
           } else {
             this.addNewControlToControlledGate(event);
           }
-        } else{
+        } else {
           this.addNewGateToCircuit(event);
         }
       } else {
-        this.removeDraggedGateAndAddNewGateToCircuit(event);
+        if (dragOrigin == "control") {
+          this.findClosestGateAndAddNewControl(event);
+        } else {
+          this.removeDraggedGateAndAddNewGateToCircuit(event);
+        }
+      }
+    },
+    findClosestGateAndAddNewControl: function (event) {
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
+      let circuitState = this.$store.state.circuitEditorModule;
+      let closestGates = getClosestGates(circuitState, step, dropQbit);
+      if (closestGates.length >= 2) {
+        alert(
+          "There is no unique closest gate to attach control to. Please use the gate popup dialog in order to add a new control to your desired gate."
+        );
+        this.handleDragLeave();
+      } else if (closestGates.length == 1) {
+        let closestGate = closestGates[0];
+        let controlState = event.dataTransfer.getData("controlState");
+
+        let controls = [];
+        let controlstates = [];
+        if (Object.prototype.hasOwnProperty.call(closestGate, "controls")) {
+          for (let i = 0; i < closestGate.controls.length; i++) {
+            controls.push(closestGate.controls[i].target);
+            controlstates.push(closestGate.controls[i].state);
+          }
+        }
+        controls.push(dropQbit);
+        controlstates.push(controlState);
+
+        let dto = { step: step, name: closestGate.name, targets: [...closestGate.targets], controls: [...controls], controlstates: [...controlstates] };
+
+        if (event.dataTransfer.types.includes("phi")) {
+          let phi = parseFloat(event.dataTransfer.getData("phi"));
+          dto["phi"] = phi;
+        }
+        if (event.dataTransfer.types.includes("theta")) {
+          let theta = parseFloat(event.dataTransfer.getData("theta"));
+          dto["theta"] = theta;
+        }
+        if (event.dataTransfer.types.includes("lambda")) {
+          let lambda = parseFloat(event.dataTransfer.getData("lambda"));
+          dto["lambda"] = lambda;
+        }
+        if (event.dataTransfer.types.includes("root")) {
+          let root = event.dataTransfer.getData("root");
+          dto["root"] = root;
+        }
+
+        this.removeGateFromCircuit(dto);
+        this.insertGateInCircuit(dto);
+      } else {
+        this.handleDragLeave();
       }
     },
     addNewControlToControlledGate: function (event) {
@@ -461,7 +526,7 @@ export default {
       
       if (dragOrigin == "stub") {
         dto["targets"] = originalTargets;
-      } else if (dragOrigin) {
+      } else if (dragOrigin && dragOrigin != "gates-pallete") {
         let targets = [];
         if (step != originalStep){
           targets = originalTargets.map(function(value) {return value + delta;}).filter(val => val >= 0);

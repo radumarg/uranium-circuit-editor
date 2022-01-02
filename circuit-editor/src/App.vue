@@ -45,22 +45,22 @@
           <table>
             <tr>
               <td class="controls-table-cell">
-                <img src="../src/assets/colored-gates/ctrl-stub-+i.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="control +i" alt="+i control"/>
+                <img src="../src/assets/colored-gates/ctrl-stub-+i.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="+i" alt="+i control"/>
               </td>
               <td class="controls-table-cell">
-                <img src="../src/assets/colored-gates/ctrl-stub--i.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="control -i" alt="-i control"/>
+                <img src="../src/assets/colored-gates/ctrl-stub--i.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="-i" alt="-i control"/>
               </td>
               <td class="controls-table-cell">
-                <img src="../src/assets/colored-gates/ctrl-stub-+.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="control +" alt="+ control"/>
+                <img src="../src/assets/colored-gates/ctrl-stub-+.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="+" alt="+ control"/>
               </td>
               <td class="controls-table-cell">
-                <img src="../src/assets/colored-gates/ctrl-stub--.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="control -" alt="- control"/>
+                <img src="../src/assets/colored-gates/ctrl-stub--.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="-" alt="- control"/>
               </td>
               <td class="controls-table-cell">
-                <img src="../src/assets/colored-gates/ctrl-stub-0.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="control 0" alt="0 control"/>
+                <img src="../src/assets/colored-gates/ctrl-stub-0.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="0" alt="0 control"/>
               </td>
               <td class="controls-table-cell">
-                <img src="../src/assets/colored-gates/ctrl-stub-1.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="control 1" alt="1 control"/>
+                <img src="../src/assets/colored-gates/ctrl-stub-1.svg" class="stub-image" @dragstart="dragStart" @dragend="dragEnd" title="1" alt="1 control"/>
               </td>
             </tr>
           </table>
@@ -91,13 +91,12 @@ import GatesPallete2Q from "./components/GatesPallete2Q";
 import GatesPalleteNQ from "./components/GatesPalleteNQ";
 import Logo from "./components/Logo";
 import ToolBar from "./components/ToolBar";
-import { leftPanelsMixin } from "./mixins/leftPanelsMixin.js";
+import { mapActions} from 'vuex';
 import { retriveNoteHtml, retriveSimpleGateHelpHtml, retriveControlledGateHelpHtml, retriveGateMatrixHtml, retriveControlledGateMatrixHtml } from "./help/help.js";
 import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "./store/modules/applicationWideReusableUnits.js";
 
 export default {
   name: "App",
-  mixins: [leftPanelsMixin],
   components: {
     Logo,
     Circuit,
@@ -118,6 +117,7 @@ export default {
     };
   },
   methods: {
+    ...mapActions('circuitEditorModule/', ['removeGateFromCircuitByUser']),
     updateHelpContents: function (gateName) {
 
       var note = document.getElementById("on-gates");
@@ -148,7 +148,8 @@ export default {
     dragStart: function(event) {
       hideTooltips();
       const target = event.target;
-      event.dataTransfer.setData("gateName", target.title);
+      event.dataTransfer.setData("controlState", target.title);
+      event.dataTransfer.setData("drag-origin", "control");
       let dragImageGhost = createDragImageGhost(target, "28px");
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
     },
@@ -156,6 +157,14 @@ export default {
       let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
       document.body.removeChild(dragImageGhost);
     },
+    handleDropEvent: function (event) {
+      let targets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
+      let step = parseInt(event.dataTransfer.getData("originalStep"));
+      if (!isNaN(step) && targets.length > 0) {
+        let dto = { step: step, targets: targets };
+        this.removeGateFromCircuitByUser(dto);
+      }
+    }
   },
   created() {
     this.$root.$on('updateHelpEvent', (selectedGate) => {this.updateHelpContents(selectedGate)});
@@ -164,6 +173,16 @@ export default {
 </script>
 
 <style>
+
+table {
+  /* disable selection on mouse drag over */
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
 
 .help {
   font-family: Arial, Helvetica, sans-serif;

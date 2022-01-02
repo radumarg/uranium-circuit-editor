@@ -6,6 +6,48 @@ import {
   getUserInterfaceSetting 
 } from "./applicationWideReusableUnits.js";
 
+export function getClosestGates(circuitState, step, qubit){
+  
+  let closestGates = [];
+  let minDistance = Infinity;
+
+  if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+    for (let i = 0; i < circuitState.steps.length; i++) {
+      if (circuitState.steps[i].index == step) {
+        let gates = circuitState.steps[i]["gates"];
+        for (let j = 0; j < gates.length; j++) {
+          let gate = gates[j];
+          if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+            for (let i = 0; i < gate.targets.length; i++) {
+              let target = gate.targets[i];
+              let delta = Math.abs(target - qubit);
+              if (delta < minDistance){
+                closestGates = [{...gate}];
+                minDistance = delta;
+              } else if (delta == minDistance) {
+                closestGates.push(gate);
+              }
+            }
+          }
+          if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+            for (let i = 0; i < gate.controls.length; i++) {
+              let control = gate.controls[i].target;
+              let delta = Math.abs(control - qubit);
+              if (delta < minDistance){
+                closestGates = [{...gate}];
+                minDistance = delta;
+              } else if (delta == minDistance) {
+                closestGates.push(gate);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return closestGates;
+}
 
 export function removingGateFromCircuit(circuitState, dto){
   let step = dto["step"];

@@ -41,6 +41,7 @@ export const gatesPalleteMixin = {
       hideTooltips();
       const target = event.target;
       event.dataTransfer.setData("gateName", target.title);
+      event.dataTransfer.setData("drag-origin", "gates-pallete");
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
     },

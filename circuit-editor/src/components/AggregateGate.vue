@@ -335,6 +335,121 @@
       </table>
     </b-modal>
 
+    <b-modal ref="edit-gates-modal-dialog" :size="editGatesModalSize()" centered hide-footer hide-header>
+      <table>
+        <tr>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleEditGatesPlusHover">
+              <b-icon v-if="editControlsPlusIsHovered" v-on:click="addControl()" title="Add control" icon="plus" style="color: #7952b3;" font-scale="1.8"></b-icon>
+              <b-icon v-else icon="plus" v-on:click="addControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+          <td :colspan="numberOfColumnsInEditGatesModal() + 2" class="edit-controls-cell">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleEditGatesModalCloseHover">
+              <b-icon v-if="editControlsModalCloseIsHovered" v-on:click="hideEditGatesModal()" title="Close dialog" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="x-square" v-on:click="hideEditGatesModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td :colspan="numberOfColumnsInEditGatesModal()" rowspan="4" :style="getEditGatesEmbedTableCellStyle()" class="text-center">
+            <b-table-simple :style="getEditGatesEmbededTableStyle()" :responsive="true" borderless>
+              <b-tr>
+                <b-td v-for="(control, index) in controlsNew.length" v-bind:key="index" style="border: 1px solid #E0E0E0;" class="embedded-table-cell">
+                  <img :src="stubImageSrcPopup(control - 1)" style="width:30px; height:auto;" />
+                </b-td>
+                <b-td v-for="(emptySlot, index) in emptySlotsInEditGatesModal()" v-bind:key="index + 1000" class="embedded-table-cell" />
+              </b-tr>
+              <b-tr>
+                <b-td v-for="(controlstate, index) in controlstatesNew" v-bind:key="index + 4000" class="embedded-table-cell">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <b-form-select v-model="controlstatesNew[index]" @change="onControlStateChange()"  placeholder="controlstate" :options="options" id="controlstate-new" style="min-width: 72px; max-width: 72px;"></b-form-select>
+                  </div>
+                </b-td>
+                <b-td v-for="(emptySlot, index) in emptySlotsInEditGatesModal()" v-bind:key="index + 5000" class="embedded-table-cell" />
+              </b-tr>
+              <b-tr>
+                <b-td v-for="(control, index) in controlsNew" v-bind:key="index + 2000" class="embedded-table-cell">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <b-form-input min="0" @keyup.enter.native="handleEditGatesModalSave()" v-model.number="controlsNew[index]" placeholder="control" type="number" id="control-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
+                  </div>
+                </b-td>
+                <b-td v-for="(emptySlot, index) in emptySlotsInEditGatesModal()" v-bind:key="index + 3000"  class="embedded-table-cell" />
+              </b-tr>
+            </b-table-simple>
+          </td>
+          <td title="Control qubit" class="edit-controls-cell">Targets:</td>
+          <td class="edit-controls-cell">
+            <div class="d-flex justify-content-center align-items-center">
+              <b-form-input readonly min="0" @keyup.enter.native="handleEditGatesModalSave()" v-model.number="numberOfGates" placeholder="target" type="number" id="target-qbit" style="width:70px;"></b-form-input>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td title="No control qubits" class="edit-controls-cell">Controls:</td>
+          <td class="edit-controls-cell">
+            <div class="d-flex justify-content-center align-items-center">
+              <b-form-input min="0" v-model.number="numberOfControls" @change="onNumberControlsChange()" @keyup.enter.native="handleEditGatesModalSave()" placeholder="controls" type="number" id="number-controls" style="width:70px;"></b-form-input>
+            </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="edit-controls-cell">
+            <div v-b-hover="handleAlignControlsUpwardsHover">
+              <b-icon v-if="alignControlsUpwardsIsHovered" icon="caret-up-fill" v-on:click="alignControlsUpwardsFromTargetQubit()" title="Align controls upwards from first target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="caret-up" style="color: #7952b3;" font-scale="1.4"></b-icon>
+             </div>
+          </td>
+          <td class="edit-controls-cell">
+            <div v-b-hover="handleMoveGateOneQubitUpwardsHover">
+              <b-icon v-if="moveGateOneQubitUpwardsIsHovered" icon="arrow-up-square-fill" v-on:click="moveGateOneQubitUpwards()" title="Move gate one qubit upwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="arrow-up-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
+             </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td class="edit-controls-cell" >
+            <div v-b-hover="handleAlignControlsDownwardsHover">
+              <b-icon v-if="alignControlsDownwardsIsHovered" icon="caret-down-fill" v-on:click="alignControlsDownwardsFromTargetQubit()" title="Align controls downwards from last target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="caret-down" style="color: #7952b3;" font-scale="1.4"></b-icon>
+             </div>
+          </td>
+          <td class="edit-controls-cell">
+            <div v-b-hover="handleMoveGateOneQubitDownwardsHover">
+              <b-icon v-if="moveGateOneQubitDownwardsIsHovered" icon="arrow-down-square-fill" v-on:click="moveGateOneQubitDownwards()" title="Move gate one qubit downwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="arrow-down-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
+             </div>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleEditGatesMinusHover">
+              <b-icon v-if="editControlsMinusIsHovered" v-on:click="removeControl()" title="Remove control" icon="dash" style="color: #7952b3;" font-scale="1.8"></b-icon>
+              <b-icon v-else icon="dash" v-on:click="removeControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+          <td :colspan="numberOfColumnsInEditGatesModal() + 2" class="edit-controls-cell">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleEditGatesModalSaveHover">
+              <b-icon v-if="editControlsModalSaveIsHovered" v-on:click="handleEditGatesModalSave()" title="Save changes" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
+              <b-icon v-else icon="check" v-on:click="handleEditGatesModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </b-modal>
+
   </div>
 </template>
 
@@ -358,36 +473,37 @@ export default {
       editGatesModalSaveIsHovered:  false,
       editGatesPlusIsHovered:  false,
       editGatesMinusIsHovered:  false,
+      gatesNew: [...this.gates],
       numberOfGates: this.gates.length,
     }
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
-        editGatesModalSize(){
-      if (this.controlsNew.length <= 7){
+    editGatesModalSize(){
+      if (this.gatesNew.length <= 7){
         return "lg";
       } else {
         return "xl";
       }
     },
     getEditGatesEmbededTableStyle(){
-      let maxWidth = (this.controlsNew.length > 7) ? 880 : 600;
+      let maxWidth = (this.gatesNew.length > 7) ? 880 : 600;
       return `overflow-x:scroll; max-width: ${maxWidth}px; height: 195px; min-height: 195px; max-height: 195px; border-spacing: 5px; display: inline-block; table-layout: fixed;`
     },
     getEditGatesEmbedTableCellStyle(){
-      let width = (this.controlsNew.length > 7) ? 880 : 560;
+      let width = (this.gatesNew.length > 7) ? 880 : 560;
       return `width: ${width}px; min-width: ${width}px; max-width: ${width}px`;
     },
     emptySlotsInEditGatesModal(){
-      let visibleControls = (this.controlsNew.length > 7) ? 11 : 7;
-      return Math.max(0, visibleControls - this.controlsNew.length);
+      let visibleControls = (this.gatesNew.length > 7) ? 11 : 7;
+      return Math.max(0, visibleControls - this.gatesNew.length);
     },
     numberOfColumnsInEditGatesModal(){
-      let visibleControls = (this.controlsNew.length > 7) ? 11 : 7;
-      return 2 + Math.max(this.controlsNew.length, visibleControls);
+      let visibleControls = (this.gatesNew.length > 7) ? 11 : 7;
+      return 2 + Math.max(this.gatesNew.length, visibleControls);
     },
     hideEditGatesModal: function() {
-      this.$refs['edit-controls-modal-dialog'].hide();
+      this.$refs['edit-gates-modal-dialog'].hide();
       this.$refs['initial-modal-dialog'].show();
     },
     handleEditGates: function(){
@@ -400,7 +516,7 @@ export default {
       this.alignControlsUpwardsIsHovered = false;
       this.alignControlsDownwardsIsHovered = false;
       this.$refs['initial-modal-dialog'].hide();
-      this.$refs['edit-controls-modal-dialog'].show();
+      this.$refs['edit-gates-modal-dialog'].show();
     },
     handleEditGatesHover(hovered) {
       this.editGatesIsHovered = hovered;

@@ -382,7 +382,7 @@ export default {
       numberOfControlsExpression: this.controls.length,
     }
   },
-    watch: {
+  watch: {
     control: function() {
       // need this in order to update controlsNew
       // when doing drag & drop on the stub

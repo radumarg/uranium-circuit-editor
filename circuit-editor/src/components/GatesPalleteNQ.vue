@@ -26,8 +26,8 @@ export default {
 
 .gates-pallete {
   overflow: scroll;
-  min-height: calc( 100vh - 140px );
-  max-height: calc( 100vh - 140px );
+  min-height: calc( 100vh - 188px );
+  max-height: calc( 100vh - 188px );
   width: 100%;
   height: 100%;
 }

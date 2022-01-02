@@ -200,7 +200,7 @@ export function retriveControlledGateHelpHtml(gateName) {
   } else if (gateName == "swap") {
     return 'The simplest controlled swap gate, also known as Fredkin gate, acts on three qubits and performs a controlled swap when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. The matrix representation of the Fredkin gate is:';
   } else if (gateName == "aggregate") {
-    return 'An "aggregate" gate may have any number of controls. This is equivalent to a set of single target qubit gates sharing the same set of controls.';
+    return 'An "aggregate" gate may have any number of controls. This is equivalent to a set of distinct single target qubit gates sharing the same set of controls.';
   } else if (gateName == "identity") {
     return '';
   }else if (gateName == "measure-x") {
