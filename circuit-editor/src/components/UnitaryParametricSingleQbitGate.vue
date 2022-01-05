@@ -258,7 +258,7 @@
           <td :colspan="numberOfColumnsInEditControlsModal()" rowspan="4" :style="getEditControlsEmbedTableCellStyle()" class="text-center">
             <b-table-simple :style="getEditControlsEmbededTableStyle()" :responsive="true" borderless>
               <b-tr>
-                <b-td v-for="(control, index) in controlsNew.length" v-bind:key="index" style="border: 1px solid #E0E0E0;" class="embedded-table-cell">
+                <b-td v-for="(control, index) in controlsNew.length" v-bind:key="index" class="embedded-table-cell">
                   <img :src="stubImageSrcPopup(control - 1)" style="width:30px; height:auto;" />
                 </b-td>
                 <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 1000" class="embedded-table-cell" />
@@ -281,7 +281,7 @@
               </b-tr>
             </b-table-simple>
           </td>
-          <td title="Control qubit" class="edit-controls-cell">Target:</td>
+          <td title="Target qubit" class="edit-controls-cell">Target:</td>
           <td class="edit-controls-cell">
             <div class="d-flex justify-content-center align-items-center">
               <b-form-input readonly min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="targetsNew[0]" placeholder="target" type="number" id="target-qbit" style="width:70px;"></b-form-input>
@@ -489,11 +489,11 @@ td {
 }
 
 .embedded-table-cell {
-  padding: 10px;
+  padding: 7px;
   text-align: center;
-  height: 50px;
-  min-height: 50px;
-  max-height: 50px;
+  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
   width: 79px;
   min-width: 79px;
   max-width: 79px;
