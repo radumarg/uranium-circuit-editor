@@ -97,10 +97,10 @@ export default {
       options: [
         { value: '1', text: '|1⟩' },
         { value: '0', text: '|0⟩' },
-        // { value: '+', text: '|+⟩' },
-        // { value: '-', text: '|-⟩' },
-        // { value: '+i', text: '|+i⟩' },
-        // { value: '-i', text: '|-i⟩' },
+        { value: '+', text: '|+⟩' },
+        { value: '-', text: '|-⟩' },
+        { value: '+i', text: '|+i⟩' },
+        { value: '-i', text: '|-i⟩' },
       ],
     }
   },
