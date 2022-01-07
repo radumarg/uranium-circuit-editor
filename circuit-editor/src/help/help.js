@@ -18,7 +18,7 @@ export function retriveSimpleGateHelpHtml(gateName) {
     } else if (gateName == "hadamard") {
         return 'The "hadamard" gate acts on a single qubit and is defined as: u2(0, π). This gate creates a superposition by mapping |0⟩ to |+⟩ and |1⟩ to |-⟩. It is the combination of two rotations, first a π rotation about the Z-axis of the Bloch sphere followed by a π/2 about the Y-axis. Alternatively, it can be represented as a π rotation around an axis diagonal in the Z-X plane. The Hadamard gate is the one-qubit version of the quantum Fourier transform.';
     } else if (gateName == "aggregate") {
-        return 'The "aggregate" gate permits grouping multiple single qubit target gates in one muliple targets gate.';
+        return 'The "aggregate" gate permits grouping multiple single qubit target gates in a single multiple targets gate that may share the same set of controls. This way more compact circuits can be created. As for any other gate, when Shift is activated during drag & drop, the aggregate gate is copied instead of being moved at the drop location.';
     }  else if (gateName == "identity") {
       return 'The "identity" gate acts on a single qubit and preserves current state of the qubit it is applied to.';
     } else if (gateName == "pauli-x") {
@@ -26,7 +26,7 @@ export function retriveSimpleGateHelpHtml(gateName) {
     } else if (gateName == "pauli-y") {
         return 'The "pauli-y" gate acts on a single qubit and is defined as: u3(π, π/2, π/2). It is equivalent to a rotation around the Y-axis of the Bloch sphere by π radians.';
     } else if (gateName == "pauli-z") {
-        return 'The "pauli-z" gate acts on a single qubit and is defined as: u1(π). It is equivalent to a rotation around the Z-axis of the Bloch sphere by π radians. It is a special case of a phase shift gate "u1" with λ equal to π. It leaves the basis state |0⟩ unchanged and maps |1⟩ to −|1⟩.';
+        return 'The "pauli-z" gate acts on a single qubit and is defined as: u1(π). It is equivalent to a rotation around the Z-axis of the Bloch sphere by π radians. It is a special case of a phase shift gate "u1" with λ equal to π. It leaves the basis state |0⟩ unchanged and maps |1⟩ to −|1⟩. From a different perspective it flips the |+⟩ and |-⟩ basis states, performing in the |+/-⟩ basis states the same role as "pauli-x" gate in the standard basis.';
     } else if (gateName == "t") {
         return 'The "t" gate acts on a single qubit and is defined as: u1(π/4). It represents an anti-clockwise π/4 radians rotation around the Z-axis of the Bloch sphere. Leaves the basis state |0⟩ unchanged and map |1⟩ to exp(i*π/4)|1⟩. The probability of measuring a |0⟩ or |1⟩ is unchanged after applying this gate, however it modifies the phase of the quantum state. The "t" gate is related to "s" gate by the relation: s = t * t. The "t" gate is a special cases of "u1" for λ equal to π/4. This gate is an example of a non-Clifford gate.';
     } else if (gateName == "t-dagger") {
@@ -90,9 +90,9 @@ each qubit is measured into a classical bit with index equal to the qubit index 
     } else if (gateName == "hadamard-xy") {
       return 'The standard "hadamard" gate can be represented as a π rotation around an axis diagonal in the Z-X plane. This gate represented as a π rotation around an axis diagonal in the X-Y plane. It translates up to a phase the X basis elements (|+⟩ and |-⟩) to the Y basis elements (|+i⟩ and |-i⟩) and back and is given by the following formula: hadamard-xy = v * hadamard * v-dagger. ';
     } else if (gateName == "hadamard-yz") {
-      return 'The standard "hadamard" gate can be represented as a π rotation around an axis diagonal in the Z-X plane. This gate represented as a π rotation around an axis diagonal in the Y-Z plane. It translates up to a phase the computational basis elements to the Y basis elements (|+i⟩ and |-i⟩) and back and is given by the following formula: hadamard-yz = s * hadamard * s-dagger. ';
+      return 'The standard "hadamard" gate can be represented as a π rotation around an axis diagonal in the Z-X plane. This gate represented as a π rotation around an axis diagonal in the Y-Z plane.  It translates up to a phase the Z basis elements (|0⟩ and |1⟩) to the Y basis elements (|+i⟩ and |-i⟩) and back and is given by the following formula: hadamard-yz = s * hadamard * s-dagger. ';
     }  else if (gateName == "hadamard-zx") {
-      return 'The standard "hadamard" gate can be represented as a π rotation around an axis diagonal in the Z-X plane. This gate is an alias for standard "hadamard" gate.';
+      return 'The standard "hadamard" gate can be represented as a π rotation around an axis diagonal in the Z-X plane. This gate is an alias for standard "hadamard" gate. It takes the computational Z-basis (|0⟩ and |1⟩) to the X-basis (|+⟩ and |-⟩) and back.';
     } else if (gateName == "c") {
       return 'This gate permutes the three axes of the Bloch sphere (X->Y, Y->Z, Z->X). It represents a 120 degree rotation of the Bloch sphere.';
     } else if (gateName == "c-dagger") {
@@ -142,13 +142,16 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             can be easily adjusted: drag and drop gestures work for both the target and the control qubits. If the Shift key is pressed \
             during performing a drag & drop gesture the original gate is not removed and an identical copy of the gate is created at the \
             drop location in the circuit. For any gate, a single click on a gate pictogram over a target qubit opens a pop-up control which \
-            allows editing the gate settings and permits adding or removing controls. This is also the method to assign values for parameters\
-            in parametric gates or to assign the index of the classic bit used as mesurement target by measure gates. Clicking over a control \
-            qubit opens up a pop-up dialog where control settings can be adjusted. A control can be draged similar to how it's done for regular gate. \
+            allows editing the gate settings, adding or removing controls and deleting the gate. A gate can also be deleted by dragging and droping \
+            the gate outside the editor area. The same pop-up dialog can be used to add values for parameters  in parametric gates or to assign \
+            the index of the classic bit used as mesurement target by measure gates. Controls can be added to a gate either from the gate pop-up \
+            dialog or by dragging a control icon from left panel and dropping it in the proximity of a gate. Clicking over a control qubit opens up a \
+            pop-up dialog where control settings can be adjusted. A control position can be adjusted by dragging similar to how it's done for regular gate. \
             If the Shift key is pressed during performing a drag & drop gesture, the original control is not removed and a copy of the control is placed \
             at the drop location. Once a gate has been added to the circuit it can be replicated. This permits to generate an arbitrarily large family \
-            of gates in a grid array with only a few mouse clicks. Steps or qubits can be removed from a pop-up which is opened by double clicking on an empty cell in \
-            the circuit. Ctrl + Click gesture(s) applied on a gate or an empty cell can be used to select a gate or a group of gates. \
+            of gates in a grid array with only a few mouse clicks. For more details on how this works please check out the help icon on replicate \
+            gates pop-up dialog. If neded, steps or qubits can be removed from a pop-up which is opened by double clicking on an empty cell \
+            in the circuit. Ctrl + Click gesture(s) applied on a gate or an empty cell can be used to select a gate or a group of gates. \
             Once gates have been selected Ctrl + C, Ctrl + V, Ctrl + X, Esc and Delete keys work as you would expect. \
             Once a circuit has been created it can be saved in a YAML format or it can  be exported to Qiskit format (other export formats will be \
             available in the future depending on user requests). For exporting circuits follow the MyProjects menu link in the main Uranium website. \

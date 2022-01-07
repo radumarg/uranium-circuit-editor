@@ -174,7 +174,7 @@
                   <b-form-input min="0" v-model.number="numberOfControls" @change="onNumberControlsChange()" @keyup.enter.native="handleEditControlsModalSave()" placeholder="controls" type="number" id="number-controls" style="width:70px;"></b-form-input>
                 </b-td>
               </b-tr>
-              <bt-tr>
+              <b-tr>
                 <b-td class="buttons-cell">
                   <div v-b-hover="handleAlignGatesUpwardsHover">
                     <b-icon v-if="alignControlsUpwardsIsHovered" icon="caret-up-fill" v-on:click="alignControlsUpwardsFromTargetQubit()" title="Align controls upwards from first target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
@@ -187,8 +187,8 @@
                     <b-icon v-else icon="arrow-up-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
                   </div>
                 </b-td>
-              </bt-tr>
-              <bt-tr>
+              </b-tr>
+              <b-tr>
                 <b-td class="buttons-cell">
                   <div v-b-hover="handleAlignGatesDownwardsHover">
                     <b-icon v-if="alignControlsDownwardsIsHovered" icon="caret-down-fill" v-on:click="alignControlsDownwardsFromTargetQubit()" title="Align controls downwards from last target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
@@ -201,7 +201,7 @@
                     <b-icon v-else icon="arrow-down-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
                   </div>
                 </b-td>
-              </bt-tr>
+              </b-tr>
             </b-table-simple>
           </td>
           <td></td>
@@ -303,9 +303,16 @@
                 </b-td>
               </b-tr>
               <b-tr>
-                <b-td class="title-cell">Gate Root:</b-td>
+                <b-td class="title-cell">Gate Root (t):</b-td>
                 <b-td v-for="(target, index) in gatesNew.length" v-bind:key="index + 16000" class="embedded-table-cell">
-                  <b-form-input v-if="gateHasRoot(gatesNew[target - 1].name)" v-model="gatesNew[target - 1].root" placeholder="1" title="root" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
+                  <b-form-input v-if="gateHasRoot(gatesNew[target - 1].name)" v-model="gatesNew[target - 1].roott" placeholder="1" title="root" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
+                  <b-form-input v-else readonly placeholder="N/A" style="min-width: 72px; max-width: 72px;" />
+                </b-td>
+              </b-tr>
+              <b-tr>
+                <b-td class="title-cell">Gate Root (k):</b-td>
+                <b-td v-for="(target, index) in gatesNew.length" v-bind:key="index + 16000" class="embedded-table-cell">
+                  <b-form-input v-if="gateHasRoot(gatesNew[target - 1].name)" v-model="gatesNew[target - 1].rootk" placeholder="1" title="root" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
                   <b-form-input v-else readonly placeholder="N/A" style="min-width: 72px; max-width: 72px;" />
                 </b-td>
               </b-tr>
@@ -327,10 +334,10 @@
                   <b-form-input min="0" v-model.number="numberOfGates" @change="onNumberGatesChange()" @keyup.enter.native="handleEditGatesModalSave()" placeholder="controls" type="number" id="number-controls" style="width:70px;"></b-form-input>
                 </b-td>
               </b-tr>
-              <bt-tr>
+              <b-tr>
                 <b-td class="buttons-cell">
                   <div v-b-hover="handleAlignControlsUpwardsHover">
-                    <b-icon v-if="alignControlsUpwardsIsHovered" icon="caret-up-fill" v-on:click="alignControlsUpwardsFromTargetQubit()" title="Align controls upwards from first target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
+                    <b-icon v-if="alignControlsUpwardsIsHovered" icon="caret-up-fill" v-on:click="alignControlsUpwardsFromTargetQubit()" title="Align gates upwards from first control qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
                     <b-icon v-else icon="caret-up" style="color: #7952b3;" font-scale="1.4"></b-icon>
                   </div>
                 </b-td>
@@ -340,11 +347,11 @@
                     <b-icon v-else icon="arrow-up-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
                   </div>
                 </b-td>
-              </bt-tr>
-              <bt-tr>
+              </b-tr>
+              <b-tr>
                 <b-td class="buttons-cell">
                   <div v-b-hover="handleAlignControlsDownwardsHover">
-                    <b-icon v-if="alignControlsDownwardsIsHovered" icon="caret-down-fill" v-on:click="alignControlsDownwardsFromTargetQubit()" title="Align controls downwards from last target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
+                    <b-icon v-if="alignControlsDownwardsIsHovered" icon="caret-down-fill" v-on:click="alignControlsDownwardsFromTargetQubit()" title="Align gates downwards from last control qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
                     <b-icon v-else icon="caret-down" style="color: #7952b3;" font-scale="1.4"></b-icon>
                   </div>
                 </b-td>
@@ -354,7 +361,7 @@
                     <b-icon v-else icon="arrow-down-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
                   </div>
                 </b-td>
-              </bt-tr>
+              </b-tr>
             </b-table-simple>
           </td>
           <td></td>
@@ -487,7 +494,7 @@ export default {
     getEmbededEditGatesTableStyle(){
       let maxLength = Math.max(this.gatesNew.length, this.controlsNew.length);
       let maxWidth = (maxLength > 5) ? 880 : 600;
-      return `overflow-x:scroll; max-width: ${maxWidth}px; height: 435px; min-height: 435px; max-height: 435px; border-spacing: 5px; display: inline-block; table-layout: fixed;`
+      return `overflow-x:scroll; max-width: ${maxWidth}px; height: 495px; min-height: 495px; max-height: 495px; border-spacing: 5px; display: inline-block; table-layout: fixed;`
     },
     getEmbedTableCellStyle(){
       let maxLength = Math.max(this.gatesNew.length, this.controlsNew.length);
