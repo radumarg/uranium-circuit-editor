@@ -33,7 +33,7 @@ class GatesTableCell {
     this.theta = null;
     this.lambda = null;
     /* root used by pauli root gates: +/-(1/t) or +/-(1/2^k) */
-    this.root = "1/1";
+    this.root = null;
     /* used by measure gates */
     this.bit = null;
     /* cell already has some content */
@@ -877,8 +877,8 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             gatesTableRowState.cells[column].tooltip += `λ:${gate.lambda} `;
           }
           if (Object.prototype.hasOwnProperty.call(gate, "root")) {
-            if (gate.name != "swap-root" || ((inputRow - 1) / 2 == Math.min(...targets))){
-              gatesTableRowState.cells[column].root = gate.root;
+            gatesTableRowState.cells[column].root = gate.root;
+            if ((gate.name != "swap-root" && gate.name != "swap-root-dagger") || ((inputRow - 1) / 2 == Math.min(...targets))){
               if (!gate.root.includes("1/2^")){
                 let root = gate.root.replace("1/", "");
                 gatesTableRowState.cells[column].tooltip += `t:${root} `;
