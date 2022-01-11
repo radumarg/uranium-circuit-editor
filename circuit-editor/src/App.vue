@@ -12,7 +12,9 @@
                 {{noteHtml}}
               </p>
             </div>
-            <p>{{helpHtml}}</p>
+            <div>
+              <span v-html="helpHtml"></span>
+            </div>
             <div align=center>
               <span v-html="gateMatrixHtml"></span>
             </div>
@@ -235,5 +237,7 @@ table {
   width: 17px;
   height: 17px;
 }
+
+
 
 </style>

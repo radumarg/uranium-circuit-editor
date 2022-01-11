@@ -1,9 +1,9 @@
 
 export function retriveNoteHtml(gateName) {
   if (gateName){
-    return 'Hint: unselect this gate in the gates pallete to see useful general hints for using the Circuit Editor.';
+    return 'Hint: unselect this gate in the gates pallete to see here useful general hints for using the Circuit Editor.';
   } else {
-    return 'Hint: select any gate in the gates pallete to see the documentation for that gate.'
+    return 'Hint: select any gate in the gates pallete to see here the documentation for that gate.'
   }
 }
 
@@ -139,23 +139,90 @@ each qubit is measured into a classical bit with index equal to the qubit index 
 
     return "In order to work with the Circuit Editor use the gates pallete on the left to drag & drop gates in the circuit \
             at the desired position defined by a target qubit and a desired step. Once a gate is placed in the circuit, it's position \
-            can be easily adjusted: drag and drop gestures work for both the target and the control qubits. If the Shift key is pressed \
-            during performing a drag & drop gesture the original gate is not removed and an identical copy of the gate is created at the \
-            drop location in the circuit. For any gate, a single click on a gate pictogram over a target qubit opens a pop-up control which \
-            allows editing the gate settings, adding or removing controls and deleting the gate. A gate can also be deleted by dragging and droping \
-            the gate outside the editor area. The same pop-up dialog can be used to add values for parameters  in parametric gates or to assign \
-            the index of the classic bit used as mesurement target by measure gates. Controls can be added to a gate either from the gate pop-up \
-            dialog or by dragging a control icon from left panel and dropping it in the proximity of a gate. Clicking over a control qubit opens up a \
-            pop-up dialog where control settings can be adjusted. A control position can be adjusted by dragging similar to how it's done for regular gate. \
-            If the Shift key is pressed during performing a drag & drop gesture, the original control is not removed and a copy of the control is placed \
-            at the drop location. Once a gate has been added to the circuit it can be replicated. This permits to generate an arbitrarily large family \
-            of gates in a grid array with only a few mouse clicks. For more details on how this works please check out the help icon on replicate \
-            gates pop-up dialog. If neded, steps or qubits can be removed from a pop-up which is opened by double clicking on an empty cell \
-            in the circuit. Ctrl + Click gesture(s) applied on a gate or an empty cell can be used to select a gate or a group of gates. \
-            Once gates have been selected Ctrl + C, Ctrl + V, Ctrl + X, Esc and Delete keys work as you would expect. \
-            Once a circuit has been created it can be saved in a YAML format or it can  be exported to Qiskit format (other export formats will be \
-            available in the future depending on user requests). For exporting circuits follow the MyProjects menu link in the main Uranium website. \
-            In order to see in this dashboard help information regarding a particular gate, select the gate in gates pallete and press the help button.";
+            can be easily adjusted: drag and drop gestures work for both the target and the control qubits. For any gate, a single click \
+            on a gate pictogram over a target qubit opens a pop-up control which allows editing the gate settings, adding or removing \
+            controls and deleting the gate. The same pop-up dialog can be used to add values for parameters in parametric gates or to assign \
+            the index of the classic bit used as mesurement target by the measure gates. \
+            <br><br> \
+            <b> One Gate into Many:</b> \
+            <br/> \
+            <br/> \
+            - if the <i>'Shift'</i> key is pressed during performing a drag & drop gesture, the original gate is not removed and an identical copy \
+            of the gate is created at the drop location in the circuit. <br>\
+            - if the <i>'Alt'</i> key is pressed during drag & drop and the direction of movement is strictly horizontal or strictly vertical an array \
+            of identical gates (horizontal or vertical) is created between the intial drag qubit and the drop qubit. <br>\
+            - once a gate has been added to the circuit it can be replicated. This permits to generate an arbitrarily large family of gates \
+            in a grid array with only a few mouse clicks. For more details on how this works please check out the help button on replicate \
+            gates pop-up dialog which can be launched by clicking the lower left icon in a gate popup dialog. <br> \
+            <br> \
+            <b> Deleting Gates:</b> \
+            <br/> \
+            <br/> \
+            - a gate can be deleted from the gate pop-up dialog. <br> \
+            - a gate can also be deleted by dragging the gate and dropping it outside the editor area. <br> \
+            - a gate can also be deleted by pressing the <i>'Esc'</i> key while clicking the image of a gate added to the circuit.  <br> \
+            <br> \
+            <b> Working with Controls:</b> \
+            <br/> \
+            <br/> \
+            - controls can be added from the controls editing dialog which can be launched from the modal gate pop-up dialog. <br> \
+            - controls can also be added by dragging a control icon from the top left panel to any position in circuit. The editor \
+            will figure out which is the nearest gate in order to attach the control to. <br> \
+            - clicking over a control qubit opens up a pop-up dialog where control settings can be adjusted or the control can be removed. <br> \
+            - a control position can be adjusted by dragging a gate similar to how it's done for regular gate. <br> \
+            - if the <i>'Shift'</i> key is pressed during dragging a control qubit the original control is not removed and a copy of the \
+            control is placed at the drop location.  <br> \
+            <br> \
+            <b> Copy & Paste:</b> \
+            <br/> \
+            <br/> \
+            <i>Ctrl</i> + <i>Click</i> gesture(s) applied on a gate or an empty cell can be used to select a gate. The effect of a second \
+            <i>Ctrl</i> + <i>Click</i> gesture will be to select a rectangular portion of the circuit. Once gates have been selected the\
+            <i>Ctrl</i> + <i>C</i>, <i>Ctrl</i> + <i>V</i>, <i>Ctrl</i> + <i>X</i>, <i>Esc</i> and <i>Delete</i> keys work as you would expect. <br> \
+            <br> \
+            <b> Measure Gates:</b> \
+            <br/> \
+            <br/> \
+            - each measure gates has a classic bit index in order to measure the gate into. This is used by the simulator in order to deliver \
+            the simulation results. You can set up any classic bit index to a measure gate as long as the bit index is not larger than \
+            the maximum qubit index. Measure gates must be always placed last for any given qubit.<br> \
+            - if multiple qubits share the same classic bit than simulation results for that bit correspond to an XOR  operation  performed on \
+            that specific bit. <br> \
+            - if measure gates are missing altogether the simulation results are identical with the situation where each qubit has attached \
+            as the last gate a measure gate in the Z basis whose classic bit is equal to the qubit index. <br> \
+            - whenever a gate is dragged in  a new position, the classic bit index is automatically set equal to the qubit index. This is still \
+            true even if the shift key is pressed during drag & drop which means that in this particular case the original gate was not copied \
+            identically as it is actually done for the other gates. \
+            <br> \
+            <br> \
+            <b> Changing Number of Steps/Qubits:</b> \
+            <br/> \
+            <br/> \
+            - the ± button in the toolbar allows changing the number of qubits and steps in the circuit. <br> \
+            - while increasing the number of steps and/or qubits may sometimes be a necessity, decreasing the number of steps/qubits \
+            does not make sense in general since the qubits/steps which are not used will be simply ignored. One exception to this \
+            recommendation is the situation where you want to make the circuit editor surface smaller in order to save the circuit \
+            as a svg image. \
+            <br> \
+            <br> \
+            <b> Getting Help for Gates:</b> \
+            <br/> \
+            <br/> \
+            - in order to see in this dashboard help information regarding a particular gate, select the gate in left panel gates pallete and \
+            than press the help button on the toolbar. \
+            <br> \
+            <br> \
+            <b> Way of Working:</b> \
+            <br/> \
+            <br/> \
+            - we provide a link towards the circuit editor on our platform frontpage in order for new vistors to be able to easily explore the \
+            circuit editor. However, that view does not allow saving circuits in a database, it only permits saving circuits to files. \
+            We recommend for you to follow the 'My Projects' on our platform frontpage, create a new project, and work from there. \
+            <br> \
+            <br> \
+            <b> Other:</b> \
+            "
+
 }
 
 export function retriveControlledGateHelpHtml(gateName) {
