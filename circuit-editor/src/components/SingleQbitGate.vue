@@ -420,12 +420,14 @@ export default {
     handleClick: function (event) {
       if (event.ctrlKey) {
         this.selectImage();
+      } else if (window.currKey == 'd' || window.currKey == 'D') {
+        this.removeGateFromCircuitByUser({'step': this.step, 'targets': this.targets});
       } else {
         this.showModal();
       }
     },
     selectImage: function() {
-      handleSelectEvent(this.targets[0], this.step);
+      handleSelectEvent(this.qrow, this.step);
     },
     showModal: function() {
       this.trashIsHovered = false;
@@ -546,28 +548,20 @@ number of controls is chosen to be greater than zero. Control state expression m
     },
     expandCircuitUp: function () {
       if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex() + 1) {
-        alert("Please increase the number targets in the circuit first.");
+        alert("Please increase the number qubits in the circuit first.");
         return;
       }
-      let controls = [];
-      if (this.controls){
-        controls = [...this.controls];
-      }
       this.hideModal();
-      let qbit = Math.min(...this.targets, ...controls);
+      let qbit = Math.min(...this.targets);
       this.insertQbitInCircuit(qbit);
     },
     expandCircuitDown: function () {
       if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex() + 1) {
-        alert("Please increase the number targets in the circuit first.");
+        alert("Please increase the number qubits in the circuit first.");
         return;
       }
-      let controls = [];
-      if (this.controls){
-        controls = [...this.controls];
-      }
       this.hideModal();
-      let qbit = Math.max(...this.targets, ...controls);
+      let qbit = Math.max(...this.targets);
       this.insertQbitInCircuit(qbit + 1);
     },
     handleDeleteGate: function(){

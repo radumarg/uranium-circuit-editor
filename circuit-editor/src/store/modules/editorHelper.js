@@ -113,7 +113,7 @@ export function insertingOneGateInCircuit(circuitState, dto) {
       circuitState.steps = []
   }
 
-  // try to find a step if it already exist
+  // try to find a step if it already exists
   for (let i = 0; i < circuitState.steps.length; i++) {
       if (circuitState.steps[i].index == step) {
       let gates = circuitState.steps[i]["gates"];

@@ -222,6 +222,7 @@ export default {
       "insertQbitInCircuit",
       "insertStepInCircuit",
       "insertGateInCircuit",
+      "insertGatesInCircuit",
       "removeGateFromCircuit",
       "removeQbitFromCircuit",
       "removeStepFromCircuit",
@@ -306,7 +307,7 @@ export default {
       this.insertQbitInCircuit(this.qrow + 1);
     },
     removeQbit: function () {
-      let dto = { qbit: this.qrow };
+      let dto = { targets: [this.qrow] };
       this.removeQbitFromCircuit(dto);
       this.$refs["modal-dialog"].hide();
     },
@@ -347,6 +348,10 @@ export default {
         } else {
           this.addNewGateToCircuit(event);
         }
+      } else if (event.altKey && isDefined(draggedQbit)) {
+        // alt key is pressed and draggedQbit not null means
+        // we are not doing drag & drop from the gates pallete
+        this.addNewGateArray(event);
       } else {
         if (dragOrigin == "control") {
           this.findClosestGateAndAddNewControl(event);
@@ -503,6 +508,89 @@ export default {
       }
 
       this.insertGateInCircuit(dto);
+    },
+    addNewGateArray: function (event) {
+
+      let dragOrigin = event.dataTransfer.getData("drag-origin");
+      if (dragOrigin == "stub"){
+        this.handleDragLeave();
+        return;
+      }
+
+      let qbit = parseInt(event.currentTarget.getAttribute("qrow"));
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
+      let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
+      let gateName = event.dataTransfer.getData("gateName");
+
+      let dto = { step: step, targets: [...originalTargets], controls: [], name: gateName, };
+
+      if (event.dataTransfer.types.includes("originalcontrols")) {
+        let controls =  JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
+        dto["controls"] = controls;
+      }
+      if (event.dataTransfer.types.includes("controlstates")) {
+        let controlstates = event.dataTransfer.getData("controlstates").split(",");
+        dto["controlstates"] = controlstates;
+      }
+      if (event.dataTransfer.types.includes("phi")) {
+        let phi = parseFloat(event.dataTransfer.getData("phi"));
+        dto["phi"] = phi;
+      }
+      if (event.dataTransfer.types.includes("theta")) {
+        let theta = parseFloat(event.dataTransfer.getData("theta"));
+        dto["theta"] = theta;
+      }
+      if (event.dataTransfer.types.includes("lambda")) {
+        let lambda = parseFloat(event.dataTransfer.getData("lambda"));
+        dto["lambda"] = lambda;
+      }
+      if (event.dataTransfer.types.includes("root")) {
+        let root = event.dataTransfer.getData("root");
+        dto["root"] = root;
+      }
+      if (event.dataTransfer.types.includes("bit")) {
+        dto["bit"] = qbit;
+      }
+
+      let dtos = [];
+
+      // replicate gate in a vertical or horizontal array
+      if (step == originalStep) {
+        if (originalTargets.length > 1 || dto["controls"].length > 0)
+        {
+          alert("Only single qubit gates can be replicated in a vertical array using this gesture. You might want to use the replicate gate dialog instead.");
+        } else  {
+          let currentQubit = Math.min(qbit, originalTargets[0]);
+          let lastQubit = Math.max(qbit, originalTargets[0]);
+          while (currentQubit <= lastQubit){
+            if (!seatsAreTaken(this.$store.state.circuitEditorModule, [currentQubit], step)) {
+              let dtoNew = {...dto};
+              dtoNew["targets"] = [currentQubit];
+              dtos.push(dtoNew);
+            }
+            currentQubit += 1;
+          }
+        }
+      } else if (originalTargets.includes(qbit)) {
+        let currentStep = Math.min(step, originalStep);
+        let lastStep = Math.max(step, originalStep);
+        while (currentStep <= lastStep){
+          let proposedQbits = [...dto["targets"], ...dto["controls"]];
+          if (!seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, currentStep)) {
+            let dtoNew = {...dto};
+            dtoNew.step = currentStep;
+            dtos.push(dtoNew);
+          }
+          currentStep += 1;
+        }
+      }
+
+      if (dtos.length > 0){
+        this.insertGatesInCircuit({"dtos": dtos, "existingStep": null, "existingQbit": null});
+      } else {
+        this.handleDragLeave();
+      }
     },
     removeDraggedGateAndAddNewGateToCircuit: function (event) {
       let qbit = parseInt(event.currentTarget.getAttribute("qrow"));

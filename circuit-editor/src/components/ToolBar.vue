@@ -99,7 +99,7 @@
           <td colspan="3"></td>
           <td class="no-resize-cell">
             <div v-b-hover="handleSaveHover">
-              <b-icon v-if="saveIsHovered" v-on:click="handleSaveStepsAndQbits()" icon="check" v-b-tooltip.hover title="Save changes" style="color: #7952b3; float: right;" font-scale="1.7"></b-icon>
+              <b-icon v-if="saveIsHovered" v-on:click="handleSaveStepsAndQbits()" icon="check" title="Save changes" style="color: #7952b3; float: right;" font-scale="1.7"></b-icon>
               <b-icon v-else v-on:click="handleSaveStepsAndQbits()" icon="check" style="color: #7952b3; float: right;" font-scale="1.4"></b-icon>
             </div>
           </td>

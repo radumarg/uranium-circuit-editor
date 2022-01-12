@@ -73,9 +73,9 @@
             <b-tab title="2-Q">
               <GatesPallete-2Q /> 
             </b-tab>
-            <b-tab title="n-Q">
+            <!-- <b-tab title="n-Q">
               <GatesPallete-nQ />
-            </b-tab>
+            </b-tab> -->
           </b-tabs>
         </b-col>
         <b-col class="bordered-box">
@@ -90,7 +90,7 @@
 import Circuit from "./components/Circuit";
 import GatesPallete1Q from "./components/GatesPallete1Q";
 import GatesPallete2Q from "./components/GatesPallete2Q";
-import GatesPalleteNQ from "./components/GatesPalleteNQ";
+//import GatesPalleteNQ from "./components/GatesPalleteNQ";
 import Logo from "./components/Logo";
 import ToolBar from "./components/ToolBar";
 import { mapActions} from 'vuex';
@@ -104,7 +104,7 @@ export default {
     Circuit,
     GatesPallete1Q,
     GatesPallete2Q,
-    GatesPalleteNQ,
+    //GatesPalleteNQ,
     ToolBar,
   },
   data() {
@@ -238,6 +238,21 @@ table {
   height: 17px;
 }
 
-
+.tooltip-inner {
+  background-color:  #f8f8ff00 !important;
+  color: #FF1493 !important;
+}
+.tooltip.bs-tooltip-right .arrow:before {
+  border-right-color: #FF1493 !important;
+}
+.tooltip.bs-tooltip-left .arrow:before {
+  border-left-color: #FF1493 !important;
+}
+.tooltip.bs-tooltip-bottom .arrow:before {
+  border-bottom-color: #FF1493 !important;
+}
+.tooltip.bs-tooltip-top .arrow:before {
+  border-top-color: #FF1493 !important;
+}
 
 </style>

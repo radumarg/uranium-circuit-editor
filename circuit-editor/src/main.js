@@ -38,6 +38,24 @@ Vue.use(TooltipPlugin);
 Vue.use(VBHoverPlugin);
 Vue.use(VueCookies);
 
+// Color scheme used by Editor for background
+window.selectBackgroundColor = "#C0C0C0";
+window.lightBackgroundColor = "ghostwhite";
+window.whiteBackgroundColor = "white";
+window.darkBackgroundColor = "#374048";
+
+
+// Need a method to detect keys pressed
+window.currKey = null;
+
+$(window).on("keydown", function(event) {
+  window.currKey = event.key;
+});
+
+$(window).on("keyup", function() {
+  window.currKey = null;
+});
+
 Vue.config.productionTip = false;
 
 // setup Vuex store
@@ -50,12 +68,6 @@ new Vue({
 window.toolTipsAreShown = false;
 
 setCookiesIfNotAlreadySet();
-
-// Color scheme used by Editor for background
-window.selectBackgroundColor = "#C0C0C0";
-window.lightBackgroundColor = "ghostwhite";
-window.whiteBackgroundColor = "white";
-window.darkBackgroundColor = "#374048";
 
 // Globally handle key pressed events
 $(document).on('keyup', function(e) {
@@ -140,6 +152,7 @@ $(document).on('keyup', function(e) {
       undoGatesSelection();
     }
   }
+
 });
 
 

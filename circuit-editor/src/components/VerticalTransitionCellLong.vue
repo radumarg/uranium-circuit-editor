@@ -6,6 +6,7 @@
 
 <script>
 import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
+import { getClosestGates } from "../store/modules/editorHelper.js";
 import { mapActions } from 'vuex';
 export default {
   name: "VerticalTransitionCellLong",
@@ -34,6 +35,7 @@ export default {
       let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
       let originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
       let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
+      let dragOrigin = event.dataTransfer.getData("drag-origin");
       if (step == originalStep) {
         if (event.shiftKey) {
           if (originalControls.includes(draggedQbit)){
@@ -50,6 +52,8 @@ export default {
             this.handleDragLeave();
           }
         }
+      } else if (dragOrigin == "control") {
+        this.findDropGateAndAddNewControl(event);
       } else {
         this.handleDragLeave();
       }
@@ -179,6 +183,47 @@ export default {
       this.removeGateFromCircuit({'step': originalStep, 'targets': originalTargets});
 
       // step2 - add the new gate to the circuit
+      this.insertGateInCircuit(dto);
+    },
+    findDropGateAndAddNewControl: function (event) {
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
+      let circuitState = this.$store.state.circuitEditorModule;
+      let closestGates = getClosestGates(circuitState, step, dropQbit);
+      let closestGate = closestGates[0];
+      let controlState = event.dataTransfer.getData("controlState");
+
+      let controls = [];
+      let controlstates = [];
+      if (Object.prototype.hasOwnProperty.call(closestGate, "controls")) {
+        for (let i = 0; i < closestGate.controls.length; i++) {
+          controls.push(closestGate.controls[i].target);
+          controlstates.push(closestGate.controls[i].state);
+        }
+      }
+      controls.push(dropQbit);
+      controlstates.push(controlState);
+
+      let dto = { step: step, name: closestGate.name, targets: [...closestGate.targets], controls: [...controls], controlstates: [...controlstates] };
+
+      if (event.dataTransfer.types.includes("phi")) {
+        let phi = parseFloat(event.dataTransfer.getData("phi"));
+        dto["phi"] = phi;
+      }
+      if (event.dataTransfer.types.includes("theta")) {
+        let theta = parseFloat(event.dataTransfer.getData("theta"));
+        dto["theta"] = theta;
+      }
+      if (event.dataTransfer.types.includes("lambda")) {
+        let lambda = parseFloat(event.dataTransfer.getData("lambda"));
+        dto["lambda"] = lambda;
+      }
+      if (event.dataTransfer.types.includes("root")) {
+        let root = event.dataTransfer.getData("root");
+        dto["root"] = root;
+      }
+
+      this.removeGateFromCircuit(dto);
       this.insertGateInCircuit(dto);
     },
     handleDragOver() {

@@ -150,9 +150,10 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             - if the <i>'Shift'</i> key is pressed during performing a drag & drop gesture, the original gate is not removed and an identical copy \
             of the gate is created at the drop location in the circuit. <br>\
             - if the <i>'Alt'</i> key is pressed during drag & drop and the direction of movement is strictly horizontal or strictly vertical an array \
-            of identical gates (horizontal or vertical) is created between the intial drag qubit and the drop qubit. <br>\
-            - once a gate has been added to the circuit it can be replicated. This permits to generate an arbitrarily large family of gates \
-            in a grid array with only a few mouse clicks. For more details on how this works please check out the help button on replicate \
+            of identical gates (horizontal or vertical) is created between the intial drag qubit and the drop qubit. Any gate can be replicated \
+            using this method horizontally, only single qubit gates can be replicated vertically.<br>\
+            - once a gate has been added to the circuit it can be replicated in a rectangular array. This permits generating an arbitrarily large family \
+            of gates with only a few mouse clicks. For more details on how this works please check out the help button on replicate \
             gates pop-up dialog which can be launched by clicking the lower left icon in a gate popup dialog. <br> \
             <br> \
             <b> Deleting Gates:</b> \
@@ -160,7 +161,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             <br/> \
             - a gate can be deleted from the gate pop-up dialog. <br> \
             - a gate can also be deleted by dragging the gate and dropping it outside the editor area. <br> \
-            - a gate can also be deleted by pressing the <i>'Esc'</i> key while clicking the image of a gate added to the circuit.  <br> \
+            - a gate can also be deleted by pressing the <i>'d'</i> or <i>'D'</i> key while clicking the image of a gate in the circuit.  <br> \
             <br> \
             <b> Working with Controls:</b> \
             <br/> \
@@ -169,6 +170,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             - controls can also be added by dragging a control icon from the top left panel to any position in circuit. The editor \
             will figure out which is the nearest gate in order to attach the control to. <br> \
             - clicking over a control qubit opens up a pop-up dialog where control settings can be adjusted or the control can be removed. <br> \
+            - a control can also be deleted by pressing the <i>'d'</i> or <i>'D'</i> key while clicking the control image in the circuit.  <br> \
             - a control position can be adjusted by dragging a gate similar to how it's done for regular gate. <br> \
             - if the <i>'Shift'</i> key is pressed during dragging a control qubit the original control is not removed and a copy of the \
             control is placed at the drop location.  <br> \
@@ -176,9 +178,10 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             <b> Copy & Paste:</b> \
             <br/> \
             <br/> \
-            <i>Ctrl</i> + <i>Click</i> gesture(s) applied on a gate or an empty cell can be used to select a gate. The effect of a second \
-            <i>Ctrl</i> + <i>Click</i> gesture will be to select a rectangular portion of the circuit. Once gates have been selected the\
-            <i>Ctrl</i> + <i>C</i>, <i>Ctrl</i> + <i>V</i>, <i>Ctrl</i> + <i>X</i>, <i>Esc</i> and <i>Delete</i> keys work as you would expect. <br> \
+            <i>Ctrl</i> + <i>Click</i> gesture over a gate or an empty cell can be used to select that cell. The effect of a second \
+            <i>Ctrl</i> + <i>Click</i> gesture will be to select a rectangular portion of the circuit. Once one ore more gates have been selected \
+            the <i>Ctrl</i> + <i>C</i>, <i>Ctrl</i> + <i>V</i>, <i>Ctrl</i> + <i>X</i>, <i>Esc</i> and <i>Delete</i> keys work as you would expect \
+            for those gates which have <i>target</i> qubits inside the selected area. <br> \
             <br> \
             <b> Measure Gates:</b> \
             <br/> \
@@ -191,18 +194,19 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             - if measure gates are missing altogether the simulation results are identical with the situation where each qubit has attached \
             as the last gate a measure gate in the Z basis whose classic bit is equal to the qubit index. <br> \
             - whenever a gate is dragged in  a new position, the classic bit index is automatically set equal to the qubit index. This is still \
-            true even if the shift key is pressed during drag & drop which means that in this particular case the original gate was not copied \
+            true even if the shift key is pressed during drag & drop which means that in this particular case the original gate is not copied \
             identically as it is actually done for the other gates. \
             <br> \
             <br> \
-            <b> Changing Number of Steps/Qubits:</b> \
+            <b> Changing Steps/Qubits:</b> \
             <br/> \
             <br/> \
             - the ± button in the toolbar allows changing the number of qubits and steps in the circuit. <br> \
             - while increasing the number of steps and/or qubits may sometimes be a necessity, decreasing the number of steps/qubits \
             does not make sense in general since the qubits/steps which are not used will be simply ignored. One exception to this \
             recommendation is the situation where you want to make the circuit editor surface smaller in order to save the circuit \
-            as a svg image. \
+            as a svg image. <br> \
+            -  steps or qubits can be removed from a pop-up dialog which is opened by double clicking on an empty cell in the circuit. \
             <br> \
             <br> \
             <b> Getting Help for Gates:</b> \
@@ -215,9 +219,9 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             <b> Way of Working:</b> \
             <br/> \
             <br/> \
-            - we provide a link towards the circuit editor on our platform frontpage in order for new vistors to be able to easily explore the \
-            circuit editor. However, that view does not allow saving circuits in a database, it only permits saving circuits to files. \
-            We recommend for you to follow the 'My Projects' on our platform frontpage, create a new project, and work from there. \
+            - we provide a link towards the circuit editor on our platform frontpage in order for new vistors to be able to easily explore \
+            it's features. However, that view does not allow saving circuits in a database, it only permits saving circuits to files. \
+            We recommend that you follow the 'My Projects' link on our platform frontpage, create a new project, and work from there. \
             <br> \
             <br> \
             <b> Other:</b> \
