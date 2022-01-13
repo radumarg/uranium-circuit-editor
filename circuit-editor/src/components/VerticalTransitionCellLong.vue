@@ -7,6 +7,7 @@
 <script>
 import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 import { getClosestGates } from "../store/modules/editorHelper.js";
+import { arraysAreEqual } from "../store/modules/javaScriptUtils.js";
 import { mapActions } from 'vuex';
 export default {
   name: "VerticalTransitionCellLong",
@@ -36,7 +37,13 @@ export default {
       let originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
       let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       let dragOrigin = event.dataTransfer.getData("drag-origin");
-      if (step == originalStep) {
+      let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
+      let circuitState = this.$store.state.circuitEditorModule;
+      let closestGates = getClosestGates(circuitState, step, dropQbit);
+      if (step == originalStep && 
+          // make sure we will not modify a different gate than the one we are dragging from
+          arraysAreEqual(closestGates[0].targets, originalTargets)
+      ) {
         if (event.shiftKey) {
           if (originalControls.includes(draggedQbit)){
             this.addNewControl(event);

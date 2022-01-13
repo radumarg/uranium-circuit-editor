@@ -171,7 +171,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             will figure out which is the nearest gate in order to attach the control to. <br> \
             - clicking over a control qubit opens up a pop-up dialog where control settings can be adjusted or the control can be removed. <br> \
             - a control can also be deleted by pressing the <i>'d'</i> or <i>'D'</i> key while clicking the control image in the circuit.  <br> \
-            - a control position can be adjusted by dragging a gate similar to how it's done for regular gate. <br> \
+            - a control position can be adjusted by dragging the control image similar to how it's done for regular gate. <br> \
             - if the <i>'Shift'</i> key is pressed during dragging a control qubit the original control is not removed and a copy of the \
             control is placed at the drop location.  <br> \
             <br> \
@@ -224,7 +224,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             We recommend that you follow the 'My Projects' link on our platform frontpage, create a new project, and work from there. \
             <br> \
             <br> \
-            <b> Other:</b> \
+            <b> Representation of states:</b> \
             "
 
 }
@@ -353,7 +353,7 @@ export function retriveControlledGateHelpHtml(gateName) {
     return 'A "cross-resonance-dagger" gate may have any number of controls.';
   }
 
-  return "Note on representation of qubit states: the Bloch sphere Z-bazis states are conventionally named: |0⟩ and |1⟩. The Z-basis is usually refered to as the computational or \
+  return "The Bloch sphere Z-bazis state vectors are conventionally named: |0⟩ and |1⟩. The Z-basis is usually refered to as the computational or \
   standard basis. The other bases commonly used are the X-basis: |+⟩ = 1/√2(|0⟩ + |1⟩), |-⟩ = 1/√2(|0⟩ - |1⟩) and the Y-basis: |+i⟩ = 1/√2(|0⟩ + i|1⟩), |-i⟩ = 1/√2(|0⟩ - i|1⟩).";
 }
 
