@@ -186,9 +186,12 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             <b> Measure Gates:</b> \
             <br/> \
             <br/> \
-            - each measure gates has a classic bit index in order to measure the gate into. This is used by the simulator in order to deliver \
-            the simulation results. You can set up any classic bit index to a measure gate as long as the bit index is not larger than \
-            the maximum qubit index. Measure gates must be always placed last for any given qubit.<br> \
+            - since we use a simulator, it does not make sense to sample the final state vector but instead we show directly the simulation \
+            results as an array of probabilities corresponding each possible state. As such, when measure gates are added to a circuit \
+            their role is not to make a measurement at the end of simulation but to indicate the classic bit that qubit would be measured into \
+            if the circuit were to be run on real quantum computer. <br>\
+            - you can set up any classic bit index to a measure gate as long as the bit index is not larger than the maximum qubit index. \
+            Measure gates must be always placed last for any given qubit. <br>\
             - if multiple qubits share the same classic bit than simulation results for that bit correspond to an XOR  operation  performed on \
             that specific bit. <br> \
             - if measure gates are missing altogether the simulation results are identical with the situation where each qubit has attached \
