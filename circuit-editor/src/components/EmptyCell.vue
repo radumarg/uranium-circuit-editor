@@ -198,7 +198,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { seatsAreTaken } from "../store/modules/gatesTable.js";
-import { handleSelectEvent, isDefined, getClosestGates } from "../store/modules/editorHelper.js";
+import { handleSelectEvent, isDefined, getClosestNonControlledGates } from "../store/modules/editorHelper.js";
 export default {
   name: "EmptyCell",
   props: {
@@ -364,7 +364,7 @@ export default {
       let step = parseInt(event.currentTarget.getAttribute("step"));
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let circuitState = this.$store.state.circuitEditorModule;
-      let closestGates = getClosestGates(circuitState, step, dropQbit);
+      let closestGates = getClosestNonControlledGates(circuitState, step, dropQbit);
       if (closestGates.length >= 2) {
         alert(
           "There is no unique closest gate to attach control to. Please use the gate popup dialog in order to add a new control to your desired gate."

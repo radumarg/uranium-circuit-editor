@@ -6,18 +6,19 @@ import {
   getUserInterfaceSetting 
 } from "./applicationWideReusableUnits.js";
 
-export function getClosestGates(circuitState, step, qubit){
+export function getClosestNonControlledGates(circuitState, step, qubit) {
   
   let closestGates = [];
   let minDistance = Infinity;
 
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+    let nonControlledGates = ['identity', 'measure-x', 'measure-y', 'measure-z'];
     for (let i = 0; i < circuitState.steps.length; i++) {
       if (circuitState.steps[i].index == step) {
         let gates = circuitState.steps[i]["gates"];
         for (let j = 0; j < gates.length; j++) {
           let gate = gates[j];
-          if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+          if (!nonControlledGates.includes(gate.name) && Object.prototype.hasOwnProperty.call(gate, "targets")) {
             for (let i = 0; i < gate.targets.length; i++) {
               let target = gate.targets[i];
               let delta = Math.abs(target - qubit);

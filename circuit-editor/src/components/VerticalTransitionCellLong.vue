@@ -6,7 +6,7 @@
 
 <script>
 import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
-import { getClosestGates } from "../store/modules/editorHelper.js";
+import { getClosestNonControlledGates } from "../store/modules/editorHelper.js";
 import { arraysAreEqual } from "../store/modules/javaScriptUtils.js";
 import { mapActions } from 'vuex';
 export default {
@@ -39,7 +39,7 @@ export default {
       let dragOrigin = event.dataTransfer.getData("drag-origin");
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let circuitState = this.$store.state.circuitEditorModule;
-      let closestGates = getClosestGates(circuitState, step, dropQbit);
+      let closestGates = getClosestNonControlledGates(circuitState, step, dropQbit);
       if (step == originalStep && 
           // make sure we will not modify a different gate than the one we are dragging from
           arraysAreEqual(closestGates[0].targets, originalTargets)
@@ -196,7 +196,7 @@ export default {
       let step = parseInt(event.currentTarget.getAttribute("step"));
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let circuitState = this.$store.state.circuitEditorModule;
-      let closestGates = getClosestGates(circuitState, step, dropQbit);
+      let closestGates = getClosestNonControlledGates(circuitState, step, dropQbit);
       let closestGate = closestGates[0];
       let controlState = event.dataTransfer.getData("controlState");
 

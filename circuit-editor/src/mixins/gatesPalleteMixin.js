@@ -18,7 +18,8 @@ export const gatesPalleteMixin = {
       }
       let selectedCellBgColor = cell.style.backgroundColor.toUpperCase();
       // reset bckg for all cells
-      for (const id of ["gates-pallete-table-1", "gates-pallete-table-2", "gates-pallete-table-n"]) 
+      //for (const id of ["gates-pallete-table-1", "gates-pallete-table-2", "gates-pallete-table-n"])
+      for (const id of ["gates-pallete-table-1", "gates-pallete-table-2"])
       { 
         let table = document.getElementById(id);
         let cells = table.getElementsByTagName("TD");
@@ -57,7 +58,8 @@ export const gatesPalleteMixin = {
   },
   created() {
     this.$root.$on("switchThemeDark", (boolFlag) => {
-      for (const id of ["gates-pallete-1", "gates-pallete-2", "gates-pallete-n"]) {
+      //for (const id of ["gates-pallete-1", "gates-pallete-2", "gates-pallete-n"]) {
+      for (const id of ["gates-pallete-1", "gates-pallete-2"]) {
         var cells = document.getElementById(id).getElementsByTagName("td");
         if (boolFlag) {
           for(let i = 0; i < cells.length; i++) { 
