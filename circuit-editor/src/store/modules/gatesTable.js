@@ -847,7 +847,27 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           // different from gate name for two target qubit gates.
           // In the case of pauli root gates when root is 'k', this is used
           // to resolved gate image name based on values for 'k' and 'img'
-          gatesTableRowState.cells[column].img = gate.name
+          gatesTableRowState.cells[column].img = gate.name;
+
+          // handling the aggregate gate
+          if (Object.prototype.hasOwnProperty.call(gate, "gates")){
+            gatesTableRowState.cells[column].gates = [...gate.gates];
+            gatesTableRowState.cells[column].targets = [];
+            for (let i = 0; i < gate["gates"].length; i++) {
+              let target = gate["gates"][i].target;
+              if (gatesTableRowState.cells[column].qrow == target){
+                gatesTableRowState.cells[column].img = gate["gates"][i].name;
+              }
+              gatesTableRowState.cells[column].targets.push(target);
+            }
+            if (gatesTableRowState.cells[column].targets.length == 0){
+              let target = gate.targets[0];
+              if (gatesTableRowState.cells[column].qrow == target){
+                gatesTableRowState.cells[column].img = gate.name;
+                gatesTableRowState.cells[column].targets = [target];
+              }
+            }
+          }
 
           // all elements in circuit must be updated when switching from colored to blue gates:
           gatesTableRowState.cells[column].key = getUserInterfaceSetting('colored-gates');

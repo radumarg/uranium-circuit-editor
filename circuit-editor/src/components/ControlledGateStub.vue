@@ -329,6 +329,9 @@ export default {
       if (isDefined(this.root)){
         event.dataTransfer.setData("root", this.root);
       }
+      if (this.gates){
+        event.dataTransfer.setData("gates", [...this.gates]);
+      }
       const target = event.target;
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);

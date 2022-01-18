@@ -198,7 +198,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { seatsAreTaken } from "../store/modules/gatesTable.js";
-import { handleSelectEvent, isDefined, getClosestNonControlledGates } from "../store/modules/editorHelper.js";
+import { getAggregatedGatesTargets, handleSelectEvent, isDefined, getClosestNonControlledGates } from "../store/modules/editorHelper.js";
 export default {
   name: "EmptyCell",
   props: {
@@ -403,6 +403,10 @@ export default {
           let root = event.dataTransfer.getData("root");
           dto["root"] = root;
         }
+        if (event.dataTransfer.types.includes("gates")) {
+          let gates = event.dataTransfer.getData("gates");
+          dto["gates"] = [...gates];
+        }
 
         this.removeGateFromCircuit(dto);
         this.insertGateInCircuit(dto);
@@ -443,6 +447,10 @@ export default {
         let root = event.dataTransfer.getData("root");
         dto["root"] = root;
       }
+      if (event.dataTransfer.types.includes("gates")) {
+        let gates = event.dataTransfer.getData("gates");
+        dto["gates"] = [...gates];
+      }
 
       this.removeGateFromCircuit(dto);
       this.insertGateInCircuit(dto);
@@ -455,7 +463,12 @@ export default {
       let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
 
       // add the new gate mandatory params
-      let dto = { step: step, targets: [qbit], controls: [], name: gateName, };
+      let dto = { step: step, targets: [], controls: [], name: gateName, };
+
+      // anything else but an aggregate gate
+      if (originalTargets.length > 0) {
+        dto["targets"] = [qbit];
+      }
 
       let qbitDelta = draggedQbit - qbit;
 
@@ -499,7 +512,21 @@ export default {
         dto["bit"] = qbit;
       }
 
-      let proposedQbits = [...dto["targets"], ...dto["controls"]]
+      if (event.dataTransfer.types.includes("gates")) {
+        let gates = event.dataTransfer.getData("gates");
+        for (let i = 0; i < gates.length; i++) {
+          gates[i].target -=  qbitDelta;
+        }
+        dto["gates"] = [...gates];
+      }
+
+      let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)];
+
+      if (proposedQbits.some(x => x < 0)) {
+        alert("Cannot add this gate here, some of the propoesd qubits are negative!");
+        this.handleDragLeave();
+        return;
+      }
 
       if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step)) {
         alert("Cannot add this gate here, not all required qubits are available!");
@@ -552,6 +579,10 @@ export default {
       if (event.dataTransfer.types.includes("bit")) {
         dto["bit"] = qbit;
       }
+      if (event.dataTransfer.types.includes("gates")) {
+        let gates = event.dataTransfer.getData("gates");
+        dto["gates"] = [...gates];
+      }
 
       let dtos = [];
 
@@ -576,7 +607,7 @@ export default {
         let currentStep = Math.min(step, originalStep);
         let lastStep = Math.max(step, originalStep);
         while (currentStep <= lastStep){
-          let proposedQbits = [...dto["targets"], ...dto["controls"]];
+          let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)];
           if (!seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, currentStep)) {
             let dtoNew = {...dto};
             dtoNew.step = currentStep;
@@ -668,9 +699,22 @@ export default {
         dto["bit"] = qbit;
       }
 
+      let originalAggregatedGateTargets = [];
+      if (event.dataTransfer.types.includes("gates")) {
+        dto["gates"] = [];
+        let gates = event.dataTransfer.getData("gates");
+        for (let i = 0; i < gates.length; i++) {
+          let gate = gates[i];
+          originalAggregatedGateTargets.push(gate.target);
+          gate.target += delta;
+          dto["gates"].push({...gate});
+        }
+      }
+
       let existingQbits = [
         ...originalTargets,
         ...originalControls,
+        ...originalAggregatedGateTargets
       ];
       
       let success = true;
@@ -733,7 +777,7 @@ export default {
         success = this.tryAppendingSecondTargetQubit(dto, qbit, step, existingQbits);
       }
 
-      let proposedQbits = [...dto["targets"], ...dto["controls"]];
+      let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)];
       
       if (success && seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)){
         if (step != originalStep) {

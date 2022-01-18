@@ -30,7 +30,7 @@
           <td>
             <div v-b-hover="handleExpandLeftHover">
               <b-icon v-if="expandLeftIsHovered" icon="chevron-bar-left" v-on:click="expandCircuitLeft()" title="Add step to the left" style="color: #7952b3;" font-scale="1.6"></b-icon>
--             <b-icon v-else icon="chevron-bar-left" v-on:click="expandCircuitLeft()" title="Add step to the left" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="chevron-bar-left" v-on:click="expandCircuitLeft()" title="Add step to the left" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
           <td colspan="2" style="padding: 10px;">
@@ -416,6 +416,14 @@ export default {
       gatesNew: [...this.gates],
       numberOfGates: this.gates.length,
       singleTargetQubitGates: [
+        { value: 'c', text: 'c' },
+        { value: 'c-dagger', text: 'c-dagger' },
+        { value: 'h', text: 'h' },
+        { value: 'h-dagger', text: 'h-dagger' },
+        { value: 'hadamard', text: 'hadamard' },
+        { value: 'hadamard-zx', text: 'hadamard-zx' },
+        { value: 'hadamard-yz', text: 'hadamard-yz' },
+        { value: 'hadamard-xy', text: 'hadamard-xy' },
         { value: 'identity', text: 'identity' },
         { value: 'pauli-x', text: 'pauli-x' },
         { value: 'pauli-y', text: 'pauli-y' },
@@ -426,31 +434,23 @@ export default {
         { value: 'pauli-y-root-dagger', text: 'pauli-y-root-dagger' },
         { value: 'pauli-z-root', text: 'pauli-z-root' },
         { value: 'pauli-z-root-dagger', text: 'pauli-z-root-dagger' },
+        { value: 'rx-theta', text: 'rx-theta' },
+        { value: 'ry-theta', text: 'ry-theta' },
+        { value: 'rz-theta', text: 'rz-theta' },
         { value: 's', text: 's' },
         { value: 's-dagger', text: 's-dagger' },
         { value: 't', text: 't' },
         { value: 't-dagger', text: 't-dagger' },
-        { value: 'v', text: 'v' },
-        { value: 'v-dagger', text: 'v-dagger' },
-        { value: 'h', text: 'h' },
-        { value: 'h-dagger', text: 'h-dagger' },
-        { value: 'rx-theta', text: 'rx-theta' },
-        { value: 'ry-theta', text: 'ry-theta' },
-        { value: 'rz-theta', text: 'rz-theta' },
-        { value: 'hadamard', text: 'hadamard' },
-        { value: 'hadamard-zx', text: 'hadamard-zx' },
-        { value: 'hadamard-yz', text: 'hadamard-yz' },
-        { value: 'hadamard-xy', text: 'hadamard-xy' },
-        { value: 'c', text: 'c' },
-        { value: 'c-dagger', text: 'c-dagger' },
         { value: 'u1', text: 'u1' },
         { value: 'u2', text: 'u2' },
         { value: 'u3', text: 'u3' },
+        { value: 'v', text: 'v' },
+        { value: 'v-dagger', text: 'v-dagger' },
       ],
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
+    ...mapActions('circuitEditorModule/', ['repositionAggregateGateInCircuit']),
     editGateAndControlsModalSize(){
       let maxLength = Math.max(this.gatesNew.length, this.controlsNew.length);
       if (maxLength <= 5){
@@ -518,6 +518,14 @@ export default {
     hideEditGatesModal: function() {
       this.$refs['edit-gates-modal-dialog'].hide();
       this.$refs['initial-modal-dialog'].show();
+    },
+    handleEditGatesModalSave: function() {
+      this.$refs['edit-gates-modal-dialog'].hide();
+      this.handleSave();
+    },
+    handleEditControlsModalSave: function() {
+      this.$refs['edit-controls-modal-dialog'].hide();
+      this.handleSave();
     },
     handleEditGates: function(){
       this.editGatesModalCloseIsHovered = false;
@@ -668,7 +676,7 @@ export default {
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
       let gatesOld = [...this.gates];
-      let promise = this.repositionSimpleGateInCircuit({
+      let promise = this.repositionAggregateGateInCircuit({
         'step': this.step, 
         'targets': [...this.targets],
         'name': this.name,

@@ -100,6 +100,10 @@ export default {
         let root = event.dataTransfer.getData("root");
         dto["root"] = root;
       }
+      if (event.dataTransfer.types.includes("gates")) {
+        let gates = event.dataTransfer.getData("gates");
+        dto["gates"] = [...gates];
+      }
 
       // step1 - remove original gate if drag event started from a cell 
       // in editor (not originating from gates pallete)
@@ -142,6 +146,10 @@ export default {
         let root = event.dataTransfer.getData("root");
         dto["root"] = root;
       }
+      if (event.dataTransfer.types.includes("gates")) {
+        let gates = event.dataTransfer.getData("gates");
+        dto["gates"] = [...gates];
+      }
 
       // step1 - remove original gate if drag event started from a cell 
       // in editor (not originating from gates pallete)
@@ -183,6 +191,17 @@ export default {
       if (event.dataTransfer.types.includes("root")) {
         let root = event.dataTransfer.getData("root");
         dto["root"] = root;
+      }
+      if (event.dataTransfer.types.includes("gates")) {
+        let gates = event.dataTransfer.getData("gates");
+        for (let i = 0; i < gates.length; i++) {
+          let aggregatedGate = gates[i];
+          if (aggregatedGate.target == draggedQubit) {
+            aggregatedGate.target = dropQbit;
+            break;
+          }
+        }
+        dto["gates"] = [...gates];
       }
 
       // step1 - remove original gate if drag event started from a cell 
@@ -228,6 +247,10 @@ export default {
       if (event.dataTransfer.types.includes("root")) {
         let root = event.dataTransfer.getData("root");
         dto["root"] = root;
+      }
+      if (event.dataTransfer.types.includes("gates")) {
+        let gates = event.dataTransfer.getData("gates");
+        dto["gates"] = [...gates];
       }
 
       this.removeGateFromCircuit(dto);

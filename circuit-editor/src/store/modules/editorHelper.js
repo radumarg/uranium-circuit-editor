@@ -65,6 +65,15 @@ export function removingGateFromCircuit(circuitState, dto){
               return;
             }
           }
+          if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+            for (let k = 0; k < gate.gates.length; k++) {
+              let aggregatedGate = gate.gates[k];
+              if (target == aggregatedGate.target) {
+                gates.splice(j, 1);
+                return;
+              }
+            }
+          }
         }
       }
     }
@@ -108,6 +117,10 @@ export function insertingOneGateInCircuit(circuitState, dto) {
   if (Object.prototype.hasOwnProperty.call(dto, "bit")) {
       let bit = dto["bit"];
       gate["bit"] = bit;
+  }
+  if (Object.prototype.hasOwnProperty.call(dto, "gates")) {
+    let gates = dto["gates"];
+    gate["gates"] = [...gates];
   }
 
   if (!Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
@@ -447,4 +460,16 @@ export function proposedNewSeatsOverlap(dtos) {
     }
   }
   return false; 
+}
+
+export function getAggregatedGatesTargets(dto) {
+
+  let aggregatedGateTargets = [];
+  
+  if (dto["gates"]) {
+    let gates = dto["gates"];
+    aggregatedGateTargets = Array.from(gates, x => x.target);
+  }
+
+  return aggregatedGateTargets;
 }

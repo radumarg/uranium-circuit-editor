@@ -58,8 +58,7 @@ export const gatesPalleteMixin = {
   },
   created() {
     this.$root.$on("switchThemeDark", (boolFlag) => {
-      //for (const id of ["gates-pallete-1", "gates-pallete-2", "gates-pallete-n"]) {
-      for (const id of ["gates-pallete-1", "gates-pallete-2"]) {
+      for (const id of ["gates-pallete-1", "gates-pallete-2", "gates-pallete-n"]) {
         var cells = document.getElementById(id).getElementsByTagName("td");
         if (boolFlag) {
           for(let i = 0; i < cells.length; i++) { 

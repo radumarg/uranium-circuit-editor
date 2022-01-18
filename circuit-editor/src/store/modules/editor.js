@@ -87,6 +87,11 @@ export const circuitEditorModule = {
                 let targets = gate.targets;
                 maxQbit = Math.max(maxQbit, ...targets);
               }
+              if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+                for (let k = 0; k < gate.gates.length; k++) {
+                  maxQbit = Math.max(maxQbit, gate.gates[k].target);
+                }
+              }
               if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
                 for (let i = 0; i < gate["controls"].length; i++) {
                   let controlInfo = gate["controls"][i];
@@ -171,6 +176,15 @@ export const circuitEditorModule = {
           controls[i] = controlSettings[i][0];
           controlstates[i] = controlSettings[i][1];
         }
+
+        let gates = []
+        if (Object.prototype.hasOwnProperty.call(dataTransferObj, "gates")) {
+          gates = [...dataTransferObj["gates"]];
+          gates = gates.sort((a, b) => (a.target > b.target) ? 1 : -1);
+          if (gates.length > 0) {
+            targets = [];
+          }
+        }
             
         if (step < 0 || targets.some((element) => element < 0) || controls.some((element) => element < 0)) {
           alert("Negative steps/qubits not permitted!");
@@ -192,8 +206,10 @@ export const circuitEditorModule = {
             dto = { "step": step, "targets": targets, "name": name, "phi": 0, "lambda": 0 };
           } else if (unitaryThreeParamGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "lambda": 0 };
+          } else if (aggregateGates.includes(name) && controls.length == 0 && targets.length == 0) {
+            dto = { "step": step, "name": name, "gates": gates };
           } else if (aggregateGates.includes(name) && controls.length == 0) {
-            dto = { "step": step, "targets": targets, "name": name };
+            dto = { "step": step, "targets": targets, "name": name, "gates": gates };
           } else if (measureGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "bit": targets[0] };
           } else if (singleQbitGates.includes(name)) {
@@ -208,8 +224,10 @@ export const circuitEditorModule = {
             dto = { "step": step, "targets": targets, "name": name, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
           } else if (unitaryThreeParamGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
+          } else if (aggregateGates.includes(name) && targets.length == 0) {
+            dto = { "step": step, "name": name, "gates": gates, "controls": controls, "controlstates": controlstates };
           } else if (aggregateGates.includes(name)) {
-            dto = { "step": step, "targets": targets, "name": name, "controls": controls, "controlstates": controlstates };
+            dto = { "step": step, "targets": targets, "name": name, "gates": gates, "controls": controls, "controlstates": controlstates };
           } else if (twoTargetGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, };
           } else if (twoTargetRootGates.includes(name) && controls.length == 0) {
@@ -472,6 +490,7 @@ export const circuitEditorModule = {
           dataTransferObj["targets"] = [...targetsNew];
           dataTransferObj["controls"] = [...controlsNew];
           dataTransferObj["controlstates"] = [...controlstatesNew];
+
           if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiNew")) {
             let phi = dataTransferObj["phiNew"];
             dataTransferObj["phi"] = phi;
@@ -487,6 +506,10 @@ export const circuitEditorModule = {
           if (Object.prototype.hasOwnProperty.call(dataTransferObj, "rootNew")) {
             let root = dataTransferObj["rootNew"];
             dataTransferObj["root"] = root;
+          }
+          if (Object.prototype.hasOwnProperty.call(dataTransferObj, "gatesNew")) {
+            let gates = dataTransferObj["gatesNew"];
+            dataTransferObj["gates"] = [...gates];
           }
           
           this.dispatch('circuitEditorModule/insertGateInCircuit', dataTransferObj);
