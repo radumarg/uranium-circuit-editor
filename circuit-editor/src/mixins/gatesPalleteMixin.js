@@ -83,10 +83,12 @@ export const gatesPalleteMixin = {
         for(let i = 0; i < cells.length; i++) {
           if (cells[i].childNodes.length > 0){
             let img = cells[i].childNodes[0];
-            if (getUserInterfaceSetting('colored-gates') === 'true'){
-              img.src = require("../assets/colored-gates/" + img.title + ".svg");
-            } else {
-              img.src = require("../assets/blue-gates/" + img.title + ".svg");
+            if (img.title != "barrier"){
+              if (getUserInterfaceSetting('colored-gates') === 'true'){
+                img.src = require("../assets/colored-gates/" + img.title + ".svg");
+              } else {
+                img.src = require("../assets/blue-gates/" + img.title + ".svg");
+              }
             }
           }
         }

@@ -10,9 +10,9 @@ export function retriveNoteHtml(gateName) {
 export function retriveSimpleGateHelpHtml(gateName) {
 
     if (gateName == "u3") {
-        return 'This is a generic, three parametric, unitary single bit gate.';
+        return 'This is a generic, three parametric, unitary single bit gate. It can be expressed in termed of elementary rotations as around X, Y and Z axes as: U3(θ, φ, λ) = Rz(φ)&nbsp;Ry(θ)&nbsp;Rz(λ).';
     } else if (gateName == "u2") {
-        return 'This is a generic, two parametric, unitary single bit gate and is defined as: u3(π/2, φ, λ).';
+        return 'This is a generic, two parametric, unitary single bit gate and is defined as: u3(π/2, φ, λ). It can be expressed in termed of elementary rotations as around X, Y and Z axes as: U2(φ, λ) = Rz(φ)&nbsp;Ry(π/2)&nbsp;Rz(λ).';
     } else if (gateName == "u1") {
         return 'This is a generic, one parameter, unitary single bit gate and is defined as: u3(0, 0, λ). The "u1" gate acts on a single qubit. Leaves the basis state |0⟩ unchanged and map |1⟩ to exp(i*λ)|1⟩. The probability of measuring a |0⟩ or |1⟩ is unchanged after applying this gate, however it modifies the phase of the quantum state. The z, s and t gates are special cases of "u1" for λ values given by π, π/2 and π/4 respectively.'
     } else if (gateName == "hadamard") {
@@ -135,6 +135,11 @@ each qubit is measured into a classical bit with index equal to the qubit index 
       return 'The "cross-resonance" gate (CR) for superconducting qubits implements a ZX interaction and is defined as: exp(-i * θ/2 * (Z⊗X)). Because in real life the CR gate is implemented using weakly anharmonic transmon qubits in practice there exist other smaller interactions terms in the interaction hamiltonian besides the dominant Z⊗X term. The CR gate is maximally entangling at θ = π/2.';
     } else if (gateName == "cross-resonance-dagger") {
       return 'The "cross-resonance-dagger" is the conjugate transpose of "cross-resonance" gate and is defined as: exp(i * θ/2 * (Z⊗X)). Because in real life the CR gate is implemented using weakly anharmonic transmon qubits in practice there exist other smaller interactions terms in the interaction hamiltonian besides the dominant Z⊗X term. The CR gate is maximally entangling at θ = π/2.';
+    } else if (gateName == "barrier") {
+      return 'In the context of IBMQ, a barier indicates a boundary in a circuit across which optimizations or circuit re-writes are not \
+      performed during transpiling phase. In the limited context of Uranium, the barrier may be used to separate different portions of a \
+      circuit in order to make the implementation of an algorithm more readable. However please keep in mind the IBMQ usecase which will \
+      apply when (sooner rather than later) you will be able to execute your circuits directly on IBMQ devices.'
     }
 
     return "In order to work with the Circuit Editor use the gates pallete on the left to drag & drop gates in the circuit \
@@ -354,6 +359,8 @@ export function retriveControlledGateHelpHtml(gateName) {
     return 'A "cross-resonance" gate may have any number of controls.';
   } else if (gateName == "cross-resonance-dagger") {
     return 'A "cross-resonance-dagger" gate may have any number of controls.';
+  } else if (gateName == "barrier") {
+    return '';
   }
 
   return "The Bloch sphere Z-bazis state vectors are conventionally named: |0⟩ and |1⟩. The Z-basis is usually refered to as the computational or \

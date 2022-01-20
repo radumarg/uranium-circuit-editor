@@ -226,6 +226,7 @@ export default {
       "removeGateFromCircuit",
       "removeQbitFromCircuit",
       "removeStepFromCircuit",
+      "refreshCircuit"
     ]),
     ...mapGetters("circuitEditorModule/", [
       "getMaximumStepIndex",
@@ -310,11 +311,13 @@ export default {
       let dto = { targets: [this.qrow] };
       this.removeQbitFromCircuit(dto);
       this.$refs["modal-dialog"].hide();
+      this.refreshCircuit();
     },
     removeStep: function () {
       let dto = { step: this.step };
       this.removeStepFromCircuit(dto);
       this.$refs["modal-dialog"].hide();
+      this.refreshCircuit();
     },
     handleDropEvent: function (event) {
 
@@ -385,28 +388,33 @@ export default {
         controls.push(dropQbit);
         controlstates.push(controlState);
 
-        let dto = { step: step, name: closestGate.name, targets: [...closestGate.targets], controls: [...controls], controlstates: [...controlstates] };
+        let dto = { step: step, name: closestGate.name, controls: [...controls], controlstates: [...controlstates] };
 
-        if (event.dataTransfer.types.includes("phi")) {
-          let phi = parseFloat(event.dataTransfer.getData("phi"));
-          dto["phi"] = phi;
+        if (closestGate["targets"]) {
+          let targets = closestGate.targets;
+          dto["targets"] = [...targets];
         }
-        if (event.dataTransfer.types.includes("theta")) {
-          let theta = parseFloat(event.dataTransfer.getData("theta"));
-          dto["theta"] = theta;
-        }
-        if (event.dataTransfer.types.includes("lambda")) {
-          let lambda = parseFloat(event.dataTransfer.getData("lambda"));
-          dto["lambda"] = lambda;
-        }
-        if (event.dataTransfer.types.includes("root")) {
-          let root = event.dataTransfer.getData("root");
-          dto["root"] = root;
-        }
-        if (event.dataTransfer.types.includes("gates")) {
-          let gates = event.dataTransfer.getData("gates");
+        if (closestGate["gates"]) {
+          let gates = closestGate.gates;
           dto["gates"] = [...gates];
         }
+      
+        if (isDefined(closestGate["phi"])) {
+          let phi = closestGate.phi;
+          dto["phi"] = phi;
+        }
+        if (isDefined(closestGate.theta)) {
+          let theta = closestGate.theta;
+          dto["theta"] = theta;
+        }
+        if (isDefined(closestGate["lambda"])) {
+          let lambda = closestGate.lambda;
+          dto["lambda"] = lambda;
+        }
+        if (closestGate["root"]) {
+          let root = closestGate.root;
+          dto["root"] = root;
+        }     
 
         this.removeGateFromCircuit(dto);
         this.insertGateInCircuit(dto);
@@ -431,6 +439,10 @@ export default {
       dto["controlstates"] = event.dataTransfer.getData("controlstates").split(",");
       dto["controlstates"].push(dto["controlstates"][controlIndex]);
       
+      if (event.dataTransfer.types.includes("gates")) {
+        let gates = JSON.parse(event.dataTransfer.getData("gates"));
+        dto["gates"] = [...gates];
+      }
       if (event.dataTransfer.types.includes("phi")) {
         let phi = parseFloat(event.dataTransfer.getData("phi"));
         dto["phi"] = phi;
@@ -446,10 +458,6 @@ export default {
       if (event.dataTransfer.types.includes("root")) {
         let root = event.dataTransfer.getData("root");
         dto["root"] = root;
-      }
-      if (event.dataTransfer.types.includes("gates")) {
-        let gates = event.dataTransfer.getData("gates");
-        dto["gates"] = [...gates];
       }
 
       this.removeGateFromCircuit(dto);
@@ -489,8 +497,17 @@ export default {
         dto["controls"] = controls.map( function(value) { return value - qbitDelta; } );
       }
       if (event.dataTransfer.types.includes("controlstates")) {
-        let controlstates = event.dataTransfer.getData("controlstates").split(",");
-        dto["controlstates"] = controlstates;
+        let controlstates = event.dataTransfer.getData("controlstates");
+        if (controlstates) {
+          dto["controlstates"] = controlstates.split(",");
+        }
+      }
+      if (event.dataTransfer.types.includes("gates")) {
+        let gates = JSON.parse(event.dataTransfer.getData("gates"));
+        for (let i = 0; i < gates.length; i++) {
+          gates[i].target -=  qbitDelta;
+        }
+        dto["gates"] = [...gates];
       }
       if (event.dataTransfer.types.includes("phi")) {
         let phi = parseFloat(event.dataTransfer.getData("phi"));
@@ -510,14 +527,6 @@ export default {
       }
       if (event.dataTransfer.types.includes("bit")) {
         dto["bit"] = qbit;
-      }
-
-      if (event.dataTransfer.types.includes("gates")) {
-        let gates = event.dataTransfer.getData("gates");
-        for (let i = 0; i < gates.length; i++) {
-          gates[i].target -=  qbitDelta;
-        }
-        dto["gates"] = [...gates];
       }
 
       let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)];
@@ -557,8 +566,14 @@ export default {
         dto["controls"] = controls;
       }
       if (event.dataTransfer.types.includes("controlstates")) {
-        let controlstates = event.dataTransfer.getData("controlstates").split(",");
-        dto["controlstates"] = controlstates;
+        let controlstates = event.dataTransfer.getData("controlstates");
+        if (controlstates) {
+          dto["controlstates"] = controlstates.split(",");
+        }
+      }
+      if (event.dataTransfer.types.includes("gates")) {
+        let gates = JSON.parse(event.dataTransfer.getData("gates"));
+        dto["gates"] = [...gates];
       }
       if (event.dataTransfer.types.includes("phi")) {
         let phi = parseFloat(event.dataTransfer.getData("phi"));
@@ -579,18 +594,17 @@ export default {
       if (event.dataTransfer.types.includes("bit")) {
         dto["bit"] = qbit;
       }
-      if (event.dataTransfer.types.includes("gates")) {
-        let gates = event.dataTransfer.getData("gates");
-        dto["gates"] = [...gates];
-      }
 
       let dtos = [];
 
       // replicate gate in a vertical or horizontal array
       if (step == originalStep) {
-        if (originalTargets.length > 1 || dto["controls"].length > 0)
-        {
-          alert("Only single qubit gates can be replicated in a vertical array using this gesture. You might want to use the replicate gate dialog instead.");
+        if (originalTargets.length > 1 || dto["controls"].length > 0) {
+          if (gateName == "aggregate") {
+            alert("Only single qubit gates can be replicated in a vertical array using this gesture.");
+          } else {
+            alert("Only single qubit gates can be replicated in a vertical array using this gesture. You might want to use the replicate gate dialog instead.");
+          }
         } else  {
           let currentQubit = Math.min(qbit, originalTargets[0]);
           let lastQubit = Math.max(qbit, originalTargets[0]);
@@ -674,9 +688,28 @@ export default {
         }
       }
       if (event.dataTransfer.types.includes("controlstates")) {
-        let controlstates = event.dataTransfer.getData("controlstates").split(",");
-        dto["controlstates"] = controlstates;
+        let controlstates = event.dataTransfer.getData("controlstates");
+        if (controlstates) {
+          dto["controlstates"] = controlstates.split(",");
+        }
       }
+
+      let originalAggregatedGateTargets = [];
+      if (event.dataTransfer.types.includes("gates")) {
+        dto["gates"] = [];
+        let gates = JSON.parse(event.dataTransfer.getData("gates"));
+        for (let i = 0; i < gates.length; i++) {
+          let gate = gates[i];
+          originalAggregatedGateTargets.push(gate.target);
+          if (step != originalStep){
+            gate.target += delta;
+          } else if (draggedQbit == gate.target) {
+             gate.target = qbit;
+          }
+          dto["gates"].push({...gate});
+        }
+      }
+
       if (event.dataTransfer.types.includes("phi")) {
         let phi = parseFloat(event.dataTransfer.getData("phi"));
         dto["phi"] = phi;
@@ -699,18 +732,6 @@ export default {
         dto["bit"] = qbit;
       }
 
-      let originalAggregatedGateTargets = [];
-      if (event.dataTransfer.types.includes("gates")) {
-        dto["gates"] = [];
-        let gates = event.dataTransfer.getData("gates");
-        for (let i = 0; i < gates.length; i++) {
-          let gate = gates[i];
-          originalAggregatedGateTargets.push(gate.target);
-          gate.target += delta;
-          dto["gates"].push({...gate});
-        }
-      }
-
       let existingQbits = [
         ...originalTargets,
         ...originalControls,
@@ -730,6 +751,14 @@ export default {
 
       if (success){
         success = this.maybeAdjustGate(gateName, dto, qbit, step, originalStep, existingQbits); 
+      }
+
+      if (dto["gates"]) {
+        let embeddedGateTargets = Array.from(dto["gates"], x => x.target);
+        if (embeddedGateTargets.some(x => x < 0)) {
+          alert("Negative target qubits not allowed!")
+          success = false;
+        }
       }
       
       if (success) {

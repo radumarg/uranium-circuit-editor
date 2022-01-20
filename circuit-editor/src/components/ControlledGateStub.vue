@@ -101,6 +101,7 @@ export default {
   props: {
     'step' : Number, 
     'targets': Array,
+    'gates': Array,
     'qrow': Number,
     'title': String,
     'name': String,
@@ -157,6 +158,7 @@ export default {
       this.expandRightIsHovered = false;
       this.expandUpIsHovered = false;
       this.expandDownIsHovered = false;
+      this.controlstateNew = this.controlstate;
       this.$refs['modal-dialog'].show();
     },
     hideModal: function() {
@@ -183,6 +185,9 @@ export default {
         'targetsNew': [...this.targets],
         'controlsNew': [...this.controls],
         'controlstatesNew': controlStatesNew,
+      }
+      if (this.gates){
+        dto['gates'] = [...this.gates];
       }
       if (isDefined(this.phi)) {
         dto['phiNew'] = this.phi;
@@ -219,6 +224,9 @@ export default {
         'targetsNew': [...this.targets],
         'controlsNew': [...controlsNew],
         'controlstatesNew': [...controlStatesNew],
+      }
+      if (this.gates){
+        dto['gates'] = [...this.gates];
       }
       if (isDefined(this.phi)) {
         dto['phiNew'] = this.phi;
@@ -317,6 +325,9 @@ export default {
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstates", [...this.controlstates]);
+      if (this.gates.length > 0) {
+        event.dataTransfer.setData("gates", JSON.stringify(this.gates));
+      }
       if (isDefined(this.theta)) {
         event.dataTransfer.setData("theta", this.theta);
       }
@@ -328,9 +339,6 @@ export default {
       }
       if (isDefined(this.root)){
         event.dataTransfer.setData("root", this.root);
-      }
-      if (this.gates){
-        event.dataTransfer.setData("gates", [...this.gates]);
       }
       const target = event.target;
       let dragImageGhost = createDragImageGhost(target);  

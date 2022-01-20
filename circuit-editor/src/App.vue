@@ -141,10 +141,14 @@ export default {
         this.gateImage = require("./assets/uranium.png");
       } else{
         this.gateName = gateName;
-        if (getUserInterfaceSetting('colored-gates') === 'true'){
-          this.gateImage = require("./assets/colored-gates/" + gateName + ".svg");
+        if ( gateName == 'barrier') {
+          this.gateImage = require("./assets/barrier.svg");
         } else {
-          this.gateImage = require("./assets/blue-gates/" + gateName + ".svg");
+          if (getUserInterfaceSetting('colored-gates') === 'true'){
+            this.gateImage = require("./assets/colored-gates/" + gateName + ".svg");
+          } else {
+            this.gateImage = require("./assets/blue-gates/" + gateName + ".svg");
+          }
         }
       }
     },

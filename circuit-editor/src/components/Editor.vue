@@ -279,7 +279,7 @@
               <ParametricTwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name.includes('stub')">
-              <ControlledGateStub :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledGateStub :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :gates="[...cell.gates]" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
           </td>
         </tr>

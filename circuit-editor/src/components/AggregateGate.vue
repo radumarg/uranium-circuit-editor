@@ -450,7 +450,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionAggregateGateInCircuit']),
+    ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
     editGateAndControlsModalSize(){
       let maxLength = Math.max(this.gatesNew.length, this.controlsNew.length);
       if (maxLength <= 5){
@@ -589,16 +589,14 @@ export default {
     },
     addGate() {
 
-      let gatesTargets = [];
-      for (var i = 0; i < this.gatesNew.length; i++){
-        gatesTargets.push(this.gatesNew[i].target);
-      }
-
       let newTarget = null;
+      let gatesTargets = Array.from(this.gatesNew, x => parseInt(x.target));
       let minQubit = Math.min(...this.targetsNew, ...this.controlsNew, ...gatesTargets);
       let maxQubit = Math.max(...this.targetsNew, ...this.controlsNew, ...gatesTargets);
       
-      if (minQubit > 0 && !seatIsTaken(this.$store.state.circuitEditorModule, minQubit - 1, this.step)) {
+      if (this.targets.length > 0 && this.$data.gatesNew.length == 0) {
+        newTarget = this.targets[0];
+      } else if (minQubit > 0 && !seatIsTaken(this.$store.state.circuitEditorModule, minQubit - 1, this.step)) {
         newTarget = minQubit - 1;
       } else {
         let currentQubit = minQubit;
@@ -620,12 +618,12 @@ export default {
         }
       } 
       
-      if (newTarget == newTarget && !seatIsTaken(this.$store.state.circuitEditorModule, maxQubit + 1, this.step)){
+      if (newTarget == null && !seatIsTaken(this.$store.state.circuitEditorModule, maxQubit + 1, this.step)){
         newTarget = maxQubit + 1;
       }
       
       if (isDefined(newTarget)) {
-        let gate = { target: newTarget, name: "identity" };
+        let gate = { name: "identity", target: newTarget };
         this.gatesNew.push(gate);
         this.numberOfGates = this.gatesNew.length;
       } else {
@@ -664,6 +662,7 @@ export default {
       this.$refs['edit-controls-modal-dialog'].show();
     },
     handleSave: function(){
+      let aggregatedGatesTarget = Array.from(this.$data.gatesNew, x => x.target);
       if (!Number.isInteger(this.$data.targetsNew[0])){
         alert("Please enter an integer number!");
         return;
@@ -672,11 +671,15 @@ export default {
         alert("Control and target qubits must differ!");
         return;
       }
+       if (arraysHaveElementsInCommon(this.$data.controlsNew, aggregatedGatesTarget)){
+        alert("Control and aggregated gates target qubits must differ!");
+        return;
+      }
       let targetsOld = [...this.targets];
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
       let gatesOld = [...this.gates];
-      let promise = this.repositionAggregateGateInCircuit({
+      let promise = this.repositionSimpleGateInCircuit({
         'step': this.step, 
         'targets': [...this.targets],
         'name': this.name,
@@ -709,7 +712,9 @@ export default {
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstates", [...this.controlstates]);
-      event.dataTransfer.setData("originalGates", [...this.gates]);
+      if (this.gates.length > 0) {
+        event.dataTransfer.setData("gates", JSON.stringify(this.gates));
+      }
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
     },

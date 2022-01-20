@@ -30,6 +30,18 @@ export function getClosestNonControlledGates(circuitState, step, qubit) {
               }
             }
           }
+          if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+            for (let i = 0; i < gate.gates.length; i++) {
+              let target = gate.gates[i].target;
+              let delta = Math.abs(target - qubit);
+              if (delta < minDistance){
+                closestGates = [{...gate}];
+                minDistance = delta;
+              } else if (delta == minDistance) {
+                closestGates.push(gate);
+              }
+            }
+          }
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
             for (let i = 0; i < gate.controls.length; i++) {
               let control = gate.controls[i].target;
@@ -52,7 +64,14 @@ export function getClosestNonControlledGates(circuitState, step, qubit) {
 
 export function removingGateFromCircuit(circuitState, dto){
   let step = dto["step"];
-  let target = dto["targets"][0];
+  
+  let target = null;
+  if (dto["targets"]) {
+    target = dto["targets"][0];
+  } else if (dto["gates"]) {
+    target = dto["gates"][0].target;
+  }
+
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
     for (let i = 0; i < circuitState.steps.length; i++) {
       if (circuitState.steps[i].index == step) {
@@ -81,11 +100,16 @@ export function removingGateFromCircuit(circuitState, dto){
 }
 
 export function insertingOneGateInCircuit(circuitState, dto) {
+
   let step = dto["step"];
-  let targets = dto["targets"];
   let name = dto["name"];
-  
-  let gate = { "name": name, "targets": [...targets] };
+
+  let gate = { "name": name};
+
+  if (Object.prototype.hasOwnProperty.call(dto, "targets")) {
+    let targets = dto["targets"];
+    gate["targets"] = [...targets];
+  }
 
   if (Object.prototype.hasOwnProperty.call(dto, "controls") &&
       Object.prototype.hasOwnProperty.call(dto, "controlstates")) {
@@ -468,7 +492,7 @@ export function getAggregatedGatesTargets(dto) {
   
   if (dto["gates"]) {
     let gates = dto["gates"];
-    aggregatedGateTargets = Array.from(gates, x => x.target);
+    aggregatedGateTargets = Array.from(gates, x => parseInt(x.target));
   }
 
   return aggregatedGateTargets;

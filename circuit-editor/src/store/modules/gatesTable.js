@@ -811,6 +811,9 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
             targets = [...gate.targets]
           }
+          if (Object.prototype.hasOwnProperty.call(gate, "gates")){
+            targets = Array.from(gate.gates, x => parseInt(x.target));
+          }
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
             for (let i = 0; i < gate["controls"].length; i++) {
               let controlInfo = gate["controls"][i];
@@ -844,27 +847,45 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           gatesTableRowState.cells[column].name = gate.name;                     
 
           // image that will be shown inside this cell which is 
-          // different from gate name for two target qubit gates.
+          // different from gate name for two target qubit gates or aggregate gate.
           // In the case of pauli root gates when root is 'k', this is used
           // to resolved gate image name based on values for 'k' and 'img'
           gatesTableRowState.cells[column].img = gate.name;
 
+          gatesTableRowState.cells[column].tooltip = "";
+
           // handling the aggregate gate
           if (Object.prototype.hasOwnProperty.call(gate, "gates")){
+
             gatesTableRowState.cells[column].gates = [...gate.gates];
-            gatesTableRowState.cells[column].targets = [];
             for (let i = 0; i < gate["gates"].length; i++) {
-              let target = gate["gates"][i].target;
-              if (gatesTableRowState.cells[column].qrow == target){
-                gatesTableRowState.cells[column].img = gate["gates"][i].name;
-              }
-              gatesTableRowState.cells[column].targets.push(target);
-            }
-            if (gatesTableRowState.cells[column].targets.length == 0){
-              let target = gate.targets[0];
-              if (gatesTableRowState.cells[column].qrow == target){
-                gatesTableRowState.cells[column].img = gate.name;
-                gatesTableRowState.cells[column].targets = [target];
+
+              let embeddedGate = gate["gates"][i];
+              if (gatesTableRowState.cells[column].qrow == embeddedGate.target){
+
+                gatesTableRowState.cells[column].img = embeddedGate.name;
+                
+                if (Object.prototype.hasOwnProperty.call(embeddedGate, "theta")) {
+                  gatesTableRowState.cells[column].lambda = parseFloat(embeddedGate.lambda);
+                  gatesTableRowState.cells[column].tooltip += `θ:${embeddedGate.lambda} `;
+                }
+                if (Object.prototype.hasOwnProperty.call(embeddedGate, "phi")) {
+                  gatesTableRowState.cells[column].lambda = parseFloat(embeddedGate.lambda);
+                  gatesTableRowState.cells[column].tooltip += `φ:${embeddedGate.lambda} `;
+                }
+                if (Object.prototype.hasOwnProperty.call(embeddedGate, "lambda")) {
+                  gatesTableRowState.cells[column].lambda = parseFloat(embeddedGate.lambda);
+                  gatesTableRowState.cells[column].tooltip += `λ:${embeddedGate.lambda} `;
+                }
+                if (Object.prototype.hasOwnProperty.call(embeddedGate, "root")) {
+                  gatesTableRowState.cells[column].root = embeddedGate.root;
+                  if (!embeddedGate.root.includes("1/2^")){
+                    let root = embeddedGate.root.replace("1/", "");
+                    gatesTableRowState.cells[column].tooltip += `t:${root} `;
+                  }
+                }
+
+                break;
               }
             }
           }
@@ -872,7 +893,6 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           // all elements in circuit must be updated when switching from colored to blue gates:
           gatesTableRowState.cells[column].key = getUserInterfaceSetting('colored-gates');
 
-          gatesTableRowState.cells[column].tooltip = "";
           if (gate.name == "sqrt-swap"
               || gate.name == "sqrt-swap-dagger"
               || gate.name == "swap-theta"

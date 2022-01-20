@@ -122,6 +122,9 @@
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/u3.svg" @dragend="dragEnd" @dragstart="dragStart" title="u3" alt="Generic Unitary Gate" />
             <img v-else src="../assets/blue-gates/u3.svg" @dragend="dragEnd" @dragstart="dragStart" title="u3" alt="Generic Unitary Gate" />
           </td>
+          <td v-on:click="gateSelected" id="barrier">
+            <img src="../assets/barrier.svg" @dragend="dragEnd" @dragstart="dragStart" title="barrier" alt="Barrier" />
+          </td>
         </tr>
         <tr>
           <td v-on:click="gateSelected" id="c">
