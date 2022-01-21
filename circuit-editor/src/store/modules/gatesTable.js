@@ -831,6 +831,16 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           let rowMin = getRowFromQbit(qmin);
           let rowMax = getRowFromQbit(qmax);
 
+          // barrier will be displayed for all qubits in the step containing a barrier
+          if (gate.name == 'barrier') {
+            if (rowHoldsGates(inputRow)) {
+              gatesTableRowState.cells[column].name = 'barrier';
+            } else {
+              gatesTableRowState.cells[column].name = 'barrier-vertical-transition-cell';
+            }
+            continue;
+          }
+
           // test if this gate impacts current row
           if ((inputRow < rowMin) || (inputRow > rowMax)) {
             continue;

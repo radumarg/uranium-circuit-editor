@@ -11,8 +11,10 @@ import {
   interpolateJavaScriptExpression,
   isDefined,
   removingGateFromCircuit,
+  removingBarrierFromCircuit,
   proposedNewGatesAreInvalid,
   proposedNewSeatsOverlap,
+  stepContainsGates,
 } from "./editorHelper.js";
 
 import {
@@ -248,6 +250,8 @@ export const circuitEditorModule = {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "controls": controls, "controlstates": controlstates };
           } else if (canonicalGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "tx": 0, "ty": 0, "tz": 0, "controls": controls, "controlstates": controlstates };
+          } else if (name == "barrier") {
+            dto = { "step": step, "name": name };
           } else {
             console.log("This (new?) gate is not handled in code. Gate name: " + name);
             return;
@@ -433,6 +437,25 @@ export const circuitEditorModule = {
         reject(false);
       })
     },
+    repositionBarrierInCircuit: function (context, dataTransferObj) {
+      return new Promise((resolve, reject) => {
+        let originalStep = dataTransferObj["originalStep"];
+        let step = dataTransferObj["step"];
+        if (step < 0) {
+          alert("Negative steps are not permitted!");
+        } else if (stepContainsGates(circuitEditorModule.state, step)) {
+          alert("A barrier can be moved only to a step that contains no gates!");
+        } else {
+          this.commit("circuitEditorModule/removeBarrier", { step: originalStep});
+          this.dispatch('circuitEditorModule/insertGateInCircuit', dataTransferObj)
+
+          // inserting the gate was successful
+          resolve(true);
+        }
+        // inserting the gate failed
+        reject(false);
+      })
+    },
     repositionElementaryGateInCircuit: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
         let step = dataTransferObj["step"];
@@ -526,6 +549,12 @@ export const circuitEditorModule = {
     removeGateFromCircuitByUser: function (context, dataTransferObj) {
       this.commit("circuitEditorModule/removeGate", dataTransferObj);
       this.commit("circuitEditorModule/removeEmptySteps");
+    },
+    removeBarrierFromCircuit: function (context, dataTransferObj) {
+      this.commit("circuitEditorModule/removeBarrierNoTrack", dataTransferObj);
+    },
+    removeBarrierFromCircuitByUser: function (context, dataTransferObj) {
+      this.commit("circuitEditorModule/removeBarrier", dataTransferObj);
     },
     removeQbitFromCircuit: function (context, dataTransferObj) {
       this.commit("circuitEditorModule/removeQbit", dataTransferObj);
@@ -626,6 +655,15 @@ export const circuitEditorModule = {
         let state = circuitEditorModule.state;
         removingGateFromCircuit(state, dtos[i]);
       }
+    },
+    removeBarrier(context, dto) {
+      let state = circuitEditorModule.state;
+      removingBarrierFromCircuit(state, dto);
+    },
+    // mutation that does not trigger update to undo/redo history
+    removeBarrierNoTrack(context, dto) {
+      let state = circuitEditorModule.state;
+      removingBarrierFromCircuit(state, dto);
     },
     removeQbit(context, dto) {
       let qbit = dto["targets"][0];

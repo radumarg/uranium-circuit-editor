@@ -139,13 +139,14 @@ export default {
   },
   created() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type == 'circuitEditorModule/insertGate' || 
+      if (mutation.type == 'circuitEditorModule/insertGate' ||
           mutation.type == 'circuitEditorModule/insertGates' ||
           mutation.type == 'circuitEditorModule/insertQbit' ||
           mutation.type == 'circuitEditorModule/insertStep' ||
-          mutation.type == 'circuitEditorModule/removeGate' || 
+          mutation.type == 'circuitEditorModule/removeGate' ||
+          mutation.type == 'circuitEditorModule/removeBarrier' ||
           mutation.type == 'circuitEditorModule/removeGates' ||
-          mutation.type == 'circuitEditorModule/removeQbit' || 
+          mutation.type == 'circuitEditorModule/removeQbit' ||
           mutation.type == 'circuitEditorModule/removeStep'){
         this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
         this.history.push(JSON.stringify(state));

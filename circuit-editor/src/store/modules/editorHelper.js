@@ -62,6 +62,21 @@ export function getClosestNonControlledGates(circuitState, step, qubit) {
   return closestGates;
 }
 
+export function removingBarrierFromCircuit(circuitState, dto){
+  let stepIndex = dto["step"];
+  if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+    for (let j = 0; j < circuitState.steps.length; j++) {
+      let step = circuitState.steps[j];
+      if (step.index == stepIndex) {
+        let gates = step["gates"];
+        for (let i = 0; i < gates.length; i++) {
+          gates.splice(0, 1);
+        }
+      }
+    }
+  }
+}
+
 export function removingGateFromCircuit(circuitState, dto){
   let step = dto["step"];
   
@@ -243,6 +258,25 @@ export function undoGatesSelection(resetQubits=true, overrideAll=false) {
 
 export function isDefined(value){ 
   return (Boolean(value) || value === 0);
+}
+
+export function stepContainsGates(circuitState, stepIndex) {
+  if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+    for (let i = 0; i < circuitState.steps.length; i++) {
+      let step = circuitState.steps[i];
+      if (stepIndex == step.index) {
+        if (Object.prototype.hasOwnProperty.call(step, "gates")) {
+          let gates = step["gates"];
+          if (gates.length > 0) {
+            return true;
+          } else {
+            break;
+          }
+        }
+      }
+    }
+  }
+  return false;
 }
 
 export function handleSelectEvent(qbit, step) {

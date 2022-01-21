@@ -281,6 +281,12 @@
             <div v-else-if="cell.name.includes('stub')">
               <ControlledGateStub :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :gates="[...cell.gates]" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
+            <div v-else-if="cell.name === 'barrier'">
+              <Barrier :id="cell.id" :step="cell.step" :name="cell.name" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'barrier-vertical-transition-cell'">
+              <BarrierVerticalTransitionCell />
+            </div>
           </td>
         </tr>
       </div>
@@ -298,6 +304,8 @@ import HorizontalTransitionCell from "./HorizontalTransitionCell";
 import VerticalTransitionCellShort from "./VerticalTransitionCellShort"
 import VerticalTransitionCellLong from "./VerticalTransitionCellLong";
 import AggregateGate from "./AggregateGate";
+import Barrier from "./Barrier";
+import BarrierVerticalTransitionCell from "./BarrierVerticalTransitionCell";
 import ElementaryGate from "./ElementaryGate";
 import SingleQbitGate from "./SingleQbitGate";
 import PauliRootGate from "./PauliRootGate";
@@ -317,28 +325,30 @@ import SwapCircle from "./SwapCircle";
 export default {
   name: "Editor",
   components: {
-    EmptyCell,
-    ZeroState,
-    HorizontalTransitionCell,
-    VerticalTransitionCellShort,
-    VerticalTransitionCellLong,
     AggregateGate,
-    ElementaryGate,
-    SingleQbitGate,
-    PauliRootGate,
-    ParametricSingleQbitGate,
-    UnitaryParametricSingleQbitGate,
-    UnitaryBiParametricSingleQbitGate,
-    UnitaryThreeParametricSingleQbitGate,
-    MeasureGate,
+    Barrier,
+    BarrierVerticalTransitionCell,
+    BiParametricTwoTargetQubitsGate,
     ControlledGateStub,
     EmptyCellRectangle,
     EmptyCellSquare,
+    ElementaryGate,
+    EmptyCell,
+    HorizontalTransitionCell,
+    MeasureGate,
+    PauliRootGate,
+    ParametricSingleQbitGate,
+    SingleQbitGate,
     TwoTargetQubitsGate,
-    ParametricTwoTargetQubitsGate,
     TwoTargetQubitsRootGate,
-    BiParametricTwoTargetQubitsGate,
+    UnitaryParametricSingleQbitGate,
+    UnitaryBiParametricSingleQbitGate,
+    UnitaryThreeParametricSingleQbitGate,
+    ParametricTwoTargetQubitsGate,
     SwapCircle,
+    VerticalTransitionCellShort,
+    VerticalTransitionCellLong,
+    ZeroState,
   },
   computed: mapGetters("circuitEditorModule/", [
     "getGatesTableCells",

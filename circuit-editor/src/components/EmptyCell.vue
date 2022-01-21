@@ -198,7 +198,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { seatsAreTaken } from "../store/modules/gatesTable.js";
-import { getAggregatedGatesTargets, handleSelectEvent, isDefined, getClosestNonControlledGates } from "../store/modules/editorHelper.js";
+import { getAggregatedGatesTargets, handleSelectEvent, isDefined, getClosestNonControlledGates, stepContainsGates } from "../store/modules/editorHelper.js";
 export default {
   name: "EmptyCell",
   props: {
@@ -224,6 +224,7 @@ export default {
       "insertGateInCircuit",
       "insertGatesInCircuit",
       "removeGateFromCircuit",
+      "removeBarrierFromCircuit",
       "removeQbitFromCircuit",
       "removeStepFromCircuit",
       "refreshCircuit"
@@ -333,8 +334,10 @@ export default {
         this.handleDragLeave();
         return;
       }
-
-      if (event.shiftKey && isDefined(draggedQbit)) {
+      
+      if (event.shiftKey &&
+         (isDefined(draggedQbit) || dragOrigin == "barrier")
+        ) {
         // shift key is pressed and draggedQbit not null means
         // we are not doing drag & drop from the gates pallete
         if (dragOrigin == "stub") {
@@ -347,6 +350,14 @@ export default {
             this.handleDragLeave();
           } else {
             this.addNewControlToControlledGate(event);
+          }
+        } else if (dragOrigin == "barrier") {
+          let step = parseInt(event.currentTarget.getAttribute("step"));
+          let circuitState = this.$store.state.circuitEditorModule;
+          if (stepContainsGates(circuitState, step)){
+            alert("Cannot add barrier here, this step contains some gates.")
+          } else {
+            this.addNewGateToCircuit(event);
           }
         } else {
           this.addNewGateToCircuit(event);
@@ -748,11 +759,11 @@ export default {
           success = false;
         }
       }
-
+      
       if (success){
         success = this.maybeAdjustGate(gateName, dto, qbit, step, originalStep, existingQbits); 
       }
-
+      
       if (dto["gates"]) {
         let embeddedGateTargets = Array.from(dto["gates"], x => x.target);
         if (embeddedGateTargets.some(x => x < 0)) {
@@ -767,9 +778,14 @@ export default {
 
         // step1 - remove original gate if drag event started from a cell
         // in editor (not originating from gates pallete)
-        if (originalTargets.length > 0 && isDefined(originalStep)) {
-          let dtoOriginal = { step: originalStep, targets: [...originalTargets] };
-          this.removeGateFromCircuit(dtoOriginal);
+        if ((originalTargets.length > 0 || gateName == "barrier") && isDefined(originalStep)) {
+          if (gateName == "barrier") {
+            let dtoOriginal = { step: originalStep }
+            this.removeBarrierFromCircuit(dtoOriginal);
+          } else {
+            let dtoOriginal = { step: originalStep, targets: [...originalTargets] }
+            this.removeGateFromCircuit(dtoOriginal);
+          }
         }
 
         // step2 - add the new gate to the circuit
