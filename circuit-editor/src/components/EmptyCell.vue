@@ -322,6 +322,10 @@ export default {
     },
     handleDropEvent: function (event) {
 
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let circuitState = this.$store.state.circuitEditorModule;
+      let gateName = event.dataTransfer.getData("gateName");
+
       let draggedQbit = null;
       if (event.dataTransfer.types.includes("dragged-qbit")) {
         draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
@@ -341,7 +345,6 @@ export default {
         // shift key is pressed and draggedQbit not null means
         // we are not doing drag & drop from the gates pallete
         if (dragOrigin == "stub") {
-          let step = parseInt(event.currentTarget.getAttribute("step"));
           let originalStep = parseInt(
             event.dataTransfer.getData("originalStep")
           );
@@ -352,10 +355,9 @@ export default {
             this.addNewControlToControlledGate(event);
           }
         } else if (dragOrigin == "barrier") {
-          let step = parseInt(event.currentTarget.getAttribute("step"));
-          let circuitState = this.$store.state.circuitEditorModule;
           if (stepContainsGates(circuitState, step)){
-            alert("Cannot add barrier here, this step contains some gates.")
+            alert("Cannot add barrier here, this step already contains some gates.");
+            this.handleDragLeave();
           } else {
             this.addNewGateToCircuit(event);
           }
@@ -370,7 +372,12 @@ export default {
         if (dragOrigin == "control") {
           this.findClosestGateAndAddNewControl(event);
         } else {
-          this.removeDraggedGateAndAddNewGateToCircuit(event);
+          if (gateName == "barrier" && stepContainsGates(circuitState, step)){
+            alert("Cannot add barrier here, this step already contains some gates.");
+            this.handleDragLeave();
+          } else {
+            this.removeDraggedGateAndAddNewGateToCircuit(event);
+          }
         }
       }
     },

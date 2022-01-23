@@ -253,10 +253,10 @@ it does not make much sense doing that unless you intend to save the circuit as 
     },
     saveImages: function() {
       var node = document.getElementById('gatesTable');
-      htmlToImage.toSvg(node,)
+      htmlToImage.toPng(node)
       .then(function (blob) {
         var link = document.createElement('a');
-        link.download = 'circuit.svg';
+        link.download = 'circuit.png';
         link.href = blob;
         link.click();
       }).catch(function (error) {

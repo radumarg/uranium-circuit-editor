@@ -18,7 +18,7 @@ export function retriveSimpleGateHelpHtml(gateName) {
     } else if (gateName == "hadamard") {
         return 'The "hadamard" gate acts on a single qubit and is defined as: u2(0, π). This gate creates a superposition by mapping |0⟩ to |+⟩ and |1⟩ to |-⟩. It is the combination of two rotations, first a π rotation about the Z-axis of the Bloch sphere followed by a π/2 about the Y-axis. Alternatively, it can be represented as a π rotation around an axis diagonal in the Z-X plane. The Hadamard gate is the one-qubit version of the quantum Fourier transform.';
     } else if (gateName == "aggregate") {
-        return 'The "aggregate" gate permits grouping multiple single qubit target gates in a single multiple targets gate that may share the same set of controls. This way more compact circuits can be created. As for any other gate, when Shift is activated during drag & drop, the aggregate gate is copied instead of being moved at the drop location.';
+        return 'The "aggregate" gate permits grouping multiple single qubit target gates in a single multiple targets gate that may share the same set of controls. This way more compact circuits can be created. As for any other gate, when the Shift key is pressed during drag & drop, the aggregate gate is copied instead of being moved at the drop location. When instead the Alt key is pressed, an array of identical copies is created.';
     }  else if (gateName == "identity") {
       return 'The "identity" gate acts on a single qubit and preserves current state of the qubit it is applied to.';
     } else if (gateName == "pauli-x") {

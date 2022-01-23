@@ -406,23 +406,23 @@ export default {
       if (this.img) {
         if (getUserInterfaceSetting('colored-gates') === 'true'){
           if (this.root.includes("1/2^")){
-             let k = parseInt(this.root.replace("1/2^", ""));
-             if (k >= 0 && k <= 35){
-               return require("../assets/colored-gates/" + this.img + "-" + k + ".svg");
-             } else {
-               return require("../assets/colored-gates/" + this.img + ".svg");
-             }
+            let k = parseInt(this.root.replace("1/2^", ""));
+            if (k >= 0 && k <= 35){
+              return require("../assets/colored-gates/" + this.img + "-" + k + ".svg");
+            } else {
+              return require("../assets/colored-gates/" + this.img + ".svg");
+            }
           } else {
             return require("../assets/colored-gates/" + this.img + ".svg");
           }
         } else {
           if (this.root.includes("1/2^")){
-             let k = parseInt(this.root.replace("1/2^", ""));
-             if (k >= 2 && k <= 35){
-               return require("../assets/blue-gates/" + this.img + "-" + k + ".svg");
-             } else {
-               return require("../assets/blue-gates/" + this.img + ".svg");
-             }
+            let k = parseInt(this.root.replace("1/2^", ""));
+            if (k >= 2 && k <= 35){
+              return require("../assets/blue-gates/" + this.img + "-" + k + ".svg");
+            } else {
+              return require("../assets/blue-gates/" + this.img + ".svg");
+            }
           } else {
             return require("../assets/blue-gates/" + this.img + ".svg");
           }

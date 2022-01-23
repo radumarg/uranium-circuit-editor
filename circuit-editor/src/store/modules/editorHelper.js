@@ -127,35 +127,35 @@ export function insertingOneGateInCircuit(circuitState, dto) {
   }
 
   if (Object.prototype.hasOwnProperty.call(dto, "controls") &&
-      Object.prototype.hasOwnProperty.call(dto, "controlstates")) {
-      let controls = dto["controls"];
-      let controlstates = dto["controlstates"];
-      gate["controls"] = []
-      for (let i = 0; i < controls.length; i++) {
-          gate["controls"].push(
-              { "target": controls[i], "state": controlstates[i] }
-          );
-      }
+    Object.prototype.hasOwnProperty.call(dto, "controlstates")) {
+    let controls = dto["controls"];
+    let controlstates = dto["controlstates"];
+    gate["controls"] = []
+    for (let i = 0; i < controls.length; i++) {
+        gate["controls"].push(
+            { "target": controls[i], "state": controlstates[i] }
+        );
+    }
   }
   if (Object.prototype.hasOwnProperty.call(dto, "phi")) {
-      let phi = dto["phi"];
-      gate["phi"] = phi;
+    let phi = dto["phi"];
+    gate["phi"] = phi;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "theta")) {
-      let theta = dto["theta"];
-      gate["theta"] = theta;
+    let theta = dto["theta"];
+    gate["theta"] = theta;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "lambda")) {
-      let lambda = dto["lambda"];
-      gate["lambda"] = lambda;
+    let lambda = dto["lambda"];
+    gate["lambda"] = lambda;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "root")) {
-      let root = dto["root"];
-      gate["root"] = root;
+    let root = dto["root"];
+    gate["root"] = root;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "bit")) {
-      let bit = dto["bit"];
-      gate["bit"] = bit;
+    let bit = dto["bit"];
+    gate["bit"] = bit;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "gates")) {
     let gates = dto["gates"];
@@ -163,17 +163,17 @@ export function insertingOneGateInCircuit(circuitState, dto) {
   }
 
   if (!Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
-      circuitState.steps = []
+    circuitState.steps = []
   }
 
   // try to find a step if it already exists
   for (let i = 0; i < circuitState.steps.length; i++) {
-      if (circuitState.steps[i].index == step) {
+    if (circuitState.steps[i].index == step) {
       let gates = circuitState.steps[i]["gates"];
       gates.push(gate);
       gates.sort((l, r) => (Math.min(...l.targets) - Math.min(...r.targets)));
       return;
-      } 
+    } 
   }
 
   // step does not exist, add new
