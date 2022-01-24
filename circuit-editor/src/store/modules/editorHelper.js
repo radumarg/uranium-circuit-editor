@@ -32,13 +32,16 @@ export function getClosestNonControlledGates(circuitState, step, qubit) {
           }
           if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
             for (let i = 0; i < gate.gates.length; i++) {
-              let target = gate.gates[i].target;
-              let delta = Math.abs(target - qubit);
-              if (delta < minDistance){
-                closestGates = [{...gate}];
-                minDistance = delta;
-              } else if (delta == minDistance) {
-                closestGates.push(gate);
+              let aggregatedGate = gate.gates[i];
+              for (let j = 0; j < aggregatedGate.targets.length; j++) {
+                let target = aggregatedGate.targets[j];
+                let delta = Math.abs(target - qubit);
+                if (delta < minDistance){
+                  closestGates = [{...gate}];
+                  minDistance = delta;
+                } else if (delta == minDistance) {
+                  closestGates.push(gate);
+                }
               }
             }
           }
@@ -84,7 +87,7 @@ export function removingGateFromCircuit(circuitState, dto){
   if (dto["targets"]) {
     target = dto["targets"][0];
   } else if (dto["gates"]) {
-    target = dto["gates"][0].target;
+    target = dto["gates"][0].targets[0];
   }
 
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
@@ -102,7 +105,7 @@ export function removingGateFromCircuit(circuitState, dto){
           if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
             for (let k = 0; k < gate.gates.length; k++) {
               let aggregatedGate = gate.gates[k];
-              if (target == aggregatedGate.target) {
+              if (aggregatedGate.targets.includes(target)) {
                 gates.splice(j, 1);
                 return;
               }

@@ -126,7 +126,7 @@
                 <b-td class="title-cell">Gates Qubits:</b-td>
                 <b-td v-for="(gate, index) in gatesNew.length" v-bind:key="index + 1000" class="embedded-table-cell">
                   <div class="d-flex justify-content-center align-items-center">
-                    <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="gatesNew[index].target" readonly placeholder="target" type="number" id="target-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
+                    <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="gatesNew[index].targets[0]" readonly placeholder="target" type="number" id="target-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
                   </div>
                 </b-td>
                 <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 2000"  class="embedded-table-cell" />
@@ -251,7 +251,7 @@
                 <b-td class="title-cell">Control Qubits:</b-td>
                 <b-td v-for="(control, index) in controlsNew" v-bind:key="index + 10000" class="embedded-table-cell">
                   <div class="d-flex justify-content-center align-items-center">
-                    <b-form-input min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="controlsNew[index]" readonly placeholder="control" type="number"  id="control-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
+                    <b-form-input min="0" v-on:click="handleEditGatesModalSave()" v-model.number="controlsNew[index]" readonly placeholder="control" type="number"  id="control-new" style="min-width: 72px; max-width: 72px;"></b-form-input>
                   </div>
                 </b-td>
                 <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 11000"  class="embedded-table-cell" />
@@ -276,7 +276,7 @@
                 <b-td class="title-cell">Gate Target:</b-td>
                 <b-td v-for="(target, index) in gatesNew.length" v-bind:key="index + 16000" class="embedded-table-cell">
                   <div class="d-flex justify-content-center align-items-center">
-                    <b-form-input min="0" v-model="gatesNew[index].target" placeholder="target" type="number" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
+                    <b-form-input min="0" v-on:click="handleEditGatesModalSave()" v-model="gatesNew[index].targets[0]" placeholder="target" type="number" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
                   </div>
                 </b-td>
                 <b-td v-for="(emptySlot, index) in emptySlotsInEditGatesModal()" v-bind:key="index + 17000" class="embedded-table-cell" />
@@ -293,35 +293,35 @@
               <b-tr>
                 <b-td class="title-cell">Gate Theta:</b-td>
                 <b-td v-for="(target, index) in gatesNew.length" v-bind:key="index + 19000" class="embedded-table-cell">
-                  <b-form-input v-if="gateHasTheta(gatesNew[index].name)" min="0" v-model="gatesNew[index].theta" placeholder="0" type="number" title="theta" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
+                  <b-form-input v-if="gateHasTheta(gatesNew[index].name)" min="0" v-on:click="handleEditGatesModalSave()" v-model="gatesNew[index].theta" placeholder="0" type="number" title="theta" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
                   <b-form-input v-else readonly placeholder="N/A" style="min-width: 72px; max-width: 72px;" />
                 </b-td>
               </b-tr>
               <b-tr>
                 <b-td class="title-cell">Gate Lambda:</b-td>
                 <b-td v-for="(target, index) in gatesNew.length" v-bind:key="index + 20000" class="embedded-table-cell">
-                  <b-form-input v-if="gateHasLambda(gatesNew[index].name)" min="0" v-model="gatesNew[index].lambda" placeholder="0" type="number" title="lambda" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
+                  <b-form-input v-if="gateHasLambda(gatesNew[index].name)" min="0" v-on:click="handleEditGatesModalSave()" v-model="gatesNew[index].lambda" placeholder="0" type="number" title="lambda" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
                   <b-form-input v-else readonly placeholder="N/A" style="min-width: 72px; max-width: 72px;" />
                 </b-td>
               </b-tr>
               <b-tr>
                 <b-td class="title-cell">Gate Phi:</b-td>
                 <b-td v-for="(target, index) in gatesNew.length" v-bind:key="index + 21000" class="embedded-table-cell">
-                  <b-form-input v-if="gateHasPhi(gatesNew[index].name)" min="0" v-model="gatesNew[index].phi" placeholder="0" type="number" title="phi" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
+                  <b-form-input v-if="gateHasPhi(gatesNew[index].name)" min="0" v-on:click="handleEditGatesModalSave()" v-model="gatesNew[index].phi" placeholder="0" type="number" title="phi" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
                   <b-form-input v-else readonly placeholder="N/A" style="min-width: 72px; max-width: 72px;" />
                 </b-td>
               </b-tr>
               <b-tr>
                 <b-td class="title-cell">Gate Root (t):</b-td>
                 <b-td v-for="(target, index) in gatesNew.length" v-bind:key="index + 22000" class="embedded-table-cell">
-                  <b-form-input v-if="gateHasRoot(gatesNew[index].name)" min="0" v-model="rootsNew[index].t" @change="rootTChanged(index)" placeholder="" title="root" type="number" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
+                  <b-form-input v-if="gateHasRoot(gatesNew[index].name)" min="0" v-on:click="handleEditGatesModalSave()" v-model="rootsNew[index].t" @change="rootTChanged(index)" placeholder="" title="root" type="number" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
                   <b-form-input v-else readonly placeholder="N/A" style="min-width: 72px; max-width: 72px;" />
                 </b-td>
               </b-tr>
               <b-tr>
                 <b-td class="title-cell">Gate Root (k):</b-td>
                 <b-td v-for="(target, index) in gatesNew.length" v-bind:key="index + 23000" class="embedded-table-cell">
-                  <b-form-input v-if="gateHasRoot(gatesNew[index].name)" min="0" v-model="rootsNew[index].k" @change="rootKChanged(index)" placeholder="" title="root" type="number" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
+                  <b-form-input v-if="gateHasRoot(gatesNew[index].name)" min="0" v-on:click="handleEditGatesModalSave()" v-model="rootsNew[index].k" @change="rootKChanged(index)" placeholder="" title="root" type="number" id="gate-target-new" style="min-width: 72px; max-width: 72px;" />
                   <b-form-input v-else readonly placeholder="N/A" style="min-width: 72px; max-width: 72px;" />
                 </b-td>
               </b-tr> 
@@ -460,6 +460,47 @@ export default {
       ],
     }
   },
+  watch: {
+    control: function() {
+      // need this in order to update control and gates
+      // when doing drag & drop on the stub
+      this.$data.controlsNew = [...this.controls];
+      this.$data.controlstatesNew = [...this.controlstates];
+      this.$data.gatesNew = [...this.gates];
+      this.$data.rootsNew = this.extractGateRootsArray(this.gates);
+    }
+  },
+  computed: {
+    gateImageSrcEditor: function() {
+      if (this.img) {
+        if (this.gateHasRoot(this.img)) {
+          let gate = this.gates.find(x => x.targets[0] == this.qrow);
+          let k = gate.root.includes("1/2^") ? parseInt(gate.root.replace("1/2^", "")) : null;
+          if (k && k >= 2 && k <= 35){
+            if (getUserInterfaceSetting('colored-gates') === 'true') {
+              return require("../assets/colored-gates/" + this.img + "-" + k + ".svg");
+            } else {
+              return require("../assets/blue-gates/" + this.img + "-" + k + ".svg");
+            }
+          } else {
+            if (getUserInterfaceSetting('colored-gates') === 'true') {
+              return require("../assets/colored-gates/" + this.img + ".svg");
+            } else {
+              return require("../assets/blue-gates/" + this.img  + ".svg");
+            }
+          }
+        } else {
+            if (getUserInterfaceSetting('colored-gates') === 'true') {
+              return require("../assets/colored-gates/" + this.img + ".svg");
+            } else {
+              return require("../assets/blue-gates/" + this.img  + ".svg");
+            }
+          }
+        } else {
+          return String.empty;
+        }
+    },
+  },
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
     editGateAndControlsModalSize(){
@@ -573,11 +614,12 @@ export default {
     },
     embededGateImageSrcPopup: function (controlIndex) {
       let name = this.$data.gatesNew[controlIndex].name;
+      let root = this.$data.rootsNew[controlIndex];
       let k = null;
-      if (isDefined(this.$data.rootsNew.k)){
-        k = parseInt(this.$data.rootsNew.k);
+      if (isDefined(root.k)){
+        k = parseInt(root.k);
       }
-      if (this.name) {
+      if (name) {
         if (this.gateHasRoot(name) && k && k >= 2 && k <= 35){
           if (getUserInterfaceSetting('colored-gates') === 'true') {
             return require("../assets/colored-gates/" + name + "-" + k + ".svg");
@@ -620,7 +662,7 @@ export default {
     onNumberGatesChange() {
       if (this.numberOfGates < this.$data.gatesNew.length) {
         if (this.$data.gatesNew.length > 0) {
-          this.$data.targetsNew = [this.$data.gatesNew[0].target];
+          this.$data.targetsNew = [...this.$data.gatesNew[0].targets];
         }
         this.$data.gatesNew = this.$data.gatesNew.slice(0, this.numberOfGates);
         this.$data.rootsNew = this.$data.rootsNew.slice(0, this.numberOfGates);
@@ -632,7 +674,13 @@ export default {
     addGate() {
 
       let newTarget = null;
-      let gatesTargets = Array.from(this.$data.gatesNew, x => parseInt(x.target));
+      let gatesTargets = [];
+      for (let i = 0; i < this.$data.gatesNew.length; i++) {
+        let aggregatedGate = this.$data.gatesNew[i];
+        for (let j = 0; j < aggregatedGate.targets.length; j++) {
+          gatesTargets.push(aggregatedGate.targets[j]);
+        }
+      }
       let minQubit = Math.min(...this.$data.targetsNew, ...this.$data.controlsNew, ...gatesTargets);
       let maxQubit = Math.max(...this.$data.targetsNew, ...this.$data.controlsNew, ...gatesTargets);
       
@@ -665,7 +713,7 @@ export default {
       }
       
       if (isDefined(newTarget)) {
-        let gate = { name: "identity", target: newTarget };
+        let gate = { name: "identity", targets: [newTarget] };
         this.$data.gatesNew.push(gate);
         let root = { t: 1, k: null };
         this.$data.rootsNew.push(root);
@@ -676,7 +724,7 @@ export default {
     },
     removeGateFromMinusIcon() {
       if (this.numberOfGates >= 1) {
-        this.$data.targetsNew = [this.$data.gatesNew[0].target];
+        this.$data.targetsNew = [...this.$data.gatesNew[0].targets];
         this.$data.gatesNew = this.$data.gatesNew.slice(0, this.numberOfGates - 1);
         this.$data.rootsNew = this.$data.rootsNew.slice(0, this.numberOfGates - 1);
         this.numberOfGates = this.$data.gatesNew.length;
@@ -687,7 +735,7 @@ export default {
       this.$data.rootsNew.splice(index, 1);
       this.numberOfGates = this.$data.gatesNew.length;
       if (this.numberOfGates > 0) {
-        this.$data.targetsNew = [this.$data.gatesNew[0].target];
+        this.$data.targetsNew = [...this.$data.gatesNew[0].targets];
       }
     },
     rootTChanged(index){
@@ -695,12 +743,14 @@ export default {
       root.k = null;
       let gate = this.$data.gatesNew[index];
       gate.root = '1/' + parseFloat(root.t);
+      this.$forceUpdate();
     },
     rootKChanged(index){
       let root = this.$data.rootsNew[index];
       root.t = null;
       let gate = this.$data.gatesNew[index];
       gate.root = '1/2^' + parseInt(root.k);
+      this.$forceUpdate();
     },
     switchToGatesEdit(){
       this.editGatesModalCloseIsHovered = false;
@@ -745,16 +795,22 @@ export default {
       return roots;
     },
     handleSave: function(){
-      let aggregatedGatesTarget = Array.from(this.$data.gatesNew, x => x.target);
-      if (!Number.isInteger(this.$data.targetsNew[0])){
+      let aggregatedGatesTargets = [];
+      for (let i = 0; i < this.$data.gatesNew.length; i++) {
+        let aggregatedGate = this.$data.gatesNew[i];
+        for (let j = 0; j < aggregatedGate.targets.length; j++) {
+           aggregatedGatesTargets.push(aggregatedGate.targets[j]);
+        }
+      }
+      if (!Number.isInteger(this.$data.targetsNew[0])) {
         alert("Please enter an integer number!");
         return;
       }
-      if (arraysHaveElementsInCommon(this.$data.controlsNew, this.$data.targetsNew)){
+      if (arraysHaveElementsInCommon(this.$data.controlsNew, this.$data.targetsNew)) {
         alert("Control and target qubits must differ!");
         return;
       }
-       if (arraysHaveElementsInCommon(this.$data.controlsNew, aggregatedGatesTarget)){
+       if (arraysHaveElementsInCommon(this.$data.controlsNew, aggregatedGatesTargets)) {
         alert("Control and aggregated gates target qubits must differ!");
         return;
       }
@@ -772,7 +828,7 @@ export default {
         'controlsNew': this.$data.controlsNew,
         'controlstatesNew': this.$data.controlstatesNew,
         'gatesNew': this.$data.gatesNew,
-      });alert(JSON.stringify(this.$data.gatesNew))
+      });
       promise.then(
         // eslint-disable-next-line no-unused-vars
         result => {}, 

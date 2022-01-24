@@ -718,11 +718,14 @@ export default {
         let gates = JSON.parse(event.dataTransfer.getData("gates"));
         for (let i = 0; i < gates.length; i++) {
           let gate = gates[i];
-          originalAggregatedGateTargets.push(gate.target);
-          if (step != originalStep){
-            gate.target += delta;
-          } else if (draggedQbit == gate.target) {
-             gate.target = qbit;
+          for (let j = 0; j < gate.targets.length; j++) {
+            let target = gate.targets[j];
+            originalAggregatedGateTargets.push(target);
+            if (step != originalStep){
+              gate.targets[j] += delta;
+            } else if (draggedQbit == target) {
+              gate.targets[j] = qbit;
+            }
           }
           dto["gates"].push({...gate});
         }

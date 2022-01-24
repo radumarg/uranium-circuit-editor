@@ -91,7 +91,11 @@ export const circuitEditorModule = {
               }
               if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
                 for (let k = 0; k < gate.gates.length; k++) {
-                  maxQbit = Math.max(maxQbit, gate.gates[k].target);
+                  let aggregatedGate = gate.gates[k];
+                  for (let l = 0; l < aggregatedGate.targets.length; l++) {
+                    let target = aggregatedGate.targets[l];
+                    maxQbit = Math.max(maxQbit, target);
+                  }
                 }
               }
               if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
@@ -715,7 +719,7 @@ export const circuitEditorModule = {
             if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
               let gates = gate.gates;
               for (let i = 0; i < gates.length; i++){
-                if (gates[i].target == qbit)
+                if (gates[i].targets.includes(qbit))
                   gate.gates.splice(i, 1);
               }
             }
@@ -724,9 +728,12 @@ export const circuitEditorModule = {
             let gate = gates[j];
             if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
               let gates = gate.gates;
-              for (let i = 0; i < gates.length; i++){
-                if (gates[i].target > qbit)
-                  gates[i].target -= 1;
+              for (let k = 0; k < gates.length; k++){
+                let aggregatedGate = gates[k];
+                for (let l = 0; l < aggregatedGate.targets.length; l++){
+                  if (aggregatedGate.targets[l] > qbit)
+                    aggregatedGate.targets[l] -= 1;
+                }
               }
             }
           }

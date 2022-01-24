@@ -812,7 +812,12 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             targets = [...gate.targets]
           }
           if (Object.prototype.hasOwnProperty.call(gate, "gates")){
-            targets = Array.from(gate.gates, x => parseInt(x.target));
+            for (let k = 0; k < gate["gates"].length; k++) {
+              let aggregatedGate = gate["gates"][k];
+              for (let l = 0; l < aggregatedGate.targets.length; l++) {
+                targets.push(aggregatedGate.targets[l]);
+              }
+            }
           }
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
             for (let i = 0; i < gate["controls"].length; i++) {
@@ -871,7 +876,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             for (let i = 0; i < gate["gates"].length; i++) {
 
               let embeddedGate = gate["gates"][i];
-              if (gatesTableRowState.cells[column].qrow == embeddedGate.target){
+              if (gatesTableRowState.cells[column].qrow == embeddedGate.targets[0]){
 
                 gatesTableRowState.cells[column].img = embeddedGate.name;
                 
