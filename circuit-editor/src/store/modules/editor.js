@@ -7,6 +7,8 @@ import {
 } from "./gatesTable.js";
 
 import {
+  getAggregatedGatesTargets,
+  getAggregatedGatesNewTargets,
   insertingOneGateInCircuit,
   interpolateJavaScriptExpression,
   isDefined,
@@ -186,7 +188,7 @@ export const circuitEditorModule = {
         let gates = []
         if (Object.prototype.hasOwnProperty.call(dataTransferObj, "gates")) {
           gates = [...dataTransferObj["gates"]];
-          gates = gates.sort((a, b) => (a.target > b.target) ? 1 : -1);
+          gates.sort((l, r) => (Math.min(...l.targets) - Math.min(...r.targets)));
           if (gates.length > 0) {
             targets = [];
           }
@@ -489,7 +491,7 @@ export const circuitEditorModule = {
         reject(false);
       })
     },
-    repositionSimpleGateInCircuit: function (context, dataTransferObj) {
+    repositionGateInCircuit: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
         let step = dataTransferObj["step"];
         let targets = dataTransferObj["targets"];
@@ -497,8 +499,8 @@ export const circuitEditorModule = {
         let targetsNew = dataTransferObj["targetsNew"];
         let controlsNew = dataTransferObj["controlsNew"];
         let controlstatesNew = dataTransferObj["controlstatesNew"];
-        let existingQbits = [...targets, ...controls];
-        let proposedQbits = [...targetsNew, ...controlsNew];
+        let existingQbits = [...targets, ...controls, ...getAggregatedGatesTargets(dataTransferObj)].filter(x => isDefined(x));
+        let proposedQbits = [...targetsNew, ...controlsNew, ...getAggregatedGatesNewTargets(dataTransferObj)].filter(x => isDefined(x));
         
         if (targetsNew.some((element) => element < 0) || controlsNew.some((element) => element < 0)) {
           alert("Negative qubits not permitted!");
@@ -534,7 +536,7 @@ export const circuitEditorModule = {
           }
           if (Object.prototype.hasOwnProperty.call(dataTransferObj, "gatesNew")) {
             let gates = dataTransferObj["gatesNew"];
-            dataTransferObj["gates"] = [...gates];
+            dataTransferObj["gates"] = JSON.parse(JSON.stringify(gates));
           }
           
           this.dispatch('circuitEditorModule/insertGateInCircuit', dataTransferObj);

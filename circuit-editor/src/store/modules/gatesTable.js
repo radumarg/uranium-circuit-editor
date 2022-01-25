@@ -216,6 +216,7 @@ export function seatIsTaken(circuitState, qbit, step) {
             let gate = gates[j];
             let targets = [];
             let controls = [];
+            let aggregatedTargets = [];
 
             if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
               targets = [...gate.targets];
@@ -227,9 +228,15 @@ export function seatIsTaken(circuitState, qbit, step) {
                 controls.push(target);
               }
             }
+            if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+              for (let i = 0; i < gate["gates"].length; i++) {
+                let aggregatedGate = gate["gates"][i];
+                aggregatedTargets.push(...aggregatedGate.targets);
+              }
+            }
 
             // get range of qbits affected when displaying this gate
-            let qbits = [...targets, ...controls];
+            let qbits = [...targets, ...controls, ...aggregatedTargets];
 
             let qmin = Math.min(...qbits);
             let qmax = Math.max(...qbits);
@@ -257,6 +264,7 @@ export function qbitIsTaken(circuitState, qbit, step) {
             let gate = gates[j];
             let targets = [];
             let controls = [];
+            let aggregatedTargets = [];
 
             if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
               targets = [...gate.targets];
@@ -268,9 +276,15 @@ export function qbitIsTaken(circuitState, qbit, step) {
                 controls.push(target);
               }
             }
+            if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+              for (let i = 0; i < gate["gates"].length; i++) {
+                let aggregatedGate = gate["gates"][i];
+                aggregatedTargets.push(...aggregatedGate.targets);
+              }
+            }
 
             // get range of qbits affected when displaying this gate
-            let qbits = [...targets, ...controls];
+            let qbits = [...targets, ...controls, ...aggregatedTargets];
             if (qbits.includes(qbit)) {
               return true;
             }
@@ -296,6 +310,7 @@ export function seatsAreTaken(circuitState, proposedQbits, step, reallocatableQb
             let gate = gates[j];
             let targets = [];
             let controls = [];
+            let aggregatedTargets = [];
 
             if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
               targets = [...gate.targets];
@@ -307,8 +322,15 @@ export function seatsAreTaken(circuitState, proposedQbits, step, reallocatableQb
                 controls.push(target);
               }
             }
+            if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+              for (let i = 0; i < gate["gates"].length; i++) {
+                let aggregatedGate = gate["gates"][i];
+                aggregatedTargets.push(...aggregatedGate.targets);
+              }
+            }
+
             // get range of qbits affected when displaying this gate
-            let qbits = [...targets, ...controls];
+            let qbits = [...targets, ...controls, ...aggregatedTargets];
             
             let qmin = Math.min(...qbits);
             let qmax = Math.max(...qbits);
@@ -343,13 +365,15 @@ export function seatsAreTaken(circuitState, proposedQbits, step, reallocatableQb
 export function seatsInArrayAreAlreadyTaken(circuitState, dtos, ignoreStep = null, ignoreQubits = []) {
   for (let i = 0; i < dtos.length; i++) {
 
-    let qbits = dtos[i]["targets"];
     let step = dtos[i]["step"];
 
-    for (let j = 0; j < qbits.length; j++){
-      let qbit = qbits[j];
-      if (ignoreStep == step && ignoreQubits.includes(qbit)) continue;
-      if (seatIsTaken(circuitState, qbit, step)) return true;
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "targets")) {
+      let qbits = dtos[i]["targets"];
+      for (let j = 0; j < qbits.length; j++){
+        let qbit = qbits[j];
+        if (ignoreStep == step && ignoreQubits.includes(qbit)) continue;
+        if (seatIsTaken(circuitState, qbit, step)) return true;
+      }
     }
 
     if (Object.prototype.hasOwnProperty.call(dtos[i], "controls")) {
@@ -358,6 +382,18 @@ export function seatsInArrayAreAlreadyTaken(circuitState, dtos, ignoreStep = nul
         let control = controls[j];
         if (ignoreStep == step && ignoreQubits.includes(control)) continue;
         if (seatIsTaken(circuitState, control, step)) return true;
+      }
+    }
+
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "gates")) {
+      let gates = dtos[i]["gates"];
+      for (let j = 0; j < gates.length; j++){
+        let gate = gates[j];
+        for (let i = 0; i < gate.targets.length; i++) {
+          let qbit = gate.targets[i];
+          if (ignoreStep == step && ignoreQubits.includes(qbit)) continue;
+          if (seatIsTaken(circuitState, qbit, step)) return true;
+        }
       }
     }
   }
@@ -807,17 +843,10 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           let targets = [];
           let controls = [];
           let controlstates = [];
+          let aggregatedTargets = [];
 
           if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
             targets = [...gate.targets]
-          }
-          if (Object.prototype.hasOwnProperty.call(gate, "gates")){
-            for (let k = 0; k < gate["gates"].length; k++) {
-              let aggregatedGate = gate["gates"][k];
-              for (let l = 0; l < aggregatedGate.targets.length; l++) {
-                targets.push(aggregatedGate.targets[l]);
-              }
-            }
           }
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
             for (let i = 0; i < gate["controls"].length; i++) {
@@ -826,9 +855,15 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
               controlstates.push(controlInfo["state"]);
             }
           }
+          if (Object.prototype.hasOwnProperty.call(gate, "gates")){
+            for (let k = 0; k < gate["gates"].length; k++) {
+              let aggregatedGate = gate["gates"][k];
+              targets.push(...aggregatedGate.targets)
+            }
+          }
 
           // get range of qbits affected when displaying this gate
-          let qbits = [...targets, ...controls];
+          let qbits = [...targets, ...controls, ...aggregatedTargets];
 
           let qmin = Math.min(...qbits);
           let targetMin = Math.min(...targets);
@@ -881,12 +916,12 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
                 gatesTableRowState.cells[column].img = embeddedGate.name;
                 
                 if (Object.prototype.hasOwnProperty.call(embeddedGate, "theta")) {
-                  gatesTableRowState.cells[column].lambda = parseFloat(embeddedGate.lambda);
-                  gatesTableRowState.cells[column].tooltip += `θ:${embeddedGate.lambda} `;
+                  gatesTableRowState.cells[column].theta = parseFloat(embeddedGate.theta);
+                  gatesTableRowState.cells[column].tooltip += `θ:${embeddedGate.theta} `;
                 }
                 if (Object.prototype.hasOwnProperty.call(embeddedGate, "phi")) {
-                  gatesTableRowState.cells[column].lambda = parseFloat(embeddedGate.lambda);
-                  gatesTableRowState.cells[column].tooltip += `φ:${embeddedGate.lambda} `;
+                  gatesTableRowState.cells[column].phi = parseFloat(embeddedGate.phi);
+                  gatesTableRowState.cells[column].tooltip += `φ:${embeddedGate.phi} `;
                 }
                 if (Object.prototype.hasOwnProperty.call(embeddedGate, "lambda")) {
                   gatesTableRowState.cells[column].lambda = parseFloat(embeddedGate.lambda);

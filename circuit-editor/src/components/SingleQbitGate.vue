@@ -415,7 +415,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['insertQbitInCircuit', 'insertStepInCircuit', 'removeGateFromCircuitByUser', 'repositionSimpleGateInCircuit', 'replicateGate']),
+    ...mapActions('circuitEditorModule/', ['insertQbitInCircuit', 'insertStepInCircuit', 'removeGateFromCircuitByUser', 'repositionGateInCircuit', 'replicateGate']),
     ...mapGetters("circuitEditorModule/", ["getMaximumStepIndex", "getMaximumQbitIndex"]),
     handleClick: function (event) {
       if (event.ctrlKey) {
@@ -579,7 +579,7 @@ number of controls is chosen to be greater than zero. Control state expression m
       let targetsOld = [...this.targets];
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
-      let promise = this.repositionSimpleGateInCircuit({
+      let promise = this.repositionGateInCircuit({
         'step': this.step,
         'name': this.name,
         'img': this.img,

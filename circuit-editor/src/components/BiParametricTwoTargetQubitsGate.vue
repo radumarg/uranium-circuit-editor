@@ -410,7 +410,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
+    ...mapActions('circuitEditorModule/', ['repositionGateInCircuit']),
     handleSave: function(){
       if (!Number.isInteger(this.$data.targetsNew[0]) || !Number.isInteger(this.$data.targetsNew[1])){
         alert("Please enter an integer number!");
@@ -425,7 +425,7 @@ export default {
       let controlstatesOld = [...this.controlstates];
       let thetaOld = this.theta;
       let phiOld = this.phi;
-      let promise = this.repositionSimpleGateInCircuit({
+      let promise = this.repositionGateInCircuit({
         'step': this.step,
         'name': this.name,
         'targets': [...this.targets],

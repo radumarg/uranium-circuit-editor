@@ -414,7 +414,7 @@ export default {
         }
         if (closestGate["gates"]) {
           let gates = closestGate.gates;
-          dto["gates"] = [...gates];
+          dto["gates"] = JSON.parse(JSON.stringify(gates));
         }
       
         if (isDefined(closestGate["phi"])) {
@@ -459,7 +459,7 @@ export default {
       
       if (event.dataTransfer.types.includes("gates")) {
         let gates = JSON.parse(event.dataTransfer.getData("gates"));
-        dto["gates"] = [...gates];
+        dto["gates"] = JSON.parse(JSON.stringify(gates));
       }
       if (event.dataTransfer.types.includes("phi")) {
         let phi = parseFloat(event.dataTransfer.getData("phi"));
@@ -525,7 +525,7 @@ export default {
         for (let i = 0; i < gates.length; i++) {
           gates[i].target -=  qbitDelta;
         }
-        dto["gates"] = [...gates];
+        dto["gates"] = JSON.parse(JSON.stringify(gates));
       }
       if (event.dataTransfer.types.includes("phi")) {
         let phi = parseFloat(event.dataTransfer.getData("phi"));
@@ -547,7 +547,7 @@ export default {
         dto["bit"] = qbit;
       }
 
-      let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)];
+      let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
 
       if (proposedQbits.some(x => x < 0)) {
         alert("Cannot add this gate here, some of the propoesd qubits are negative!");
@@ -591,7 +591,7 @@ export default {
       }
       if (event.dataTransfer.types.includes("gates")) {
         let gates = JSON.parse(event.dataTransfer.getData("gates"));
-        dto["gates"] = [...gates];
+        dto["gates"] = JSON.parse(JSON.stringify(gates));
       }
       if (event.dataTransfer.types.includes("phi")) {
         let phi = parseFloat(event.dataTransfer.getData("phi"));
@@ -628,7 +628,7 @@ export default {
           let lastQubit = Math.max(qbit, originalTargets[0]);
           while (currentQubit <= lastQubit){
             if (!seatsAreTaken(this.$store.state.circuitEditorModule, [currentQubit], step)) {
-              let dtoNew = {...dto};
+              let dtoNew = JSON.parse(JSON.stringify(dto));
               dtoNew["targets"] = [currentQubit];
               dtos.push(dtoNew);
             }
@@ -639,11 +639,13 @@ export default {
         let currentStep = Math.min(step, originalStep);
         let lastStep = Math.max(step, originalStep);
         while (currentStep <= lastStep){
-          let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)];
-          if (!seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, currentStep)) {
-            let dtoNew = {...dto};
-            dtoNew.step = currentStep;
-            dtos.push(dtoNew);
+          if (currentStep != originalStep){
+            let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
+            if (!seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, currentStep)) {
+              let dtoNew = JSON.parse(JSON.stringify(dto));
+              dtoNew.step = currentStep;
+              dtos.push(dtoNew);
+            }
           }
           currentStep += 1;
         }
@@ -727,7 +729,7 @@ export default {
               gate.targets[j] = qbit;
             }
           }
-          dto["gates"].push({...gate});
+          dto["gates"].push(JSON.parse(JSON.stringify(gate)));
         }
       }
 
@@ -775,8 +777,15 @@ export default {
       }
       
       if (dto["gates"]) {
-        let embeddedGateTargets = Array.from(dto["gates"], x => x.target);
-        if (embeddedGateTargets.some(x => x < 0)) {
+        let embeddedGatesTargets = [];
+
+        let gates = dto["gates"];
+        for (let i = 0; i < gates.length; i++) {
+          let gate = gates[i];
+          embeddedGatesTargets.push(...gate.targets);
+        }
+ 
+        if (embeddedGatesTargets.some(x => x < 0)) {
           alert("Negative target qubits not allowed!")
           success = false;
         }
@@ -832,7 +841,7 @@ export default {
         success = this.tryAppendingSecondTargetQubit(dto, qbit, step, existingQbits);
       }
 
-      let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)];
+      let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
       
       if (success && seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)){
         if (step != originalStep) {
@@ -848,14 +857,14 @@ the action which was attempted was to adjust the dragged qubit not to move the g
     },
     tryAppendingSecondTargetQubit(dto, qbit, step, existingQbits) {
       dto["targets"] = [qbit, qbit + 1];
-      let proposedQbits = [...dto["targets"], ...dto["controls"]];
+      let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
       if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)) {
         if (qbit == 0) {
           alert("Cannot allocate second target qubit for this gate!");
           return false;
         }
         dto["targets"] = [qbit, qbit - 1];
-        proposedQbits = [...dto["targets"], ...dto["controls"]];
+        proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
         if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)) {
           alert("Cannot allocate second target qubit for this gate!");
           return false;

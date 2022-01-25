@@ -148,7 +148,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit', 'insertQbitInCircuit', 'insertStepInCircuit',]),
+    ...mapActions('circuitEditorModule/', ['repositionGateInCircuit', 'insertQbitInCircuit', 'insertStepInCircuit',]),
     ...mapGetters("circuitEditorModule/", ["getMaximumStepIndex", "getMaximumQbitIndex"]),
     showModal: function() {
       this.trashIsHovered = false;
@@ -201,7 +201,7 @@ export default {
       if (isDefined(this.root)) {
         dto['rootNew'] = this.root;
       }
-      let promise = this.repositionSimpleGateInCircuit(dto);
+      let promise = this.repositionGateInCircuit(dto);
       promise.then(
         // eslint-disable-next-line no-unused-vars
         result => {}, 
@@ -240,7 +240,7 @@ export default {
       if (isDefined(this.root)) {
         dto['rootNew'] = this.root;
       }
-      let promise = this.repositionSimpleGateInCircuit(dto);
+      let promise = this.repositionGateInCircuit(dto);
       promise.then(
         // eslint-disable-next-line no-unused-vars
         result => {}, 

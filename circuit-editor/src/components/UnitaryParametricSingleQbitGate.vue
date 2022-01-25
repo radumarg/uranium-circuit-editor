@@ -373,7 +373,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
+    ...mapActions('circuitEditorModule/', ['repositionGateInCircuit']),
     handleSave: function(){
       if (!Number.isInteger(this.$data.targetsNew[0])){
         alert("Please enter an integer number fo target qubit!");
@@ -387,7 +387,7 @@ export default {
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
       let lambdaOld = this.lambda;
-      let promise = this.repositionSimpleGateInCircuit({
+      let promise = this.repositionGateInCircuit({
         'step': this.step, 
         'targets': [...this.targets],
         'name': this.name,

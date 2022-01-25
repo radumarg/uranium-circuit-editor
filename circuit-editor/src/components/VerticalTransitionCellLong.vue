@@ -96,7 +96,7 @@ export default {
 
       if (event.dataTransfer.types.includes("gates")) {
         let gates = JSON.parse(event.dataTransfer.getData("gates"));
-        dto["gates"] = [...gates];
+        dto["gates"] = JSON.parse(JSON.stringify(gates));
       }
 
       // add optional params, notice lower case needed for types.includes
@@ -188,7 +188,7 @@ export default {
 
       if (event.dataTransfer.types.includes("gates")) {
         let gates = JSON.parse(event.dataTransfer.getData("gates"));
-        dto["gates"] = [...gates];
+        dto["gates"] = JSON.parse(JSON.stringify(gates));
       }
 
       // add optional params, notice lower case needed for types.includes
@@ -244,12 +244,15 @@ export default {
         let gates = JSON.parse(event.dataTransfer.getData("gates"));
         for (let i = 0; i < gates.length; i++) {
           let aggregatedGate = gates[i];
-          if (aggregatedGate.target == draggedQubit) {
-            aggregatedGate.target = dropQbit;
-            break;
+          for (let j = 0; j < gates.length; j++) {
+            let target = aggregatedGate.targets[j];
+            if (target == draggedQubit) {
+              aggregatedGate.targets[j] = dropQbit;
+              break;
+            }
           }
         }
-        dto["gates"] = [...gates];
+        dto["gates"] = gates;
       }
 
       // add optional params, notice lower case needed for types.includes
@@ -304,7 +307,7 @@ export default {
       }
       if (closestGate["gates"]) {
         let gates = closestGate.gates;
-        dto["gates"] = [...gates];
+        dto["gates"] = JSON.parse(JSON.stringify(gates));
       }
      
       if (isDefined(closestGate["phi"])) {

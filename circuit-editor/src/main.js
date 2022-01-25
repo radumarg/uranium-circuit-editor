@@ -104,7 +104,7 @@ $(document).on('keyup', function(e) {
     }
     
   } else if ((e.key == 'v' || e.key == 'V') && e.ctrlKey){
-
+    
     // Ctrl+V is pressed
     if (!isDefined(window.selectQbitStart) ||
         !isDefined(window.selectStepStart)){
@@ -123,10 +123,15 @@ $(document).on('keyup', function(e) {
 
     getPastedGates(window.selectQbitStart, window.selectStepStart)
     .then(function(gates) {
-      if (seatsInArrayAreAlreadyTaken(store.state.circuitEditorModule, gates)){
-        alert("Not all the proposed seats are empty.");
+      if (gates.length > 0){
+        if (seatsInArrayAreAlreadyTaken(store.state.circuitEditorModule, gates)){
+          alert("Not all the proposed seats are empty.");
+        } else {
+          store.dispatch('circuitEditorModule/insertGatesInCircuit', {"dtos": gates, "existingStep": null, "existingQbit": null});
+          undoGatesSelection();
+        }
       } else {
-        store.dispatch('circuitEditorModule/insertGatesInCircuit', {"dtos": gates, "existingStep": null, "existingQbit": null});
+        alert("There nothing to be pasted!");
         undoGatesSelection();
       }
     })
