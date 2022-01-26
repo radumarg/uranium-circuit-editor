@@ -14,7 +14,8 @@ import {
 } from "../store/modules/gatesTable.js";
 
 import {
-  isDefined
+  isDefined,
+  getAggregatedGatesNewTargets
 } from "../store/modules/editorHelper.js";
 
 export const controlsMixin = {
@@ -168,8 +169,17 @@ export const controlsMixin = {
     },
     addControl() {
       let newControl = null;
-      let minQubit = Math.min(...this.targetsNew, ...this.controlsNew);
-      let maxQubit = Math.max(...this.targetsNew, ...this.controlsNew);
+      let aggregatedGatesTargets = [];
+
+      if (this.$data.gatesNew) {
+        for (let i = 0; i < this.$data.gatesNew.length; i++) {
+          let aggregatedGate = this.$data.gatesNew[i];
+          aggregatedGatesTargets.push(...aggregatedGate.targets);
+        }
+      }
+      
+      let minQubit = Math.min(...this.targetsNew, ...this.controlsNew, ...aggregatedGatesTargets);
+      let maxQubit = Math.max(...this.targetsNew, ...this.controlsNew, ...aggregatedGatesTargets);
 
       if (minQubit > 0 && !seatIsTaken(this.$store.state.circuitEditorModule, minQubit - 1, this.step)) {
         newControl = minQubit - 1;
@@ -181,6 +191,9 @@ export const controlsMixin = {
             continue;
           }
           if (this.controlsNew.includes(currentQubit)) {
+            continue;
+          }
+          if (getAggregatedGatesNewTargets(this).includes(currentQubit)) {
             continue;
           }
           if (!qbitIsTaken(this.$store.state.circuitEditorModule, currentQubit, this.step)) {

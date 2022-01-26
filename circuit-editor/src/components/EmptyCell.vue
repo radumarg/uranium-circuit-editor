@@ -577,7 +577,7 @@ export default {
       let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
       let gateName = event.dataTransfer.getData("gateName");
 
-      let dto = { step: step, targets: [...originalTargets], controls: [], name: gateName, };
+      let dto = { step: step, targets: [], controls: [], name: gateName, };
 
       if (event.dataTransfer.types.includes("originalcontrols")) {
         let controls =  JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
@@ -592,6 +592,8 @@ export default {
       if (event.dataTransfer.types.includes("gates")) {
         let gates = JSON.parse(event.dataTransfer.getData("gates"));
         dto["gates"] = JSON.parse(JSON.stringify(gates));
+      } else {
+        dto["targets"] = [...originalTargets];
       }
       if (event.dataTransfer.types.includes("phi")) {
         let phi = parseFloat(event.dataTransfer.getData("phi"));
