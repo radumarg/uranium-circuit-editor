@@ -95,6 +95,12 @@ export const controlsMixin = {
       this.moveGateOneQubitDownwardsIsHovered = false;
       this.alignControlsUpwardsIsHovered = false;
       this.alignControlsDownwardsIsHovered = false;
+      this.controlsNew = [...this.controls];
+      this.controlstatesNew = [...this.controlstates];
+      this.numberOfControls = this.controls.length;
+      if (this.gates) {
+        this.numberOfGates = this.gates.length;
+      }
       this.$refs['initial-modal-dialog'].hide();
       this.$refs['edit-controls-modal-dialog'].show();
     },

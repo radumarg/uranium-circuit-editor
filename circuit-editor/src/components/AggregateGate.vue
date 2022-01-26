@@ -267,7 +267,7 @@
                 <b-td class="title-cell">Gate Name:</b-td>
                 <b-td v-for="(target, index) in gatesNew.length" v-bind:key="index + 14000" class="embedded-table-cell">
                   <div class="d-flex justify-content-center align-items-center">
-                    <b-form-select v-model="gatesNew[index].name" @change="onGateNameChange()" :options="singleTargetQubitGates" placeholder="name" id="gate-name-new" style="min-width: 72px; max-width: 72px;"></b-form-select>
+                    <b-form-select v-model="gatesNew[index].name" @change="onGateNameChange(index)" :options="singleTargetQubitGates" placeholder="name" id="gate-name-new" style="min-width: 72px; max-width: 72px;"></b-form-select>
                   </div>
                 </b-td>
                 <b-td v-for="(emptySlot, index) in emptySlotsInEditGatesModal()" v-bind:key="index + 15000" class="embedded-table-cell" />
@@ -346,7 +346,7 @@
               <b-tr>
                 <b-td class="buttons-cell">
                   <div v-b-hover="handleAlignControlsUpwardsHover">
-                    <b-icon v-if="alignControlsUpwardsIsHovered" icon="caret-up-fill" v-on:click="alignControlsUpwardsFromTargetQubit()" title="Align gates upwards from first control qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
+                    <b-icon v-if="alignControlsUpwardsIsHovered" icon="caret-up-fill" v-on:click="alignControlsUpwardsFromTargetQubit()" title="Align controls upwards from first target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
                     <b-icon v-else icon="caret-up" style="color: #7952b3;" font-scale="1.4"></b-icon>
                   </div>
                 </b-td>
@@ -360,7 +360,7 @@
               <b-tr>
                 <b-td class="buttons-cell">
                   <div v-b-hover="handleAlignControlsDownwardsHover">
-                    <b-icon v-if="alignControlsDownwardsIsHovered" icon="caret-down-fill" v-on:click="alignControlsDownwardsFromTargetQubit()" title="Align gates downwards from last control qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
+                    <b-icon v-if="alignControlsDownwardsIsHovered" icon="caret-down-fill" v-on:click="alignControlsDownwardsFromTargetQubit()" title="Align controls downwards from last target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
                     <b-icon v-else icon="caret-down" style="color: #7952b3;" font-scale="1.4"></b-icon>
                   </div>
                 </b-td>
@@ -588,6 +588,10 @@ export default {
       this.moveGateOneQubitDownwardsIsHovered = false;
       this.alignControlsUpwardsIsHovered = false;
       this.alignControlsDownwardsIsHovered = false;
+      this.gatesNew = JSON.parse(JSON.stringify(this.gates));
+      this.rootsNew = this.extractGateRootsArray(this.gates);
+      this.numberOfGates = this.gates.length;
+      this.numberOfControls = this.controls.length;
       this.$refs['initial-modal-dialog'].hide();
       this.$refs['edit-gates-modal-dialog'].show();
     },
@@ -637,23 +641,23 @@ export default {
         return String.empty;
       }
     },
-    onGateNameChange() {
-      for (let i = 0; i < this.$data.gatesNew.length; i++) {
-        let gate = this.$data.gatesNew[i];
-        if (this.gateHasTheta(gate.name) && !isDefined(gate.theta)){
-          gate.theta = 0;
-        }
-        if (this.gateHasPhi(gate.name) && !isDefined(gate.phi)){
-          gate.phi = 0;
-        }
-        if (this.gateHasLambda(gate.name) && !isDefined(gate.lambda)){
-          gate.lambda = 0;
-        }
-        this.$data.rootsNew[i] = { t: 1, k: null };
-        if (this.gateHasRoot(gate.name)){
-          this.rootTChanged(i);
-        } 
+    onGateNameChange(index) {
+
+      let gate = this.$data.gatesNew[index];
+      if (this.gateHasTheta(gate.name) && !isDefined(gate.theta)){
+        gate.theta = 0;
       }
+      if (this.gateHasPhi(gate.name) && !isDefined(gate.phi)){
+        gate.phi = 0;
+      }
+      if (this.gateHasLambda(gate.name) && !isDefined(gate.lambda)){
+        gate.lambda = 0;
+      }
+      this.$data.rootsNew[index] = { t: 1, k: null };
+      if (this.gateHasRoot(gate.name)){
+        this.rootTChanged(index);
+      }
+
       // need to refresh control state icon image
       this.$forceUpdate();
     },
@@ -672,15 +676,13 @@ export default {
     addGate() {
 
       let newTarget = null;
-      let gatesTargets = [];
+      let aggregatedGatesTargets = [];
       for (let i = 0; i < this.$data.gatesNew.length; i++) {
         let aggregatedGate = this.$data.gatesNew[i];
-        for (let j = 0; j < aggregatedGate.targets.length; j++) {
-          gatesTargets.push(aggregatedGate.targets[j]);
-        }
+        aggregatedGatesTargets.push(...aggregatedGate.targets);
       }
-      let minQubit = Math.min(...this.$data.targetsNew, ...this.$data.controlsNew, ...gatesTargets);
-      let maxQubit = Math.max(...this.$data.targetsNew, ...this.$data.controlsNew, ...gatesTargets);
+      let minQubit = Math.min(...this.$data.targetsNew, ...this.$data.controlsNew, ...aggregatedGatesTargets);
+      let maxQubit = Math.max(...this.$data.targetsNew, ...this.$data.controlsNew, ...aggregatedGatesTargets);
       
       if (this.targets.length > 0 && this.$data.gatesNew.length == 0) {
         newTarget = this.targets[0];
@@ -696,7 +698,7 @@ export default {
           if (this.$data.controlsNew.includes(currentQubit)) {
             continue;
           }
-          if (gatesTargets.includes(currentQubit)) {
+          if (aggregatedGatesTargets.includes(currentQubit)) {
             continue;
           }
           if (!qbitIsTaken(this.$store.state.circuitEditorModule, currentQubit, this.step)) {
@@ -844,14 +846,17 @@ export default {
     moveGateOneQubitUpwards() {
       let proposedTargets = [...this.targetsNew];
       let proposedControls = [...this.controlsNew];
-      let proposedGates = getAggregatedGatesNewTargets(this);
+      let proposedGatesTargets = getAggregatedGatesNewTargets(this);
 
-      if (Math.min(...proposedTargets) > 0 && Math.min(...proposedControls) > 0) {
+      if (Math.min(...proposedTargets) > 0 && Math.min(...proposedControls) > 0 && Math.min(...proposedGatesTargets) > 0) {
         for (let i = 0; i < proposedTargets.length; i++) {
           proposedTargets[i] -= 1;
         }
         for (let i = 0; i < proposedControls.length; i++) {
           proposedControls[i] -= 1;
+        }
+        for (let i = 0; i < proposedGatesTargets.length; i++) {
+          proposedGatesTargets[i] -= 1;
         }
       } else {
         alert("The 0 qubit index has been reached!");
@@ -859,15 +864,18 @@ export default {
       }
 
       let existingQbits = [...this.targets, ...this.controls, ...getAggregatedGatesTargets(this)].filter(x => isDefined(x));
-      let proposedQbits = [...proposedTargets, ...proposedControls, ...proposedGates].filter(x => isDefined(x));
+      let proposedQbits = [...proposedTargets, ...proposedControls, ...proposedGatesTargets].filter(x => isDefined(x));
 
       if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
         alert("There are no free seats to move control upwards!");
       } else {
         this.targetsNew = proposedTargets;
         this.controlsNew = proposedControls;
-        if (this.targetsNew.length > 0) {
-          this.targetsString = `${this.targetsNew[0]},  ${this.targetsNew[1]}`;
+        for (let i = 0; i < this.gatesNew.length; i++) {
+          let gate = this.gatesNew[i];
+          for (let j = 0; j < gate.targets.length; j++) {
+            gate.targets[j] -= 1;
+          }
         }
         this.$forceUpdate();
       }
@@ -875,7 +883,7 @@ export default {
     moveGateOneQubitDownwards() {
       let proposedTargets = [...this.targetsNew];
       let proposedControls = [...this.controlsNew];
-      let proposedGates = getAggregatedGatesNewTargets(this);
+      let proposedGatesTargets = getAggregatedGatesNewTargets(this);
 
       for (let i = 0; i < proposedTargets.length; i++) {
         proposedTargets[i] += 1;
@@ -883,20 +891,47 @@ export default {
       for (let i = 0; i < proposedControls.length; i++) {
         proposedControls[i] += 1;
       }
+      for (let i = 0; i < proposedGatesTargets.length; i++) {
+        proposedGatesTargets[i] += 1;
+      }
 
       let existingQbits = [...this.targets, ...this.controls, ...getAggregatedGatesTargets(this)].filter(x => isDefined(x));
-      let proposedQbits = [...proposedTargets, ...proposedControls, ...proposedGates].filter(x => isDefined(x));
+      let proposedQbits = [...proposedTargets, ...proposedControls, ...proposedGatesTargets].filter(x => isDefined(x));
 
       if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
         alert("There are no free seats to move control downwards!");
       } else {
         this.targetsNew = proposedTargets;
         this.controlsNew = proposedControls;
-        if (this.targetsNew.length > 0) {
-          this.targetsString = `${this.targetsNew[0]},  ${this.targetsNew[1]}`;
+        for (let i = 0; i < this.gatesNew.length; i++) {
+          let gate = this.gatesNew[i];
+          for (let j = 0; j < gate.targets.length; j++) {
+            gate.targets[j] += 1;
+          }
         }
         this.$forceUpdate();
       }
+    },
+    alignControlsUpwardsFromTargetQubit() {
+      let proposedGatesTargets = getAggregatedGatesNewTargets(this);
+      let startUp = Math.min(...this.$data.targetsNew, ...proposedGatesTargets);
+      let startDown = Math.max(...this.$data.targetsNew, ...proposedGatesTargets);
+      for (let i = 0; i < this.controlsNew.length; i++) {
+        if (startUp - i >= 1) {
+          this.controlsNew[i] = startUp - i - 1;
+        } else {
+          this.controlsNew[i] = startDown + i - startUp + 1;
+        }
+      }
+      this.$forceUpdate();
+    },
+    alignControlsDownwardsFromTargetQubit() {
+      let proposedGatesTargets = getAggregatedGatesNewTargets(this);
+      let start = Math.max(...this.$data.targetsNew, ...proposedGatesTargets);
+      for (let i = 0; i < this.controlsNew.length; i++) {
+        this.controlsNew[i] = start + i + 1;
+      }
+      this.$forceUpdate();
     },
     dragStart: function(event) {
       hideTooltips();

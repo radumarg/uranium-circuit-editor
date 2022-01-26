@@ -140,8 +140,10 @@ export default {
 
       for (let i = 0; i < dto["gates"].length; i++) {
         let gate = dto["gates"][i];
-        if (gate.target == draggedQubit) {
+
+        if (gate.targets.includes(draggedQubit)) {
           let aggregatedGate = { "name": gate.name, targets: [dropQbit] };
+
           if (isDefined(gate.phi)) {
             let phi = gate.phi;
             aggregatedGate["phi"] = phi;
@@ -158,7 +160,9 @@ export default {
             let root = gate.root;
             dto["root"] = root;
           }
+
           dto["gates"].push(aggregatedGate);
+          break;
         }
       }
 

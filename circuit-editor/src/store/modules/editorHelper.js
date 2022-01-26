@@ -173,7 +173,7 @@ export function insertingOneGateInCircuit(circuitState, dto) {
     if (circuitState.steps[i].index == step) {
       let gates = circuitState.steps[i]["gates"] ? circuitState.steps[i]["gates"] : [];
       gates.push(gate);
-      gates.sort((l, r) => (Math.min(...l.targets) - Math.min(...r.targets)));
+      gates.sort((l, r) => (Math.min(...getTargets(l)) - Math.min(...getTargets(r))));
       return;
     } 
   }
@@ -182,6 +182,17 @@ export function insertingOneGateInCircuit(circuitState, dto) {
   circuitState.steps.push({ "index": step, "gates": [gate] });
   circuitState.steps.sort((l, r) => (l.index - r.index));
 } 
+
+function getTargets(gate) {
+  if (gate.targets) return [...gate.targets];
+  else {
+    let targets = [];
+    for (let i = 0; i < gate.gates; ++i) {
+      targets.push(...gate.gates[i].targets);
+    }
+    return targets;
+  }
+}
 
 export function interpolateJavaScriptExpression(expression, s, q, j) {
   
