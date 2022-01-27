@@ -778,16 +778,10 @@ export default {
         success = this.maybeAdjustGate(gateName, dto, qbit, step, originalStep, existingQbits); 
       }
       
-      if (dto["gates"]) {
-        let embeddedGatesTargets = [];
-
-        let gates = dto["gates"];
-        for (let i = 0; i < gates.length; i++) {
-          let gate = gates[i];
-          embeddedGatesTargets.push(...gate.targets);
-        }
+      if (success && dto["gates"]) {
+        let aggregatedGatesTargets = getAggregatedGatesTargets(dto);
  
-        if (embeddedGatesTargets.some(x => x < 0)) {
+        if (aggregatedGatesTargets.some(x => x < 0)) {
           alert("Negative target qubits not allowed!")
           success = false;
         }
@@ -847,7 +841,7 @@ export default {
       
       if (success && seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)){
         if (step != originalStep) {
-          alert("There are not enough free seats in order to move the gate here.")
+          alert("There are not enough free seats in order to move the gate here.");
         } else {
           alert("Some of the requested qubits are already occupied by another gate(s)! Note that since you have dragged the gate within the same step\
 the action which was attempted was to adjust the dragged qubit not to move the gate to a new position"); 
