@@ -424,7 +424,7 @@ export default {
       alignGatesDownwardsIsHovered: false,
       gatesNew: JSON.parse(JSON.stringify(this.gates)),
       rootsNew: this.extractGateRootsArray(this.gates),
-      numberOfGates: this.gates.length,
+      numberOfGates: this.gates ? this.gates.length : 0,
       indexDeleteHover: null,
       singleTargetQubitGates: [
         { value: 'c', text: 'c' },
@@ -468,6 +468,8 @@ export default {
       this.$data.controlstatesNew = [...this.controlstates];
       this.$data.gatesNew = JSON.parse(JSON.stringify(this.gates));
       this.$data.rootsNew = this.extractGateRootsArray(this.gates);
+      this.$data.numberOfGates = this.gates? this.gates.length : 0;
+      this.$data.numberOfControls = this.controls.length;
     }
   },
   computed: {
@@ -503,6 +505,15 @@ export default {
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionGateInCircuit']),
+    initializeData: function () {
+      this.$data.targetsNew = [...this.targets];
+      this.$data.controlsNew = [...this.controls];
+      this.$data.controlstatesNew = [...this.controlstates];
+      this.$data.gatesNew = JSON.parse(JSON.stringify(this.gates));
+      this.$data.rootsNew = this.extractGateRootsArray(this.gates);
+      this.$data.numberOfGates = this.gates? this.gates.length : 0;
+      this.$data.numberOfControls = this.controls.length;
+    },
     editGateAndControlsModalSize(){
       let maxLength = Math.max(this.$data.gatesNew.length, this.$data.controlsNew.length);
       if (maxLength <= 5){
@@ -588,10 +599,6 @@ export default {
       this.moveGateOneQubitDownwardsIsHovered = false;
       this.alignControlsUpwardsIsHovered = false;
       this.alignControlsDownwardsIsHovered = false;
-      this.gatesNew = JSON.parse(JSON.stringify(this.gates));
-      this.rootsNew = this.extractGateRootsArray(this.gates);
-      this.numberOfGates = this.gates.length;
-      this.numberOfControls = this.controls.length;
       this.$refs['initial-modal-dialog'].hide();
       this.$refs['edit-gates-modal-dialog'].show();
     },
@@ -662,12 +669,12 @@ export default {
       this.$forceUpdate();
     },
     onNumberGatesChange() {
-      if (this.numberOfGates < this.$data.gatesNew.length) {
+      if (this.$data.numberOfGates < this.$data.gatesNew.length) {
         if (this.$data.gatesNew.length > 0) {
           this.$data.targetsNew = [...this.$data.gatesNew[0].targets];
         }
-        this.$data.gatesNew = this.$data.gatesNew.slice(0, this.numberOfGates);
-        this.$data.rootsNew = this.$data.rootsNew.slice(0, this.numberOfGates);
+        this.$data.gatesNew = this.$data.gatesNew.slice(0, this.$data.numberOfGates);
+        this.$data.rootsNew = this.$data.rootsNew.slice(0, this.$data.numberOfGates);
       } else {
         this.addGate();
       }
@@ -717,24 +724,24 @@ export default {
         this.$data.gatesNew.push(gate);
         let root = { t: 1, k: null };
         this.$data.rootsNew.push(root);
-        this.numberOfGates = this.$data.gatesNew.length;
+        this.$data.numberOfGates = this.$data.gatesNew ? this.$data.gatesNew.length : 0;
       } else {
         alert("No empty seat left to add new gate!");
       }
     },
     removeGateFromMinusIcon() {
-      if (this.numberOfGates >= 1) {
+      if (this.$data.numberOfGates >= 1) {
         this.$data.targetsNew = [...this.$data.gatesNew[0].targets];
-        this.$data.gatesNew = this.$data.gatesNew.slice(0, this.numberOfGates - 1);
-        this.$data.rootsNew = this.$data.rootsNew.slice(0, this.numberOfGates - 1);
-        this.numberOfGates = this.$data.gatesNew.length;
+        this.$data.gatesNew = this.$data.gatesNew.slice(0, this.$data.numberOfGates - 1);
+        this.$data.rootsNew = this.$data.rootsNew.slice(0, this.$data.numberOfGates - 1);
+        this.$data.numberOfGates = this.$data.gatesNew ? this.$data.gatesNew.length : 0;
       }
     },
     removeAggregatedGateFromCloseIcon(index) {
       this.$data.gatesNew.splice(index, 1);
       this.$data.rootsNew.splice(index, 1);
-      this.numberOfGates = this.$data.gatesNew.length;
-      if (this.numberOfGates > 0) {
+      this.$data.numberOfGates = this.$data.gatesNew ? this.$data.gatesNew.length : 0;
+      if (this.$data.numberOfGates > 0) {
         this.$data.targetsNew = [...this.$data.gatesNew[0].targets];
       }
     },
@@ -818,7 +825,6 @@ export default {
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
       let gatesOld = [...this.gates];
-      let rootsOld = this.extractGateRootsArray(this.gates);
       let promise = this.repositionGateInCircuit({
         'step': this.step, 
         'targets': [...this.targets],
@@ -831,21 +837,25 @@ export default {
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
-        result => {}, 
+        result => {
+          this.initializeData();
+        }, 
         // eslint-disable-next-line no-unused-vars
         error => {
           this.$data.targetsNew = [...targetsOld];
           this.$data.controlsNew = [...controlsOld];
           this.$data.controlstatesNew = [...controlstatesOld];
           this.$data.gatesNew = JSON.parse(JSON.stringify(gatesOld));
-          this.$data.rootsNew = [...rootsOld];
+          this.$data.rootsNew = this.extractGateRootsArray(this.gatesOld);
+          this.$data.numberOfGates = this.gatesOld? this.gatesOld.length : 0;
+          this.$data.numberOfControls = this.controlsOld.length;
         }
       );
       this.$refs['initial-modal-dialog'].hide();
     },
     moveGateOneQubitUpwards() {
-      let proposedTargets = [...this.targetsNew];
-      let proposedControls = [...this.controlsNew];
+      let proposedTargets = [...this.$data.targetsNew];
+      let proposedControls = [...this.$data.controlsNew];
       let proposedGatesTargets = getAggregatedGatesNewTargets(this);
 
       if (Math.min(...proposedTargets) > 0 && Math.min(...proposedControls) > 0 && Math.min(...proposedGatesTargets) > 0) {
@@ -869,8 +879,8 @@ export default {
       if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
         alert("There are no free seats to move control upwards!");
       } else {
-        this.targetsNew = proposedTargets;
-        this.controlsNew = proposedControls;
+        this.$data.targetsNew = proposedTargets;
+        this.$data.controlsNew = proposedControls;
         for (let i = 0; i < this.gatesNew.length; i++) {
           let gate = this.gatesNew[i];
           for (let j = 0; j < gate.targets.length; j++) {
@@ -881,8 +891,8 @@ export default {
       }
     },
     moveGateOneQubitDownwards() {
-      let proposedTargets = [...this.targetsNew];
-      let proposedControls = [...this.controlsNew];
+      let proposedTargets = [...this.$data.targetsNew];
+      let proposedControls = [...this.$data.controlsNew];
       let proposedGatesTargets = getAggregatedGatesNewTargets(this);
 
       for (let i = 0; i < proposedTargets.length; i++) {
@@ -901,8 +911,8 @@ export default {
       if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
         alert("There are no free seats to move control downwards!");
       } else {
-        this.targetsNew = proposedTargets;
-        this.controlsNew = proposedControls;
+        this.$data.targetsNew = proposedTargets;
+        this.$data.controlsNew = proposedControls;
         for (let i = 0; i < this.gatesNew.length; i++) {
           let gate = this.gatesNew[i];
           for (let j = 0; j < gate.targets.length; j++) {
@@ -916,11 +926,11 @@ export default {
       let proposedGatesTargets = getAggregatedGatesNewTargets(this);
       let startUp = Math.min(...this.$data.targetsNew, ...proposedGatesTargets);
       let startDown = Math.max(...this.$data.targetsNew, ...proposedGatesTargets);
-      for (let i = 0; i < this.controlsNew.length; i++) {
+      for (let i = 0; i < this.$data.controlsNew.length; i++) {
         if (startUp - i >= 1) {
-          this.controlsNew[i] = startUp - i - 1;
+          this.$data.controlsNew[i] = startUp - i - 1;
         } else {
-          this.controlsNew[i] = startDown + i - startUp + 1;
+          this.$data.controlsNew[i] = startDown + i - startUp + 1;
         }
       }
       this.$forceUpdate();
@@ -928,8 +938,8 @@ export default {
     alignControlsDownwardsFromTargetQubit() {
       let proposedGatesTargets = getAggregatedGatesNewTargets(this);
       let start = Math.max(...this.$data.targetsNew, ...proposedGatesTargets);
-      for (let i = 0; i < this.controlsNew.length; i++) {
-        this.controlsNew[i] = start + i + 1;
+      for (let i = 0; i < this.$data.controlsNew.length; i++) {
+        this.$data.controlsNew[i] = start + i + 1;
       }
       this.$forceUpdate();
     },

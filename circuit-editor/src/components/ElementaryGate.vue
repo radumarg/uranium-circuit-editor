@@ -173,6 +173,9 @@ export default {
   extends: SingleQbitGate,
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionElementaryGateInCircuit']),
+    initializeData: function () {
+      this.$data.targetsNew = [...this.targets];
+    },
     handleSave: function(){
       if (!Number.isInteger(this.$data.targetsNew[0])){
         alert("Please enter an integer number for the target qubit!");

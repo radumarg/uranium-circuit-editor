@@ -100,6 +100,12 @@ export function getNoQbits(circuitState) {
               maxQbitIndex = Math.max(maxQbitIndex, target);
             }
           }
+          if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+            for (let i = 0; i < gate["gates"].length; i++) {
+              let aggregatedGate = gate["gates"][i];
+              maxQbitIndex = Math.max(maxQbitIndex, ...aggregatedGate.targets);
+            }
+          }
         }
       }
     }
@@ -153,6 +159,17 @@ export function measureGatesArePositionedLast(circuitState){
             }
           }
         }
+        if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+          for (let i = 0; i < gate["gates"].length; i++) {
+            let aggregatedGate = gate["gates"][i];
+            for (let j = 0; j < aggregatedGate.targets.length; j++) {
+              let target = aggregatedGate.targets[j];
+              if (measureGates.includes(target)) {
+                return false;
+              }
+            }
+          }
+        }
       }
     }
   }
@@ -180,16 +197,23 @@ export function positionIsFilled(circuitState, step, qubit) {
           for (let j = 0; j < gates.length; j++) {
             let gate = gates[j];
             if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
-              let targets = gate.targets;
-              for (let j = 0; j < targets.length; j++){
-                if (targets[j] == qubit) return true;
+              if (gate.targets.includes(qubit)) {
+                return true;
               }
             }
             if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-              for (let i = 0; i < gate["controls"].length; i++) {
-                let controlInfo = gate["controls"][i];
+              for (let k = 0; k < gate["controls"].length; k++) {
+                let controlInfo = gate["controls"][k];
                 let target = controlInfo["target"];
                 if (target == qubit) return true;
+              }
+            }
+            if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+              for (let k = 0; k < gate["gates"].length; k++) {
+                let aggregatedGate = gate["gates"][k];
+                if (aggregatedGate.targets.includes(qubit)) {
+                  return true;
+                }
               }
             }
           }

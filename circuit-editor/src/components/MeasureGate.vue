@@ -200,13 +200,13 @@ export default {
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['repositionElementaryGateInCircuit']),
+    initializeData: function () {
+      this.$data.targetsNew = [...this.targets];
+      this.$data.bitNew = this.bit;
+    },
     handleSave: function(){
       if (!Number.isInteger(this.$data.targetsNew[0]) || !Number.isInteger(this.$data.bitNew)){
         alert("Please enter an integer number!");
-        return;
-      }
-      if (this.$data.bitNew > this.$data.targetsNew[0]){
-        alert("Classic bit number index cannot be larger than target qubit index!");
         return;
       }
       let targetsOld = [...this.targets];

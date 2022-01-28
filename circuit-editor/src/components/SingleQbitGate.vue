@@ -417,12 +417,19 @@ export default {
   methods: {
     ...mapActions('circuitEditorModule/', ['insertQbitInCircuit', 'insertStepInCircuit', 'removeGateFromCircuitByUser', 'repositionGateInCircuit', 'replicateGate']),
     ...mapGetters("circuitEditorModule/", ["getMaximumStepIndex", "getMaximumQbitIndex"]),
+    initializeData: function () {
+      this.$data.targetsNew = [...this.targets];
+      this.$data.controlsNew = [...this.controls];
+      this.$data.controlstatesNew = [...this.controlstates];
+      this.$data.numberOfControls = this.controls.length;
+    },
     handleClick: function (event) {
       if (event.ctrlKey) {
         this.selectImage();
       } else if (window.currKey == 'd' || window.currKey == 'D') {
         this.removeGateFromCircuitByUser({'step': this.step, 'targets': this.targets});
       } else {
+        this.initializeData();
         this.showModal();
       }
     },

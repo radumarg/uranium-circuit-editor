@@ -598,11 +598,23 @@ export const circuitEditorModule = {
               }
 
               if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-                for (let i = 0; i < gate["controls"].length; i++) {
-                  let controlInfo = gate["controls"][i];
+                for (let k = 0; k < gate["controls"].length; k++) {
+                  let controlInfo = gate["controls"][k];
                   let target = controlInfo["target"];
                   if (target >= qbit) {
                     controlInfo["target"] += 1;
+                  }
+                }
+              }
+
+              if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+                for (let k = 0; k < gate["gates"].length; k++) {
+                  let aggregatedGate = gate["gates"][k];
+                  for (let l = 0; l < aggregatedGate.targets.length; l++) {
+                    let target = aggregatedGate.targets[l];
+                    if (target >= qbit) {
+                      aggregatedGate.targets[l] += 1;
+                    }
                   }
                 }
               }

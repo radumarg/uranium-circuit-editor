@@ -338,14 +338,16 @@ export function saveCopiedGates(circuitState, qbitStart, qbitStop, stepStart, st
         for (let j = 0; j < gates.length; j++) {
 
           let gate = gates[j];
+          let targetsForGate = gate.targets ? [...gate.targets] : getAggregatedGatesTargets(gate);
+
           let copiedGate = {"step": stepIndex - stepStart, "name": gate.name };
           
           if (gate.name == "barrier"){
             copiedGates.push(copiedGate);
             continue;
           } else if (
-              Math.min(...gate.targets) >= qbitStart &&
-              Math.max(...gate.targets) <= qbitStop &&
+              Math.min(...targetsForGate) >= qbitStart &&
+              Math.max(...targetsForGate) <= qbitStop &&
               stepIndex >= stepStart &&
               stepIndex <= stepStop) 
           {
@@ -365,8 +367,12 @@ export function saveCopiedGates(circuitState, qbitStart, qbitStop, stepStart, st
               copiedGate.controlstates = controlstates;
             }
             if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
-              let gates = gate.gates;
+              let gates = gate["gates"];
               copiedGate.gates = JSON.parse(JSON.stringify(gates));
+              for (let k = 0; k < copiedGate.gates.length; k++) {
+                let aggregatedGate = copiedGate.gates[k];
+                aggregatedGate.targets = aggregatedGate.targets.map(function(value) {return value - qbitStart;});
+              }
             }
             if (Object.prototype.hasOwnProperty.call(gate, "theta")) {
               copiedGate.theta = gate.theta;
@@ -425,6 +431,12 @@ export function getPastedGates(qbitStart, stepStart){
             }
             if (gate.controls && gate.controls.some(negative)) {
               throw new Error("Negative control qubits not permitted.");
+            }
+            if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+              for (let j = 0; j < gate["gates"].length; j++){
+                let aggregatedGate = gate["gates"][j];
+                aggregatedGate.targets = aggregatedGate.targets.map(function(value) {return value + qbitStart;});
+              }
             }
             if (gate.name.includes("measure")){
               gate.bit = gate.targets[0];
