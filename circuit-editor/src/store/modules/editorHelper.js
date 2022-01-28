@@ -94,7 +94,13 @@ export function removingGateFromCircuit(circuitState, dto){
       if (circuitState.steps[i].index == step) {
         let gates = circuitState.steps[i]["gates"];
         for (let j = 0; j < gates.length; j++) {
+
           let gate = gates[j];
+
+          if (gate.name == "barrier") {
+            gates.splice(j, 1);
+            return;
+          }
           if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
             if (gate.targets.includes(target)) {
               gates.splice(j, 1);
