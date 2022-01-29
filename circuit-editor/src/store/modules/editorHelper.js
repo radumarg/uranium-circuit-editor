@@ -2,24 +2,118 @@
    Helper code for vuex store.
 */
 import $ from "jquery";
-import { 
-  getUserInterfaceSetting 
-} from "./applicationWideReusableUnits.js";
+import { getUserInterfaceSetting } from "./applicationWideReusableUnits.js";
+import { arraysHaveElementsInCommon } from "./javaScriptUtils.js";
 
+export function getClosestNonControlledGates(circuitState, step, qubit) {
+  
+  let closestGates = [];
+  let minDistance = Infinity;
 
-export function removingGateFromCircuit(circuitState, dto){
-  let step = dto["step"];
-  let target = dto["targets"][0];
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+    let nonControlledGates = ['identity', 'measure-x', 'measure-y', 'measure-z'];
     for (let i = 0; i < circuitState.steps.length; i++) {
       if (circuitState.steps[i].index == step) {
         let gates = circuitState.steps[i]["gates"];
         for (let j = 0; j < gates.length; j++) {
           let gate = gates[j];
+          if (!nonControlledGates.includes(gate.name) && Object.prototype.hasOwnProperty.call(gate, "targets")) {
+            for (let i = 0; i < gate.targets.length; i++) {
+              let target = gate.targets[i];
+              let delta = Math.abs(target - qubit);
+              if (delta < minDistance){
+                closestGates = [JSON.parse(JSON.stringify(gate))];
+                minDistance = delta;
+              } else if (delta == minDistance) {
+                closestGates.push(gate);
+              }
+            }
+          }
+          if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+            for (let i = 0; i < gate.gates.length; i++) {
+              let aggregatedGate = gate.gates[i];
+              for (let j = 0; j < aggregatedGate.targets.length; j++) {
+                let target = aggregatedGate.targets[j];
+                let delta = Math.abs(target - qubit);
+                if (delta < minDistance){
+                  closestGates = [JSON.parse(JSON.stringify(gate))];
+                  minDistance = delta;
+                } else if (delta == minDistance) {
+                  closestGates.push(gate);
+                }
+              }
+            }
+          }
+          if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+            for (let i = 0; i < gate.controls.length; i++) {
+              let control = gate.controls[i].target;
+              let delta = Math.abs(control - qubit);
+              if (delta < minDistance){
+                closestGates = [JSON.parse(JSON.stringify(gate))];
+                minDistance = delta;
+              } else if (delta == minDistance) {
+                closestGates.push(gate);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  return closestGates;
+}
+
+export function removingBarrierFromCircuit(circuitState, dto){
+  let stepIndex = dto["step"];
+  if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+    for (let j = 0; j < circuitState.steps.length; j++) {
+      let step = circuitState.steps[j];
+      if (step.index == stepIndex) {
+        let gates = step["gates"];
+        for (let i = 0; i < gates.length; i++) {
+          gates.splice(0, 1);
+        }
+      }
+    }
+  }
+}
+
+export function removingGateFromCircuit(circuitState, dto){
+  let step = dto["step"];
+  
+  let target = null;
+  if (dto["targets"]) {
+    target = dto["targets"][0];
+  } else if (dto["gates"]) {
+    target = dto["gates"][0].targets[0];
+  }
+
+  if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+    for (let i = 0; i < circuitState.steps.length; i++) {
+      if (circuitState.steps[i].index == step) {
+        let gates = circuitState.steps[i]["gates"];
+        for (let j = 0; j < gates.length; j++) {
+
+          let gate = gates[j];
+
+          if (gate.name == "barrier") {
+            gates.splice(j, 1);
+            return;
+          }
           if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
             if (gate.targets.includes(target)) {
               gates.splice(j, 1);
               return;
+            }
+          }
+          if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+            for (let k = 0; k < gate.gates.length; k++) {
+              let aggregatedGate = gate.gates[k];
+              if (aggregatedGate.targets.includes(target)) {
+                gates.splice(j, 1);
+                return;
+              }
             }
           }
         }
@@ -29,62 +123,82 @@ export function removingGateFromCircuit(circuitState, dto){
 }
 
 export function insertingOneGateInCircuit(circuitState, dto) {
+
   let step = dto["step"];
-  let targets = dto["targets"];
   let name = dto["name"];
-  
-  let gate = { "name": name, "targets": [...targets] };
+
+  let gate = { "name": name};
+
+  if (Object.prototype.hasOwnProperty.call(dto, "targets")) {
+    let targets = dto["targets"];
+    gate["targets"] = [...targets];
+  }
 
   if (Object.prototype.hasOwnProperty.call(dto, "controls") &&
-      Object.prototype.hasOwnProperty.call(dto, "controlstates")) {
-      let controls = dto["controls"];
-      let controlstates = dto["controlstates"];
-      gate["controls"] = []
-      for (let i = 0; i < controls.length; i++) {
-          gate["controls"].push(
-              { "target": controls[i], "state": controlstates[i] }
-          );
-      }
+    Object.prototype.hasOwnProperty.call(dto, "controlstates")) {
+    let controls = dto["controls"];
+    let controlstates = dto["controlstates"];
+    gate["controls"] = []
+    for (let i = 0; i < controls.length; i++) {
+        gate["controls"].push(
+            { "target": controls[i], "state": controlstates[i] }
+        );
+    }
   }
   if (Object.prototype.hasOwnProperty.call(dto, "phi")) {
-      let phi = dto["phi"];
-      gate["phi"] = phi;
+    let phi = dto["phi"];
+    gate["phi"] = phi;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "theta")) {
-      let theta = dto["theta"];
-      gate["theta"] = theta;
+    let theta = dto["theta"];
+    gate["theta"] = theta;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "lambda")) {
-      let lambda = dto["lambda"];
-      gate["lambda"] = lambda;
+    let lambda = dto["lambda"];
+    gate["lambda"] = lambda;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "root")) {
-      let root = dto["root"];
-      gate["root"] = root;
+    let root = dto["root"];
+    gate["root"] = root;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "bit")) {
-      let bit = dto["bit"];
-      gate["bit"] = bit;
+    let bit = dto["bit"];
+    gate["bit"] = bit;
+  }
+  if (Object.prototype.hasOwnProperty.call(dto, "gates")) {
+    let gates = dto["gates"];
+    gate["gates"] = JSON.parse(JSON.stringify(gates));
   }
 
   if (!Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
-      circuitState.steps = []
+    circuitState.steps = []
   }
 
-  // try to find a step if it already exist
+  // try to find a step if it already exists
   for (let i = 0; i < circuitState.steps.length; i++) {
-      if (circuitState.steps[i].index == step) {
-      let gates = circuitState.steps[i]["gates"];
+    if (circuitState.steps[i].index == step) {
+      let gates = circuitState.steps[i]["gates"] ? circuitState.steps[i]["gates"] : [];
       gates.push(gate);
-      gates.sort((l, r) => (Math.min(...l.targets) - Math.min(...r.targets)));
+      gates.sort((l, r) => (Math.min(...getTargets(l)) - Math.min(...getTargets(r))));
       return;
-      } 
+    } 
   }
 
   // step does not exist, add new
   circuitState.steps.push({ "index": step, "gates": [gate] });
   circuitState.steps.sort((l, r) => (l.index - r.index));
 } 
+
+function getTargets(gate) {
+  if (gate.targets) return [...gate.targets];
+  else {
+    let targets = [];
+    for (let i = 0; i < gate.gates; ++i) {
+      targets.push(...gate.gates[i].targets);
+    }
+    return targets;
+  }
+}
 
 export function interpolateJavaScriptExpression(expression, s, q, j) {
   
@@ -165,6 +279,25 @@ export function isDefined(value){
   return (Boolean(value) || value === 0);
 }
 
+export function stepContainsGates(circuitState, stepIndex) {
+  if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+    for (let i = 0; i < circuitState.steps.length; i++) {
+      let step = circuitState.steps[i];
+      if (stepIndex == step.index) {
+        if (Object.prototype.hasOwnProperty.call(step, "gates")) {
+          let gates = step["gates"];
+          if (gates.length > 0) {
+            return true;
+          } else {
+            break;
+          }
+        }
+      }
+    }
+  }
+  return false;
+}
+
 export function handleSelectEvent(qbit, step) {
   if (isDefined(window.selectQbitStart) && isDefined(window.selectStepStart)){
     if (isDefined(window.selectQbitStop) && isDefined(window.selectStepStop)){
@@ -209,19 +342,25 @@ export function saveCopiedGates(circuitState, qbitStart, qbitStop, stepStart, st
       if (Object.prototype.hasOwnProperty.call(circuitState.steps[i], "gates")) {
         let gates = circuitState.steps[i]["gates"];
         for (let j = 0; j < gates.length; j++) {
+
           let gate = gates[j];
-          if (Math.min(...gate.targets) >= qbitStart &&
-              Math.max(...gate.targets) <= qbitStop &&
+          let targetsForGate = gate.targets ? [...gate.targets] : getAggregatedGatesTargets(gate);
+
+          let copiedGate = {"step": stepIndex - stepStart, "name": gate.name };
+          
+          if (gate.name == "barrier"){
+            copiedGates.push(copiedGate);
+            continue;
+          } else if (
+              Math.min(...targetsForGate) >= qbitStart &&
+              Math.max(...targetsForGate) <= qbitStop &&
               stepIndex >= stepStart &&
-              stepIndex <= stepStop) {
-
-            let copiedGate = {"step": stepIndex - stepStart, "name": gate.name };
-
+              stepIndex <= stepStop) 
+          {
             if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
-              let targets = gate.targets;
+              let targets = gate.targets ? gate.targets : [];
               copiedGate.targets = targets.map(function(value) {return value - qbitStart;});
             }
-
             if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
               let controls = [];
               let controlstates = [];
@@ -232,6 +371,14 @@ export function saveCopiedGates(circuitState, qbitStart, qbitStop, stepStart, st
               }
               copiedGate.controls = controls.map(function(value) {return value - qbitStart;});
               copiedGate.controlstates = controlstates;
+            }
+            if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+              let gates = gate["gates"];
+              copiedGate.gates = JSON.parse(JSON.stringify(gates));
+              for (let k = 0; k < copiedGate.gates.length; k++) {
+                let aggregatedGate = copiedGate.gates[k];
+                aggregatedGate.targets = aggregatedGate.targets.map(function(value) {return value - qbitStart;});
+              }
             }
             if (Object.prototype.hasOwnProperty.call(gate, "theta")) {
               copiedGate.theta = gate.theta;
@@ -291,6 +438,12 @@ export function getPastedGates(qbitStart, stepStart){
             if (gate.controls && gate.controls.some(negative)) {
               throw new Error("Negative control qubits not permitted.");
             }
+            if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+              for (let j = 0; j < gate["gates"].length; j++){
+                let aggregatedGate = gate["gates"][j];
+                aggregatedGate.targets = aggregatedGate.targets.map(function(value) {return value + qbitStart;});
+              }
+            }
             if (gate.name.includes("measure")){
               gate.bit = gate.targets[0];
             }
@@ -301,7 +454,7 @@ export function getPastedGates(qbitStart, stepStart){
 
       return gates;
     } catch (e) {
-      alert(e.message);
+      //alert(e.message);
       return [];
     }
   })
@@ -345,18 +498,26 @@ export function proposedNewGatesAreInvalid(dtos) {
     let noExpectedQubits = 0;
     let targets = [];
     let controls = [];
+    let aggregatedGatesTargets = [];
 
     if (Object.prototype.hasOwnProperty.call(dtos[i], "targets")) {
       targets = dtos[i]["targets"];
       noExpectedQubits += targets.length;
     }
-
     if (Object.prototype.hasOwnProperty.call(dtos[i], "controls")) {
       controls = dtos[i]["controls"];
       noExpectedQubits += controls.length;
     }
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "gates")) {
+      let gates = dtos[i]["gates"];
+      for (let i = 0; i < gates.length; i++) {
+        let gate = gates[i];
+        aggregatedGatesTargets.push(...gate.targets);
+        noExpectedQubits += gate.targets.length;
+      }
+    }
 
-    let distinctQbits = [...targets, ...controls]
+    let distinctQbits = [...targets, ...controls, ...aggregatedGatesTargets]
       // x - item in array
       // i - index of item
       // a - array reference
@@ -373,35 +534,79 @@ export function proposedNewSeatsOverlap(dtos) {
     let step = dtos[i]["step"];
     let controls = [];
     let targets = [];
+    let aggregatedGatesTargets = [];
 
     if (Object.prototype.hasOwnProperty.call(dtos[i], "targets")) {
       targets = dtos[i]["targets"];
     }
-
     if (Object.prototype.hasOwnProperty.call(dtos[i], "controls")) {
       controls = dtos[i].controls;
     }
-    let qbits = [...targets, ...controls];
+    if (Object.prototype.hasOwnProperty.call(dtos[i], "gates")) {
+      let gates = dtos[i]["gates"];
+      for (let j = 0; j < gates.length; j++) {
+        let gate = gates[j];
+        aggregatedGatesTargets.push(...gate.targets);
+      }
+    }
+
+    let qbits = [...targets, ...controls, ...aggregatedGatesTargets];
 
     for (let j = i + 1; j < dtos.length; j++) {
       let step2 = dtos[j]["step"];
       if (step != step2) continue;
+
       let targetsSecond = [];
       let controlsSecond = [];
+      let aggregatedGatesTargetsSecond = [];
+
       if (Object.prototype.hasOwnProperty.call(dtos[j], "targets")) {
         targetsSecond = dtos[j].targets;
       }
       if (Object.prototype.hasOwnProperty.call(dtos[j], "controls")) {
         controlsSecond = dtos[j].controls;
       }
-      let qbitsSecond = [...targetsSecond, ...controlsSecond];
-      for (let k = 0; k < qbits.length ; k++){
-        let qbit = qbits[k];
-        if (qbitsSecond.includes(qbit)){
-          return true;
+      if (Object.prototype.hasOwnProperty.call(dtos[j], "gates")) {
+        let gates = dtos[j]["gates"];
+        for (let k = 0; k < gates.length; k++) {
+          let gate = gates[k];
+          aggregatedGatesTargetsSecond.push(...gate.targets);
         }
       }
+
+      let qbitsSecond = [...targetsSecond, ...controlsSecond, ...aggregatedGatesTargetsSecond];
+      if (arraysHaveElementsInCommon(qbits, qbitsSecond)) return true;
     }
   }
   return false; 
+}
+
+export function getAggregatedGatesTargets(dto) {
+
+  let aggregatedGateTargets = [];
+  
+  if (dto["gates"]) {
+    let gates = dto["gates"];
+    for (let i = 0; i < gates.length; i++) {
+      let gate = gates[i];
+      aggregatedGateTargets.push(...gate.targets);
+    }
+  }
+
+  return aggregatedGateTargets;
+}
+
+export function getAggregatedGatesNewTargets(dto) {
+
+  let aggregatedGateTargets = [];
+
+  if (dto["gatesNew"]) {
+    let gates = dto["gatesNew"];
+    for (let i = 0; i < gates.length; i++) {
+      let gate = gates[i];
+      aggregatedGateTargets.push(...gate.targets);
+    }
+  }
+
+  return aggregatedGateTargets;
 }

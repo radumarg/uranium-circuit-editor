@@ -18,7 +18,7 @@ Vue.use(MdToolbar);
 Vue.use(MdTooltip);
 
 // Bootstrap-Vue
-import { IconsPlugin, ImagePlugin, FormInputPlugin, FormSelectPlugin, LayoutPlugin, ModalPlugin, SidebarPlugin, SpinnerPlugin, TabsPlugin, TablePlugin, TooltipPlugin, VBHoverPlugin } from 'bootstrap-vue';
+import { IconsPlugin, ImagePlugin, FormInputPlugin, FormSelectPlugin, LayoutPlugin, LinkPlugin, ModalPlugin, SidebarPlugin, SpinnerPlugin, TabsPlugin, TablePlugin, TooltipPlugin, VBHoverPlugin } from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import { setCookiesIfNotAlreadySet } from "./store/modules/applicationWideReusableUnits.js";
@@ -28,6 +28,7 @@ Vue.use(ImagePlugin);
 Vue.use(FormInputPlugin);
 Vue.use(FormSelectPlugin);
 Vue.use(LayoutPlugin);
+Vue.use(LinkPlugin);
 Vue.use(ModalPlugin);
 Vue.use(SidebarPlugin);
 Vue.use(SpinnerPlugin);
@@ -36,6 +37,24 @@ Vue.use(TablePlugin);
 Vue.use(TooltipPlugin);
 Vue.use(VBHoverPlugin);
 Vue.use(VueCookies);
+
+// Color scheme used by Editor for background
+window.selectBackgroundColor = "#C0C0C0";
+window.lightBackgroundColor = "ghostwhite";
+window.whiteBackgroundColor = "white";
+window.darkBackgroundColor = "#374048";
+
+
+// Need a method to detect keys pressed
+window.currKey = null;
+
+$(window).on("keydown", function(event) {
+  window.currKey = event.key;
+});
+
+$(window).on("keyup", function() {
+  window.currKey = null;
+});
 
 Vue.config.productionTip = false;
 
@@ -49,12 +68,6 @@ new Vue({
 window.toolTipsAreShown = false;
 
 setCookiesIfNotAlreadySet();
-
-// Color scheme used by Editor for background
-window.selectBackgroundColor = "#C0C0C0";
-window.lightBackgroundColor = "ghostwhite";
-window.whiteBackgroundColor = "white";
-window.darkBackgroundColor = "#374048";
 
 // Globally handle key pressed events
 $(document).on('keyup', function(e) {
@@ -91,7 +104,7 @@ $(document).on('keyup', function(e) {
     }
     
   } else if ((e.key == 'v' || e.key == 'V') && e.ctrlKey){
-
+    
     // Ctrl+V is pressed
     if (!isDefined(window.selectQbitStart) ||
         !isDefined(window.selectStepStart)){
@@ -110,10 +123,15 @@ $(document).on('keyup', function(e) {
 
     getPastedGates(window.selectQbitStart, window.selectStepStart)
     .then(function(gates) {
-      if (seatsInArrayAreAlreadyTaken(store.state.circuitEditorModule, gates)){
-        alert("Not all the proposed seats are empty.");
+      if (gates.length > 0){
+        if (seatsInArrayAreAlreadyTaken(store.state.circuitEditorModule, gates)){
+          alert("Not all the proposed seats are empty.");
+        } else {
+          store.dispatch('circuitEditorModule/insertGatesInCircuit', {"dtos": gates, "existingStep": null, "existingQbit": null});
+          undoGatesSelection();
+        }
       } else {
-        store.dispatch('circuitEditorModule/insertGatesInCircuit', {"dtos": gates, "existingStep": null, "existingQbit": null});
+        alert("There nothing to be pasted!");
         undoGatesSelection();
       }
     })
@@ -139,6 +157,7 @@ $(document).on('keyup', function(e) {
       undoGatesSelection();
     }
   }
+
 });
 
 

@@ -9,14 +9,14 @@
         <tr>
           <td class="no-resize-cell">
              <div v-b-hover="handleTrashHover">
-              <b-icon v-if="trashIsHovered" v-on:click="handleDeleteGate()" icon="trash" v-b-tooltip.hover title="Delete gate" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-if="trashIsHovered" v-on:click="handleDeleteGate()" icon="trash" title="Delete gate" style="color: #7952b3;" font-scale="1.6"></b-icon>
               <b-icon v-else icon="trash" v-on:click="handleDeleteGate()" style="color: #7952b3;" font-scale="1.4"></b-icon>
               </div>
           </td>
           <td colspan="2">
             <div v-b-hover="handleExpandUpHover">
-              <b-icon v-if="expandUpIsHovered" icon="chevron-bar-up" v-on:click="expandCircuitUp()" v-b-tooltip.hover title="Add qbit before" style="color: #7952b3;" font-scale="1.6"></b-icon>
-              <b-icon v-else icon="chevron-bar-up" v-on:click="expandCircuitUp()" v-b-tooltip.hover title="Add qbit before" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-if="expandUpIsHovered" icon="chevron-bar-up" v-on:click="expandCircuitUp()" title="Add qbit before" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="chevron-bar-up" v-on:click="expandCircuitUp()" title="Add qbit before" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
           <td class="no-resize-cell">
@@ -29,8 +29,8 @@
         <tr>
           <td>
             <div v-b-hover="handleExpandLeftHover">
-              <b-icon v-if="expandLeftIsHovered" icon="chevron-bar-left" v-on:click="expandCircuitLeft()" v-b-tooltip.hover title="Add step to the left" style="color: #7952b3;" font-scale="1.6"></b-icon>
-              <b-icon v-else icon="chevron-bar-left" v-on:click="expandCircuitLeft()" v-b-tooltip.hover title="Add step to the left" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-if="expandLeftIsHovered" icon="chevron-bar-left" v-on:click="expandCircuitLeft()" title="Add step to the left" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="chevron-bar-left" v-on:click="expandCircuitLeft()" title="Add step to the left" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
           <td colspan="2" style="padding: 10px;">
@@ -38,8 +38,8 @@
           </td>
           <td>
             <div v-b-hover="handleExpandRightHover">
-              <b-icon v-if="expandRightIsHovered" icon="chevron-bar-right" v-on:click="expandCircuitRight()" v-b-tooltip.hover title="Add step to the right" style="color: #7952b3;" font-scale="1.6"></b-icon>
-              <b-icon v-else icon="chevron-bar-right" v-on:click="expandCircuitRight()" v-b-tooltip.hover title="Add step to the right" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-if="expandRightIsHovered" icon="chevron-bar-right" v-on:click="expandCircuitRight()" title="Add step to the right" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="chevron-bar-right" v-on:click="expandCircuitRight()" title="Add step to the right" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
         </tr>
@@ -61,7 +61,7 @@
         </tr>
         <tr>
           <td></td>
-          <td v-b-tooltip.hover title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
+          <td title="Target qubit" width="100px" style="padding: 5px;">Target:</td>
           <td width="100px" style="padding: 5px;"> 
             <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNew[0]" placeholder="qbit" type="number" id="qbit-new" style="width:90px;"></b-form-input>
           </td>
@@ -97,19 +97,19 @@
         <tr>
           <td class="no-resize-cell">
              <div v-b-hover="handleExpandGateHover">
-              <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" v-b-tooltip.hover title="Replicate gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
+              <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" title="Replicate gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
               <b-icon v-else icon="files" v-on:click="handleExpandGate()" style="color: #7952b3;" font-scale="1.3"></b-icon>
               </div>
           </td>
           <td colspan="2">
             <div v-b-hover="handleExpandDownHover">
-              <b-icon v-if="expandDownIsHovered" icon="chevron-bar-down" v-on:click="expandCircuitDown()" v-b-tooltip.hover title="Add qbit after" style="color: #7952b3;" font-scale="1.6"></b-icon>
-              <b-icon v-else icon="chevron-bar-down" v-on:click="expandCircuitDown()" v-b-tooltip.hover title="Add qbit after" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-if="expandDownIsHovered" icon="chevron-bar-down" v-on:click="expandCircuitDown()" title="Add qbit after" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="chevron-bar-down" v-on:click="expandCircuitDown()" title="Add qbit after" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleSaveHover">
-              <b-icon v-if="saveIsHovered" v-on:click="handleSave()" icon="check" v-b-tooltip.hover title="Save changes" style="color: #7952b3;" font-scale="1.7"></b-icon>
+              <b-icon v-if="saveIsHovered" v-on:click="handleSave()" icon="check" title="Save changes" style="color: #7952b3;" font-scale="1.7"></b-icon>
               <b-icon v-else v-on:click="handleSave()" icon="check" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
@@ -273,10 +273,10 @@
         </tr>
         <tr>
           <td></td>
-          <td :colspan="numberOfColumnsInEditControlsModal()" rowspan="4" :style="getEmbedTableCellStyle()" class="text-center">
-            <b-table-simple :style="getEmbededTableStyle()" :responsive="true" borderless>
+          <td :colspan="numberOfColumnsInEditControlsModal()" rowspan="4" :style="getEditControlsEmbedTableCellStyle()" class="text-center">
+            <b-table-simple :style="getEditControlsEmbededTableStyle()" :responsive="true" borderless>
               <b-tr>
-                <b-td v-for="(control, index) in controlsNew.length" v-bind:key="index" style="border: 1px solid #E0E0E0;" class="embedded-table-cell">
+                <b-td v-for="(control, index) in controlsNew.length" v-bind:key="index" class="embedded-table-cell">
                   <img :src="stubImageSrcPopup(control - 1)" style="width:30px; height:auto;" />
                 </b-td>
                 <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 1000" class="embedded-table-cell" />
@@ -299,7 +299,7 @@
               </b-tr>
             </b-table-simple>
           </td>
-          <td title="Control qubit" class="edit-controls-cell">Target:</td>
+          <td title="Target qubit" class="edit-controls-cell">Target:</td>
           <td class="edit-controls-cell">
             <div class="d-flex justify-content-center align-items-center">
               <b-form-input readonly min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="targetsNew[0]" placeholder="target" type="number" id="target-qbit" style="width:70px;"></b-form-input>
@@ -406,23 +406,23 @@ export default {
       if (this.img) {
         if (getUserInterfaceSetting('colored-gates') === 'true'){
           if (this.root.includes("1/2^")){
-             let k = parseInt(this.root.replace("1/2^", ""));
-             if (k >= 0 && k <= 35){
-               return require("../assets/colored-gates/" + this.img + "-" + k + ".svg");
-             } else {
-               return require("../assets/colored-gates/" + this.img + ".svg");
-             }
+            let k = parseInt(this.root.replace("1/2^", ""));
+            if (k >= 0 && k <= 35){
+              return require("../assets/colored-gates/" + this.img + "-" + k + ".svg");
+            } else {
+              return require("../assets/colored-gates/" + this.img + ".svg");
+            }
           } else {
             return require("../assets/colored-gates/" + this.img + ".svg");
           }
         } else {
           if (this.root.includes("1/2^")){
-             let k = parseInt(this.root.replace("1/2^", ""));
-             if (k >= 2 && k <= 35){
-               return require("../assets/blue-gates/" + this.img + "-" + k + ".svg");
-             } else {
-               return require("../assets/blue-gates/" + this.img + ".svg");
-             }
+            let k = parseInt(this.root.replace("1/2^", ""));
+            if (k >= 2 && k <= 35){
+              return require("../assets/blue-gates/" + this.img + "-" + k + ".svg");
+            } else {
+              return require("../assets/blue-gates/" + this.img + ".svg");
+            }
           } else {
             return require("../assets/blue-gates/" + this.img + ".svg");
           }
@@ -433,7 +433,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionSimpleGateInCircuit']),
+    ...mapActions('circuitEditorModule/', ['repositionGateInCircuit']),
     handleSave: function(){
       if (!Number.isInteger(this.$data.targetsNew[0])){
         alert("Please enter an integer number!");
@@ -446,7 +446,7 @@ export default {
       let targetsOld = [...this.targets];
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
-      let promise = this.repositionSimpleGateInCircuit({
+      let promise = this.repositionGateInCircuit({
         'step': this.step, 
         'targets': [...this.targets],
         'name': this.name,
@@ -592,11 +592,11 @@ td {
 }
 
 .embedded-table-cell {
-  padding: 10px;
+  padding: 7px;
   text-align: center;
-  height: 50px;
-  min-height: 50px;
-  max-height: 50px;
+  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
   width: 79px;
   min-width: 79px;
   max-width: 79px;

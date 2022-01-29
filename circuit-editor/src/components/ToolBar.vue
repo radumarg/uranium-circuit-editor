@@ -99,7 +99,7 @@
           <td colspan="3"></td>
           <td class="no-resize-cell">
             <div v-b-hover="handleSaveHover">
-              <b-icon v-if="saveIsHovered" v-on:click="handleSaveStepsAndQbits()" icon="check" v-b-tooltip.hover title="Save changes" style="color: #7952b3; float: right;" font-scale="1.7"></b-icon>
+              <b-icon v-if="saveIsHovered" v-on:click="handleSaveStepsAndQbits()" icon="check" title="Save changes" style="color: #7952b3; float: right;" font-scale="1.7"></b-icon>
               <b-icon v-else v-on:click="handleSaveStepsAndQbits()" icon="check" style="color: #7952b3; float: right;" font-scale="1.4"></b-icon>
             </div>
           </td>
@@ -139,13 +139,14 @@ export default {
   },
   created() {
     this.unsubscribe = this.$store.subscribe((mutation, state) => {
-      if (mutation.type == 'circuitEditorModule/insertGate' || 
+      if (mutation.type == 'circuitEditorModule/insertGate' ||
           mutation.type == 'circuitEditorModule/insertGates' ||
           mutation.type == 'circuitEditorModule/insertQbit' ||
           mutation.type == 'circuitEditorModule/insertStep' ||
-          mutation.type == 'circuitEditorModule/removeGate' || 
+          mutation.type == 'circuitEditorModule/removeGate' ||
+          mutation.type == 'circuitEditorModule/removeBarrier' ||
           mutation.type == 'circuitEditorModule/removeGates' ||
-          mutation.type == 'circuitEditorModule/removeQbit' || 
+          mutation.type == 'circuitEditorModule/removeQbit' ||
           mutation.type == 'circuitEditorModule/removeStep'){
         this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
         this.history.push(JSON.stringify(state));
@@ -252,10 +253,10 @@ it does not make much sense doing that unless you intend to save the circuit as 
     },
     saveImages: function() {
       var node = document.getElementById('gatesTable');
-      htmlToImage.toSvg(node,)
+      htmlToImage.toPng(node)
       .then(function (blob) {
         var link = document.createElement('a');
-        link.download = 'circuit.svg';
+        link.download = 'circuit.png';
         link.href = blob;
         link.click();
       }).catch(function (error) {

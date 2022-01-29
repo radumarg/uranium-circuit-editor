@@ -237,10 +237,10 @@
         </tr>
         <tr>
           <td></td>
-          <td :colspan="numberOfColumnsInEditControlsModal()" rowspan="4" :style="getEmbedTableCellStyle()" class="text-center">
-            <b-table-simple :style="getEmbededTableStyle()" :responsive="true" borderless>
+          <td :colspan="numberOfColumnsInEditControlsModal()" rowspan="4" :style="getEditControlsEmbedTableCellStyle()" class="text-center">
+            <b-table-simple :style="getEditControlsEmbededTableStyle()" :responsive="true" borderless>
               <b-tr>
-                <b-td v-for="(control, index) in controlsNew.length" v-bind:key="index" style="border: 1px solid #E0E0E0;" class="embedded-table-cell">
+                <b-td v-for="(control, index) in controlsNew.length" v-bind:key="index" class="embedded-table-cell">
                   <img :src="stubImageSrcPopup(control - 1)" style="width:30px; height:auto;" />
                 </b-td>
                 <b-td v-for="(emptySlot, index) in emptySlotsInEditControlsModal()" v-bind:key="index + 1000" class="embedded-table-cell" />
@@ -263,7 +263,7 @@
               </b-tr>
             </b-table-simple>
           </td>
-          <td title="Control qubit" class="edit-controls-cell">Target:</td>
+          <td title="Target qubit" class="edit-controls-cell">Target:</td>
           <td class="edit-controls-cell">
             <div class="d-flex justify-content-center align-items-center">
               <b-form-input readonly min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="targetsNew[0]" placeholder="target" type="number" id="target-qbit" style="width:70px;"></b-form-input>
@@ -382,7 +382,7 @@ export default {
       numberOfControlsExpression: this.controls.length,
     }
   },
-    watch: {
+  watch: {
     control: function() {
       // need this in order to update controlsNew
       // when doing drag & drop on the stub
@@ -415,17 +415,26 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['insertQbitInCircuit', 'insertStepInCircuit', 'removeGateFromCircuitByUser', 'repositionSimpleGateInCircuit', 'replicateGate']),
+    ...mapActions('circuitEditorModule/', ['insertQbitInCircuit', 'insertStepInCircuit', 'removeGateFromCircuitByUser', 'repositionGateInCircuit', 'replicateGate']),
     ...mapGetters("circuitEditorModule/", ["getMaximumStepIndex", "getMaximumQbitIndex"]),
+    initializeData: function () {
+      this.$data.targetsNew = [...this.targets];
+      this.$data.controlsNew = [...this.controls];
+      this.$data.controlstatesNew = [...this.controlstates];
+      this.$data.numberOfControls = this.controls.length;
+    },
     handleClick: function (event) {
       if (event.ctrlKey) {
         this.selectImage();
+      } else if (window.currKey == 'd' || window.currKey == 'D') {
+        this.removeGateFromCircuitByUser({'step': this.step, 'targets': this.targets});
       } else {
+        this.initializeData();
         this.showModal();
       }
     },
     selectImage: function() {
-      handleSelectEvent(this.targets[0], this.step);
+      handleSelectEvent(this.qrow, this.step);
     },
     showModal: function() {
       this.trashIsHovered = false;
@@ -546,28 +555,20 @@ number of controls is chosen to be greater than zero. Control state expression m
     },
     expandCircuitUp: function () {
       if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex() + 1) {
-        alert("Please increase the number targets in the circuit first.");
+        alert("Please increase the number qubits in the circuit first.");
         return;
       }
-      let controls = [];
-      if (this.controls){
-        controls = [...this.controls];
-      }
       this.hideModal();
-      let qbit = Math.min(...this.targets, ...controls);
+      let qbit = Math.min(...this.targets);
       this.insertQbitInCircuit(qbit);
     },
     expandCircuitDown: function () {
       if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex() + 1) {
-        alert("Please increase the number targets in the circuit first.");
+        alert("Please increase the number qubits in the circuit first.");
         return;
       }
-      let controls = [];
-      if (this.controls){
-        controls = [...this.controls];
-      }
       this.hideModal();
-      let qbit = Math.max(...this.targets, ...controls);
+      let qbit = Math.max(...this.targets);
       this.insertQbitInCircuit(qbit + 1);
     },
     handleDeleteGate: function(){
@@ -585,7 +586,7 @@ number of controls is chosen to be greater than zero. Control state expression m
       let targetsOld = [...this.targets];
       let controlsOld = [...this.controls];
       let controlstatesOld = [...this.controlstates];
-      let promise = this.repositionSimpleGateInCircuit({
+      let promise = this.repositionGateInCircuit({
         'step': this.step,
         'name': this.name,
         'img': this.img,
@@ -695,15 +696,16 @@ td {
 }
 
 .embedded-table-cell {
-  padding: 10px;
+  padding: 7px;
   text-align: center;
-  height: 50px;
-  min-height: 50px;
-  max-height: 50px;
+  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
   width: 79px;
   min-width: 79px;
   max-width: 79px;
 }
+
 
 img {
   display: inline-block;

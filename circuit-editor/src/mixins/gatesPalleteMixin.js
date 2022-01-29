@@ -18,7 +18,8 @@ export const gatesPalleteMixin = {
       }
       let selectedCellBgColor = cell.style.backgroundColor.toUpperCase();
       // reset bckg for all cells
-      for (const id of ["gates-pallete-table-1", "gates-pallete-table-2"]) 
+      //for (const id of ["gates-pallete-table-1", "gates-pallete-table-2", "gates-pallete-table-n"])
+      for (const id of ["gates-pallete-table-1", "gates-pallete-table-2"])
       { 
         let table = document.getElementById(id);
         let cells = table.getElementsByTagName("TD");
@@ -41,6 +42,7 @@ export const gatesPalleteMixin = {
       hideTooltips();
       const target = event.target;
       event.dataTransfer.setData("gateName", target.title);
+      event.dataTransfer.setData("drag-origin", "gates-pallete");
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
     },
@@ -56,28 +58,38 @@ export const gatesPalleteMixin = {
   },
   created() {
     this.$root.$on("switchThemeDark", (boolFlag) => {
-      for (const id of ["gates-pallete-1", "gates-pallete-2"]) {
+      for (const id of ["gates-pallete-1", "gates-pallete-2", "gates-pallete-n"]) {
         var cells = document.getElementById(id).getElementsByTagName("td");
         if (boolFlag) {
           for(let i = 0; i < cells.length; i++) { 
-            cells[i].style.borderColor = "lightslategray";
+            if (cells[i].childNodes.length > 0) {
+              // cell is not empty (contains a gate image)
+              cells[i].style.borderColor = "lightslategray";
+            }
           }
         } else {
           for(let i = 0; i < cells.length; i++) {
-            cells[i].style.borderColor = window.lightBackgroundColor;
+            if (cells[i].childNodes.length > 0) {
+              // cell is not empty (contains a gate image)
+              cells[i].style.borderColor = window.lightBackgroundColor;
+            }
           }
         }
       }
     })
     this.$root.$on("switchGateColors", () => {
-      for (const id of ["gates-pallete-1", "gates-pallete-2"]) {
+      for (const id of ["gates-pallete-1", "gates-pallete-2", "gates-pallete-n"]) {
         var cells = document.getElementById(id).getElementsByTagName("td");
         for(let i = 0; i < cells.length; i++) {
-          let img = cells[i].childNodes[0];
-          if (getUserInterfaceSetting('colored-gates') === 'true'){
-            img.src = require("../assets/colored-gates/" + img.title + ".svg");
-          } else {
-            img.src = require("../assets/blue-gates/" + img.title + ".svg");
+          if (cells[i].childNodes.length > 0){
+            let img = cells[i].childNodes[0];
+            if (img.title != "barrier"){
+              if (getUserInterfaceSetting('colored-gates') === 'true'){
+                img.src = require("../assets/colored-gates/" + img.title + ".svg");
+              } else {
+                img.src = require("../assets/blue-gates/" + img.title + ".svg");
+              }
+            }
           }
         }
       }

@@ -122,6 +122,9 @@
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/u3.svg" @dragend="dragEnd" @dragstart="dragStart" title="u3" alt="Generic Unitary Gate" />
             <img v-else src="../assets/blue-gates/u3.svg" @dragend="dragEnd" @dragstart="dragStart" title="u3" alt="Generic Unitary Gate" />
           </td>
+          <td v-on:click="gateSelected" id="barrier">
+            <img src="../assets/barrier.svg" @dragend="dragEnd" @dragstart="dragStart" title="barrier" alt="Barrier" />
+          </td>
         </tr>
         <tr>
           <td v-on:click="gateSelected" id="c">
@@ -167,8 +170,8 @@ export default {
 
 .gates-pallete {
   overflow: scroll;
-  min-height: calc( 100vh - 140px );
-  max-height: calc( 100vh - 140px );
+  min-height: calc( 100vh - 188px );
+  max-height: calc( 100vh - 188px );
   width: 100%;
   height: 100%;
 }
