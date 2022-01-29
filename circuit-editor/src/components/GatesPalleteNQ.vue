@@ -6,8 +6,14 @@
               <img v-if="coloredGatesCookie" src="../assets/colored-gates/aggregate.svg" @dragend="dragEnd" @dragstart="dragStart" title="aggregate" alt="Aggregate Gate"/>
               <img v-else src="../assets/blue-gates/aggregate.svg" @dragend="dragEnd" @dragstart="dragStart" title="aggregate" alt="Aggregate Gate"/>
           </td>
-          <td class="td-empty"></td>
-          <td class="td-empty"></td>
+           <td v-on:click="gateSelected" id="qft"> 
+              <img v-if="coloredGatesCookie" src="../assets/colored-gates/qft.svg" @dragend="dragEnd" @dragstart="dragStart" title="qft" alt="QFT Gate"/>
+              <img v-else src="../assets/blue-gates/qft.svg" @dragend="dragEnd" @dragstart="dragStart" title="qft" alt="QFT Gate"/>
+          </td>
+           <td v-on:click="gateSelected" id="qft-dagger"> 
+              <img v-if="coloredGatesCookie" src="../assets/colored-gates/qft-dagger.svg" @dragend="dragEnd" @dragstart="dragStart" title="qft-dagger" alt="QFT-dagger Gate"/>
+              <img v-else src="../assets/blue-gates/qft-dagger.svg" @dragend="dragEnd" @dragstart="dragStart" title="qft-dagger" alt="QFT-dagger Gate"/>
+          </td>
           <td class="td-empty"></td>
         </tr>
     </table>
