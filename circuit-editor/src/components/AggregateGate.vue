@@ -953,7 +953,7 @@ export default {
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstates", [...this.controlstates]);
-      if (this.gates.length > 0) {
+      if (this.gates) {
         event.dataTransfer.setData("gates", JSON.stringify(this.gates));
       }
       let dragImageGhost = createDragImageGhost(target);  

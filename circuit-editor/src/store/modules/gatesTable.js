@@ -94,15 +94,15 @@ export function getNoQbits(circuitState) {
             maxQbitIndex = Math.max(maxQbitIndex, ...gate.targets);
           }
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-            for (let i = 0; i < gate["controls"].length; i++) {
-              let controlInfo = gate["controls"][i];
+            for (let k = 0; k < gate["controls"].length; k++) {
+              let controlInfo = gate["controls"][k];
               let target = controlInfo["target"];
               maxQbitIndex = Math.max(maxQbitIndex, target);
             }
           }
           if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
-            for (let i = 0; i < gate["gates"].length; i++) {
-              let aggregatedGate = gate["gates"][i];
+            for (let k = 0; k < gate["gates"].length; k++) {
+              let aggregatedGate = gate["gates"][k];
               maxQbitIndex = Math.max(maxQbitIndex, ...aggregatedGate.targets);
             }
           }

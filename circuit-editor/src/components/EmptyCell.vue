@@ -523,7 +523,7 @@ export default {
       if (event.dataTransfer.types.includes("gates")) {
         let gates = JSON.parse(event.dataTransfer.getData("gates"));
         for (let i = 0; i < gates.length; i++) {
-          gates[i].target -=  qbitDelta;
+          gates[i].targets = gates[i].targets.map( function(value) { return value - qbitDelta; } );
         }
         dto["gates"] = JSON.parse(JSON.stringify(gates));
       }
