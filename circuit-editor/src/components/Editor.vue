@@ -278,6 +278,9 @@
             <div v-else-if="cell.name === 'givens'">
               <ParametricTwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
+            <div v-else-if="cell.name === 'qft' || cell.name === 'qft-dagger'">
+              <QftGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+            </div>
             <div v-else-if="cell.name.includes('stub')">
               <ControlledGateStub :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :gates="[...cell.gates]" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
@@ -314,6 +317,7 @@ import UnitaryParametricSingleQbitGate from "./UnitaryParametricSingleQbitGate";
 import UnitaryBiParametricSingleQbitGate from "./UnitaryBiParametricSingleQbitGate";
 import UnitaryThreeParametricSingleQbitGate from "./UnitaryThreeParametricSingleQbitGate";
 import MeasureGate from "./MeasureGate";
+import QftGate from "./QftGate";
 import ControlledGateStub from "./ControlledGateStub";
 import EmptyCellRectangle from "./EmptyCellRectangle";
 import EmptyCellSquare from "./EmptyCellSquare";
@@ -336,6 +340,7 @@ export default {
     EmptyCell,
     HorizontalTransitionCell,
     MeasureGate,
+    QftGate,
     PauliRootGate,
     ParametricSingleQbitGate,
     SingleQbitGate,

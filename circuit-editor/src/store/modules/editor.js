@@ -155,7 +155,8 @@ export const circuitEditorModule = {
         let parametricTwoTargetGates = ["givens", "swap-theta", "xx", "yy", "zz", "xy", "cross-resonance", "cross-resonance-dagger"];
         let biParametricTwoTargetGates = ["a"];
         let canonicalGates = ["canonical"];
-        
+        let qftGates = ["qft", "qft-dagger"];
+
         let name = dataTransferObj["name"];
         let step = dataTransferObj["step"];
         
@@ -210,6 +211,8 @@ export const circuitEditorModule = {
             dto = { "step": step, "targets": targets, "name": name, "phi": 0, "lambda": 0 };
           } else if (unitaryThreeParamGates.includes(name) && controls.length == 0) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "lambda": 0 };
+          } else if (qftGates.includes(name) && controls.length == 0) {
+            dto = { "step": step, "targets": targets, "name": name };
           } else if (aggregateGates.includes(name) && controls.length == 0 && targets.length == 0) {
             dto = { "step": step, "name": name, "gates": gates };
           } else if (aggregateGates.includes(name) && controls.length == 0) {
@@ -228,6 +231,8 @@ export const circuitEditorModule = {
             dto = { "step": step, "targets": targets, "name": name, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
           } else if (unitaryThreeParamGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "lambda": 0, "controls": controls, "controlstates": controlstates };
+          } else if (qftGates.includes(name)) {
+            dto = { "step": step, "targets": targets, "name": name, "controls": controls, "controlstates": controlstates };
           } else if (aggregateGates.includes(name) && targets.length == 0) {
             dto = { "step": step, "name": name, "gates": gates, "controls": controls, "controlstates": controlstates };
           } else if (aggregateGates.includes(name)) {
