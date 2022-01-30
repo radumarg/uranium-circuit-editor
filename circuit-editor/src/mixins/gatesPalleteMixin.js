@@ -18,8 +18,7 @@ export const gatesPalleteMixin = {
       }
       let selectedCellBgColor = cell.style.backgroundColor.toUpperCase();
       // reset bckg for all cells
-      //for (const id of ["gates-pallete-table-1", "gates-pallete-table-2", "gates-pallete-table-n"])
-      for (const id of ["gates-pallete-table-1", "gates-pallete-table-2"])
+      for (const id of ["gates-pallete-table-1", "gates-pallete-table-2", "gates-pallete-table-n"])
       { 
         let table = document.getElementById(id);
         let cells = table.getElementsByTagName("TD");

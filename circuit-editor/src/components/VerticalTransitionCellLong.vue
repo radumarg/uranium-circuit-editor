@@ -248,7 +248,7 @@ export default {
         let gates = JSON.parse(event.dataTransfer.getData("gates"));
         for (let i = 0; i < gates.length; i++) {
           let aggregatedGate = gates[i];
-          for (let j = 0; j < gates.length; j++) {
+          for (let j = 0; j < aggregatedGate.targets.length; j++) {
             let target = aggregatedGate.targets[j];
             if (target == draggedQubit) {
               aggregatedGate.targets[j] = dropQbit;
