@@ -284,6 +284,9 @@
             <div v-else-if="cell.name.includes('stub')">
               <ControlledGateStub :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :gates="[...cell.gates]" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
+            <div v-else-if="cell.name === 'box-middle-short'">
+              <BoxVerticalTransitionCellShort :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+            </div>
             <div v-else-if="cell.name === 'barrier'">
               <Barrier :id="cell.id" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
@@ -302,10 +305,10 @@ import { mapGetters } from "vuex";
 import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 import { undoGatesSelection } from "../store/modules/editorHelper.js";
 import EmptyCell from "./EmptyCell";
-import ZeroState from "./ZeroState";
 import HorizontalTransitionCell from "./HorizontalTransitionCell";
 import VerticalTransitionCellShort from "./VerticalTransitionCellShort"
 import VerticalTransitionCellLong from "./VerticalTransitionCellLong";
+import BoxVerticalTransitionCellShort from "./BoxVerticalTransitionCellShort";
 import AggregateGate from "./AggregateGate";
 import Barrier from "./Barrier";
 import BarrierVerticalTransitionCell from "./BarrierVerticalTransitionCell";
@@ -326,6 +329,7 @@ import ParametricTwoTargetQubitsGate from "./ParametricTwoTargetQubitsGate";
 import TwoTargetQubitsRootGate from "./TwoTargetQubitsRootGate.vue";
 import BiParametricTwoTargetQubitsGate from "./BiParametricTwoTargetQubitsGate";
 import SwapCircle from "./SwapCircle";
+import ZeroState from "./ZeroState";
 export default {
   name: "Editor",
   components: {
@@ -333,6 +337,7 @@ export default {
     Barrier,
     BarrierVerticalTransitionCell,
     BiParametricTwoTargetQubitsGate,
+    BoxVerticalTransitionCellShort,
     ControlledGateStub,
     EmptyCellRectangle,
     EmptyCellSquare,

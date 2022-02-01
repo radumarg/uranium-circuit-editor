@@ -487,29 +487,12 @@ export default {
       let step = parseInt(event.currentTarget.getAttribute("step"));            
       let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
-
-      // add the new gate mandatory params
-      let dto = { step: step, targets: [], controls: [], name: gateName, };
-
-      // anything else but an aggregate gate
-      if (originalTargets.length > 0) {
-        dto["targets"] = [qbit];
-      }
-
       let qbitDelta = draggedQbit - qbit;
 
+      // add the new gate mandatory params
+      let dto = { step: step, targets: originalTargets.map(function(value) { return value - qbitDelta; }), controls: [], name: gateName, };
+
       // add optional params, notice lower case needed for types.includes
-      if (originalTargets.length == 2) {
-        let originalTarget = originalTargets[0];
-        let originalTarget2 = originalTargets[1];
-        if (draggedQbit == originalTarget) {
-          dto["targets"].push(originalTarget2 - qbitDelta);
-        } else if (draggedQbit == originalTarget2) {
-          dto["targets"].length = 0; // reset array
-          dto["targets"][0] = originalTarget - qbitDelta;
-          dto["targets"].push(qbit);
-        }
-      }
       if (event.dataTransfer.types.includes("originalcontrols")) {
         let controls =  JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
         dto["controls"] = controls.map( function(value) { return value - qbitDelta; } );
@@ -682,14 +665,16 @@ export default {
       if (dragOrigin == "stub") {
         dto["targets"] = originalTargets;
       } else if (dragOrigin && dragOrigin != "gates-pallete") {
-        let targets = [];
-        if (step != originalStep){
-          targets = originalTargets.map(function(value) {return value + delta;}).filter(val => val >= 0);
+        if (step == originalStep){
+          if (gateName == "qft" || gateName == "qft-dagger") {
+            let min = Math.min(...originalTargets, qbit);
+            let max = Math.max(...originalTargets, qbit);
+            dto["targets"] = Array.from({length: max - min + 1}, (_, i) => i + min);
+          } else {
+            dto["targets"] = originalTargets.map(function(item) { return item == draggedQbit ? qbit : item; });
+          }
         } else {
-          targets = originalTargets.map(function(item) { return item == draggedQbit ? qbit : item; });
-        }
-        if (targets.length > 0) {
-          dto["targets"] = targets;
+          dto["targets"] = originalTargets.map(function(value) {return value + delta;}).filter(val => val >= 0);
         }
       }
       // notice lower case needed for types.includes
