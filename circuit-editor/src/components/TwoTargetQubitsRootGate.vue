@@ -80,13 +80,13 @@
         </tr>
         <tr>
           <td></td>
-          <td class="edit-controls-cell" style="padding: 5px;">
+          <td style="padding: 5px;">
             <div v-b-hover="handleMoveGateOneQubitDownwardsHover">
               <b-icon v-if="moveGateOneQubitDownwardsIsHovered" icon="arrow-down-square-fill" v-on:click="moveGateOneQubitDownwards()" title="Move gate one qubit downwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="arrow-down-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
              </div>
           </td>
-          <td class="edit-controls-cell" style="padding: 5px;">
+          <td style="padding: 5px;">
             <div v-b-hover="handleMoveGateOneQubitUpwardsHover">
               <b-icon v-if="moveGateOneQubitUpwardsIsHovered" icon="arrow-up-square-fill" v-on:click="moveGateOneQubitUpwards()" title="Move gate one qubit upwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="arrow-up-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
@@ -262,7 +262,7 @@
               <b-icon v-else icon="plus" v-on:click="addControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
-          <td :colspan="numberOfColumnsInEditControlsModal() + 2" class="edit-controls-cell">
+          <td :colspan="numberOfColumnsInEditControlsModal() + 2">
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsModalCloseHover">
@@ -299,8 +299,8 @@
               </b-tr>
             </b-table-simple>
           </td>
-          <td title="Target qubits" class="edit-controls-cell">Targets:</td>
-          <td class="edit-controls-cell">
+          <td title="Target qubits">Targets:</td>
+          <td>
             <div class="d-flex justify-content-center align-items-center">
               <b-form-input readonly min="0" @keyup.enter.native="handleEditControlsModalSave()" v-model.number="targetsString" placeholder="targets" type="text" id="target-qbit" style="width:70px;"></b-form-input>
             </div>
@@ -309,8 +309,8 @@
         </tr>
         <tr>
           <td></td>
-          <td title="No control qubits" class="edit-controls-cell">Controls:</td>
-          <td class="edit-controls-cell">
+          <td title="No control qubits">Controls:</td>
+          <td>
             <div class="d-flex justify-content-center align-items-center">
               <b-form-input min="0" v-model.number="numberOfControls" @change="onNumberControlsChange()" @keyup.enter.native="handleEditControlsModalSave()" placeholder="controls" type="number" id="number-controls" style="width:70px;"></b-form-input>
             </div>
@@ -319,13 +319,13 @@
         </tr>
         <tr>
           <td></td>
-          <td class="edit-controls-cell">
+          <td>
             <div v-b-hover="handleAlignControlsUpwardsHover">
               <b-icon v-if="alignControlsUpwardsIsHovered" icon="caret-up-fill" v-on:click="alignControlsUpwardsFromTargetQubit()" title="Align controls upwards from target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="caret-up" style="color: #7952b3;" font-scale="1.4"></b-icon>
              </div>
           </td>
-          <td class="edit-controls-cell">
+          <td>
             <div v-b-hover="handleMoveGateOneQubitUpwardsHover">
               <b-icon v-if="moveGateOneQubitUpwardsIsHovered" icon="arrow-up-square-fill" v-on:click="moveGateOneQubitUpwards()" title="Move gate one qubit upwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="arrow-up-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
@@ -335,13 +335,13 @@
         </tr>
         <tr>
           <td></td>
-          <td class="edit-controls-cell" >
+          <td >
             <div v-b-hover="handleAlignControlsDownwardsHover">
               <b-icon v-if="alignControlsDownwardsIsHovered" icon="caret-down-fill" v-on:click="alignControlsDownwardsFromTargetQubit()" title="Align controls downwards from target qubit" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="caret-down" style="color: #7952b3;" font-scale="1.4"></b-icon>
              </div>
           </td>
-          <td class="edit-controls-cell">
+          <td>
             <div v-b-hover="handleMoveGateOneQubitDownwardsHover">
               <b-icon v-if="moveGateOneQubitDownwardsIsHovered" icon="arrow-down-square-fill" v-on:click="moveGateOneQubitDownwards()" title="Move gate one qubit downwards" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="arrow-down-square" style="color: #7952b3;" font-scale="1.4"></b-icon>
@@ -356,7 +356,7 @@
               <b-icon v-else icon="dash" v-on:click="removeControl()" style="color: #7952b3;" font-scale="1.4"></b-icon>
             </div>
           </td>
-          <td :colspan="numberOfColumnsInEditControlsModal() + 2" class="edit-controls-cell">
+          <td :colspan="numberOfColumnsInEditControlsModal() + 2">
           </td>
           <td class="no-resize-cell">
             <div v-b-hover="handleEditControlsModalSaveHover">

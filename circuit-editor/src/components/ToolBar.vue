@@ -359,11 +359,11 @@ it does not make much sense doing that unless you intend to save the circuit as 
 }
 
 .md-button-undo-redo {
-  font-size: 30px;
+  font-size: 26px;
 }
 
 .md-help-button {
-  font-size: 28px;
+  font-size: 26px;
 }
 
 .no-resize-cell{
@@ -377,9 +377,8 @@ it does not make much sense doing that unless you intend to save the circuit as 
 .md-checkbox{
   height: 20px; 
   margin: 5px;
-  font-size: 14px;
+  font-size: 15px;
   color: white;
-  font-weight: bold;
 }
 
 </style>

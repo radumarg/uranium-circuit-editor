@@ -122,8 +122,9 @@
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/u3.svg" @dragend="dragEnd" @dragstart="dragStart" title="u3" alt="Generic Unitary Gate" />
             <img v-else src="../assets/blue-gates/u3.svg" @dragend="dragEnd" @dragstart="dragStart" title="u3" alt="Generic Unitary Gate" />
           </td>
-          <td v-on:click="gateSelected" id="barrier">
-            <img src="../assets/barrier.svg" @dragend="dragEnd" @dragstart="dragStart" title="barrier" alt="Barrier" />
+          <td v-on:click="gateSelected" id="p">
+            <img v-if="coloredGatesCookie" src="../assets/colored-gates/p.svg" @dragend="dragEnd" @dragstart="dragStart" title="p" alt="Phase Shit Gate" />
+            <img v-else src="../assets/blue-gates/p.svg" @dragend="dragEnd" @dragstart="dragStart" title="p" alt="Phase Shit Gate Gate" />
           </td>
         </tr>
         <tr>
@@ -138,6 +139,9 @@
           <td v-on:click="gateSelected" id="identity">
             <img v-if="coloredGatesCookie" src="../assets/colored-gates/identity.svg" @dragend="dragEnd" @dragstart="dragStart" title="identity" alt="Identity Gate" />
             <img v-else src="../assets/blue-gates/identity.svg" @dragend="dragEnd" @dragstart="dragStart" title="identity" alt="Identity Gate" />
+          </td>
+          <td v-on:click="gateSelected" id="barrier">
+            <img src="../assets/barrier.svg" @dragend="dragEnd" @dragstart="dragStart" title="barrier" alt="Barrier" />
           </td>
         </tr>
         <tr>

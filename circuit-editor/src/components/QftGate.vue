@@ -1,7 +1,7 @@
 <template>
-  <div v-on:click="handleClick">
+  <div :step="step" :qrow="qrow" v-on:click="handleClick" @dragenter.prevent @dragover.prevent @drop.prevent="handleDropEvent">
 
-    <img :src="gateImageSrcEditor" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
+    <img :src="gateImageSrcEditor" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
     <b-modal ref="initial-modal-dialog" size="sm" centered hide-footer hide-header>
       <table style="table-layout:fixed;">
@@ -219,9 +219,12 @@
 
 <script>
 import { mapActions } from 'vuex';
-import {controlsMixin} from "../mixins/controlsMixin.js";
+import { arraysAreEqual } from "../store/modules/javaScriptUtils.js";
+import { controlsMixin } from "../mixins/controlsMixin.js";
+import { getClosestControlledGates } from "../store/modules/editorHelper.js";
+import { seatsAreTaken } from "../store/modules/gatesTable.js";
 import SingleQbitGate from "./SingleQbitGate";
-import { createDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { createDragImageGhost, getUserInterfaceSetting, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 export default {
   name: "QftGate",
   extends: SingleQbitGate,
@@ -233,8 +236,11 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['repositionElementaryGateInCircuit']),
+    ...mapActions('circuitEditorModule/', ['insertGateInCircuit', 'repositionElementaryGateInCircuit', 'removeGateFromCircuit']),
     initializeData: function () {
+      this.$data.controlsNew = [...this.controls];
+      this.$data.controlstatesNew = [...this.controlstates];
+      this.$data.numberOfControls = this.controls.length;
       this.$data.targetsNewFirst = this.targets[0];
       this.$data.targetsNewLast = this.targets[this.targets.length - 1];
     },
@@ -258,11 +264,15 @@ export default {
         if (!targetsNew.includes(i))
           targetsNew.push(i);
       }
-      let promise = this.repositionElementaryGateInCircuit({
-        'step': this.step, 
+      let promise = this.repositionGateInCircuit({
+        'step': this.step,
+        'name': this.name,
+        'img': this.img,
         'targets': [...this.targets],
-        'name': this.name, 
+        'controls': [...this.controls],
         'targetsNew': [...targetsNew],
+        'controlsNew': [...this.$data.controlsNew],
+        'controlstatesNew': [...this.$data.controlstatesNew],
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -275,6 +285,126 @@ export default {
       );
       this.$refs['initial-modal-dialog'].hide();
     },
+    handleDropEvent: function (event) {
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
+      let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
+      let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
+      let circuitState = this.$store.state.circuitEditorModule;
+      let closestGates = getClosestControlledGates(circuitState, step, dropQbit);
+
+      if (step == originalStep && closestGates.length == 1 && dropQbit != draggedQbit) {
+
+        let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
+        let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
+        let closestGateTargets = closestGates[0].targets ? closestGates[0].targets : [];
+
+        if (
+            // make sure we will not modify a different gate than the one we are dragging from
+            arraysAreEqual(closestGateTargets, originalTargets) &&
+            (draggedQbit == originalTargets[0] || draggedQbit == originalTargets[originalTargets.length - 1])
+          ) {
+            this.repositionGate(event);
+          } else {
+            this.handleDragLeave();
+          }
+      } else {
+        this.handleDragLeave();
+      }
+    },
+    repositionGate: function (event) {
+      let gateName = event.dataTransfer.getData("gateName");
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
+      let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
+      let originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
+      let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
+      let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
+
+      let controlstates = [];
+      if (event.dataTransfer.types.includes("controlstates")) {
+        let controlstatesData = event.dataTransfer.getData("controlstates");
+        if (controlstatesData) {
+          controlstates = controlstatesData.split(",");
+        }
+      }
+
+      // add the new gate mandatory params
+      let dto = { "step": step, "name": gateName, "controls": originalControls, "controlstates": controlstates};
+
+      if (draggedQbit ==  originalTargets[0]) {
+        let min = dropQbit;
+        let max = originalTargets[originalTargets.length - 1];
+        dto["targets"] = Array.from({length: max - min + 1}, (_, i) => i + min);
+      } else if (draggedQbit == originalTargets[originalTargets.length - 1]) {
+        let min = originalTargets[0];
+        let max = dropQbit;
+        dto["targets"] = Array.from({length: max - min + 1}, (_, i) => i + min);
+      } else {
+        // not strictly needed, this is defensive coding
+        return;
+      }
+
+      // step1 - remove original gate if drag event started from a cell
+      // in editor (not originating from gates pallete)
+      this.removeGateFromCircuit({'step': originalStep, 'targets': originalTargets});
+
+      // step2 - add the new gate to the circuit
+      this.insertGateInCircuit(dto);
+    },
+    moveGateOneQubitUpwards() {
+      let proposedTargets = [...this.$data.targetsNew];
+      let proposedControls = [...this.$data.controlsNew];
+
+      if (Math.min(...proposedTargets) > 0 && Math.min(...proposedControls) > 0) {
+        for (let i = 0; i < proposedTargets.length; i++) {
+          proposedTargets[i] -= 1;
+        }
+        for (let i = 0; i < proposedControls.length; i++) {
+          proposedControls[i] -= 1;
+        }
+      } else {
+        alert("The 0 qubit index has been reached!");
+        return;
+      }
+
+      let existingQbits = [...this.targets, ...this.controls];
+      let proposedQbits = [...proposedTargets, ...proposedControls];
+
+      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
+        alert("There are no free seats to move control upwards!");
+      } else {
+        this.$data.targetsNew = proposedTargets;
+        this.$data.controlsNew = proposedControls;
+        this.$data.targetsNewFirst = this.$data.targetsNew[0];
+        this.$data.targetsNewLast = this.$data.targetsNew[this.$data.targetsNew.length - 1];
+        this.$forceUpdate();
+      }
+    },
+    moveGateOneQubitDownwards() {
+      let proposedTargets = [...this.$data.targetsNew];
+      let proposedControls = [...this.$data.controlsNew];
+
+      for (let i = 0; i < proposedTargets.length; i++) {
+        proposedTargets[i] += 1;
+      }
+      for (let i = 0; i < proposedControls.length; i++) {
+        proposedControls[i] += 1;
+      }
+
+      let existingQbits = [...this.targets, ...this.controls];
+      let proposedQbits = [...proposedTargets, ...proposedControls];
+
+      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
+        alert("There are no free seats to move control downwards!");
+      } else {
+        this.$data.targetsNew = proposedTargets;
+        this.$data.controlsNew = proposedControls;
+        this.$data.targetsNewFirst = this.$data.targetsNew[0];
+        this.$data.targetsNewLast = this.$data.targetsNew[this.$data.targetsNew.length - 1];
+        this.$forceUpdate();
+      }
+    },
     dragStart: function(event) {
       hideTooltips();
       const target = event.target;
@@ -285,12 +415,24 @@ export default {
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstates", [...this.controlstates]);
-      let dragImageGhost = createDragImageGhost(target);  
+      let dragImageGhost = createDragImageGhost(target);
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
     },
     dragEnd: function() {
       let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
       document.body.removeChild(dragImageGhost);
+    },
+    handleDragOver() {
+      var image = window.document.getElementById(this.id);
+      image.src = require("../assets/red-line.svg");
+    },
+    handleDragLeave() {
+      var image = window.document.getElementById(this.id);
+      if (getUserInterfaceSetting('colored-gates') === 'true'){
+        image.src = require("../assets/colored-gates/" + this.img + ".svg");
+      } else {
+        image.src = require("../assets/blue-gates/" + this.img + ".svg");
+      }
     },
   },
 }

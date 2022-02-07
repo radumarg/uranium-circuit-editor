@@ -6,7 +6,7 @@
 
 <script>
 import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
-import { getClosestNonControlledGates, isDefined } from "../store/modules/editorHelper.js";
+import { getClosestControlledGates, isDefined } from "../store/modules/editorHelper.js";
 import { arraysAreEqual } from "../store/modules/javaScriptUtils.js";
 import { mapActions } from 'vuex';
 export default {
@@ -33,6 +33,7 @@ export default {
     handleDropEvent: function (event) {
       let step = parseInt(event.currentTarget.getAttribute("step"));
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
+      let gateName = event.dataTransfer.getData("gateName");
       let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
       let originalGates = event.dataTransfer.getData("gates") ? JSON.parse(event.dataTransfer.getData("gates")) : [];
       let originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
@@ -40,7 +41,7 @@ export default {
       let dragOrigin = event.dataTransfer.getData("drag-origin");
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let circuitState = this.$store.state.circuitEditorModule;
-      let closestGates = getClosestNonControlledGates(circuitState, step, dropQbit);
+      let closestGates = getClosestControlledGates(circuitState, step, dropQbit);
       let closestGateTargets = closestGates[0].targets ? closestGates[0].targets : [];
       let closestGateGates = closestGates[0].gates ? closestGates[0].gates : [];
       
@@ -51,7 +52,12 @@ export default {
             (closestGateGates.length == 0 && arraysAreEqual(closestGateTargets, originalTargets))
           )
       ) {
-        if (event.shiftKey) {
+        if (gateName == "qft" || gateName == "qft-dagger") {
+          let min = Math.min(dropQbit, ...originalTargets);
+          let max = Math.max(dropQbit, ...originalTargets);
+          let newTargets = Array.from({length: max - min + 1}, (_, i) => i + min);
+          this.repositionGate(event, newTargets);
+        } else if (event.shiftKey) {
           if (originalControls.includes(draggedQbit)){
             this.addNewControl(event);
           } else {
@@ -284,11 +290,29 @@ export default {
       // step2 - add the new gate to the circuit
       this.insertGateInCircuit(dto);
     },
+    repositionGate: function (event, newTargets) {
+      let gateName = event.dataTransfer.getData("gateName");
+      let step = parseInt(event.currentTarget.getAttribute("step"));
+      let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
+      let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
+      let originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
+      let controlstates = event.dataTransfer.getData("controlstates").split(",");
+
+      // add the new gate mandatory params
+      let dto = { "step": step, "name": gateName, "targets": [...newTargets], "controls": originalControls, "controlstates": controlstates };
+
+      // step1 - remove original gate if drag event started from a cell
+      // in editor (not originating from gates pallete)
+      this.removeGateFromCircuit({'step': originalStep, 'targets': originalTargets});
+
+      // step2 - add the new gate to the circuit
+      this.insertGateInCircuit(dto);
+    },
     findDropGateAndAddNewControl: function (event) {
       let step = parseInt(event.currentTarget.getAttribute("step"));
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let circuitState = this.$store.state.circuitEditorModule;
-      let closestGates = getClosestNonControlledGates(circuitState, step, dropQbit);
+      let closestGates = getClosestControlledGates(circuitState, step, dropQbit);
       let closestGate = closestGates[0];
       let controlState = event.dataTransfer.getData("controlState");
 

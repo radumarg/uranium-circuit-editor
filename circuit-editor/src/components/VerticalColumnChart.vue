@@ -126,7 +126,7 @@ export default {
          maxRange: undefined,
          qubits: 0,
          measureGates: {},
-         defaultNumberOfBins: 128,
+         defaultNumberOfBins: 256,
       }
    },
    methods: {

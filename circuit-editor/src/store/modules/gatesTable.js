@@ -551,6 +551,7 @@ var magicGates = ["magic", "magic-dagger"];
 var canonicalGates = ["canonical"];
 var crossResonanceGates = ["cross-resonance", "cross-resonance-dagger"];
 var qftGates = ["qft", "qft-dagger"];
+var phaseShiftGates = ["p"];
 
 
 function getSwapIntermediateLineName(thisRowHoldsGates, qmin, qrow, gateName) {
@@ -598,6 +599,10 @@ function getCtrlStubDownName(gate, controlstate) {
     return "ctrl-cross-resonance-stub-down-" + controlstate;
   } else if (aggregateGates.includes(gate.name)) {
     return "ctrl-aggregate-stub-down-" + controlstate;
+  } else if (qftGates.includes(gate.name)) {
+    return "ctrl-qft-stub-down-" + controlstate;
+  } else if (phaseShiftGates.includes(gate.name)) {
+    return "ctrl-p-stub-down-" + controlstate;
   } 
 }
 
@@ -634,6 +639,10 @@ function getCtrlStubUpName(gate, controlstate) {
     return "ctrl-cross-resonance-stub-up-" + controlstate;
   } else if (aggregateGates.includes(gate.name)) {
     return "ctrl-aggregate-stub-up-" + controlstate;
+  } else if (qftGates.includes(gate.name)) {
+    return "ctrl-qft-stub-up-" + controlstate;
+  } else if (phaseShiftGates.includes(gate.name)) {
+    return "ctrl-p-stub-up-" + controlstate;
   }
 }
 
@@ -670,6 +679,10 @@ function getCtrlStubMidName(gate, controlstate) {
     return "ctrl-cross-resonance-stub-mid-" + controlstate;
   } else if (aggregateGates.includes(gate.name)) {
     return "ctrl-aggregate-stub-mid-" + controlstate;
+  } else if (qftGates.includes(gate.name)) {
+    return "ctrl-qft-stub-mid-" + controlstate;
+  } else if (phaseShiftGates.includes(gate.name)) {
+    return "ctrl-p-stub-mid-" + controlstate;
   }
 }
 
@@ -771,7 +784,17 @@ function getIntermediateLineName(gateName, thisRowHoldsGates) {
       return "aggregate-line-short";
     }
   } else if (qftGates.includes(gateName)) {
-    return "box-middle-short";
+    if (thisRowHoldsGates) {
+      return "qft-line-long";
+    } else {
+      return "qft-line-short";
+    }
+  } else if (phaseShiftGates.includes(gateName)) {
+    if (thisRowHoldsGates) {
+      return "p-line-long";
+    } else {
+      return "p-line-short";
+    }
   }
 }
 
@@ -894,10 +917,13 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           let qbits = [...targets, ...controls, ...aggregatedTargets];
 
           let qmin = Math.min(...qbits);
-          let targetMin = Math.min(...targets);
           let qmax = Math.max(...qbits);
           let rowMin = getRowFromQbit(qmin);
           let rowMax = getRowFromQbit(qmax);
+          let targetMin = Math.min(...targets);
+          let targetMax = Math.max(...targets);
+          let rowTargetMin = getRowFromQbit(targetMin);
+          let rowTargetMax = getRowFromQbit(targetMax);
 
           // barrier will be displayed for all qubits in the step containing a barrier
           if (gate.name == 'barrier') {
@@ -1085,13 +1111,17 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
               }  else if (gate.name == "xy") {
                 gatesTableRowState.cells[column].img = "_xy_";
               } else if (gate.name == "qft") {
-                if (targets.length == 2) {
+                if (targets.length == 1) {
+                  gatesTableRowState.cells[column].img = "qft";
+                } else if (targets.length == 2) {
                   gatesTableRowState.cells[column].img = "_qft-up_";
                 } else {
                   gatesTableRowState.cells[column].img = "box-up";
                 }
               } else if (gate.name == "qft-dagger") {
-                if (targets.length == 2) {
+                if (targets.length == 1) {
+                  gatesTableRowState.cells[column].img = "qft-dagger";
+                } else if (targets.length == 2) {
                   gatesTableRowState.cells[column].img = "_qft-dagger-up_";
                 } else {
                   gatesTableRowState.cells[column].img = "box-up";
@@ -1141,18 +1171,42 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
               }  else if (gate.name == "xy") {
                 gatesTableRowState.cells[column].img = "_xy_";
               } else if (gate.name == "qft") {
-                let middleTarget = targets[Math.floor((targets.length - 1) / 2)];
-                if (rowQbit == middleTarget) {
-                  gatesTableRowState.cells[column].img = "_qft_";
+                if (inputRow == rowTargetMin) {
+                  if (targets.length == 1) {
+                    gatesTableRowState.cells[column].img = "qft";
+                  } else if (targets.length == 2) {
+                    gatesTableRowState.cells[column].img = "_qft-up_";
+                  } else {
+                    gatesTableRowState.cells[column].img = "box-up";
+                  }
+                } else if (inputRow == rowTargetMax) {
+                  gatesTableRowState.cells[column].img = "box-down";
                 } else {
-                  gatesTableRowState.cells[column].img = "box-middle-long";
+                  let middleTarget = targets[Math.floor((targets.length - 1) / 2)];
+                  if (rowQbit == middleTarget) {
+                    gatesTableRowState.cells[column].img = "_qft_";
+                  } else {
+                    gatesTableRowState.cells[column].img = "box-middle-long";
+                  }
                 }
               } else if (gate.name == "qft-dagger") {
-                let middleTarget = targets[Math.floor((targets.length - 1) / 2)];
-                if (rowQbit == middleTarget) {
-                  gatesTableRowState.cells[column].img = "_qft-dagger_";
+                if (inputRow == rowTargetMin) {
+                  if (targets.length == 1) {
+                    gatesTableRowState.cells[column].img = "qft-dagger";
+                  } else if (targets.length == 2) {
+                    gatesTableRowState.cells[column].img = "_qft-dagger-up_";
+                  } else {
+                    gatesTableRowState.cells[column].img = "box-up";
+                  }
+                } else if (inputRow == rowTargetMax) {
+                  gatesTableRowState.cells[column].img = "box-down";
                 } else {
-                  gatesTableRowState.cells[column].img = "box-middle-long";
+                  let middleTarget = targets[Math.floor((targets.length - 1) / 2)];
+                  if (rowQbit == middleTarget) {
+                    gatesTableRowState.cells[column].img = "_qft-dagger_";
+                  } else {
+                    gatesTableRowState.cells[column].img = "box-middle-long";
+                  }
                 }
               }
             } else {
@@ -1165,6 +1219,11 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
                   // the gate qubits is moved via drag & drop 
                   gatesTableRowState.cells[column].key = timestamp;
                 }
+              } else if (
+                  (gate.name == "qft" || gate.name == "qft-dagger") &&
+                  (inputRow > rowTargetMin && inputRow < rowTargetMax)
+              ) {
+                gatesTableRowState.cells[column].name = "box-middle-short";
               } else {
                 gatesTableRowState.cells[column].name = getIntermediateLineName(gate.name, thisRowHoldsGates);
               }
@@ -1211,8 +1270,18 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
                 gatesTableRowState.cells[column].img = "_w_";
               }  else if (gate.name == "xy") {
                 gatesTableRowState.cells[column].img = "_xy_";
-              } else if (gate.name == "qft" || gate.name == "qft-dagger") {
-                gatesTableRowState.cells[column].img = "box-down";
+              } else if (gate.name == "qft") {
+                if (targets.length == 1) {
+                  gatesTableRowState.cells[column].img = "qft";
+                } else {
+                  gatesTableRowState.cells[column].img = "box-down";
+                }
+              } else if (gate.name == "qft-dagger") {
+                if (targets.length == 1) {
+                  gatesTableRowState.cells[column].img = "qft-dagger";
+                } else {
+                  gatesTableRowState.cells[column].img = "box-down";
+                }
               }
             }
           }

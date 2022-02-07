@@ -38,6 +38,12 @@
             <div v-else-if="cell.name === 'c-line-long'">
               <VerticalTransitionCellLong :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
+            <div v-else-if="cell.name === 'p-line-short'">
+              <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'p-line-long'">
+              <VerticalTransitionCellLong :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+            </div>
             <div v-else-if="cell.name === 'r-line-short'">
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
             </div>
@@ -66,6 +72,12 @@
               <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'aggregate-line-long'">
+              <VerticalTransitionCellLong :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'qft-line-short'">
+              <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'qft-line-long'">
               <VerticalTransitionCellLong :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'swap-circle-small'" :key="cell.key">
@@ -151,6 +163,9 @@
             </div>
             <div v-else-if="cell.name === 'measure-z'">
               <MeasureGate :id="cell.id" :targets="[...cell.targets]" :controls="[]" :controlstates="[]" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :bit="cell.bit" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'p'">
+              <ParametricSingleQbitGate :id="cell.id" :targets="[...cell.targets]" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'pauli-x'">
               <SingleQbitGate :id="cell.id" :targets="[...cell.targets]" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>

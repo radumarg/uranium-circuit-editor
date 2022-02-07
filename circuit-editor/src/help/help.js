@@ -21,12 +21,18 @@ export function retriveSimpleGateHelpHtml(gateName) {
         return 'The "aggregate" gate permits grouping multiple single qubit target gates in a single multiple targets gate that may share the same set of controls. This way more compact circuits can be created. As for any other gate, when the Shift key is pressed during drag & drop, the aggregate gate is copied instead of being moved at the drop location. When instead the Alt key is pressed, and the line of movement is horizontal, an array of identical copies is created.';
     }  else if (gateName == "identity") {
       return 'The "identity" gate acts on a single qubit and preserves current state of the qubit it is applied to.';
-    } else if (gateName == "pauli-x") {
+    }  else if (gateName == "p") {
+      return 'This is the phase shift gate, it shifts the phase of the |1⟩ state relative to the |0⟩ state. It leaves the basis state |0⟩ unchanged and map |1⟩ to exp(i*θ)|1⟩. The range for θ is [0, 4π). It is identical to "u1" gate (except for the name of free parameter) and it was added only because it might be considered more expressive in certain contexts. Should not be confused with the "s" gate which historically was sometimes named "p".'
+    }   else if (gateName == "pauli-x") {
         return 'The "pauli-x" gate acts on a single qubit and is defined as: u3(π, 0, π). With respect to the computational basis it is the quantum equivalent of the NOT gate for classical computers since it maps |0⟩ to |1⟩ and |1⟩ to |0⟩. It is equivalent to a rotation around the X-axis of the Bloch sphere by π radians.';
     } else if (gateName == "pauli-y") {
         return 'The "pauli-y" gate acts on a single qubit and is defined as: u3(π, π/2, π/2). It is equivalent to a rotation around the Y-axis of the Bloch sphere by π radians.';
     } else if (gateName == "pauli-z") {
         return 'The "pauli-z" gate acts on a single qubit and is defined as: u1(π). It is equivalent to a rotation around the Z-axis of the Bloch sphere by π radians. It is a special case of a phase shift gate "u1" with λ equal to π. It leaves the basis state |0⟩ unchanged and maps |1⟩ to −|1⟩. From a different perspective it flips the |+⟩ and |-⟩ basis states, performing in the |+/-⟩ basis states the same role as "pauli-x" gate in the standard basis.';
+    } else if (gateName == "qft") {
+      return "This gate implements the Quantum Fourier Transform. This happens to be unitary operation which can be efficiently implemented using O(n<sup>2</sup>) one and two qubit gates."
+    } else if (gateName == "qft-dagger") {
+      return "This gate implements the inverse of Quantum Fourier Transform. This happens to be a unitary operation which can be efficiently implemented using O(n<sup>2</sup>) one and two qubit gates."
     } else if (gateName == "t") {
         return 'The "t" gate acts on a single qubit and is defined as: u1(π/4). It represents an anti-clockwise π/4 radians rotation around the Z-axis of the Bloch sphere up to a global phase factor. Leaves the basis state |0⟩ unchanged and map |1⟩ to exp(i*π/4)|1⟩. The probability of measuring a |0⟩ or |1⟩ is unchanged after applying this gate, however it modifies the phase of the quantum state. The "t" gate is related to "s" gate by the relation: s = t * t. The "t" gate is a special cases of "u1" for λ equal to π/4. This gate is an example of a non-Clifford gate.';
     } else if (gateName == "t-dagger") {
@@ -51,15 +57,15 @@ export function retriveSimpleGateHelpHtml(gateName) {
         return 'This gate performs partial a two-qubit swap and is equivalent to Canonical(-1/2, -1/2, 0). Equivalence between two gates means they have the same unitary operator up to a global phase factor.';
     } else if (gateName == "measure-x") {
         return 'Measures a qubit along the direction given by the X-axis of the Bloch sphere. This is not a unitary operation. The index of the classic bit where a qubit is measured cannot be larger than the maximum qubit index. \
-When multiple qubits are measured in the same classical bit an XOR operation is performed on the bit value. When no measure gates are present in the circuit simulation results are identical to the situation where \
+When multiple qubits are measured in the same classical bit . When no measure gates are present in the circuit simulation results are identical to the situation where \
 each qubit is measured into a classical bit with index equal to the qubit index of the measure gate.';
     } else if (gateName == "measure-y") {
         return 'Measures a qubit along the direction given by the Y-axis of the Bloch sphere. This is not a unitary operation. The index of the classic bit where a qubit is measured cannot be larger than the maximum qubit index. \
-When multiple qubits are measured in the same classical bit an XOR operation is performed on the bit value. When no measure gates are present in the circuit simulation results are identical to the situation where \
+When multiple qubits are measured in the same classical bit the result is given by addition modulo 2 of each measurement result. When no measure gates are present in the circuit simulation results are identical to the situation where \
 each qubit is measured into a classical bit with index equal to the qubit index of the measure gate.';
     } else if (gateName == "measure-z") {
         return 'Measures a qubit along the direction given by the Z-axis of the Bloch sphere. This is not a unitary operation. The index of the classic bit where a qubit is measured cannot be larger than the maximum qubit index. \
-When multiple qubits are measured in the same classical bit an XOR operation is performed on the bit value. When no measure gates are present in the circuit simulation results are identical to the situation where \
+When multiple qubits are measured in the same classical bit the result is given by addition modulo 2 of each measurement result. When no measure gates are present in the circuit simulation results are identical to the situation where \
 each qubit is measured into a classical bit with index equal to the qubit index of the measure gate.';
     } else if (gateName == "xx") {
         return 'XX Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * X⊗X). The range for θ is [0, 4π). When expressed in terms of  canonical gate it is equal to Canonical(θ, 0, 0). The Ising XX, YY and ZZ gates all commute with one another.';
@@ -197,8 +203,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             if the circuit were to be run on real quantum computer. <br>\
             - you can set up any classic bit index to a measure gate as long as the bit index is not larger than the maximum qubit index. \
             Measure gates must be always placed last for any given qubit. <br>\
-            - if multiple qubits share the same classic bit than simulation results for that bit correspond to an XOR  operation  performed on \
-            that specific bit. <br> \
+            - if multiple qubits share the same classic bit than simulation results for that bit is given by addition modulo 2 of individual measurement results. <br> \
             - if measure gates are missing altogether the simulation results are identical with the situation where each qubit has attached \
             as the last gate a measure gate in the Z basis whose classic bit is equal to the qubit index. <br> \
             - whenever a gate is dragged in  a new position, the classic bit index is automatically set equal to the qubit index. This is still \
@@ -253,6 +258,8 @@ export function retriveControlledGateHelpHtml(gateName) {
       return 'A "pauli-z" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "pauli-z" gate typically performs the "pauli-z" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. The single controlled "pauli-z" gate is also known as CPHASE gate and has the particular property that is symmetric, which means that swapping the control with the target qubit does not modify the result when applying the gate.';
   } else if (gateName == "u1") {
       return 'An "u1" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "u1" gate typically applies the "u1" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
+  } else if (gateName == "p") {
+    return 'A "p" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "p" gate typically applies the "p" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "rx-theta") {
       return 'A "rx-theta" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "rx-theta" gate typically applies the "rx-theta" gate on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩.';
   } else if (gateName == "ry-theta") {
@@ -279,6 +286,10 @@ export function retriveControlledGateHelpHtml(gateName) {
       return 'A "pauli-y-root-dagger" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "pauli-y-root-dagger" gate typically performs the "pauli-y-root-dagger" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
   } else if (gateName == "pauli-z-root-dagger") {
       return 'A "pauli-z-root-dagger" gate may have any number of controls. The single controlled gate acts on 2 qubits, where one of them acts as a control and the other acts as target. The controlled "pauli-z-root-dagger" gate typically performs the "pauli-z-root-dagger" operation on the target qubit only when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. ';
+  } else if (gateName == "qft") {
+    return 'A "qft" gate may have any number of controls.';
+  } else if (gateName == "qft-dagger") {
+    return 'A "qft-dagger" gate may have any number of controls.';
   } else if (gateName == "swap") {
     return 'The simplest controlled swap gate, also known as Fredkin gate, acts on three qubits and performs a controlled swap when the control qubit is |1⟩ otherwise leaves it unchanged. It is however perfectly possible a setup where the control state(s) are |0⟩, |+⟩, |-⟩, |+i⟩ or |-i⟩ instead of |1⟩. The matrix representation of the Fredkin gate is:';
   } else if (gateName == "aggregate") {
@@ -467,6 +478,18 @@ export function retriveGateMatrixHtml(gateName) {
             <td style='padding: 5px; text-align: center;'>e<sup>iλ</sup></td>\
         </tr>\
         </table>";
+    } else if (gateName == "p") {
+      return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
+      <table class='matrix'> \
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>1</td>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+      </tr>\
+      <tr>\
+          <td style='padding: 5px; text-align: center;'>0</td>\
+          <td style='padding: 5px; text-align: center;'>e<sup>iθ</sup></td>\
+      </tr>\
+      </table>";
     } else if (gateName == "t") {
         return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
         <table class='matrix'> \
@@ -1802,6 +1825,34 @@ export function retriveControlledGateMatrixHtml(gateName) {
           <td style='padding: 5px; text-align: center;'>e<sup>iλ</sup></td>\
       </tr>\
       </table>";
+  } else if (gateName == "p") {
+    return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ u1, as:</div> <br/> \
+    <table class='matrix'> \
+    <tr>\
+        <td style='padding: 5px; text-align: center;'>1</td>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+    </tr>\
+    <tr>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+        <td style='padding: 5px; text-align: center;'>1</td>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+    </tr>\
+    <tr>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+        <td style='padding: 5px; text-align: center;'>1</td>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+    </tr>\
+    <tr>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+        <td style='padding: 5px; text-align: center;'>0</td>\
+        <td style='padding: 5px; text-align: center;'>e<sup>iθ</sup></td>\
+    </tr>\
+    </table>";
   } else if (gateName == "t") {
       return "<div style='text-align: left;'> For the most elementary case where there is only one control qubit and the control state is |1⟩, the matrix representation of this gate can be calculated via the following formula: |0⟩⟨0| ⊗ id + |1⟩⟨1| ⊗ t, as:</div> <br/> \
       <table class='matrix'> \
@@ -2151,6 +2202,10 @@ export function retriveControlledGateMatrixHtml(gateName) {
   } else if (gateName == "canonical") {
     return "";
   } else if (gateName == "givens") {
+    return "";
+  } else if (gateName == "qft") {
+    return "";
+  } else if (gateName == "qft-dagger") {
     return "";
   }
 

@@ -5,13 +5,13 @@ import $ from "jquery";
 import { getUserInterfaceSetting } from "./applicationWideReusableUnits.js";
 import { arraysHaveElementsInCommon } from "./javaScriptUtils.js";
 
-export function getClosestNonControlledGates(circuitState, step, qubit) {
+export function getClosestControlledGates(circuitState, step, qubit) {
   
   let closestGates = [];
   let minDistance = Infinity;
+  let nonControlledGates = ['identity', 'measure-x', 'measure-y', 'measure-z'];
 
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
-    let nonControlledGates = ['identity', 'measure-x', 'measure-y', 'measure-z'];
     for (let i = 0; i < circuitState.steps.length; i++) {
       if (circuitState.steps[i].index == step) {
         let gates = circuitState.steps[i]["gates"];
