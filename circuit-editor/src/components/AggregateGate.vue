@@ -999,9 +999,9 @@ td {
 .embedded-table-cell {
   padding: 7px;
   text-align: center;
-  height: 40px;
-  min-height: 40px;
-  max-height: 40px;
+  height: 52px;
+  min-height: 52px;
+  max-height: 52px;
   width: 79px;
   min-width: 79px;
   max-width: 79px;
@@ -1010,9 +1010,9 @@ td {
 .embedded-table-state-image-cell {
   padding: 10px;
   text-align: center;
-  height: 40px;
-  min-height: 40px;
-  max-height: 40px;
+  height: 52px;
+  min-height: 52px;
+  max-height: 52px;
   width: 79px;
   min-width: 79px;
   max-width: 79px;
@@ -1021,25 +1021,21 @@ td {
 .embedded-table-gate-image-cell {
   padding: 2px;
   text-align: center;
-  height: 50px;
-  min-height: 50px;
-  max-height: 50px;
+  height: 52px;
+  min-height: 52px;
+  max-height: 52px;
   width: 79px;
   min-width: 79px;
   max-width: 79px;
 }
 
 .title-cell {
-  width: 135px;
-  min-width: 135px;
-  max-width: 135px;
-  text-align: left;
-}
-
-.number-gates-controls-cell {
-  width: 65px;
-  min-width: 65px;
-  max-width: 65px;
+  width: 140px;
+  min-width: 140px;
+  max-width: 140px;
+  height: 52px;
+  min-height: 52px;
+  max-height: 52px;
   text-align: left;
 }
 
@@ -1047,6 +1043,9 @@ td {
   width: 65px;
   min-width: 65px;
   max-width: 65px;
+  height: 52px;
+  min-height: 52px;
+  max-height: 52px;
   text-align: center;
   vertical-align: middle;
 }
@@ -1055,6 +1054,9 @@ td {
   width: 35px;
   min-width: 35px;
   max-width: 35px;
+  height: 52px;
+  min-height: 52px;
+  max-height: 52px;
   text-align: center;
   vertical-align: middle;
 }
@@ -1063,6 +1065,9 @@ td {
   width: 140px;
   max-width: 140px;
   min-width: 140px; 
+  height: 52px;
+  min-height: 52px;
+  max-height: 52px;
   border-spacing: 1px;
 }
 
@@ -1070,6 +1075,9 @@ td {
   width: 70px;
   min-width: 70px;
   max-width: 70px;
+  height: 52px;
+  min-height: 52px;
+  max-height: 52px;
   text-align: center;
   vertical-align: middle;
 }
