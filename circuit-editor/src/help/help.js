@@ -234,7 +234,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             <br/> \
             - we provide a link towards the circuit editor on our platform frontpage in order for new vistors to be able to easily explore \
             it's features. However, that view does not allow saving circuits in a database, it only permits saving circuits to files. \
-            We recommend that you follow the 'My Projects' link on our platform frontpage, create a new project, and work from there. \
+            We recommend that you follow the 'My Projects' link on our platform frontpage, create a new project and continue your work from there. \
             <br> \
             <br> \
             <b> Representation of states:</b> \
@@ -781,14 +781,14 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         <tr>\
             <td style='padding: 2px; text-align: center;'>0</td>\
-            <td style='padding: 2px; text-align: center;'>cos(θ)</td>\
-            <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ)</td>\
+            <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
+            <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ/2)</td>\
             <td style='padding: 2x; text-align: center;'>0</td>\
         </tr>\
         <tr>\
             <td style='padding: 2px; text-align: center;'>0</td>\
-            <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ)</td>\
-            <td style='padding: 2px; text-align: center;'>cos(θ)</td>\
+            <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ/)</td>\
+            <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
             <td style='padding: 2px; text-align: center;'>0</td>\
         </tr>\
         <tr>\
