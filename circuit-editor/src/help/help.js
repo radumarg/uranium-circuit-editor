@@ -781,14 +781,14 @@ export function retriveGateMatrixHtml(gateName) {
         </tr>\
         <tr>\
             <td style='padding: 2px; text-align: center;'>0</td>\
-            <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
-            <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ/2)</td>\
+            <td style='padding: 2px; text-align: center;'>cos(θ)</td>\
+            <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ)</td>\
             <td style='padding: 2x; text-align: center;'>0</td>\
         </tr>\
         <tr>\
             <td style='padding: 2px; text-align: center;'>0</td>\
-            <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ/)</td>\
-            <td style='padding: 2px; text-align: center;'>cos(θ/2)</td>\
+            <td style='padding: 2px; text-align: center;'>-i&nbsp;sin(θ)</td>\
+            <td style='padding: 2px; text-align: center;'>cos(θ)</td>\
             <td style='padding: 2px; text-align: center;'>0</td>\
         </tr>\
         <tr>\
