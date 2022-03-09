@@ -31,6 +31,9 @@
             <td>
               <md-checkbox class="md-primary" v-model="liveSimulation" v-on:change="switchSimulationMode()">Live Simulation</md-checkbox>
             </td>
+            <td>
+              <md-checkbox class="md-primary" v-model="bigEndianOrdering" v-on:change="switchQubitOrdering()">Bigendian Ordering</md-checkbox>
+            </td>
           </tr>
           <tr>
             <td>
@@ -129,6 +132,7 @@ export default {
       colorGates: getUserInterfaceSetting("colored-gates") === 'true',
       liveSimulation: getUserInterfaceSetting("live-simulation") === 'true',
       statesAreShownInBase2: getUserInterfaceSetting("legend-base") === '2',
+      bigEndianOrdering: getUserInterfaceSetting("big-endian-ordering") === 'true',
       closeIsHovered: false,
       saveIsHovered:  false,
       qbitsNew: 0,
@@ -324,6 +328,10 @@ it does not make much sense doing that unless you intend to save the circuit as 
     switchSimulationMode: function(){
       setUserInterfaceSetting('live-simulation', this.liveSimulation);
       this.$root.$emit("switchToLiveSimulationMode", this.liveSimulation);
+    },
+    switchQubitOrdering: function(){
+      setUserInterfaceSetting('big-endian-ordering', this.bigEndianOrdering);
+      this.$root.$emit("switchEndianess");
     },
     commitCircuitState: function(event) {
       const yaml = require('js-yaml');

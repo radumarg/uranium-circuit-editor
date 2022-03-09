@@ -102,7 +102,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
     } else if (gateName == "c") {
       return 'This gate permutes the three axes of the Bloch sphere (X->Y, Y->Z, Z->X). It represents a 120 degree rotation of the Bloch sphere.';
     } else if (gateName == "c-dagger") {
-      return 'This is the conjugate transpose of "c" gate and is also equal to the square of the "c" gate. It represents a 240 degree rotation of the Bloch sphere and permutes the three axes of the Bloch sphere (X->Z, Y->X, Z->Y).';
+      return 'This is the conjugate transpose of "c" gate and is also equal to the square of the "c" gate. It permutes the three axes of the Bloch sphere (X->Z, Y->X, Z->Y).';
     } else if (gateName == "fswap") {
       return 'This is the fermionic swap gate which swaps adjacent fermionic modes in the Jordan-Wigner representation and is equivalent to Canonical(1/2, 1/2, 0). Equivalence between two gates means they have the same unitary operator up to a global phase factor.';
     } else if (gateName == "swap-root") {
@@ -238,7 +238,24 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             <br> \
             <br> \
             <b> Representation of states:</b> \
-            "
+            <br> \
+            <br> \
+            - the Bloch sphere Z-bazis state vectors are conventionally named: |0⟩ and |1⟩. The Z-basis is usually refered to as the computational or \
+            standard basis. The other bases commonly used are the X-basis: |+⟩ = 1/√2(|0⟩ + |1⟩), |-⟩ = 1/√2(|0⟩ - |1⟩) and the \
+            Y-basis: |+i⟩ = 1/√2(|0⟩ + i|1⟩), |-i⟩ = 1/√2(|0⟩ - i|1⟩). \
+            <br/> \
+            <br/> \
+            <b> Ordering of bits and qubits:</b> \
+            <br> \
+            <br> \
+            - when simulating a circuit the gates in circuit editor are applied from left to right which is the generally accepted convention. \
+            <br> \
+            - visually, the circuit editor has an implicit ordering of qubits from top to bottom where the qubit with index zero is placed on top \
+            and the qubit with last index is placed at the bottom of the editor. The question is \
+            how should the state corresponding to these qubits should be represented. In most physics textbooks both qubits and bits are ordered starting \
+            with the first one on the left and last one on the right when representing a state vector as a tensor product of single qubit states. This is typically \
+            refered to as big endian convention. However many commercial quantum computing platform use the little endian convention which means the \
+            order of qubits and bits is reversed. In Uranium you can choose either one of the two orderings."
 
 }
 
@@ -374,8 +391,7 @@ export function retriveControlledGateHelpHtml(gateName) {
     return '';
   }
 
-  return "The Bloch sphere Z-bazis state vectors are conventionally named: |0⟩ and |1⟩. The Z-basis is usually refered to as the computational or \
-  standard basis. The other bases commonly used are the X-basis: |+⟩ = 1/√2(|0⟩ + |1⟩), |-⟩ = 1/√2(|0⟩ - |1⟩) and the Y-basis: |+i⟩ = 1/√2(|0⟩ + i|1⟩), |-i⟩ = 1/√2(|0⟩ - i|1⟩).";
+  return "";
 }
 
 export function retriveGateMatrixHtml(gateName) {
@@ -800,28 +816,28 @@ export function retriveGateMatrixHtml(gateName) {
         </table>";
     } else if (gateName == "pauli-x-root") {
         return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <div style='font-size:13px;'>exp(i&nbsp;π/2t)</div> \
+        <div style='font-size:13px;'>exp(i&nbsp;π/(2t))</div> \
         <table class='matrix'> \
         <tr>\
-            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
-            <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/(2t))</td>\
+            <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/(2t))</td>\
         </tr>\
         <tr>\
-            <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/2t)</td>\
-            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/(2t))</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/(2t))</td>\
         </tr>\
         </table>";
     } else if (gateName == "pauli-y-root") {
         return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <div style='font-size:13px;'>exp(i&nbsp;π/2t)</div> \
+        <div style='font-size:13px;'>exp(i&nbsp;π/(2t))</div> \
         <table class='matrix'> \
         <tr>\
-            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
-            <td style='padding: 5px; text-align: center;'>-&nbsp;sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/(2t))</td>\
+            <td style='padding: 5px; text-align: center;'>-&nbsp;sin(π/(2t))</td>\
         </tr>\
         <tr>\
-            <td style='padding: 5px; text-align: center;'>sin(π/2t)</td>\
-            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>sin(π/(2t))</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/(2t))</td>\
         </tr>\
         </table>";
     } else if (gateName == "pauli-z-root") {
@@ -838,28 +854,28 @@ export function retriveGateMatrixHtml(gateName) {
         </table>";
     } else if (gateName == "pauli-x-root-dagger") {
         return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <div style='font-size:13px;'>exp(-i&nbsp;π/2t)</div> \
+        <div style='font-size:13px;'>exp(-i&nbsp;π/(2t))</div> \
         <table class='matrix'> \
         <tr>\
-            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
-            <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/(2t))</td>\
+            <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/(2t))</td>\
         </tr>\
         <tr>\
-            <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/2t)</td>\
-            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/(2t))</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/(2t))</td>\
         </tr>\
         </table>";
     } else if (gateName == "pauli-y-root-dagger") {
         return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-        <div style='font-size:13px;'>exp(-i&nbsp;π/2t)</div> \
+        <div style='font-size:13px;'>exp(-i&nbsp;π/(2t))</div> \
         <table class='matrix'> \
         <tr>\
-            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
-            <td style='padding: 5px; text-align: center;'>&nbsp;sin(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/(2t))</td>\
+            <td style='padding: 5px; text-align: center;'>&nbsp;sin(π/(2t))</td>\
         </tr>\
         <tr>\
-            <td style='padding: 5px; text-align: center;'>-&nbsp;sin(π/2t)</td>\
-            <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+            <td style='padding: 5px; text-align: center;'>-&nbsp;sin(π/(2t))</td>\
+            <td style='padding: 5px; text-align: center;'>cos(π/(2t))</td>\
         </tr>\
         </table>";
     } else if (gateName == "pauli-z-root-dagger") {
@@ -1021,28 +1037,28 @@ export function retriveGateMatrixHtml(gateName) {
       <div style='font-size:13px;'>exp(-i&nbsp;π/4t)&nbsp*</div> \
       <table class='matrix'> \
       <tr>\
-          <td style='padding: 5px; text-align: center;'>exp(i&nbsp;π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>exp(i&nbsp;π/(2t))</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
       </tr>\
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
-          <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>cos(π/(2t))</td>\
+          <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/(2t))</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
       </tr>\
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/2t)</td>\
-          <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>i&nbsp;sin(π/(2t))</td>\
+          <td style='padding: 5px; text-align: center;'>cos(π/(2t))</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
       </tr>\
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>exp(i&nbsp;π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>exp(i&nbsp;π/(2t))</td>\
       </tr>\
       </table>";
     } else if (gateName == "swap-root-dagger") {
@@ -1050,28 +1066,28 @@ export function retriveGateMatrixHtml(gateName) {
       <div style='font-size:13px;'>exp(i&nbsp;π/4t)&nbsp*</div> \
       <table class='matrix'> \
       <tr>\
-          <td style='padding: 5px; text-align: center;'>exp(-i&nbsp;π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>exp(-i&nbsp;π/(2t))</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
       </tr>\
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
-          <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>cos(π/(2t))</td>\
+          <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/(2t))</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
       </tr>\
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/2t)</td>\
-          <td style='padding: 5px; text-align: center;'>cos(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>-i&nbsp;sin(π/(2t))</td>\
+          <td style='padding: 5px; text-align: center;'>cos(π/(2t))</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
       </tr>\
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>exp(-i&nbsp;π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>exp(-i&nbsp;π/(2t))</td>\
       </tr>\
       </table>";
     } else if (gateName == "sqrt-swap-dagger") {
@@ -1280,7 +1296,9 @@ export function retriveGateMatrixHtml(gateName) {
       </table>";
     } else if (gateName == "ecp") {
       return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-      <table class='matrix'> \
+      <table>\
+      <td>1/2&nbsp;*&nbsp;&nbsp;</td> \
+      <td><table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>2c</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
@@ -1305,10 +1323,13 @@ export function retriveGateMatrixHtml(gateName) {
         <td style='padding: 5px; text-align: center;'>0</td>\
         <td style='padding: 5px; text-align: center;'>2c</td>\
         </tr>\
-      </table> where c = cos(π/8) and s =  sin(π/8)";
+        </table></td>\
+        </table> <br/> where c = cos(π/8) and s =  sin(π/8).";
     }else if (gateName == "ecp-dagger") {
       return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
-      <table class='matrix'> \
+      <table>\
+      <td>1/2&nbsp;*&nbsp;&nbsp;</td> \
+      <td><table class='matrix'> \
       <tr>\
           <td style='padding: 5px; text-align: center;'>2c</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
@@ -1333,7 +1354,8 @@ export function retriveGateMatrixHtml(gateName) {
         <td style='padding: 5px; text-align: center;'>0</td>\
         <td style='padding: 5px; text-align: center;'>2c</td>\
         </tr>\
-      </table> where c = cos(π/8) and s =  sin(π/8)";
+        </table></td>\
+        </table> <br/> where c = cos(π/8) and s =  sin(π/8).";
     } else if (gateName == "magic") {
       return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
       <table>\
@@ -1927,14 +1949,14 @@ export function retriveControlledGateMatrixHtml(gateName) {
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>exp(iπ/2t)&nbsp;cos(π/2t)</td>\
-          <td style='padding: 5px; text-align: center;'>-i&nbsp;exp(iπ/2t)&nbsp;sin(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>exp(iπ/(2t))&nbsp;cos(π/(2t))</td>\
+          <td style='padding: 5px; text-align: center;'>-i&nbsp;exp(iπ/(2t))&nbsp;sin(π/(2t))</td>\
       </tr>\
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>-i&nbsp;exp(iπ/2t)&nbsp;sin(π/2t)</td>\
-          <td style='padding: 5px; text-align: center;'>exp(iπ/2t)&nbsp;cos(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>-i&nbsp;exp(iπ/(2t))&nbsp;sin(π/(2t))</td>\
+          <td style='padding: 5px; text-align: center;'>exp(iπ/(2t))&nbsp;cos(π/(2t))</td>\
       </tr>\
       </table>";
   } else if (gateName == "pauli-y-root") {
@@ -1955,14 +1977,14 @@ export function retriveControlledGateMatrixHtml(gateName) {
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>exp(iπ/2t)&nbsp;cos(π/2t)</td>\
-          <td style='padding: 5px; text-align: center;'>-exp(iπ/2t)&nbsp;sin(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>exp(iπ/(2t))&nbsp;cos(π/(2t))</td>\
+          <td style='padding: 5px; text-align: center;'>-exp(iπ/(2t))&nbsp;sin(π/(2t))</td>\
       </tr>\
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>exp(iπ/2t)&nbsp;sin(π/2t)</td>\
-          <td style='padding: 5px; text-align: center;'>exp(iπ/2t)&nbsp;cos(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>exp(iπ/(2t))&nbsp;sin(π/(2t))</td>\
+          <td style='padding: 5px; text-align: center;'>exp(iπ/(2t))&nbsp;cos(π/(2t))</td>\
       </tr>\
       </table>";
   } else if (gateName == "pauli-z-root") {
@@ -2011,14 +2033,14 @@ export function retriveControlledGateMatrixHtml(gateName) {
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>exp(-iπ/2t)&nbsp;cos(π/2t)</td>\
-          <td style='padding: 5px; text-align: center;'>i&nbsp;exp(-iπ/2t)&nbsp;sin(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>exp(-iπ/(2t))&nbsp;cos(π/(2t))</td>\
+          <td style='padding: 5px; text-align: center;'>i&nbsp;exp(-iπ/(2t))&nbsp;sin(π/(2t))</td>\
       </tr>\
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>i&nbsp;exp(-iπ/2t)&nbsp;sin(π/2t)</td>\
-          <td style='padding: 5px; text-align: center;'>exp(-iπ/2t)&nbsp;cos(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>i&nbsp;exp(-iπ/(2t))&nbsp;sin(π/(2t))</td>\
+          <td style='padding: 5px; text-align: center;'>exp(-iπ/(2t))&nbsp;cos(π/(2t))</td>\
       </tr>\
       </table>";
   } else if (gateName == "pauli-y-root-dagger") {
@@ -2039,14 +2061,14 @@ export function retriveControlledGateMatrixHtml(gateName) {
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>exp(-iπ/2t)&nbsp;cos(π/2t)</td>\
-          <td style='padding: 5px; text-align: center;'>-exp(-iπ/2t)&nbsp;sin(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>exp(-iπ/(2t))&nbsp;cos(π/(2t))</td>\
+          <td style='padding: 5px; text-align: center;'>-exp(-iπ/(2t))&nbsp;sin(π/(2t))</td>\
       </tr>\
       <tr>\
           <td style='padding: 5px; text-align: center;'>0</td>\
           <td style='padding: 5px; text-align: center;'>0</td>\
-          <td style='padding: 5px; text-align: center;'>exp(-iπ/2t)&nbsp;sin(π/2t)</td>\
-          <td style='padding: 5px; text-align: center;'>exp(-iπ/2t)&nbsp;cos(π/2t)</td>\
+          <td style='padding: 5px; text-align: center;'>exp(-iπ/(2t))&nbsp;sin(π/(2t))</td>\
+          <td style='padding: 5px; text-align: center;'>exp(-iπ/(2t))&nbsp;cos(π/(2t))</td>\
       </tr>\
       </table>";
   } else if (gateName == "pauli-z-root-dagger") {

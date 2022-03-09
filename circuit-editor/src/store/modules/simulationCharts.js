@@ -47,7 +47,12 @@ export async function getStateProbabilities(circuitState) {
     if (circuitState != undefined) {
       let serializedCircuit = JSON.stringify(circuitState);
       await init('./wasm/moara_js_bg.wasm');
-      return get_probabilities(serializedCircuit);
+      let bigEndianOrdering = getUserInterfaceSetting('big-endian-ordering');
+      if (bigEndianOrdering === 'true') {
+        return get_probabilities(serializedCircuit, "bigendian");
+      } else {
+        return get_probabilities(serializedCircuit, "littleendian");
+      }
     }
 
     return []
@@ -58,7 +63,12 @@ async function getStateVector(circuitState) {
   if (circuitState != undefined) {
     let serializedCircuit = JSON.stringify(circuitState);
     await init('./wasm/moara_js_bg.wasm');
-    return get_statevector(serializedCircuit);
+    let bigEndianOrdering = getUserInterfaceSetting('big-endian-ordering');
+    if (bigEndianOrdering === 'true') {
+      return get_statevector(serializedCircuit, "bigendian");
+    } else {
+      return get_statevector(serializedCircuit, "littleendian");
+    }
   }
   
   return []

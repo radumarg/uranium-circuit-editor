@@ -168,6 +168,7 @@ export default {
       this.$root.$on('switchLegendBase', () => {this.runSimulation(this.$store.state.circuitEditorModule)});
       this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.updateView(simulatingLive)});
       this.$root.$on('probabilitiesTabActivated', (activated) => {this.tabActivated(activated)});
+      this.$root.$on('switchEndianess', () => {this.runSimulation(this.$store.state.circuitEditorModule, false)});
    },
 }
 </script>

@@ -100,6 +100,14 @@ export default {
       this.$root.$emit("showColumnChart", stateProbabilities, positionInfo.width, positionInfo.height);
       this.$root.$emit("showPieChart", getTopEntriesStateProbabilities(stateProbabilities), positionInfo.width, positionInfo.height);
     },
+    endianessChange(){
+      let circuitState = this.$store.state.circuitEditorModule;
+      this.$data.lastSimulatedCircuit = JSON.stringify(circuitState);
+      this.$root.$emit("showSpinners");
+      var element = document.getElementById("editor2");
+      var positionInfo = element.getBoundingClientRect();
+      this.triggerSimulationJob(circuitState, positionInfo);
+    },
     adjustView: function(simulatingLive){
       let tabbedEditor = document.getElementById("tabbedEditor");
       if (simulatingLive == true){
@@ -125,6 +133,7 @@ export default {
       this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.adjustView(simulatingLive)});
       this.$root.$on('circuitModifiedFromMenu', () => {this.switchToEditorTab()});
       this.$root.$on('switchLegendBase', () => {this.switchToEditorTab(); this.$data.lastSimulatedCircuit = null;});
+      this.$root.$on('switchEndianess', () => {this.endianessChange()});
    },
 };
 </script>

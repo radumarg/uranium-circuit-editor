@@ -127,20 +127,23 @@ function getArrayU32FromWasm0(ptr, len) {
 /**
 * @param {string} serialized_circuit
 * @param {number} shots
+* @param {string | undefined} endianess
 * @param {number | undefined} qubit_count
 * @returns {Uint32Array}
 */
-export function simulate(serialized_circuit, shots, qubit_count) {
+export function simulate(serialized_circuit, shots, endianess, qubit_count) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         var ptr0 = passStringToWasm0(serialized_circuit, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         var len0 = WASM_VECTOR_LEN;
-        wasm.simulate(retptr, ptr0, len0, shots, isLikeNone(qubit_count) ? 0xFFFFFF : qubit_count);
+        var ptr1 = isLikeNone(endianess) ? 0 : passStringToWasm0(endianess, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        var len1 = WASM_VECTOR_LEN;
+        wasm.simulate(retptr, ptr0, len0, shots, ptr1, len1, isLikeNone(qubit_count) ? 0xFFFFFF : qubit_count);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
-        var v1 = getArrayU32FromWasm0(r0, r1).slice();
+        var v2 = getArrayU32FromWasm0(r0, r1).slice();
         wasm.__wbindgen_free(r0, r1 * 4);
-        return v1;
+        return v2;
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
@@ -159,20 +162,23 @@ function getArrayF32FromWasm0(ptr, len) {
 }
 /**
 * @param {string} serialized_circuit
+* @param {string | undefined} endianess
 * @param {number | undefined} qubit_count
 * @returns {Float32Array}
 */
-export function get_probabilities(serialized_circuit, qubit_count) {
+export function get_probabilities(serialized_circuit, endianess, qubit_count) {
     try {
         const retptr = wasm.__wbindgen_add_to_stack_pointer(-16);
         var ptr0 = passStringToWasm0(serialized_circuit, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
         var len0 = WASM_VECTOR_LEN;
-        wasm.get_probabilities(retptr, ptr0, len0, isLikeNone(qubit_count) ? 0xFFFFFF : qubit_count);
+        var ptr1 = isLikeNone(endianess) ? 0 : passStringToWasm0(endianess, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+        var len1 = WASM_VECTOR_LEN;
+        wasm.get_probabilities(retptr, ptr0, len0, ptr1, len1, isLikeNone(qubit_count) ? 0xFFFFFF : qubit_count);
         var r0 = getInt32Memory0()[retptr / 4 + 0];
         var r1 = getInt32Memory0()[retptr / 4 + 1];
-        var v1 = getArrayF32FromWasm0(r0, r1).slice();
+        var v2 = getArrayF32FromWasm0(r0, r1).slice();
         wasm.__wbindgen_free(r0, r1 * 4);
-        return v1;
+        return v2;
     } finally {
         wasm.__wbindgen_add_to_stack_pointer(16);
     }
@@ -180,13 +186,16 @@ export function get_probabilities(serialized_circuit, qubit_count) {
 
 /**
 * @param {string} serialized_circuit
+* @param {string | undefined} endianess
 * @param {number | undefined} qubit_count
 * @returns {Array<any>}
 */
-export function get_statevector(serialized_circuit, qubit_count) {
+export function get_statevector(serialized_circuit, endianess, qubit_count) {
     var ptr0 = passStringToWasm0(serialized_circuit, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
     var len0 = WASM_VECTOR_LEN;
-    var ret = wasm.get_statevector(ptr0, len0, isLikeNone(qubit_count) ? 0xFFFFFF : qubit_count);
+    var ptr1 = isLikeNone(endianess) ? 0 : passStringToWasm0(endianess, wasm.__wbindgen_malloc, wasm.__wbindgen_realloc);
+    var len1 = WASM_VECTOR_LEN;
+    var ret = wasm.get_statevector(ptr0, len0, ptr1, len1, isLikeNone(qubit_count) ? 0xFFFFFF : qubit_count);
     return takeObject(ret);
 }
 
@@ -234,6 +243,9 @@ async function load(module, imports) {
 }
 
 async function init(input) {
+    //if (typeof input === 'undefined') {
+    //    input = new URL('moara_js_bg.wasm', import.meta.url);
+    //}
     const imports = {};
     imports.wbg = {};
     imports.wbg.__wbindgen_string_new = function(arg0, arg1) {
