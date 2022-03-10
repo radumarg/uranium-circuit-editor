@@ -349,8 +349,8 @@ export const circuitEditorModule = {
                   }
 
                   if (noControls > 0) {
-                    let controlsExpression = dataTransferObj["controlsExpression"].trim();
-                    let controlstatesExpression = dataTransferObj["controlstatesExpression"].trim();
+                    let controlsExpression = dataTransferObj["controlsExpression"].toString().trim();
+                    let controlstatesExpression = dataTransferObj["controlstatesExpression"].toString().trim();
 
                     if (!controlsExpression) {
                       throw new Error(`Since the number of controls is ${noControls} you must specify an expression for controls!`);
@@ -375,7 +375,7 @@ export const circuitEditorModule = {
                         throw new Error(`The ${j}'th' control state is an empty string.`);
                       }
                       if (!['0', '1', '+', '-', '+i', '-i'].includes(controlstate)) {
-                        throw new Error(`The ${j}'th control state for q=${q}, s=${s} does not evaluate to '0', '1', '+', '-', '+i' or '-i'.`);
+                        throw new Error(`The ${j}'th control state for q=${q}, s=${s} does not evaluate to 0, 1, '+', '-', '+i' or '-i' where quotes are needed.`);
                       }
                       dto["controlstates"].push(controlstate);
                     }

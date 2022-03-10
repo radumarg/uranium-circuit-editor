@@ -72,7 +72,11 @@
     xmlHttpReq.setRequestHeader('Authorization', authToken);
     let csrfToken = getCookie('csrftoken');
     xmlHttpReq.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    let data = `yaml-code=${encodeURI(yaml)}&csrfmiddlewaretoken=${csrfToken}`;
+    let encodedCircuit = encodeURI(yaml);
+    // '+' character is a reserved character and not encoded corectly, not sure why
+    // at server side according to specs + is treated as space and %2B is decoded as literal "+"
+    encodedCircuit = encodedCircuit.replaceAll('+', '%2B');
+    let data = `yaml-code=${encodedCircuit}&csrfmiddlewaretoken=${csrfToken}`;
 
     xmlHttpReq.send(data);    
   }

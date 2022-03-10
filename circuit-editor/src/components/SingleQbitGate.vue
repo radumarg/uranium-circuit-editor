@@ -640,7 +640,7 @@ number of controls is chosen to be greater than zero. Control state expression m
       this.$refs['replicate-gate-modal-dialog'].show();
     },
     onNumberOfControlsExpressionChange(){
-      let controls = parseInt(this.numberOfControlsExpression.trim());
+      let controls = parseInt(this.numberOfControlsExpression.toString().trim());
       if (controls == 0){
         this.controlsExpression = "";
         this.controlstatesExpression = "";
