@@ -162,7 +162,7 @@ export const circuitEditorModule = {
         
         let targets = [];
         if (Object.prototype.hasOwnProperty.call(dataTransferObj, "targets")) {
-          targets = [...dataTransferObj["targets"]].sort();
+          targets = [...dataTransferObj["targets"]].sort((a, b) => (a - b));
         }
 
         let controls = [];

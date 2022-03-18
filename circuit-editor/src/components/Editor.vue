@@ -1,6 +1,6 @@
 <template>
   <div class="circuit-editor" id="circuit-editor-canvas">
-    <table ref="gatesTable" id="gatesTable" cellspacing="0" cellpadding="0">
+    <table ref="gatesTable" id="gatesTable" cellspacing="0" cellpadding="0" style="width: 100%; height:100%;">
       <div v-for="row in getRowsInGatesTable" v-bind:key="row">
         <tr>
           <td
@@ -407,7 +407,6 @@ export default {
 
 .circuit-editor {
   position: absolute;
-  overflow: scroll;
   width: 100%;
   height: 100%;
   user-select: none; /* supported by Chrome and Opera */

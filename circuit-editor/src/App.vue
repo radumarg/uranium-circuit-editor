@@ -35,7 +35,7 @@
         </b-sidebar>
       </div>
     </b-row>
-    <b-row no-gutters align-v="center" class="bordered-box" style="border-right: solid 0.5em #374048;" @dragover.prevent @drop.prevent="handleDropEvent">
+    <b-row no-gutters align-v="center" class="bordered-box top-row" @dragover.prevent @drop.prevent="handleDropEvent">
       <b-col cols="12" md="auto" style="max-width: 286px;">
         <Logo />
       </b-col>
@@ -189,6 +189,13 @@ table {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.top-row {
+  border-right: solid 0.5em #374048;
+  height: 96px;
+  max-height: 96px;
+  min-height: 96px;
 }
 
 .help {

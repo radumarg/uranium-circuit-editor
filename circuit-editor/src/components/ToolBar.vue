@@ -22,6 +22,13 @@
         <md-tooltip md-direction="left">Show Tooltips</md-tooltip>
       </md-button>
 
+      &nbsp;&nbsp;
+      <!-- 
+        Please not that while all other controls from tool bar, tool bar included are Vue Material controls, b-form-select is a BootstrapVue control.
+        At some point we should migrate the entire toolbar to BootstrapVue, Vue Material is less customizable than BootstrapVue.  
+      -->
+      <b-form-select style="width:120px; max-width: 120px; min-width: 120px;" v-model="zoomLevel" v-on:change="switchZoomLevel()" :options="zoomLevels" size="sm" class="mt-1"></b-form-select>
+
       <div class="md-toolbar-offset">
         <table>
           <tr>
@@ -32,7 +39,10 @@
               <md-checkbox class="md-primary" v-model="liveSimulation" v-on:change="switchSimulationMode()">Live Simulation</md-checkbox>
             </td>
             <td>
-              <md-checkbox class="md-primary" v-model="bigEndianOrdering" v-on:change="switchQubitOrdering()">Bigendian Ordering</md-checkbox>
+              <md-checkbox class="md-primary" v-model="bigEndianOrdering" v-on:change="switchQubitOrdering()">
+                Bigendian Ordering
+                <md-tooltip md-direction="left">Ordering of qubits in state vectors</md-tooltip>
+              </md-checkbox>
             </td>
           </tr>
           <tr>
@@ -40,7 +50,12 @@
               <md-checkbox class="md-primary" v-model="colorGates" v-on:change="switchGateColors()">Color Gates</md-checkbox>
             </td>
             <td>
-              <md-checkbox class="md-primary" v-model="statesAreShownInBase2" v-on:change="switchLegendBase()">Base 2 States</md-checkbox>
+              <md-checkbox class="md-primary" v-model="statesAreShownInBase2" v-on:change="switchLegendBase()">
+                Base 2 States
+                <md-tooltip md-direction="left">Base used to display state vectors</md-tooltip>
+              </md-checkbox>
+            </td>
+            <td>
             </td>
           </tr>
         </table>
@@ -116,6 +131,7 @@
 </template>
 
 <script>
+import Vue from 'vue';
 import * as htmlToImage from 'html-to-image';
 import JQuery from 'jquery';
 import { mapActions, mapGetters } from 'vuex';
@@ -133,6 +149,25 @@ export default {
       liveSimulation: getUserInterfaceSetting("live-simulation") === 'true',
       statesAreShownInBase2: getUserInterfaceSetting("legend-base") === '2',
       bigEndianOrdering: getUserInterfaceSetting("big-endian-ordering") === 'true',
+      zoomLevel: getUserInterfaceSetting("zoom-level"),
+      zoomLevels: [
+          { value: '100', text: 'Zoom: 100%' },
+          { value: '95', text: 'Zoom: 95%' },
+          { value: '90', text: 'Zoom: 90%' },
+          { value: '85', text: 'Zoom: 85%' },
+          { value: '80', text: 'Zoom: 80%' },
+          { value: '75', text: 'Zoom: 75%' },
+          { value: '70', text: 'Zoom: 70%' },
+          { value: '65', text: 'Zoom: 65%' },
+          { value: '60', text: 'Zoom: 60%' },
+          { value: '55', text: 'Zoom: 55%' },
+          { value: '50', text: 'Zoom: 50%' },
+          { value: '45', text: 'Zoom: 45%' },
+          { value: '40', text: 'Zoom: 40%' },
+          { value: '35', text: 'Zoom: 35%' },
+          { value: '30', text: 'Zoom: 30%' },
+          { value: '25', text: 'Zoom: 25%' },
+        ],
       closeIsHovered: false,
       saveIsHovered:  false,
       qbitsNew: 0,
@@ -332,6 +367,17 @@ it does not make much sense doing that unless you intend to save the circuit as 
     switchQubitOrdering: function(){
       setUserInterfaceSetting('big-endian-ordering', this.bigEndianOrdering);
       this.$root.$emit("switchEndianess");
+    },
+    switchZoomLevel: function(){
+      if (Vue.$cookies.get('functionality_cookies') === 'accepted'){
+        setUserInterfaceSetting('zoom-level', this.zoomLevel);
+        window.location.reload();
+      } else {
+        alert("You have not accepted functionality cookies hence changing page zoom level will not work. You can remove all cookies \
+for this domain from the lock image in the browser url box, reload the page and when prompted accept functionality cookies. \
+If you do not want to accept cookies, you can zoom the page yourself from the keyboard.");
+        this.zoomLevel = '100';
+      }
     },
     commitCircuitState: function(event) {
       const yaml = require('js-yaml');

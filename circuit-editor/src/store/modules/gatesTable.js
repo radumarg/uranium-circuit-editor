@@ -1,3 +1,4 @@
+import Vue from 'vue';
 import { getUserInterfaceSetting } from "./applicationWideReusableUnits.js";
 
 /* Holds information necessary to diplay a cell in gates table */
@@ -481,14 +482,26 @@ class GatesTable {
 
 export function getNumberOfRowsThatFit() {
   let availableHeight = window.innerHeight;
-  let rows = 2 * Math.floor((availableHeight - 70) / (window.cellSize + window.separatorCellSize));
-  return rows;
+  let zoomLevel = Vue.$cookies.get('zoom-level');
+  zoomLevel = '75%';
+  if (zoomLevel == null) {
+    return 10 + 2 * Math.ceil((availableHeight - 70) / (window.cellSize + window.separatorCellSize));
+  } else {
+    let zoom = 100.0 / parseInt(zoomLevel);
+    return 10 + Math.ceil(zoom * 2 * (availableHeight - 70) / (window.cellSize + window.separatorCellSize));
+  }
 }
 
 export function getNumberOfColumnsThatFit() {
   let availableWidth = window.innerWidth;
-  let columns = 2 * Math.floor((availableWidth - 280) / (window.cellSize + window.separatorCellSize));
-  return columns;
+  let zoomLevel = Vue.$cookies.get('zoom-level');
+  zoomLevel = '75%';
+  if (zoomLevel == null) {
+    return 10 + 2 * Math.ceil((availableWidth - 280) / (window.cellSize + window.separatorCellSize));
+  } else {
+    let zoom = 100.0 / parseInt(zoomLevel);
+    return 10 + Math.ceil(zoom * 2 * (availableWidth - 280) / (window.cellSize + window.separatorCellSize));
+  }
 }
 
 export function retrieveRowsInGatesTable(circuitState) {

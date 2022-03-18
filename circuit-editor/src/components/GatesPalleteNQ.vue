@@ -32,8 +32,8 @@ export default {
 
 .gates-pallete {
   overflow: scroll;
-  min-height: calc( 100vh - 188px );
-  max-height: calc( 100vh - 188px );
+  min-height: calc(var(--gates-pallete-height));
+  max-height: calc(var(--gates-pallete-height));
   width: 100%;
   height: 100%;
 }
@@ -50,7 +50,6 @@ table {
   text-align: center;
   background-color: #374048; 
   table-layout: fixed;
-  /* height: calc(100vh - 96px); */
 
   /* disable selection on mouse drag over */
   -webkit-touch-callout: none;

@@ -202,7 +202,7 @@ export function getBinnedProbabilities(fullStateProbabilities, min, max, numberO
             istart = i + 1;
         }
     }
-    if (accumulator > 0){
+    if (istart < max - 1){
         binnedStateProbabilities.push({ x: toState(istart, qubits, quantumStatesBase) + '/' + toState(max - 1,  qubits, quantumStatesBase), y: accumulator });
         maxProbability = Math.max(maxProbability, accumulator);
     }

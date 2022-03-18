@@ -251,11 +251,14 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             - when simulating a circuit the gates in circuit editor are applied from left to right which is the generally accepted convention. \
             <br> \
             - visually, the circuit editor has an implicit ordering of qubits from top to bottom where the qubit with index zero is placed on top \
-            and the qubit with last index is placed at the bottom of the editor. The question is \
-            how should the state corresponding to these qubits should be represented. In most physics textbooks both qubits and bits are ordered starting \
-            with the first one on the left and last one on the right when representing a state vector as a tensor product of single qubit states. This is typically \
-            refered to as big endian convention. However many commercial quantum computing platform use the little endian convention which means the \
-            order of qubits and bits is reversed. In Uranium you can choose either one of the two orderings."
+            and the qubit with highest index is placed at the bottom of the editor. \
+            <br> \
+            - A valid question to be asked is how should the state vector be represented for a quantum register that consists of a given number of qubits. \
+            In principle these qubits can be orderer from left to right or from right to left. In most physics textbooks qubits are ordered \
+            starting with the first one (lowest qubit index) on the left and last one (higher qubit index) on the right when representing a state vector \
+            as a tensor product of single qubit states. This is typically refered to as big endian convention. However many commercial quantum computing \
+            platform use the little endian convention which means the order of qubits, and bits as well, is reversed. In Uranium you can choose either one of the \
+            two orderings."
 
 }
 

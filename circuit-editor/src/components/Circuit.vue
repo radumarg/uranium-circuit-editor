@@ -2,30 +2,32 @@
 
   <b-container fluid="xs" class="h-100">
 
-    <b-container fluid="xs" class="h-100" :style="{display: liveSimulation ? 'block' : 'none'}" id="splittedEditor">
-      <b-row no-gutters class="h-100">
-        <b-col><Editor id="editor1"/></b-col>
-        <b-col cols="3">
-          <b-tabs content-class="mt-1" id="tabbedSplitEditor">
-            <b-tab title="Probabilities" v-on:click="onProbabilitiesTabChanged">
-              <HorizontalColumnChart />
+    <b-container fluid="xs" style="height: 100%;" :style="{display: liveSimulation ? 'block' : 'none'}" id="splittedEditor">
+      <b-row no-gutters style="height: 100%;">
+        <b-col class="single-tab">
+          <Editor id="editor1"/>
+        </b-col>
+        <b-col style="max-width: 370px;" class="single-tab">
+          <b-tabs content-class="mt-1"  id="tabbedSplitEditor" style="height: 100%;">
+            <b-tab title="Probabilities" v-on:click="onProbabilitiesTabChanged" style="height: 100%;">
+              <HorizontalColumnChart style="height: 100%;"/>
             </b-tab>
-            <b-tab title="State-Vector (Max 8 Qubits)" v-on:click="onStatevectorTabChanged">
-              <StateVectorChart />
+            <b-tab title="State-Vector (Max 8-Q)" v-on:click="onStatevectorTabChanged">
+              <StateVectorChart style="height: 100%;"/>
             </b-tab>
           </b-tabs>
         </b-col>
       </b-row>
     </b-container>
 
-    <b-tabs content-class="mt-1" :style="{display: !liveSimulation ? 'block' : 'none'}" id="tabbedEditor">
+    <b-tabs content-class="mt-1" :style="{display: !liveSimulation ? 'block' : 'none'}" class="single-tab" id="tabbedEditor">
       <b-tab title="Circuit" ref="circuitTab">
-        <Editor id="editor2" style="height:calc(100% - 48px)"/>
+        <Editor id="editor2" />
       </b-tab>
-      <b-tab title="Column Chart" v-on:click="onTabChanged" class="single-tab">
+      <b-tab title="Column Chart" v-on:click="onTabChanged" >
         <VerticalColumnChart />
       </b-tab>
-      <b-tab title="Pie Chart" v-on:click="onTabChanged" class="single-tab">
+      <b-tab title="Pie Chart" v-on:click="onTabChanged">
         <PieChart />
       </b-tab>
     </b-tabs>
@@ -142,9 +144,9 @@ export default {
 
 .single-tab {
   position: absolute;
-  overflow: hidden;
+  overflow-x: scroll;
   width: 100%;
-  height: 100%;
+  height: calc(var(--tab-height));
 }
 
 </style>

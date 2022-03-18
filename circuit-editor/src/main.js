@@ -18,11 +18,28 @@ Vue.use(MdToolbar);
 Vue.use(MdTooltip);
 
 // Bootstrap-Vue
-import { IconsPlugin, ImagePlugin, FormInputPlugin, FormSelectPlugin, LayoutPlugin, LinkPlugin, ModalPlugin, SidebarPlugin, SpinnerPlugin, TabsPlugin, TablePlugin, TooltipPlugin, VBHoverPlugin } from 'bootstrap-vue';
+import {
+    DropdownPlugin,
+    IconsPlugin,
+    ImagePlugin,
+    FormInputPlugin,
+    FormSelectPlugin,
+    LayoutPlugin,
+    LinkPlugin,
+    ModalPlugin,
+    SidebarPlugin,
+    SpinnerPlugin,
+    TabsPlugin,
+    TablePlugin,
+    TooltipPlugin,
+    VBHoverPlugin
+} from 'bootstrap-vue';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
 import { setCookiesIfNotAlreadySet } from "./store/modules/applicationWideReusableUnits.js";
 
+
+Vue.use(DropdownPlugin);
 Vue.use(IconsPlugin);
 Vue.use(ImagePlugin);
 Vue.use(FormInputPlugin);

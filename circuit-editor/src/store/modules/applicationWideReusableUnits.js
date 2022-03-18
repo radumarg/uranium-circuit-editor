@@ -43,7 +43,7 @@ export function hideTooltips(){
   window.toolTipsAreShown = false;
 }
 
-const defaultCookieValues = {'colored-gates': 'true', 'dark-theme': 'false', 'live-simulation': 'true', 'legend-base': '2', 'big-endian-ordering': 'true'};
+const defaultCookieValues = {'colored-gates': 'true', 'dark-theme': 'false', 'live-simulation': 'true', 'legend-base': '2', 'big-endian-ordering': 'true', 'zoom-level': '100'};
 
 export function setCookiesIfNotAlreadySet(){ 
   if (Vue.$cookies.get('functionality_cookies') === 'accepted')
@@ -73,6 +73,10 @@ export function setCookiesIfNotAlreadySet(){
     if (bigEndianOrdering == null){
       Vue.$cookies.set('big-endian-ordering', defaultCookieValues['big-endian-ordering'], expires);
     }
+    let zoomLevel = Vue.$cookies.get('zoom-level');
+    if (zoomLevel == null){
+      Vue.$cookies.set('zoom-level', defaultCookieValues['zoom-level'], expires);
+    }
   } else {
     if (!window.userInterfaceSettings) {
       window.userInterfaceSettings = {};
@@ -81,6 +85,7 @@ export function setCookiesIfNotAlreadySet(){
       window.userInterfaceSettings['live-simulation'] = defaultCookieValues['live-simulation'];
       window.userInterfaceSettings['legend-base'] = defaultCookieValues['legend-base'];
       window.userInterfaceSettings['big-endian-ordering'] = defaultCookieValues['big-endian-ordering'];
+      window.userInterfaceSettings['zoom-level'] = defaultCookieValues['zoom-level'];
     }
   }
 }
