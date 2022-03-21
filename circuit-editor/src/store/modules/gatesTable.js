@@ -483,11 +483,10 @@ class GatesTable {
 export function getNumberOfRowsThatFit() {
   let availableHeight = window.innerHeight;
   let zoomLevel = Vue.$cookies.get('zoom-level');
-  zoomLevel = '75%';
   if (zoomLevel == null) {
     return 10 + 2 * Math.ceil((availableHeight - 70) / (window.cellSize + window.separatorCellSize));
   } else {
-    let zoom = 100.0 / parseInt(zoomLevel);
+    let zoom = 100.0 / parseFloat(zoomLevel);
     return 10 + Math.ceil(zoom * 2 * (availableHeight - 70) / (window.cellSize + window.separatorCellSize));
   }
 }
@@ -495,11 +494,10 @@ export function getNumberOfRowsThatFit() {
 export function getNumberOfColumnsThatFit() {
   let availableWidth = window.innerWidth;
   let zoomLevel = Vue.$cookies.get('zoom-level');
-  zoomLevel = '75%';
   if (zoomLevel == null) {
     return 10 + 2 * Math.ceil((availableWidth - 280) / (window.cellSize + window.separatorCellSize));
   } else {
-    let zoom = 100.0 / parseInt(zoomLevel);
+    let zoom = 100.0 / parseFloat(zoomLevel);
     return 10 + Math.ceil(zoom * 2 * (availableWidth - 280) / (window.cellSize + window.separatorCellSize));
   }
 }

@@ -4,7 +4,7 @@
 
     <b-container fluid="xs" style="height: 100%;" :style="{display: liveSimulation ? 'block' : 'none'}" id="splittedEditor">
       <b-row no-gutters style="height: 100%;">
-        <b-col class="single-tab">
+        <b-col class="single-tab" style="width: 100%;">
           <Editor id="editor1"/>
         </b-col>
         <b-col style="max-width: 370px;" class="single-tab">
@@ -143,9 +143,7 @@ export default {
 <style>
 
 .single-tab {
-  position: absolute;
   overflow-x: scroll;
-  width: 100%;
   height: calc(var(--tab-height));
 }
 

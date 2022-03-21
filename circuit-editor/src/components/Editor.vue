@@ -1,6 +1,6 @@
 <template>
   <div class="circuit-editor" id="circuit-editor-canvas">
-    <table ref="gatesTable" id="gatesTable" cellspacing="0" cellpadding="0" style="width: 100%; height:100%;">
+    <table ref="gatesTable" id="gatesTable" cellspacing="0" cellpadding="0">
       <div v-for="row in getRowsInGatesTable" v-bind:key="row">
         <tr>
           <td
@@ -417,7 +417,6 @@ export default {
 }
 
 table {
-  background-color: ghostwhite;
   border: 0px;
   border-spacing: 0px;
   table-layout: fixed;
