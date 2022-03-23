@@ -18,7 +18,7 @@ export default {
   methods: {
     goBack: function() {
       var previousURL = document.referrer;
-      if (previousURL.includes("transilvania-quantum")){
+      if (previousURL.includes("transilvania-quantum") && !previousURL.includes("circuit-editor")){
         window.location.href = previousURL;
       } else {
         window.location.href = "https://uranium.transilvania-quantum.org/";
