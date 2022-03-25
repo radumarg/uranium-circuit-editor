@@ -144,11 +144,11 @@ export default {
       },
       updateView(simulatingLive){
         this.$data.liveSimulation = simulatingLive;
-        this.runSimulation(this.$store.state.circuitEditorModule, simulatingLive && this.$data.activated);
+        this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId], simulatingLive && this.$data.activated);
       },
       tabActivated(activated){
         this.$data.activated = activated;
-        this.runSimulation(this.$store.state.circuitEditorModule, true);
+        this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId], true);
       },
       forceRerender() {
         // this creates a memory leak
@@ -165,10 +165,11 @@ export default {
    },
    created() {
       this.$root.$on('triggerSimulationRun', (circuitState) => {this.runSimulation(circuitState)});
-      this.$root.$on('switchLegendBase', () => {this.runSimulation(this.$store.state.circuitEditorModule)});
+      this.$root.$on('switchLegendBase', () => {this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId])});
       this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.updateView(simulatingLive)});
       this.$root.$on('probabilitiesTabActivated', (activated) => {this.tabActivated(activated)});
-      this.$root.$on('switchEndianess', () => {this.runSimulation(this.$store.state.circuitEditorModule, false)});
+      this.$root.$on('switchEndianess', () => {this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId], false)});
+      this.$root.$on('currentCircuitSwitch', () => {this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId])});
    },
 }
 </script>

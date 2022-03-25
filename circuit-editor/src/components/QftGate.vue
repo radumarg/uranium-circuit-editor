@@ -290,7 +290,7 @@ export default {
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
-      let circuitState = this.$store.state.circuitEditorModule;
+      let circuitState = this.$store.state.circuitEditorModule[window.currentCircuitId];
       let closestGates = getClosestControlledGates(circuitState, step, dropQbit);
 
       if (step == originalStep && closestGates.length == 1 && dropQbit != draggedQbit) {
@@ -371,7 +371,7 @@ export default {
       let existingQbits = [...this.targets, ...this.controls];
       let proposedQbits = [...proposedTargets, ...proposedControls];
 
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
+      if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, this.step, existingQbits)) {
         alert("There are no free seats to move control upwards!");
       } else {
         this.$data.targetsNew = proposedTargets;
@@ -395,7 +395,7 @@ export default {
       let existingQbits = [...this.targets, ...this.controls];
       let proposedQbits = [...proposedTargets, ...proposedControls];
 
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
+      if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, this.step, existingQbits)) {
         alert("There are no free seats to move control downwards!");
       } else {
         this.$data.targetsNew = proposedTargets;

@@ -20,7 +20,7 @@ import {
 } from "./editorHelper.js";
 
 import {
-  retrieve_circuit,
+  retrieve_project_circuits,
 } from "./circuitSaveAndRetrieve.js";
 
 import { 
@@ -50,26 +50,26 @@ math.import({
 export const circuitEditorModule = {
   namespaced: true,
 
-  state: retrieve_circuit(),
+  state: retrieve_project_circuits(),
 
   getters: {
     getGatesTableCells: () => {
       return (row) => {
         return computeGatesTableCells(
-          circuitEditorModule.state,
+          circuitEditorModule.state[window.currentCircuitId],
           row,
         );
       };
     },
     getRowsInGatesTable: () => {
-      return retrieveRowsInGatesTable(circuitEditorModule.state);
+      return retrieveRowsInGatesTable(circuitEditorModule.state[window.currentCircuitId]);
     },
     getCircuitState: () => {
-      return circuitEditorModule.state;
+      return circuitEditorModule.state[window.currentCircuitId];
     },
     getMaximumStepIndex: () => {
       let maxStep = 0;
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       if (Object.prototype.hasOwnProperty.call(state, "steps")) {
         for (let i = 0; i < state.steps.length; i++) {
           maxStep = Math.max(maxStep, state.steps[i].index);
@@ -79,7 +79,7 @@ export const circuitEditorModule = {
     },
     getMaximumQbitIndex: () => {
       let maxQbit = -1;
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       if (Object.prototype.hasOwnProperty.call(state, "steps")) {
         for (let i = 0; i < state.steps.length; i++) {
           let step = state.steps[i];
@@ -118,7 +118,7 @@ export const circuitEditorModule = {
       let availableSteps = window.gatesTable.columns / 2 - 1;
       for (let s = 0; s < availableSteps; s++){
         for (let q = 0; q < availableQubits; q++){
-          if (!positionIsFilled(circuitEditorModule.state, s, q)){
+          if (!positionIsFilled(circuitEditorModule.state[window.currentCircuitId], s, q)){
             let dto = {"step":s, "targets": [q], "name": "identity"};
             this.commit("circuitEditorModule/insertGateNoTrack", dto);
             this.commit("circuitEditorModule/removeGateNoTrack", dto);
@@ -193,7 +193,7 @@ export const circuitEditorModule = {
             
         if (step < 0 || targets.some((element) => element < 0) || controls.some((element) => element < 0)) {
           alert("Negative steps/qubits not permitted!");
-        } else if (seatsAreTaken(circuitEditorModule.state, targets, step)) {
+        } else if (seatsAreTaken(circuitEditorModule.state[window.currentCircuitId], targets, step)) {
           alert("A gate already exists at this location!");
         } else {
           let dto = {};
@@ -425,7 +425,7 @@ export const circuitEditorModule = {
           alert("Negative qubits not permitted!");
         } else if (proposedNewGatesAreInvalid(dtos)){
           alert("Some of the proposed new gates do not allocate distinct seats for each target and each control qubit!");
-        } else if (seatsInArrayAreAlreadyTaken(circuitEditorModule.state, dtos, step, existingQbits)) {
+        } else if (seatsInArrayAreAlreadyTaken(circuitEditorModule.state[window.currentCircuitId], dtos, step, existingQbits)) {
           alert("Some of the proposed new gates have seats already occupied!");
         } else if (proposedNewSeatsOverlap(dtos)) {
           alert("Some of the proposed new gates overlap!");
@@ -450,7 +450,7 @@ export const circuitEditorModule = {
         let step = dataTransferObj["step"];
         if (step < 0) {
           alert("Negative steps are not permitted!");
-        } else if (stepContainsGates(circuitEditorModule.state, step)) {
+        } else if (stepContainsGates(circuitEditorModule.state[window.currentCircuitId], step)) {
           alert("A barrier can be moved only to a step that contains no gates!");
         } else {
           this.commit("circuitEditorModule/removeBarrier", { step: originalStep});
@@ -471,7 +471,7 @@ export const circuitEditorModule = {
         
         if (targetsNew.some((element) => element < 0)) {
           alert("Negative steps/qubits not permitted!");
-        } else if ((!arraysAreEqual(targets, targetsNew)) && seatsAreTaken(circuitEditorModule.state, targetsNew, step, targets)) {
+        } else if ((!arraysAreEqual(targets, targetsNew)) && seatsAreTaken(circuitEditorModule.state[window.currentCircuitId], targetsNew, step, targets)) {
           alert("A gate already exists at this location!");
         } else {
           this.commit("circuitEditorModule/removeGateNoTrack", { step: step, targets: targets });
@@ -510,7 +510,7 @@ export const circuitEditorModule = {
         } else if (targetsNew.some(e => controlsNew.includes(e))) {
           alert("The target and control qubits must be different!");
         } else if ((!arraysAreEqual(targets, targetsNew) || !arraysAreEqual(controls, controlsNew)) &&
-          seatsAreTaken(circuitEditorModule.state, proposedQbits, step, existingQbits)) {
+          seatsAreTaken(circuitEditorModule.state[window.currentCircuitId], proposedQbits, step, existingQbits)) {
           alert("The requested seat is occupied!");
         } else {
           this.commit("circuitEditorModule/removeGateNoTrack", { step: step, targets: targets });
@@ -573,14 +573,14 @@ export const circuitEditorModule = {
 
   mutations: {
     updateCircuitState(context, jsonObj) {
-      circuitEditorModule.state.steps = jsonObj.steps;
+      circuitEditorModule.state[window.currentCircuitId].steps = jsonObj.steps;
     },
     resetCircuitState() {
       let emptyState = JSON.parse('{"steps":[{"index":0,"gates":[]}]}');
-      circuitEditorModule.state.steps = emptyState.steps;
+      circuitEditorModule.state[window.currentCircuitId].steps = emptyState.steps;
     },
     insertQbit(context, qbit) {
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       if (Object.prototype.hasOwnProperty.call(state, "steps")) {
         for (let i = 0; i < state.steps.length; i++) {
           if (Object.prototype.hasOwnProperty.call(state.steps[i], "gates")) {
@@ -625,7 +625,7 @@ export const circuitEditorModule = {
       }
     },
     insertStep(context, step) {
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       if (Object.prototype.hasOwnProperty.call(state, "steps")) {
         for (let i = 0; i < state.steps.length; i++) {
           let currentStep = state.steps[i];
@@ -639,19 +639,19 @@ export const circuitEditorModule = {
       }
     },
     insertGate(context, dto) {
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       insertingOneGateInCircuit(state, dto);
     },
     // mutation that does not trigger update to undo/redo history
     insertGateNoTrack(context, dto) {
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       insertingOneGateInCircuit(state, dto);
     },
     insertGates(context, dataTransferObj) {
       let dtos = dataTransferObj["dtos"];
       let existingStep = dataTransferObj["existingStep"];
       let existingQbits = dataTransferObj["existingQbits"];
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       if (isDefined(existingStep) && existingQbits && existingQbits.length > 0){
         removingGateFromCircuit(state, {"step": existingStep, "targets": [...existingQbits]});
       }
@@ -660,33 +660,33 @@ export const circuitEditorModule = {
       }
     },
     removeGate(context, dto) {
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       removingGateFromCircuit(state, dto);
     },
     // mutation that does not trigger update to undo/redo history
     removeGateNoTrack(context, dto) {
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       removingGateFromCircuit(state, dto);
     },
     removeGates(context, dataTransferObj) {
       let dtos = dataTransferObj["dtos"];
       for (let i = 0; i < dtos.length; i++){
-        let state = circuitEditorModule.state;
+        let state = circuitEditorModule.state[window.currentCircuitId];
         removingGateFromCircuit(state, dtos[i]);
       }
     },
     removeBarrier(context, dto) {
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       removingBarrierFromCircuit(state, dto);
     },
     // mutation that does not trigger update to undo/redo history
     removeBarrierNoTrack(context, dto) {
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       removingBarrierFromCircuit(state, dto);
     },
     removeQbit(context, dto) {
       let qbit = dto["targets"][0];
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       if (Object.prototype.hasOwnProperty.call(state, "steps")) {
         for (let i = 0; i < state.steps.length; i++) {
           let gates = state.steps[i]["gates"];
@@ -757,7 +757,7 @@ export const circuitEditorModule = {
     },
     removeStep(context, dto) {
       let step = dto["step"];
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       if (Object.prototype.hasOwnProperty.call(state, "steps")) {
         for (let i = 0; i < state.steps.length; i++) {
           let stepIndex = parseInt(state.steps[i].index)
@@ -774,7 +774,7 @@ export const circuitEditorModule = {
       }
     },
     removeEmptySteps() {
-      let state = circuitEditorModule.state;
+      let state = circuitEditorModule.state[window.currentCircuitId];
       if (Object.prototype.hasOwnProperty.call(state, "steps")) {
         for (let i = 0; i < state.steps.length; i++) {
           let step = state.steps[i];

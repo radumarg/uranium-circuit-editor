@@ -323,7 +323,7 @@ export default {
     handleDropEvent: function (event) {
 
       let step = parseInt(event.currentTarget.getAttribute("step"));
-      let circuitState = this.$store.state.circuitEditorModule;
+      let circuitState = this.$store.state.circuitEditorModule[window.currentCircuitId];
       let gateName = event.dataTransfer.getData("gateName");
 
       let draggedQbit = null;
@@ -384,7 +384,7 @@ export default {
     findClosestGateAndAddNewControl: function (event) {
       let step = parseInt(event.currentTarget.getAttribute("step"));
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
-      let circuitState = this.$store.state.circuitEditorModule;
+      let circuitState = this.$store.state.circuitEditorModule[window.currentCircuitId];
       let closestGates = getClosestControlledGates(circuitState, step, dropQbit);
       if (closestGates.length >= 2) {
         alert(
@@ -538,7 +538,7 @@ export default {
         return;
       }
 
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step)) {
+      if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, step)) {
         alert("Cannot add this gate here, not all required qubits are available!");
         this.handleDragLeave();
         return;
@@ -612,7 +612,7 @@ export default {
           let currentQubit = Math.min(qbit, originalTargets[0]);
           let lastQubit = Math.max(qbit, originalTargets[0]);
           while (currentQubit <= lastQubit){
-            if (!seatsAreTaken(this.$store.state.circuitEditorModule, [currentQubit], step)) {
+            if (!seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], [currentQubit], step)) {
               let dtoNew = JSON.parse(JSON.stringify(dto));
               dtoNew["targets"] = [currentQubit];
               dtos.push(dtoNew);
@@ -626,7 +626,7 @@ export default {
         while (currentStep <= lastStep){
           if (currentStep != originalStep){
             let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
-            if (!seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, currentStep)) {
+            if (!seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, currentStep)) {
               let dtoNew = JSON.parse(JSON.stringify(dto));
               dtoNew.step = currentStep;
               dtos.push(dtoNew);
@@ -824,7 +824,7 @@ export default {
 
       let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
       
-      if (success && seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)){
+      if (success && seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, step, existingQbits)){
         if (step != originalStep) {
           alert("There are not enough free seats in order to move the gate here.");
         } else {
@@ -839,14 +839,14 @@ the action which was attempted was to adjust the dragged qubit not to move the g
     tryAppendingSecondTargetQubit(dto, qbit, step, existingQbits) {
       dto["targets"] = [qbit, qbit + 1];
       let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)) {
+      if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, step, existingQbits)) {
         if (qbit == 0) {
           alert("Cannot allocate second target qubit for this gate!");
           return false;
         }
         dto["targets"] = [qbit, qbit - 1];
         proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
-        if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)) {
+        if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, step, existingQbits)) {
           alert("Cannot allocate second target qubit for this gate!");
           return false;
         }

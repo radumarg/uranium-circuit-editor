@@ -172,8 +172,8 @@ export default {
       saveIsHovered:  false,
       qbitsNew: 0,
       stepsNew: 0,
-      history: [],
-      historyUnRoll: [],
+      history: this.initializeProjectHistory(),
+      historyUnRoll: this.initializeProjectHistory(),
     }
   },
   created() {
@@ -187,20 +187,21 @@ export default {
           mutation.type == 'circuitEditorModule/removeGates' ||
           mutation.type == 'circuitEditorModule/removeQbit' ||
           mutation.type == 'circuitEditorModule/removeStep'){
-        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
-        this.history.push(JSON.stringify(state));
-        this.historyUnRoll = [];
+        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule[window.currentCircuitId]);
+        this.history[window.currentCircuitId].push(JSON.stringify(state.circuitEditorModule[window.currentCircuitId]));
+        this.historyUnRoll[window.currentCircuitId] = [];
         // validate circuit in a separate thread
-        sendWorkerMessage(state.circuitEditorModule);
+        sendWorkerMessage(state.circuitEditorModule[window.currentCircuitId]);
       }      
     });
   },
   mounted() {
     let darkTheme = (getUserInterfaceSetting("dark-theme") === 'true')
     this.$root.$emit("switchThemeDark", darkTheme);
-    if (this.$store.state.circuitEditorModule.steps.length > 0){
-      this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
-      this.history.push(JSON.stringify(this.$store.state));
+    if (this.$store.state.circuitEditorModule[window.currentCircuitId].steps.length > 0){
+      this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule[window.currentCircuitId]);
+      let circuit = this.$store.state.circuitEditorModule[window.currentCircuitId];
+      this.history[window.currentCircuitId].push(JSON.stringify(circuit));
     }
   },
   beforeDestroy() {
@@ -210,27 +211,36 @@ export default {
     ...mapActions('circuitEditorModule/', ['emptyCircuit', 'updateCircuit', 'refreshCircuit']),
     ...mapGetters("circuitEditorModule/", ["getCircuitState", "getMaximumStepIndex", "getMaximumQbitIndex"]),
     undo: function() {
-      if (this.history.length > 0) {
-        let prev_state = this.history.pop();
-        this.historyUnRoll.push(prev_state);
-        if (this.history.length > 0){
-           let current_state = JSON.parse(this.history[this.history.length - 1]);
-           this.updateCircuit(current_state.circuitEditorModule);
-           this.$root.$emit("triggerSimulationRun", current_state.circuitEditorModule);
+      if (this.history[window.currentCircuitId].length > 0) {
+        let prev_state = this.history[window.currentCircuitId].pop();
+        this.historyUnRoll[window.currentCircuitId].push(prev_state);
+        if (this.history[window.currentCircuitId].length > 0){
+           let lastIndex = this.history[window.currentCircuitId].length - 1;
+           let current_state = JSON.parse(this.history[window.currentCircuitId][lastIndex]);
+           this.updateCircuit(current_state);
+           this.$root.$emit("triggerSimulationRun", current_state);
         } else {
           this.emptyCircuit();
-          this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
+          this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule[window.currentCircuitId]);
         }
       }
     },
     redo: function() {
-      if(this.historyUnRoll.length > 0){
-        let json_txt = this.historyUnRoll.pop();
-        this.history.push(json_txt);
+      if(this.historyUnRoll[window.currentCircuitId].length > 0){
+        let json_txt = this.historyUnRoll[window.currentCircuitId].pop();
+        this.history[window.currentCircuitId].push(json_txt);
         let current_state = JSON.parse(json_txt);
-        this.updateCircuit(current_state.circuitEditorModule);
-        this.$root.$emit("triggerSimulationRun", current_state.circuitEditorModule);
+        this.updateCircuit(current_state);
+        this.$root.$emit("triggerSimulationRun", current_state);
       }
+    },
+    initializeProjectHistory: function() {
+      let projectHistory = {};
+      for (let i = 0; i < window.circuitIds.length; i++) {
+        let id = window.circuitIds[i];
+        projectHistory[id] = [];
+      }
+      return projectHistory;
     },
     toggleTooltips: function() {    
       this.refreshCircuit();  
@@ -306,14 +316,15 @@ it does not make much sense doing that unless you intend to save the circuit as 
       let state = this.getCircuitState();
       const yaml = require('js-yaml');
       let yamlState = yaml.safeDump(state);
-      if (window.circuitId){
+      if (window.currentCircuitId > 0){
+        // TODO: change code here in order to save all circuits
         save_circuit(yamlState);
       } else {
         this.download("circuit.yaml", yamlState);
       }
     },
     download: function(filename, text) {
-      // add temp element for downloading files with user
+      // add temporary element for downloading files with user
       // consent, works on all HTML5 Ready browsers
       var element = document.createElement('a');
       element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -330,12 +341,12 @@ it does not make much sense doing that unless you intend to save the circuit as 
     },
     resetCircuit: function() {
       this.emptyCircuit();
-      this.history = [];
-      this.historyUnRoll = [];
+      this.history[window.currentCircuitId] = [];
+      this.historyUnRoll[window.currentCircuitId] = [];
       let state = this.getCircuitState();
       window.gatesTable.rows = window.initialRows;
       window.gatesTable.columns = window.initialColumns;
-      this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
+      this.$root.$emit("triggerSimulationRun", state);
       this.$root.$emit("circuitModifiedFromMenu");
       if (window.toolTipsAreShown){
         JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");
@@ -383,18 +394,19 @@ If you do not want to accept cookies, you can zoom the page yourself from the ke
       const yaml = require('js-yaml');
       var contents = event.target.result;
       let jsonObj = yaml.safeLoad(contents);
-      if (!jsonObj.version || jsonObj.version == "1.0"){
-        alert("Unfortunately this circuit format is outdated. We will refrain from introducing backwards incompatible changes in the future.")
-        jsonObj = JSON.parse('{"version": "1.1", "circuit-type": "simple", "steps": []}');
+      if (!jsonObj.version || jsonObj.version == "1.0" || jsonObj.version == "1.1") {
+        alert("Unfortunately this circuit format is outdated. Please delete this circuit and create a new one.");
+        return;
       }
       let qbits = getNoQbits(jsonObj);
       let steps = getNoSteps(jsonObj);
       window.gatesTable.rows = Math.max(2 * qbits + 2, window.initialRows);
       window.gatesTable.columns = Math.max(2 * steps + 2, window.initialColumns);
-      this.history = [];
-      this.historyUnRoll = [];
+      this.history[window.currentCircuitId] = [];
+      this.historyUnRoll[window.currentCircuitId] = [];
       this.updateCircuit(jsonObj);
-      this.history.push(JSON.stringify(this.$store.state));
+      let circuit = this.$store.state.circuitEditorModule[window.currentCircuitId];
+      this.history[window.currentCircuitId].push(JSON.stringify(circuit));
       this.$root.$emit("triggerSimulationRun", jsonObj);
       this.$root.$emit("circuitModifiedFromMenu");
     }

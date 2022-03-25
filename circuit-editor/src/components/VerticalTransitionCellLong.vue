@@ -40,7 +40,7 @@ export default {
       let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       let dragOrigin = event.dataTransfer.getData("drag-origin");
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
-      let circuitState = this.$store.state.circuitEditorModule;
+      let circuitState = this.$store.state.circuitEditorModule[window.currentCircuitId][window.currentCircuitId];
       let closestGates = getClosestControlledGates(circuitState, step, dropQbit);
       let closestGateTargets = closestGates[0].targets ? closestGates[0].targets : [];
       let closestGateGates = closestGates[0].gates ? closestGates[0].gates : [];
@@ -311,7 +311,7 @@ export default {
     findDropGateAndAddNewControl: function (event) {
       let step = parseInt(event.currentTarget.getAttribute("step"));
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
-      let circuitState = this.$store.state.circuitEditorModule;
+      let circuitState = this.$store.state.circuitEditorModule[window.currentCircuitId][window.currentCircuitId];
       let closestGates = getClosestControlledGates(circuitState, step, dropQbit);
       let closestGate = closestGates[0];
       let controlState = event.dataTransfer.getData("controlState");

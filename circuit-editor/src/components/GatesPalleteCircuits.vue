@@ -24,7 +24,7 @@
 import {gatesPalleteMixin} from "../mixins/gatesPalleteMixin.js";
 export default {
   mixins: [gatesPalleteMixin],
-  name: "GatesPalleteNQ"
+  name: "GatesPalleteCircuits"
 };
 </script>
 

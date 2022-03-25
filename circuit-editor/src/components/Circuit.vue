@@ -80,7 +80,7 @@ export default {
         return;
       }
       
-      let circuitState = this.$store.state.circuitEditorModule;
+      let circuitState = this.$store.state.circuitEditorModule[window.currentCircuitId];
       if (this.$data.lastSimulatedCircuit !== JSON.stringify(circuitState)){
         this.$data.lastSimulatedCircuit = JSON.stringify(circuitState);        
         this.$root.$emit("showSpinners");
@@ -103,7 +103,7 @@ export default {
       this.$root.$emit("showPieChart", getTopEntriesStateProbabilities(stateProbabilities), positionInfo.width, positionInfo.height);
     },
     endianessChange(){
-      let circuitState = this.$store.state.circuitEditorModule;
+      let circuitState = this.$store.state.circuitEditorModule[window.currentCircuitId];
       this.$data.lastSimulatedCircuit = JSON.stringify(circuitState);
       this.$root.$emit("showSpinners");
       var element = document.getElementById("editor2");

@@ -16,18 +16,21 @@
   }
   
   /* use Django REST API to retrieve circuit */
-  export function retrieve_circuit(){
+  export function retrieve_project_circuits(){
     
+    //TODO: change to retrieve all circuits for a given prject identity
+    //TODO: update uranium website to deliver empty circuits in the new format
+
     // Due to Cross-Origin Resource Sharing (CORS) policy restrictions the following request will
     // not work if request is sent to Django local development server from the Vue.js development server
     // In order to test while developeing, launch chrome in the following flags:
     // google-chrome --disable-site-isolation-trials --disable-web-security --user-data-dir="/tmp"
-    window.circuitId = get_request_param('circuitid');
+    window.currentCircuitId = get_request_param('circuitid');
     let authToken = getCookie('auth-token');
-    if (window.circuitId && authToken){
+    if (window.currentCircuitId && authToken){
   
         let xmlHttpReq = new XMLHttpRequest();
-        let url = '/projects/circuits-api/?circuitid='.concat(window.circuitId);
+        let url = '/projects/circuits-api/?circuitid='.concat(window.currentCircuitId);
         xmlHttpReq.open( 'GET', url, false); //TODO: this must be changed to an async request
         xmlHttpReq.setRequestHeader('Authorization', authToken);
         xmlHttpReq.setRequestHeader('Accept', 'application/json');
@@ -47,8 +50,21 @@
         }
         alert('Failed to retrieve the circuit code. Please try to reload the page.');
     }
-        
-    return JSON.parse('{"version": "1.1", "circuit-type": "simple", "steps": []}');
+
+    // Using negative values since these circuits are not intended to be saved in Django application database and
+    // will be loaded only if the Circuit Editor will be opened from the "Explore Editor" button on Uranium front
+    // webpage or in the development enviroment.
+    window.circuitIds = [-1, -2, -3, -4];
+
+    // Current circuit to be loaded in editor.
+    window.currentCircuitId = -1;
+
+    return JSON.parse('{\
+"-1": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-1", "circuit-name": "First Circuit", "project-id": "-1", "project-name": "My Project", "gate-shortcut": "1st", "steps": []},\
+"-2": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-2", "circuit-name": "Second Circuit", "project-id": "-1", "project-name": "My Project", "gate-shortcut": "2nd", "steps": []},\
+"-3": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-3", "circuit-name": "Third Circuit", "project-id": "-1", "project-name": "My Project", "gate-shortcut": "3rd", "steps": []},\
+"-4": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-4", "circuit-name": "Fourth Circuit", "project-id": "-1", "project-name": "My Project", "gate-shortcut": "4th", "steps": []}\
+}');
   }
   
   /* use Django REST API to save circuit */
@@ -65,7 +81,7 @@
       alert("For some reason saving the circuit has failed, please try again.");
     };
 
-    let url = '/projects/circuits-api/?circuitid='.concat(window.circuitId);
+    let url = '/projects/circuits-api/?circuitid='.concat(window.currentCircuitId);
     xmlHttpReq.open( "POST", url, true);
 
     let authToken = getCookie('auth-token');

@@ -380,6 +380,7 @@ export default {
     "getRowsInGatesTable"
   ]),
   created() {
+    this.$root.$on('currentCircuitSwitch', () => {this.$forceUpdate();});
     this.$root.$on("switchThemeDark", boolFlag => {
       if (boolFlag) {
         this.$refs["gatesTable"].style.backgroundColor = window.darkBackgroundColor;
