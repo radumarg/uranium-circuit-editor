@@ -112,6 +112,12 @@ export const circuitEditorModule = {
   },
 
   actions: {
+    updateCircuitName: function (context, args) {
+      this.commit("circuitEditorModule/updateCircuitNameElement", args);
+    },
+    updateCircuitAbbreviation: function (context, args) {
+      this.commit("circuitEditorModule/updateCircuitAbbreviationElement", args);
+    },
     // need a way to force circuit redraw, perhaps there is a better way
     refreshCircuit: function () {
       let availableQubits = window.gatesTable.rows / 2 - 1;
@@ -646,6 +652,16 @@ export const circuitEditorModule = {
     insertGateNoTrack(context, dto) {
       let state = circuitEditorModule.state[window.currentCircuitId];
       insertingOneGateInCircuit(state, dto);
+    },
+    updateCircuitNameElement(context, args) {
+      let circuitId = args[0];
+      let newCircuitName = args[1];
+      circuitEditorModule.state[circuitId]["circuit-name"] = newCircuitName;
+    },
+    updateCircuitAbbreviationElement(context, args) {
+      let circuitId = args[0];
+      let newCircuitAbbreviation = args[1];
+      circuitEditorModule.state[circuitId]["circuit-abbreviation"] = newCircuitAbbreviation;
     },
     insertGates(context, dataTransferObj) {
       let dtos = dataTransferObj["dtos"];

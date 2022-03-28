@@ -60,10 +60,10 @@
     window.currentCircuitId = -1;
 
     return JSON.parse('{\
-"-1": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-1", "circuit-name": "First Circuit", "project-id": "-1", "project-name": "My Project", "gate-shortcut": "1st", "steps": []},\
-"-2": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-2", "circuit-name": "Second Circuit", "project-id": "-1", "project-name": "My Project", "gate-shortcut": "2nd", "steps": []},\
-"-3": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-3", "circuit-name": "Third Circuit", "project-id": "-1", "project-name": "My Project", "gate-shortcut": "3rd", "steps": []},\
-"-4": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-4", "circuit-name": "Fourth Circuit", "project-id": "-1", "project-name": "My Project", "gate-shortcut": "4th", "steps": []}\
+"-1": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-1", "circuit-name": "First Circuit", "project-id": "-1", "project-name": "My Project", "circuit-abbreviation": "1st", "steps": []},\
+"-2": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-2", "circuit-name": "Second Circuit", "project-id": "-1", "project-name": "My Project", "circuit-abbreviation": "2nd", "steps": []},\
+"-3": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-3", "circuit-name": "Third Circuit", "project-id": "-1", "project-name": "My Project", "circuit-abbreviation": "3rd", "steps": []},\
+"-4": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-4", "circuit-name": "Fourth Circuit", "project-id": "-1", "project-name": "My Project", "circuit-abbreviation": "4th", "steps": []}\
 }');
   }
   

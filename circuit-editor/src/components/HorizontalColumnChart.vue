@@ -1,5 +1,5 @@
 <template>
-   <JSCharting :options="chartOptionsProbabilities" ref="chartProbabilities" class="chart" :key="updateKey"></JSCharting>
+   <JSCharting :options="chartOptionsProbabilities" ref="chartProbabilities" class="chart"></JSCharting>
 </template>
 
 <script>
@@ -53,12 +53,11 @@ export default {
         measureGates: {},
         defaultNumberOfBins: 128,
         liveSimulation: getUserInterfaceSetting("live-simulation") === 'true',
-        updateKey: 0,
       }
    },
    methods: {
       ...mapGetters("circuitEditorModule/", ["getMaximumQbitIndex"]),
-      updateData(probabilitiesDTO, forceReRender = false) {
+      updateData(probabilitiesDTO) {
          const [binnedStateProbabilities, maxProbability] = probabilitiesDTO;
          this.$data.chartOptionsProbabilities = {
             type: 'horizontal column',
@@ -78,11 +77,8 @@ export default {
                }
             },
          };
-         if (forceReRender) {
-           this.forceRerender();
-         }
       },
-      runSimulation: async function (circuitState, forceReRender = false) {
+      runSimulation: async function (circuitState) {
         if (this.$data.liveSimulation == true && this.$data.activated) {
           let maxQubitIndex = this.getMaximumQbitIndex();
           let measureGates = getMeasureGates(circuitState);
@@ -110,7 +106,7 @@ export default {
           }
           this.$data.qubits = maxQubitIndex + 1;
           let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateProbabilities.length);
-          this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, this.$data.minRange, this.$data.maxRange, numberOfBins), forceReRender);
+          this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, this.$data.minRange, this.$data.maxRange, numberOfBins));
         }        
       },
       selectionHandler(ev) { 
@@ -150,10 +146,6 @@ export default {
         this.$data.activated = activated;
         this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId], true);
       },
-      forceRerender() {
-        // this creates a memory leak
-        this.updateKey += 1;
-      }
    },
    options: {
       responsive: true,

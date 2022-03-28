@@ -128,8 +128,8 @@ export default {
       runSimulation: async function (circuitState, forceReRender = false) {
         if (this.$data.liveSimulation == true && this.$data.activated) {
           let qubits = this.getMaximumQbitIndex() + 1;
-          if (qubits == -1){
-            this.updateData([], [], 1.0);
+          if (qubits <= 0){
+            this.updateData([{ x: '0', y: 0 }, { x: '1', y: 0 }], [{ x: '0', y: 0 }, { x: '1', y: 0 }], 1.0);
           } else if (qubits <= 8){
             let stateVectorEntries = await getStateVectorEntries(circuitState, qubits);
             let stateVectorRealEntries = stateVectorEntries["real"];
@@ -138,7 +138,7 @@ export default {
             this.updateData([], [], maxScale);
             this.updateData(stateVectorRealEntries, stateVectorImaginaryEntries, maxScale);
           } else {
-            this.updateData([], [], 1.0);
+            this.updateData([{ x: '0', y: 0 }, { x: '1', y: 0 }], [{ x: '0', y: 0 }, { x: '1', y: 0 }], 1.0);
           }
           if (forceReRender) {
             this.forceRerender();
@@ -154,7 +154,8 @@ export default {
         this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId], true);
       },
       forceRerender() {
-        // this creates a memory leak
+        // this creates a memory leak, however removing this will cause both StateVectorChart and
+        // HorizontalColumnChart to not update correctly when swicthing between the two tabs.
         this.updateKey += 1;
       }
    },
