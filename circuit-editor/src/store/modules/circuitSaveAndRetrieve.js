@@ -42,7 +42,7 @@
               let jsonObj = JSON.parse(xmlHttpReq.responseText);
               if (!jsonObj.version || jsonObj.version == "1.0"){
                 alert("Unfortunately this circuit format is outdated. We will refrain from introducing backwards incompatible changes in the future.")
-                jsonObj = JSON.parse('{"version": "1.1", "circuit-type": "simple", "steps": []}');
+                jsonObj = JSON.parse('{"version": "1.1", "circuit_type": "simple", "steps": []}');
               }
               return jsonObj;
           } 
@@ -60,10 +60,10 @@
     window.currentCircuitId = -1;
 
     return JSON.parse('{\
-"-1": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-1", "circuit-name": "First Circuit", "project-id": "-1", "project-name": "My Project", "circuit-abbreviation": "1st", "steps": []},\
-"-2": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-2", "circuit-name": "Second Circuit", "project-id": "-1", "project-name": "My Project", "circuit-abbreviation": "2nd", "steps": []},\
-"-3": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-3", "circuit-name": "Third Circuit", "project-id": "-1", "project-name": "My Project", "circuit-abbreviation": "3rd", "steps": []},\
-"-4": {"version": "1.2", "circuit-type": "simple", "circuit-id": "-4", "circuit-name": "Fourth Circuit", "project-id": "-1", "project-name": "My Project", "circuit-abbreviation": "4th", "steps": []}\
+"-1": {"version": "1.2", "circuit_type": "simple", "circuit_id": "-1", "circuit_name": "First Circuit", "circuit_abbreviation": "1st", "project_id": "-1", "project_name": "My Project", "steps": []},\
+"-2": {"version": "1.2", "circuit_type": "simple", "circuit_id": "-2", "circuit_name": "Second Circuit", "circuit_abbreviation": "2nd", "project_id": "-1", "project_name": "My Project", "steps": []},\
+"-3": {"version": "1.2", "circuit_type": "simple", "circuit_id": "-3", "circuit_name": "Third Circuit", "circuit_abbreviation": "3rd", "project_id": "-1", "project_name": "My Project", "steps": []},\
+"-4": {"version": "1.2", "circuit_type": "simple", "circuit_id": "-4", "circuit_name": "Fourth Circuit", "circuit_abbreviation": "4th", "project_id": "-1", "project_name": "My Project", "steps": []}\
 }');
   }
   

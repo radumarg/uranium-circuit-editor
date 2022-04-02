@@ -432,7 +432,23 @@ export default {
         if (closestGate["root"]) {
           let root = closestGate.root;
           dto["root"] = root;
-        }     
+        }
+        if (closestGate["circuit_id"]) {
+          let circuitId = closestGate.circuit_id;
+          dto["circuit_id"] = circuitId;
+        }
+        if (closestGate["circuit_abbreviation"]) {
+          let circuitAbbreviation = closestGate.circuit_abbreviation;
+          dto["circuit_abbreviation"] = circuitAbbreviation;
+        }
+        if (isDefined(closestGate["circuit_power"])) {
+          let circuitPower = closestGate.circuit_power;
+          dto["circuit_power"] = circuitPower;
+        }
+        if (isDefined(closestGate["targets_expression"])) {
+          let targetsExpression = closestGate.targets_expression;
+          dto["targets_expression"] = targetsExpression;
+        }
 
         this.removeGateFromCircuit(dto);
         this.insertGateInCircuit(dto);
@@ -476,6 +492,22 @@ export default {
       if (event.dataTransfer.types.includes("root")) {
         let root = event.dataTransfer.getData("root");
         dto["root"] = root;
+      }
+      if (event.dataTransfer.types.includes("circuit_id")) {
+        let circuitId = event.dataTransfer.getData("circuit_id");
+        dto["circuit_id"] = circuitId;
+      }
+      if (event.dataTransfer.types.includes("circuit_abbreviation")) {
+        let circuitAbbreviation = event.dataTransfer.getData("circuit_abbreviation");
+        dto["circuit_abbreviation"] = circuitAbbreviation;
+      }
+      if (event.dataTransfer.types.includes("circuit_power")) {
+        let circuitPower = event.dataTransfer.getData("circuit_power");
+        dto["circuit_power"] = circuitPower;
+      }
+      if (event.dataTransfer.types.includes("targets_expression")) {
+        let targetsExpression = event.dataTransfer.getData("targets_expression");
+        dto["targets_expression"] = targetsExpression;
       }
 
       this.removeGateFromCircuit(dto);
@@ -528,6 +560,22 @@ export default {
       }
       if (event.dataTransfer.types.includes("bit")) {
         dto["bit"] = qbit;
+      }
+      if (event.dataTransfer.types.includes("circuit_id")) {
+        let circuitId = event.dataTransfer.getData("circuit_id");
+        dto["circuit_id"] = circuitId;
+      }
+      if (event.dataTransfer.types.includes("circuit_abbreviation")) {
+        let circuitAbbreviation = event.dataTransfer.getData("circuit_abbreviation");
+        dto["circuit_abbreviation"] = circuitAbbreviation;
+      }
+      if (event.dataTransfer.types.includes("circuit_power")) {
+        let circuitPower = event.dataTransfer.getData("circuit_power");
+        dto["circuit_power"] = circuitPower;
+      }
+      if (event.dataTransfer.types.includes("targets_expression")) {
+        let targetsExpression = event.dataTransfer.getData("targets_expression");
+        dto["targets_expression"] = targetsExpression;
       }
 
       let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
@@ -596,6 +644,22 @@ export default {
       }
       if (event.dataTransfer.types.includes("bit")) {
         dto["bit"] = qbit;
+      }
+      if (event.dataTransfer.types.includes("circuit_id")) {
+        let circuitId = event.dataTransfer.getData("circuit_id");
+        dto["circuit_id"] = circuitId;
+      }
+      if (event.dataTransfer.types.includes("circuit_abbreviation")) {
+        let circuitAbbreviation = event.dataTransfer.getData("circuit_abbreviation");
+        dto["circuit_abbreviation"] = circuitAbbreviation;
+      }
+      if (event.dataTransfer.types.includes("circuit_power")) {
+        let circuitPower = event.dataTransfer.getData("circuit_power");
+        dto["circuit_power"] = circuitPower;
+      }
+      if (event.dataTransfer.types.includes("targets_expression")) {
+        let targetsExpression = event.dataTransfer.getData("targets_expression");
+        dto["targets_expression"] = targetsExpression;
       }
 
       let dtos = [];
@@ -740,6 +804,22 @@ export default {
         // in case we relocate the gate, it makes much
         //  more sense to assign bit to the new qbit
         dto["bit"] = qbit;
+      }
+      if (event.dataTransfer.types.includes("circuit_id")) {
+        let circuitId = event.dataTransfer.getData("circuit_id");
+        dto["circuit_id"] = circuitId;
+      }
+      if (event.dataTransfer.types.includes("circuit_abbreviation")) {
+        let circuitAbbreviation = event.dataTransfer.getData("circuit_abbreviation");
+        dto["circuit_abbreviation"] = circuitAbbreviation;
+      }
+      if (event.dataTransfer.types.includes("circuit_power")) {
+        let circuitPower = event.dataTransfer.getData("circuit_power");
+        dto["circuit_power"] = circuitPower;
+      }
+      if (event.dataTransfer.types.includes("targets_expression")) {
+        let targetsExpression = event.dataTransfer.getData("targets_expression");
+        dto["targets_expression"] = targetsExpression;
       }
 
       let existingQbits = [

@@ -141,6 +141,8 @@ each qubit is measured into a classical bit with index equal to the qubit index 
       return 'The "cross-resonance" gate (CR) for superconducting qubits implements a ZX interaction and is defined as: exp(-i * θ/2 * (Z⊗X)). Because in real life the CR gate is implemented using weakly anharmonic transmon qubits in practice there exist other smaller interactions terms in the interaction hamiltonian besides the dominant Z⊗X term. The CR gate is maximally entangling at θ = π/2.';
     } else if (gateName == "cross-resonance-dagger") {
       return 'The "cross-resonance-dagger" is the conjugate transpose of "cross-resonance" gate and is defined as: exp(i * θ/2 * (Z⊗X)). Because in real life the CR gate is implemented using weakly anharmonic transmon qubits in practice there exist other smaller interactions terms in the interaction hamiltonian besides the dominant Z⊗X term. The CR gate is maximally entangling at θ = π/2.';
+    } else if (gateName == "circuit") {
+      return 'This is a special gate that is used to represent an arbitrary quantum circuit defined in the same project.';
     } else if (gateName == "barrier") {
       return 'In the context of IBMQ, a barier indicates a boundary in a circuit across which optimizations or circuit re-writes are not \
       performed during transpiling phase. In the limited context of Uranium, the barrier may be used to separate different portions of a \
@@ -390,6 +392,8 @@ export function retriveControlledGateHelpHtml(gateName) {
     return 'A "cross-resonance" gate may have any number of controls.';
   } else if (gateName == "cross-resonance-dagger") {
     return 'A "cross-resonance-dagger" gate may have any number of controls.';
+  } else if (gateName == "circuit") {
+    return 'Any number of controls can be attached to this gate.';
   } else if (gateName == "barrier") {
     return '';
   }

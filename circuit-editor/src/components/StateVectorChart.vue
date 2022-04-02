@@ -173,7 +173,7 @@ export default {
       this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.updateView(simulatingLive)});
       this.$root.$on('statevectorTabActivated', (activated) => {this.tabActivated(activated)});
       this.$root.$on('switchEndianess', () => {this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId], false)});
-      this.$root.$on('currentCircuitSwitch', () => {this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId])});
+      this.$root.$on('currentCircuitSwitch', () => {this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId], true)});
    },
 }
 </script>

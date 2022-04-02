@@ -4,6 +4,20 @@
 import $ from "jquery";
 import { getUserInterfaceSetting } from "./applicationWideReusableUnits.js";
 import { arraysHaveElementsInCommon } from "./javaScriptUtils.js";
+import { create, all } from 'mathjs'
+
+// reduce the security risk by not allwing to evaluate arbitrary js
+// expressions: https://mathjs.org/docs/expressions/security.html
+const math = create(all);
+const limitedEvaluate = math.evaluate;
+math.import({
+  'import':     function () { throw new Error('Function import is disabled') },
+  'createUnit': function () { throw new Error('Function createUnit is disabled') },
+  'evaluate':   function () { throw new Error('Function evaluate is disabled') },
+  'parse':      function () { throw new Error('Function parse is disabled') },
+  'simplify':   function () { throw new Error('Function simplify is disabled') },
+  'derivative': function () { throw new Error('Function derivative is disabled') }
+}, { override: true })
 
 export function getClosestControlledGates(circuitState, step, qubit) {
   
@@ -129,9 +143,26 @@ export function insertingOneGateInCircuit(circuitState, dto) {
 
   let gate = { "name": name};
 
+  if (Object.prototype.hasOwnProperty.call(dto, "circuit_id")) {
+    let circuitId = dto["circuit_id"];
+    gate["circuit_id"] = circuitId;
+  }
+  if (Object.prototype.hasOwnProperty.call(dto, "circuit_abbreviation")) {
+    let circuitAbbreviation = dto["circuit_abbreviation"];
+    gate["circuit_abbreviation"] = circuitAbbreviation;
+  }
+  if (Object.prototype.hasOwnProperty.call(dto, "circuit_power")) {
+    let circuitPower = dto["circuit_power"];
+    gate["circuit_power"] = circuitPower;
+  }
+
   if (Object.prototype.hasOwnProperty.call(dto, "targets")) {
     let targets = dto["targets"];
     gate["targets"] = [...targets];
+  }
+  if (Object.prototype.hasOwnProperty.call(dto, "targets_expression")) {
+    let targetsExpression = dto["targets_expression"];
+    gate["targets_expression"] = targetsExpression;
   }
 
   if (Object.prototype.hasOwnProperty.call(dto, "controls") &&
@@ -609,4 +640,25 @@ export function getAggregatedGatesNewTargets(dto) {
   }
 
   return aggregatedGateTargets;
+}
+
+export function interpolateJavaScriptTargetsExpression(expression, j) {
+
+  expression = expression.trim();
+  expression = expression.replaceAll("False", "false");
+  expression = expression.replaceAll("FALSE", "false");
+  expression = expression.replaceAll("True", "true");
+  expression = expression.replaceAll("TRUE", "true");
+  expression = expression.replace(/j/g, `${j}`);
+  return expression;
+}
+
+export function evaluateTargetsExpression(expression, j) {
+  let condition = interpolateJavaScriptExpression(expression, j);
+  if (limitedEvaluate(condition) === true) {
+    return true;
+  } else if (limitedEvaluate(condition) === false) {
+    return false;
+  }
+  throw new Error('Expression does not evaluate to a boolean value.');
 }

@@ -47,6 +47,14 @@ class GatesTableCell {
     this.controlstates = [];
     /* single qubit gates attached to an aggregate gate */
     this.gates = [];
+    /* id of the circuit for a circuit gate */
+    this.circuit_id = null;
+    /* abbrevation used to distinguish different circuit gates */
+    this.circuit_abbreviation = null;
+    /* power for a circuit gate: pozitive or negative integer */
+    this.circuit_power = null;
+    /* i-based javascript target expression */
+    this.targets_expression = null;
     /* the circle in parametric swap gates is not being refreshed by vue when draging the upper qbit, 
        upwards to a new position so we need to update this key to force vue to re-render that cell 
     */
@@ -1058,6 +1066,18 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           if (Object.prototype.hasOwnProperty.call(gate, "bit")) {
             gatesTableRowState.cells[column].bit = parseFloat(gate.bit);
             gatesTableRowState.cells[column].tooltip += `bit=${gate.bit} `;
+          }
+          if (Object.prototype.hasOwnProperty.call(gate, "circuit_id")) {
+            gatesTableRowState.cells[column].circuit_id = parseInt(gate.circuit_id);
+          }
+          if (Object.prototype.hasOwnProperty.call(gate, "circuit_abbreviation")) {
+            gatesTableRowState.cells[column].circuit_abbreviation = gate.circuit_abbreviation;
+          }
+          if (Object.prototype.hasOwnProperty.call(gate, "circuit_power")) {
+            gatesTableRowState.cells[column].circuit_power = parseInt(gate.circuit_power);
+          }
+          if (Object.prototype.hasOwnProperty.call(gate, "targets_expression")) {
+            gatesTableRowState.cells[column].targets_expression = gate.targets_expression;
           }
 
           // if this is not a multiple bit gate we are done

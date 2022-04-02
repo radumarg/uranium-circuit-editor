@@ -263,6 +263,8 @@ export const circuitEditorModule = {
             dto = { "step": step, "targets": targets, "name": name, "theta": 0, "phi": 0, "controls": controls, "controlstates": controlstates };
           } else if (canonicalGates.includes(name)) {
             dto = { "step": step, "targets": targets, "name": name, "tx": 0, "ty": 0, "tz": 0, "controls": controls, "controlstates": controlstates };
+          } else if (name == "circuit") {
+            dto = { "step": step, "targets": targets, "name": name, "controls": controls, "controlstates": controlstates };
           } else if (name == "barrier") {
             dto = { "step": step, "name": name };
           } else {
@@ -289,6 +291,22 @@ export const circuitEditorModule = {
           if (Object.prototype.hasOwnProperty.call(dataTransferObj, "bit")) {
             let bit = dataTransferObj["bit"];
             dto["bit"] = bit;
+          }
+          if (Object.prototype.hasOwnProperty.call(dataTransferObj, "circuit_id")) {
+            let circuitId = dataTransferObj["circuit_id"];
+            dto["circuit_id"] = circuitId;
+          }
+          if (Object.prototype.hasOwnProperty.call(dataTransferObj, "circuit_abbreviation")) {
+            let circuitAbbreviation = dataTransferObj["circuit_abbreviation"];
+            dto["circuit_abbreviation"] = circuitAbbreviation;
+          }
+          if (Object.prototype.hasOwnProperty.call(dataTransferObj, "circuit_power")) {
+            let circuitPower = dataTransferObj["circuit_power"];
+            dto["circuit_power"] = circuitPower;
+          }
+          if (Object.prototype.hasOwnProperty.call(dataTransferObj, "targets_expression")) {
+            let targetsExpression = dataTransferObj["targets_expression"];
+            dto["targets_expression"] = targetsExpression;
           }
 
           this.commit("circuitEditorModule/insertGate", dto);
@@ -656,12 +674,12 @@ export const circuitEditorModule = {
     updateCircuitNameElement(context, args) {
       let circuitId = args[0];
       let newCircuitName = args[1];
-      circuitEditorModule.state[circuitId]["circuit-name"] = newCircuitName;
+      circuitEditorModule.state[circuitId]["circuit_name"] = newCircuitName;
     },
     updateCircuitAbbreviationElement(context, args) {
       let circuitId = args[0];
       let newCircuitAbbreviation = args[1];
-      circuitEditorModule.state[circuitId]["circuit-abbreviation"] = newCircuitAbbreviation;
+      circuitEditorModule.state[circuitId]["circuit_abbreviation"] = newCircuitAbbreviation;
     },
     insertGates(context, dataTransferObj) {
       let dtos = dataTransferObj["dtos"];

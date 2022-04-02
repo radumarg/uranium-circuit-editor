@@ -74,7 +74,7 @@
             </tr>
             <tr>
               <td colspan="2" class="project-details">
-                <b-form-select style="width:264px; max-width: 264px; min-width: 264px;" v-model="circuitName" v-on:change="switchCircuit()" :options="circuitNames" size="sm" class="mt-1"></b-form-select>
+                <b-form-select style="width:264px; max-width: 264px; min-width: 264px;" v-model="circuitName" v-on:change="switchCircuit()" :options="circuitNames" class="mt-1"></b-form-select>
               </td>
             </tr>
             <tr style="height: 10px;">
@@ -135,8 +135,8 @@ export default {
       gateMatrixHtml: retriveGateMatrixHtml(""),
       controlledGateMatrixHtml: retriveControlledGateMatrixHtml(""),
       gateName: "",
-      projectName: this.$store.state.circuitEditorModule[window.currentCircuitId]["project-name"],
-      circuitName: this.$store.state.circuitEditorModule[window.currentCircuitId]["circuit-name"],
+      projectName: this.$store.state.circuitEditorModule[window.currentCircuitId]["project_name"],
+      circuitName: this.$store.state.circuitEditorModule[window.currentCircuitId]["circuit_name"],
       circuitNames: this.getCircuitNameOptions(),
     };
   },
@@ -196,7 +196,7 @@ export default {
     switchCircuit: function(){
       for (let i = 0; i < window.circuitIds.length; i++) {
         let id = window.circuitIds[i];
-        if (this.$store.state.circuitEditorModule[id]["circuit-name"] == this.circuitName) {
+        if (this.$store.state.circuitEditorModule[id]["circuit_name"] == this.circuitName) {
           window.currentCircuitId = id;
           let newCircuit = this.$store.state.circuitEditorModule[id];
           this.updateCircuit(newCircuit);
@@ -209,7 +209,7 @@ export default {
       let circuitNameOptions = [];
       for (let i = 0; i < window.circuitIds.length; i++) {
         let id = window.circuitIds[i];
-        let circuitName = this.$store.state.circuitEditorModule[id]["circuit-name"];
+        let circuitName = this.$store.state.circuitEditorModule[id]["circuit_name"];
         circuitNameOptions.push({ value: circuitName, text: circuitName })
       }
       return circuitNameOptions;
@@ -225,12 +225,11 @@ export default {
 
 table {
   /* disable selection on mouse drag over */
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 .top-row {

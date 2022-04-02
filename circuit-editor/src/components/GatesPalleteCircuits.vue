@@ -2,21 +2,56 @@
   <div class="gates-pallete" id="gates-pallete-circuit">
 
     <table id="gates-pallete-table-circuit" style="table-layout: fixed; max-width: 269px;">
-      <div v-for="circuitIndex in this.getCompatibleCircuitIds().length" v-bind:key="circuitIndex">
+      <!-- <div v-for="circuitIndex in this.getCompatibleCircuitIds().length" v-bind:key="circuitIndex"> -->
+        <div v-for="circuitIndex in 1" v-bind:key="circuitIndex">
         <tr>
+
           <td style="width: 5px; height: 5px; max-height: 5px; text-align: center; padding: 5px;">
             <div @mouseover="onPenMouseOver(circuitIndex - 1)" @mouseleave="onPenMouseLeave(circuitIndex - 1)">
               <b-icon v-if="editCircuitNamePenIsHovered[circuitIndex - 1]" icon="pencil-fill" v-on:click="showEditCircuitModal(circuitIndex - 1)" title="Edit circuit name and abbreviation" style="color: MediumSlateBlue;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="pencil" style="color: MediumSlateBlue;" font-scale="1.4"></b-icon>
             </div>
           </td>
+
+
           <td style="color: white; text-align: center; width: 268px; height: 5px; max-height: 5px; padding: 5px;">
             {{ getCircuitName(circuitIndex - 1) }}
           </td>
-          <td style="text-align: center; height: 5px; max-height: 5px; width: 5px; padding: 5px;">
-            <img v-if="coloredGatesCookie" src="../assets/colored-gates/qft.svg" @dragend="dragEnd" @dragstart="dragStart" class="circuit-gate-image" title="circuit" alt="Circuit Gate"/>
-            <img v-else src="../assets/blue-gates/qft.svg" @dragend="dragEnd" @dragstart="dragStart" class="circuit-gate-image" title="circuit" alt="Circuit Gate"/>
+
+          <td style="height: 50px; max-height: 50px; width: 50px; max-width: 50px; padding: 5px;">
+            
+            <!-- <div v-if="coloredGatesCookie" type="parametric-svg">
+              <img src="../assets/colored-gates/circuit.svg" @dragend="dragEnd" @dragstart="dragStart" class="circuit-gate-image" title="circuit" alt="Circuit Gate"/>
+              <param name="abbreviation" value="2"/>
+              <param name="fill" value="orange"/>
+            </div>
+            <div v-else type="parametric-svg">
+              <img src="../assets/blue-gates/qft.svg" @dragend="dragEnd" @dragstart="dragStart" class="circuit-gate-image" title="circuit" alt="Circuit Gate"/>
+              <param name="abbreviation" value="2"/>
+              <param name="fill" value="orange"/>
+            </div> -->
+
+            <!-- <object v-if="coloredGatesCookie" :data="require('../assets/colored-gates/circuit.svg')" type="image/svg+xml" class="circuit-gate-image" title="circuit" alt="Circuit Gate">
+              <param name="abbreviation" value="2"/>
+              <param name="fill" value="orange"/>
+            </object> -->
+  
+
+      <div draggable="true" id="xyz">
+      <svg class="circuit-gate-image" xmlns="http://www.w3.org/2000/svg" title="circuit">
+        <g>
+          <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke:MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+          <text x="8" y="28" style="font-size: 27px; font-style: italic;  fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">B</tspan></text>
+        </g>
+      </svg>
+      </div>
+
+
+            
+            <!-- <object v-else :data="require('../assets/blue-gates/circuit.svg')" type="image/svg+xml" class="circuit-gate-image" title="circuit" alt="Circuit Gate">
+            </object> -->
           </td>
+
         </tr>
       </div>
     </table>
@@ -70,11 +105,10 @@
 </template>
 
 <script>
-import {gatesPalleteMixin} from "../mixins/gatesPalleteMixin.js";
+import { createCircuitDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 import { mapActions } from 'vuex';
 export default {
   name: "GatesPalleteCircuits",
-  mixins: [gatesPalleteMixin],
   data() {
     return {
       editCircuitNamePenIsHovered: this.initPenHoverStauses(),
@@ -87,6 +121,13 @@ export default {
   },
   created() {
     this.$root.$on('currentCircuitSwitch', () => {this.$forceUpdate()});
+  },
+  mounted() {
+    var svgDiv = document.getElementById("xyz");
+    if (svgDiv != null){
+      svgDiv.addEventListener("dragstart", this.dragStart);
+      svgDiv.addEventListener('dragend', this.dragEnd);
+    }
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['refreshCircuit', 'updateCircuitName', 'updateCircuitAbbreviation']),
@@ -107,10 +148,10 @@ export default {
     },
     getCompatibleCircuitIds: function () {
       let ids = [];
-      let currentCircuitName = this.$store.state.circuitEditorModule[window.currentCircuitId]["circuit-name"];
+      let currentCircuitName = this.$store.state.circuitEditorModule[window.currentCircuitId]["circuit_name"];
       for (let i = 0; i < window.circuitIds.length; i++) {
         let id = window.circuitIds[i];
-        let circuitName = this.$store.state.circuitEditorModule[id]["circuit-name"];
+        let circuitName = this.$store.state.circuitEditorModule[id]["circuit_name"];
         if (currentCircuitName != circuitName) {
           ids.push(id);
         }
@@ -120,13 +161,13 @@ export default {
     getCircuitName: function (circuitIndex) {
       let compatibleCicuitIds = this.getCompatibleCircuitIds();
       let id = compatibleCicuitIds[circuitIndex];
-      return this.$store.state.circuitEditorModule[id]["circuit-name"];
+      return this.$store.state.circuitEditorModule[id]["circuit_name"];
     },
     showEditCircuitModal: function (circuitIndex) {
       let compatibleCicuitIds = this.getCompatibleCircuitIds();
       this.$data.editedCircuitId = compatibleCicuitIds[circuitIndex];
-      this.$data.circuitName = this.$store.state.circuitEditorModule[this.$data.editedCircuitId]["circuit-name"];
-      this.$data.circuitAbbreviation = this.$store.state.circuitEditorModule[this.$data.editedCircuitId]["circuit-abbreviation"];
+      this.$data.circuitName = this.$store.state.circuitEditorModule[this.$data.editedCircuitId]["circuit_name"];
+      this.$data.circuitAbbreviation = this.$store.state.circuitEditorModule[this.$data.editedCircuitId]["circuit_abbreviation"];
       this.$refs['change-circuit-name-dialog'].show();
       this.modalCloseIsHovered = false;
       this.modalSaveIsHovered = false;
@@ -164,7 +205,22 @@ export default {
       this.$refs['change-circuit-name-dialog'].hide();
       this.$forceUpdate();
       this.refreshCircuit();
-    }
+    },
+    dragStart: function(event) {
+      hideTooltips();
+      event.dataTransfer.setData("gateName", "circuit");
+      event.dataTransfer.setData("drag-origin", "gates-pallete");
+      event.dataTransfer.setData("circuit_id", "-1");
+      event.dataTransfer.setData("circuit_abbreviation", "BO");
+      event.dataTransfer.setData("circuit_power", "1");
+      event.dataTransfer.setData("targets_expression", "true");
+      let dragImageGhost = createCircuitDragImageGhost();
+      event.dataTransfer.setDragImage(dragImageGhost, 20, 20);
+    },
+    dragEnd: function() {
+      let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
+      document.body.removeChild(dragImageGhost);
+    },
   },
 };
 </script>
@@ -185,12 +241,11 @@ table {
   table-layout: fixed;
 
   /* disable selection on mouse drag over */
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 th,

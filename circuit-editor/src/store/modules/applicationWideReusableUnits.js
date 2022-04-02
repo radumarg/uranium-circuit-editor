@@ -30,10 +30,33 @@ export function createDragImageGhost (targetImage, imageWidth = null) {
   fakeGhost.id = "dragged-gate-ghost";
   document.body.appendChild(fakeGhost);
 
-  // tried to make image transparent, not working on my machine, though image is transparent on other browsers
-  // https://stackoverflow.com/questions/38731743/transition-opacity-not-working-when-creating-element
-  //window.getComputedStyle(fakeGhost).getPropertyValue("opacity");
-  //fakeGhost.style.opacity = "0.5"; 
+  return fakeGhost;
+}
+
+export function createCircuitDragImageGhost () {
+
+  var fakeGhost = document.createElement("img");
+
+  if (getUserInterfaceSetting("colored-gates") === 'true'){
+    fakeGhost.src = require('../../assets/colored-gates/circuit.svg');
+  } else {
+    fakeGhost.src = require('../../assets/blue-gates/circuit.svg');
+  }
+
+  if (getUserInterfaceSetting("dark-theme") === 'true'){
+      fakeGhost.style.backgroundColor = window.darkBackgroundColor;
+  } else {
+      if (getUserInterfaceSetting("colored-gates") === 'true'){
+          fakeGhost.style.backgroundColor = window.lightBackgroundColor;
+      } else {
+          fakeGhost.style.backgroundColor = window.whiteBackgroundColor;
+      }
+  }
+
+  fakeGhost.style.width = "40px";
+  fakeGhost.style.height = "auto";
+  fakeGhost.id = "dragged-gate-ghost";
+  document.body.appendChild(fakeGhost);
 
   return fakeGhost;
 }
