@@ -155,14 +155,14 @@ export function insertingOneGateInCircuit(circuitState, dto) {
     let circuitPower = dto["circuit_power"];
     gate["circuit_power"] = circuitPower;
   }
+  if (Object.prototype.hasOwnProperty.call(dto, "targets_expression")) {
+    let targetsExpression = dto["targets_expression"];
+    gate["targets_expression"] = targetsExpression;
+  }
 
   if (Object.prototype.hasOwnProperty.call(dto, "targets")) {
     let targets = dto["targets"];
     gate["targets"] = [...targets];
-  }
-  if (Object.prototype.hasOwnProperty.call(dto, "targets_expression")) {
-    let targetsExpression = dto["targets_expression"];
-    gate["targets_expression"] = targetsExpression;
   }
 
   if (Object.prototype.hasOwnProperty.call(dto, "controls") &&
@@ -176,6 +176,7 @@ export function insertingOneGateInCircuit(circuitState, dto) {
         );
     }
   }
+  
   if (Object.prototype.hasOwnProperty.call(dto, "phi")) {
     let phi = dto["phi"];
     gate["phi"] = phi;
@@ -654,11 +655,43 @@ export function interpolateJavaScriptTargetsExpression(expression, j) {
 }
 
 export function evaluateTargetsExpression(expression, j) {
-  let condition = interpolateJavaScriptExpression(expression, j);
+  let condition = interpolateJavaScriptTargetsExpression(expression, j);
   if (limitedEvaluate(condition) === true) {
     return true;
   } else if (limitedEvaluate(condition) === false) {
     return false;
   }
   throw new Error('Expression does not evaluate to a boolean value.');
+}
+
+export function getMatchingTargets(qmin, qmax, expression) {
+
+  let targets = [];
+  for (let q = qmin; q <= qmax; q++) {
+    let targetIsUsed = evaluateTargetsExpression(expression, q - qmin);
+    if (targetIsUsed == true) {
+      targets.push(q);
+    }
+  }
+
+  return targets;
+}
+
+export function gateHasVariableTragets(gateName){
+  if (gateName == "qft"
+    || gateName == "qft-dagger"
+    ) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+export function gateCanHaveManyTargets(gateName) {
+
+  if (gateName == "circuit") {
+    return true;
+  }
+
+  return gateHasVariableTragets(gateName);
 }

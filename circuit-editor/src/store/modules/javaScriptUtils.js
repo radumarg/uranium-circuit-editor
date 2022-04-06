@@ -30,3 +30,8 @@ export function arraysHaveElementsInCommon(array1, array2) {
   const filteredArray = array1.filter(value => array2.includes(value));
   return (filteredArray.length > 0);
 }
+
+export function range(min, max) {
+  const range = (min, max) => Array.from({ length: max - min + 1 }, (_, i) => min + i);
+  return range(min, max);
+}

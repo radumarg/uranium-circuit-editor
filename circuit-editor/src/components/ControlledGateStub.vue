@@ -115,6 +115,10 @@ export default {
     'lambda': Number,
     'root': String,
     'id': String,
+    'circuit_id': Number,
+    'circuit_abbreviation': String,
+    'circuit_power': Number,
+    'targets_expression': String,
   },
   data() {
     return {
@@ -339,6 +343,18 @@ export default {
       }
       if (isDefined(this.root)){
         event.dataTransfer.setData("root", this.root);
+      }
+      if (isDefined(this.circuit_id)){
+        event.dataTransfer.setData("circuit_id", this.circuit_id);
+      }
+      if (isDefined(this.circuit_abbreviation)){
+        event.dataTransfer.setData("circuit_abbreviation", this.circuit_abbreviation);
+      }
+      if (isDefined(this.circuit_power)){
+        event.dataTransfer.setData("circuit_power", this.circuit_power);
+      }
+      if (isDefined(this.targets_expression)){
+        event.dataTransfer.setData("targets_expression", this.targets_expression);
       }
       const target = event.target;
       let dragImageGhost = createDragImageGhost(target);  

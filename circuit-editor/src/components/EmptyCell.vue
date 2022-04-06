@@ -198,7 +198,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { seatsAreTaken } from "../store/modules/gatesTable.js";
-import { getAggregatedGatesTargets, handleSelectEvent, isDefined, getClosestControlledGates, stepContainsGates } from "../store/modules/editorHelper.js";
+import { getMatchingTargets, gateHasVariableTragets, getAggregatedGatesTargets, handleSelectEvent, isDefined, getClosestControlledGates, stepContainsGates } from "../store/modules/editorHelper.js";
 export default {
   name: "EmptyCell",
   props: {
@@ -334,7 +334,7 @@ export default {
       let dragOrigin = event.dataTransfer.getData("drag-origin");
       if (!dragOrigin){
         // handles the case where we are dragging by accident the gates pallete 
-        // tab title, don't know how to disable the drag action for these
+        // tab title, don't know how to disable the drag action for those
         this.handleDragLeave();
         return;
       }
@@ -730,17 +730,29 @@ export default {
         dto["targets"] = originalTargets;
       } else if (dragOrigin && dragOrigin != "gates-pallete") {
         if (step == originalStep){
-          if (gateName == "qft" || gateName == "qft-dagger") {
-            let min = Math.min(...originalTargets, qbit);
-            let max = Math.max(...originalTargets, qbit);
-            dto["targets"] = Array.from({length: max - min + 1}, (_, i) => i + min);
+          let qmin = Math.min(...originalTargets, qbit);
+          let qmax = Math.max(...originalTargets, qbit);
+          if (gateName == "sn") {
+            dto["targets"] = Array.from({length: qmax - qmin + 1}, (_, i) => i + qmin);
+          } else if (gateName == "circuit") {
+            dto["targets"] = originalTargets.map(function(value) { return value + delta; });
+          } else if (gateHasVariableTragets(gateName)) {
+            let targetsExpression = event.dataTransfer.getData("targets_expression");
+            dto["targets"] = getMatchingTargets(qmin, qmax, targetsExpression);
           } else {
             dto["targets"] = originalTargets.map(function(item) { return item == draggedQbit ? qbit : item; });
           }
         } else {
-          dto["targets"] = originalTargets.map(function(value) {return value + delta;}).filter(val => val >= 0);
+          dto["targets"] = originalTargets.map(function(value) { return value + delta; });
         }
       }
+
+      if (dto["targets"].some(x => x < 0)) {
+        alert("Negative target qubits not allowed.");
+        this.handleDragLeave();
+        return;
+      }
+
       // notice lower case needed for types.includes
       if (event.dataTransfer.types.includes("originalcontrols")) {
         originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
@@ -754,10 +766,17 @@ export default {
           if (dragOrigin == "stub"){
             dto["controls"] = originalControls.map(function(item) { return item == draggedQbit ? qbit : item; });
           } else {
-            dto["controls"] = originalControls.map(val => val + delta).filter(val => val >= 0);
+            dto["controls"] = originalControls.map(val => val + delta);
           }
         }
       }
+
+      if (dto["controls"].some(x => x < 0)) {
+        alert("Negative control qubits not allowed.");
+        this.handleDragLeave();
+        return;
+      }
+
       if (event.dataTransfer.types.includes("controlstates")) {
         let controlstates = event.dataTransfer.getData("controlstates");
         if (controlstates) {

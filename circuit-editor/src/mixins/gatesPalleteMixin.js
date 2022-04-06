@@ -1,9 +1,13 @@
 
 import { 
-  createDragImageGhost, 
+  createDragImageGhost,
   hideTooltips,
   getUserInterfaceSetting
 } from "../store/modules/applicationWideReusableUnits.js";
+
+import {
+  gateCanHaveManyTargets,
+} from "../store/modules/editorHelper.js";
 
 export const gatesPalleteMixin = {
   methods: {
@@ -41,6 +45,9 @@ export const gatesPalleteMixin = {
       hideTooltips();
       const target = event.target;
       event.dataTransfer.setData("gateName", target.title);
+      if (gateCanHaveManyTargets(target.title)) {
+        event.dataTransfer.setData("targets_expression", "true");
+      }
       event.dataTransfer.setData("drag-origin", "gates-pallete");
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
