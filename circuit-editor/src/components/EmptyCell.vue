@@ -198,6 +198,7 @@
 <script>
 import { mapActions, mapGetters } from "vuex";
 import { seatsAreTaken } from "../store/modules/gatesTable.js";
+import { arraysAreEqual } from "../store/modules/javaScriptUtils.js";
 import { getMatchingTargets, gateHasVariableTragets, getAggregatedGatesTargets, handleSelectEvent, isDefined, getClosestControlledGates, stepContainsGates } from "../store/modules/editorHelper.js";
 export default {
   name: "EmptyCell",
@@ -782,6 +783,14 @@ export default {
         if (controlstates) {
           dto["controlstates"] = controlstates.split(",");
         }
+      }
+
+      if (step == originalStep &&
+          arraysAreEqual(dto["targets"], originalTargets) &&
+          arraysAreEqual(dto["controls"], originalControls)) {
+        alert("Proposed new targets and controls are the same with old ones.");
+        this.handleDragLeave();
+        return;
       }
 
       let originalAggregatedGateTargets = [];

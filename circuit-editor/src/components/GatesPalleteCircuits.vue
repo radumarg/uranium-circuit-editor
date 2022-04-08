@@ -2,56 +2,26 @@
   <div class="gates-pallete" id="gates-pallete-circuit">
 
     <table id="gates-pallete-table-circuit" style="table-layout: fixed; max-width: 269px;">
-      <!-- <div v-for="circuitIndex in this.getCompatibleCircuitIds().length" v-bind:key="circuitIndex"> -->
-        <div v-for="circuitIndex in 1" v-bind:key="circuitIndex">
+      <div v-for="circuitIndex in this.getCompatibleCircuitIds().length" v-bind:key="circuitIndex">
         <tr>
-
           <td style="width: 5px; height: 5px; max-height: 5px; text-align: center; padding: 5px;">
             <div @mouseover="onPenMouseOver(circuitIndex - 1)" @mouseleave="onPenMouseLeave(circuitIndex - 1)">
-              <b-icon v-if="editCircuitNamePenIsHovered[circuitIndex - 1]" icon="pencil-fill" v-on:click="showEditCircuitModal(circuitIndex - 1)" title="Edit circuit name and abbreviation" style="color: MediumSlateBlue;" font-scale="1.4"></b-icon>
-              <b-icon v-else icon="pencil" style="color: MediumSlateBlue;" font-scale="1.4"></b-icon>
+              <div v-if="coloredGatesCookie">
+                <b-icon class="pencil" v-if="editCircuitNamePenIsHovered[circuitIndex - 1]" icon="pencil-fill" v-on:click="showEditCircuitModal(circuitIndex - 1)" title="Edit circuit name and abbreviation" style="color: MediumSlateBlue;" font-scale="1.4"></b-icon>
+                <b-icon class="pencil" v-else icon="pencil" style="color: MediumSlateBlue;" font-scale="1.4"></b-icon>
+              </div>
+              <div v-else>
+                <b-icon class="pencil" v-if="editCircuitNamePenIsHovered[circuitIndex - 1]" icon="pencil-fill" v-on:click="showEditCircuitModal(circuitIndex - 1)" title="Edit circuit name and abbreviation" style="color: #318ce7;" font-scale="1.4"></b-icon>
+                <b-icon class="pencil" v-else icon="pencil" style="color: #318ce7;" font-scale="1.4"></b-icon>
+              </div>
             </div>
           </td>
-
-
           <td style="color: white; text-align: center; width: 268px; height: 5px; max-height: 5px; padding: 5px;">
             {{ getCircuitName(circuitIndex - 1) }}
           </td>
-
-          <td style="height: 50px; max-height: 50px; width: 50px; max-width: 50px; padding: 5px;">
-            
-            <!-- <div v-if="coloredGatesCookie" type="parametric-svg">
-              <img src="../assets/colored-gates/circuit.svg" @dragend="dragEnd" @dragstart="dragStart" class="circuit-gate-image" title="circuit" alt="Circuit Gate"/>
-              <param name="abbreviation" value="2"/>
-              <param name="fill" value="orange"/>
-            </div>
-            <div v-else type="parametric-svg">
-              <img src="../assets/blue-gates/qft.svg" @dragend="dragEnd" @dragstart="dragStart" class="circuit-gate-image" title="circuit" alt="Circuit Gate"/>
-              <param name="abbreviation" value="2"/>
-              <param name="fill" value="orange"/>
-            </div> -->
-
-            <!-- <object v-if="coloredGatesCookie" :data="require('../assets/colored-gates/circuit.svg')" type="image/svg+xml" class="circuit-gate-image" title="circuit" alt="Circuit Gate">
-              <param name="abbreviation" value="2"/>
-              <param name="fill" value="orange"/>
-            </object> -->
-  
-
-      <div draggable="true" id="xyz">
-      <svg class="circuit-gate-image" xmlns="http://www.w3.org/2000/svg" title="circuit">
-        <g>
-          <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke:MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-          <text x="8" y="28" style="font-size: 27px; font-style: italic;  fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">B</tspan></text>
-        </g>
-      </svg>
-      </div>
-
-
-            
-            <!-- <object v-else :data="require('../assets/blue-gates/circuit.svg')" type="image/svg+xml" class="circuit-gate-image" title="circuit" alt="Circuit Gate">
-            </object> -->
+          <td style="height: 50px; max-height: 50px; width: 50px; max-width: 50px; padding: 5px; text-align: center;">
+            <div v-bind:id="'circuit-gate-div-' + (circuitIndex - 1)" draggable="true" class="circuit-gate-div"></div>
           </td>
-
         </tr>
       </div>
     </table>
@@ -105,7 +75,7 @@
 </template>
 
 <script>
-import { createCircuitDragImageGhost, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { createCircuitDragImageGhost, getUserInterfaceSetting, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
 import { mapActions } from 'vuex';
 export default {
   name: "GatesPalleteCircuits",
@@ -117,16 +87,21 @@ export default {
       editedCircuitId: null,
       circuitName:  "",
       circuitAbbreviation: "",
+      coloredGatesCookie: getUserInterfaceSetting("colored-gates") === 'true'
     }
   },
   created() {
-    this.$root.$on('currentCircuitSwitch', () => {this.$forceUpdate()});
+    this.$root.$on('currentCircuitSwitch', () => { this.$forceUpdate(); });
+    this.$root.$on("switchGateColors", () => { this.updateGateImagesColor(); });
   },
   mounted() {
-    var svgDiv = document.getElementById("xyz");
-    if (svgDiv != null){
-      svgDiv.addEventListener("dragstart", this.dragStart);
-      svgDiv.addEventListener('dragend', this.dragEnd);
+    for (let i = 0; i < window.circuitIds.length; i++) {
+      let svgDiv = document.getElementById(`circuit-gate-div-${i}`);
+      if (svgDiv != null) {
+        svgDiv.innerHTML = this.getCircuitGateImage(i);
+        svgDiv.addEventListener("dragstart", this.dragStart);
+        svgDiv.addEventListener('dragend', this.dragEnd);
+      }
     }
   },
   methods: {
@@ -162,6 +137,49 @@ export default {
       let compatibleCicuitIds = this.getCompatibleCircuitIds();
       let id = compatibleCicuitIds[circuitIndex];
       return this.$store.state.circuitEditorModule[id]["circuit_name"];
+    },
+    getCircuitGateImage(circuitIndex) {
+      let compatibleCicuitIds = this.getCompatibleCircuitIds();
+      let id = compatibleCicuitIds[circuitIndex];
+      let abbreviation = this.$store.state.circuitEditorModule[id]["circuit_abbreviation"];
+      let gateColor = 'MediumSlateBlue';
+      if (getUserInterfaceSetting('colored-gates') === 'false'){
+        gateColor = '#318ce7';
+      }
+      let gateImage = '<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">';
+      gateImage += '<g>';
+      if (abbreviation.length == 1){
+        gateImage += `<rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke:${gateColor}; stroke-width:3.8; stroke-opacity:1;"/>`;
+        gateImage += `<text x="8" y="28" style="font-size: 27px; font-style: italic; fill: ${gateColor}; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">${abbreviation}</tspan></text>`;
+      } else if (abbreviation.length == 2){
+        gateImage += `<rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke:${gateColor}; stroke-width:3.8; stroke-opacity:1;"/>`;
+        gateImage += `<text x="5" y="28" style="font-size: 27px; font-style: italic; fill: ${gateColor}; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">${abbreviation}</tspan></text>`;
+      } else {
+        gateImage += `<rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke:${gateColor}; stroke-width:3.8; stroke-opacity:1;"/>`;
+        gateImage += `<text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: ${gateColor}; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">${abbreviation}</tspan></text>`;
+      }
+      gateImage += '</g>';
+      gateImage += '</svg>';
+      return gateImage;
+    },
+    updateGateImagesColor(){
+      // circuit gates icon
+      for (let i = 0; i < window.circuitIds.length; i++) {
+        let svgDiv = document.getElementById(`circuit-gate-div-${i}`);
+        if (svgDiv != null) {
+          svgDiv.innerHTML = this.getCircuitGateImage(i);
+        }
+      }
+      // edit circuit name icons
+      let pencills = document.getElementsByClassName("pencil");
+      for (let i = 0; i < pencills.length; i++) {
+        let pencill = pencills[i];
+        if (getUserInterfaceSetting('colored-gates') === 'true'){
+          pencill.style.color = 'MediumSlateBlue';
+        } else {
+          pencill.style.color = '#318ce7';
+        }
+      }
     },
     showEditCircuitModal: function (circuitIndex) {
       let compatibleCicuitIds = this.getCompatibleCircuitIds();
@@ -284,6 +302,15 @@ td {
 }
 
 .circuit-gate-image {
+  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
+}
+
+.circuit-gate-div {
   height: 40px;
   min-height: 40px;
   max-height: 40px;

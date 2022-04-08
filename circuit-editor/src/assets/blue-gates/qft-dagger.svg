@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-  <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke:cornflowerblue; stroke-width:3.8; stroke-opacity:1;"/>
-  <text x="2.5" y="25" style="font-size: 14px; font-weight: bold; fill: cornflowerblue; white-space: pre;">QFT<tspan baseline-shift="super" style="font-size: 12px;">†</tspan></text>
+  <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke:#318ce7; stroke-width:3.8; stroke-opacity:1;"/>
+  <text x="2.5" y="25" style="font-size: 14px; font-weight: bold; fill: #318ce7; white-space: pre;">QFT<tspan baseline-shift="super" style="font-size: 12px;">†</tspan></text>
 </svg>
