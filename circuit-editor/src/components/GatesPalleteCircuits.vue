@@ -11,15 +11,15 @@
                 <b-icon class="pencil" v-else icon="pencil" style="color: MediumSlateBlue;" font-scale="1.4"></b-icon>
               </div>
               <div v-else>
-                <b-icon class="pencil" v-if="editCircuitNamePenIsHovered[circuitIndex - 1]" icon="pencil-fill" v-on:click="showEditCircuitModal(circuitIndex - 1)" title="Edit circuit name and abbreviation" style="color: #318ce7;" font-scale="1.4"></b-icon>
-                <b-icon class="pencil" v-else icon="pencil" style="color: #318ce7;" font-scale="1.4"></b-icon>
+                <b-icon class="pencil" v-if="editCircuitNamePenIsHovered[circuitIndex - 1]" icon="pencil-fill" v-on:click="showEditCircuitModal(circuitIndex - 1)" title="Edit circuit name and abbreviation" style="color: #678efa;" font-scale="1.4"></b-icon>
+                <b-icon class="pencil" v-else icon="pencil" style="color: #678efa;" font-scale="1.4"></b-icon>
               </div>
             </div>
           </td>
           <td style="color: white; text-align: center; width: 268px; height: 5px; max-height: 5px; padding: 5px;">
             {{ getCircuitName(circuitIndex - 1) }}
           </td>
-          <td style="height: 50px; max-height: 50px; width: 50px; max-width: 50px; padding: 5px; text-align: center;">
+          <td v-on:click="gateSelected" style="height: 50px; max-height: 50px; width: 50px; max-width: 50px; padding: 5px; text-align: center;">
             <div v-bind:id="'circuit-gate-div-' + (circuitIndex - 1)" draggable="true" class="circuit-gate-div"></div>
           </td>
         </tr>
@@ -142,9 +142,9 @@ export default {
       let compatibleCicuitIds = this.getCompatibleCircuitIds();
       let id = compatibleCicuitIds[circuitIndex];
       let abbreviation = this.$store.state.circuitEditorModule[id]["circuit_abbreviation"];
-      let gateColor = 'MediumSlateBlue';
+      let gateColor = window.circuitGateColor;
       if (getUserInterfaceSetting('colored-gates') === 'false'){
-        gateColor = '#318ce7';
+        gateColor = window.blueGatesColor;
       }
       let gateImage = '<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">';
       gateImage += '<g>';
@@ -171,13 +171,13 @@ export default {
         }
       }
       // edit circuit name icons
-      let pencills = document.getElementsByClassName("pencil");
-      for (let i = 0; i < pencills.length; i++) {
-        let pencill = pencills[i];
+      let pencils = document.getElementsByClassName("pencil");
+      for (let i = 0; i < pencils.length; i++) {
+        let pencil = pencils[i];
         if (getUserInterfaceSetting('colored-gates') === 'true'){
-          pencill.style.color = 'MediumSlateBlue';
+          pencil.style.color = window.circuitGateColor;
         } else {
-          pencill.style.color = '#318ce7';
+          pencil.style.color = window.blueGatesColor;
         }
       }
     },
@@ -226,10 +226,13 @@ export default {
     },
     dragStart: function(event) {
       hideTooltips();
+      let circuitIndex = parseInt(event.target.id.replace('circuit-gate-div-', ''));
+      let compatibleCicuitIds = this.getCompatibleCircuitIds();
+      let id = compatibleCicuitIds[circuitIndex];
       event.dataTransfer.setData("gateName", "circuit");
       event.dataTransfer.setData("drag-origin", "gates-pallete");
-      event.dataTransfer.setData("circuit_id", "-1");
-      event.dataTransfer.setData("circuit_abbreviation", "BO");
+      event.dataTransfer.setData("circuit_id", this.$store.state.circuitEditorModule[id]["circuit_id"]);
+      event.dataTransfer.setData("circuit_abbreviation", this.$store.state.circuitEditorModule[id]["circuit_abbreviation"]);
       event.dataTransfer.setData("circuit_power", "1");
       event.dataTransfer.setData("targets_expression", "true");
       let dragImageGhost = createCircuitDragImageGhost();
@@ -239,6 +242,32 @@ export default {
       let dragImageGhost = window.document.getElementById("dragged-gate-ghost");
       document.body.removeChild(dragImageGhost);
     },
+    gateSelected: function (event) {
+      let cell = event.target;
+      while (cell.tagName.toUpperCase() != "TD"){
+        cell = cell.parentElement;
+      }
+      let selectedCellBgColor = cell.style.backgroundColor.toUpperCase();
+      // reset bckg for all cells
+      for (const id of ["gates-pallete-table-1", "gates-pallete-table-2", "gates-pallete-table-n", "gates-pallete-table-circuit"])
+      {
+        let table = document.getElementById(id);
+        let cells = table.getElementsByTagName("TD");
+        for (var i = 0; i < cells.length; i++) {
+          cells[i].style.backgroundColor = window.darkBackgroundColor;
+        }
+      }
+      // set bckg black for selected cell
+      if (cell != null) {
+        if (selectedCellBgColor != "BLACK"){
+          cell.style.backgroundColor = "Black";
+          this.$root.$emit("updateHelpEvent", "circuit");
+        } else {
+          this.$root.$emit("updateHelpEvent", null);
+          cell.style.backgroundColor = window.darkBackgroundColor;
+        }
+      }
+    }
   },
 };
 </script>

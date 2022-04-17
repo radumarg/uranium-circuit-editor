@@ -187,7 +187,6 @@ export function measureGatesArePositionedLast(circuitState){
   return true;
 }
 
-//TODO: this might not be neeeded anymore
 export function getProximFreeSeat(circuitState, qbit, step) {
   if (!seatIsTaken(circuitState, qbit + 1, step)) {
     return qbit + 1;

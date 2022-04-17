@@ -54,7 +54,7 @@ export function createCircuitDragImageGhost () {
   }
 
   fakeGhost.style.width = "40px";
-  fakeGhost.style.height = "auto";
+  fakeGhost.style.height = "40px";
   fakeGhost.id = "dragged-gate-ghost";
   document.body.appendChild(fakeGhost);
 

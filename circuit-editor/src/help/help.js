@@ -142,7 +142,8 @@ each qubit is measured into a classical bit with index equal to the qubit index 
     } else if (gateName == "cross-resonance-dagger") {
       return 'The "cross-resonance-dagger" is the conjugate transpose of "cross-resonance" gate and is defined as: exp(i * θ/2 * (Z⊗X)). Because in real life the CR gate is implemented using weakly anharmonic transmon qubits in practice there exist other smaller interactions terms in the interaction hamiltonian besides the dominant Z⊗X term. The CR gate is maximally entangling at θ = π/2.';
     } else if (gateName == "circuit") {
-      return 'This is a special gate that is used to represent an arbitrary quantum circuit defined in the same project.';
+      return 'This is a special gate which is used to reuse as a subcircuit a quantum circuit defined in the same project with your current circuit \
+      While using this gate, you should be aware that a circuit cannot contain itself, either directly or indirectly via its subcircuits.';
     } else if (gateName == "barrier") {
       return 'In the context of IBMQ, a barier indicates a boundary in a circuit across which optimizations or circuit re-writes are not \
       performed during transpiling phase. In the limited context of Uranium, the barrier may be used to separate different portions of a \
@@ -157,7 +158,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             controls and deleting the gate. The same pop-up dialog can be used to add values for parameters in parametric gates or to assign \
             the index of the classic bit used as mesurement target by the measure gates. \
             <br><br> \
-            <b> One Gate into Many:</b> \
+            <b> One gate into many:</b> \
             <br/> \
             <br/> \
             - if the <i>'Shift'</i> key is pressed during performing a drag & drop gesture, the original gate is not removed and an identical copy \
@@ -169,14 +170,14 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             of gates with only a few mouse clicks. For more details on how this works please check out the help button on replicate \
             gates pop-up dialog which can be launched by clicking the lower left icon in a gate popup dialog. <br> \
             <br> \
-            <b> Deleting Gates:</b> \
+            <b> Deleting gates:</b> \
             <br/> \
             <br/> \
             - a gate can be deleted from the gate pop-up dialog. <br> \
             - a gate can also be deleted by dragging the gate and dropping it outside the editor area. <br> \
             - a gate can also be deleted by pressing the <i>'d'</i> or <i>'D'</i> key while clicking the image of a gate in the circuit.  <br> \
             <br> \
-            <b> Working with Controls:</b> \
+            <b> Working with controls:</b> \
             <br/> \
             <br/> \
             - controls can be added from the controls editing dialog which can be launched from the modal gate pop-up dialog. <br> \
@@ -196,7 +197,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             the <i>Ctrl</i> + <i>C</i>, <i>Ctrl</i> + <i>V</i>, <i>Ctrl</i> + <i>X</i>, <i>Esc</i> and <i>Delete</i> keys work as you would expect \
             for those gates which have <i>target</i> qubits inside the selected area. <br> \
             <br> \
-            <b> Measure Gates:</b> \
+            <b> Measure gates:</b> \
             <br/> \
             <br/> \
             - since we use a simulator, it does not make sense to sample the final state vector but instead we show directly the simulation \
@@ -213,7 +214,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             identically as it is actually done for the other gates. \
             <br> \
             <br> \
-            <b> Changing Steps/Qubits:</b> \
+            <b> Changing number of steps/qubits:</b> \
             <br/> \
             <br/> \
             - the ± button in the toolbar allows changing the number of qubits and steps in the circuit. <br> \
@@ -224,14 +225,14 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             -  steps or qubits can be removed from a pop-up dialog which is opened by double clicking on an empty cell in the circuit. \
             <br> \
             <br> \
-            <b> Getting Help for Gates:</b> \
+            <b> Getting help for gates:</b> \
             <br/> \
             <br/> \
             - in order to see in this dashboard help information regarding a particular gate, select the gate in left panel gates pallete and \
             than press the help button on the toolbar. \
             <br> \
             <br> \
-            <b> Way of Working:</b> \
+            <b> Way of working:</b> \
             <br/> \
             <br/> \
             - we provide a link towards the circuit editor on our platform frontpage in order for new vistors to be able to easily explore \
@@ -256,11 +257,11 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             and the qubit with highest index is placed at the bottom of the editor. \
             <br> \
             - A valid question to be asked is how should the state vector be represented for a quantum register that consists of a given number of qubits. \
-            In principle these qubits can be orderer from left to right or from right to left. In most physics textbooks qubits are ordered \
+            In principle, these qubits can be orderer either from left to right or from right to left. In most physics textbooks qubits are ordered \
             starting with the first one (lowest qubit index) on the left and last one (higher qubit index) on the right when representing a state vector \
             as a tensor product of single qubit states. This is typically refered to as big endian convention. However many commercial quantum computing \
-            platform use the little endian convention which means the order of qubits, and bits as well, is reversed. In Uranium you can choose either one of the \
-            two orderings."
+            platform use the little endian convention which means the order of qubits (as well as bits in classical registers) is reversed. \
+            In Uranium you can choose either one of the two orderings."
 
 }
 

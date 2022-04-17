@@ -205,6 +205,18 @@ export default {
       if (isDefined(this.root)) {
         dto['rootNew'] = this.root;
       }
+      if (isDefined(this.circuit_id)){
+        dto['circuit_id'] = this.circuit_id;
+      }
+      if (isDefined(this.circuit_abbreviation)){
+        dto['circuit_abbreviation'] = this.circuit_abbreviation;
+      }
+      if (isDefined(this.circuit_power)){
+        dto['circuit_power'] = this.circuit_power;
+      }
+      if (isDefined(this.targets_expression)){
+        dto['targets_expression'] = this.targets_expression;
+      }
       let promise = this.repositionGateInCircuit(dto);
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -243,6 +255,18 @@ export default {
       }
       if (isDefined(this.root)) {
         dto['rootNew'] = this.root;
+      }
+      if (isDefined(this.circuit_id)){
+        dto['circuit_id'] = this.circuit_id;
+      }
+      if (isDefined(this.circuit_abbreviation)){
+        dto['circuit_abbreviation'] = this.circuit_abbreviation;
+      }
+      if (isDefined(this.circuit_power)){
+        dto['circuit_power'] = this.circuit_power;
+      }
+      if (isDefined(this.targets_expression)){
+        dto['targets_expression'] = this.targets_expression;
       }
       let promise = this.repositionGateInCircuit(dto);
       promise.then(

@@ -151,6 +151,10 @@ export default {
       bigEndianOrdering: getUserInterfaceSetting("big-endian-ordering") === 'true',
       zoomLevel: getUserInterfaceSetting("zoom-level"),
       zoomLevels: [
+          { value: '120', text: 'Zoom: 120%' },
+          { value: '115', text: 'Zoom: 115%' },
+          { value: '110', text: 'Zoom: 110%' },
+          { value: '105', text: 'Zoom: 105%' },
           { value: '100', text: 'Zoom: 100%' },
           { value: '95', text: 'Zoom: 95%' },
           { value: '90', text: 'Zoom: 90%' },
@@ -177,7 +181,12 @@ export default {
     }
   },
   created() {
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+    this.unsubscribeLoadProject = this.$store.subscribe((mutation, state) => {
+      if (mutation.type == 'circuitEditorModule/loadProject') {
+        this.projectLoaded(state);
+      }
+    });
+    this.unsubscribeEditProject = this.$store.subscribe((mutation, state) => {
       if (mutation.type == 'circuitEditorModule/insertGate' ||
           mutation.type == 'circuitEditorModule/insertGates' ||
           mutation.type == 'circuitEditorModule/insertQbit' ||
@@ -198,18 +207,26 @@ export default {
   mounted() {
     let darkTheme = (getUserInterfaceSetting("dark-theme") === 'true')
     this.$root.$emit("switchThemeDark", darkTheme);
-    if (this.$store.state.circuitEditorModule[window.currentCircuitId].steps.length > 0){
-      this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule[window.currentCircuitId]);
-      let circuit = this.$store.state.circuitEditorModule[window.currentCircuitId];
-      this.history[window.currentCircuitId].push(JSON.stringify(circuit));
-    }
   },
   beforeDestroy() {
-    this.unsubscribe();
+    this.unsubscribeLoadProject();
+    this.unsubscribeEditProject();
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['emptyCircuit', 'updateCircuit', 'refreshCircuit']),
     ...mapGetters("circuitEditorModule/", ["getCircuitState", "getMaximumStepIndex", "getMaximumQbitIndex"]),
+    projectLoaded: function(state) {
+      this.history = this.initializeProjectHistory();
+      this.historyUnRoll = this.initializeProjectHistory();
+      if (state.circuitEditorModule[window.currentCircuitId].steps.length > 0){
+        let circuit = state.circuitEditorModule[window.currentCircuitId];
+        this.history[window.currentCircuitId] = [];
+        this.historyUnRoll[window.currentCircuitId] = [];
+        this.history[window.currentCircuitId].push(JSON.stringify(circuit));
+        this.historyUnRoll[window.currentCircuitId].push(JSON.stringify(circuit));
+        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule[window.currentCircuitId]);
+      }
+    },
     undo: function() {
       if (this.history[window.currentCircuitId].length > 0) {
         let prev_state = this.history[window.currentCircuitId].pop();
@@ -313,14 +330,20 @@ it does not make much sense doing that unless you intend to save the circuit as 
       });
     },
     saveFile: function() {
-      let state = this.getCircuitState();
+      let circuitNo = 1;
+      let state = this.$store.state.circuitEditorModule;
+      window.alertedOnFaliedSavingCircuit = false;
       const yaml = require('js-yaml');
-      let yamlState = yaml.safeDump(state);
-      if (window.currentCircuitId > 0){
-        // TODO: change code here in order to save all circuits
-        save_circuit(yamlState);
-      } else {
-        this.download("circuit.yaml", yamlState);
+      for (const [key, value] of Object.entries(state)) {
+        let circuitId = key;
+        let circuitState = value;
+        let yamlState = yaml.safeDump(circuitState);
+        if (window.projectId != null && window.projectId > 0) {
+          save_circuit(circuitId, yamlState);
+        } else {
+          this.download(`circuit_${circuitNo}.yaml`, yamlState);
+          circuitNo += 1;
+        }
       }
     },
     download: function(filename, text) {

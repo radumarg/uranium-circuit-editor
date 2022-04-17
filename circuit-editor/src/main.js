@@ -60,6 +60,12 @@ window.selectBackgroundColor = "#C0C0C0";
 window.lightBackgroundColor = "ghostwhite";
 window.whiteBackgroundColor = "white";
 window.darkBackgroundColor = "#374048";
+window.blueGatesColor = "#678efa";
+window.circuitGateColor = "MediumSlateBlue";
+
+// Temporary values until circuit will be loaded asynchronously
+window.circuitIds = [0];
+window.currentCircuitId = 0;
 
 
 // Need a method to detect keys pressed

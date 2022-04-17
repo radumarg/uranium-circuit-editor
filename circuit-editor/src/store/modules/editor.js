@@ -50,7 +50,9 @@ math.import({
 export const circuitEditorModule = {
   namespaced: true,
 
-  state: retrieve_project_circuits(),
+  state: JSON.parse('{\
+    "0": {"version": "1.2", "circuit_type": "simple", "circuit_id": "0", "circuit_name": "Blank", "circuit_abbreviation": "", "project_id": "0", "project_name": "Blank", "steps": []}\
+  }'),
 
   getters: {
     getGatesTableCells: () => {
@@ -112,6 +114,9 @@ export const circuitEditorModule = {
   },
 
   actions: {
+    asynchronouslyLoadProject: function () {
+      retrieve_project_circuits().then(result => this.commit('circuitEditorModule/loadProject', result));
+    },
     updateCircuitName: function (context, args) {
       this.commit("circuitEditorModule/updateCircuitNameElement", args);
     },
@@ -596,6 +601,19 @@ export const circuitEditorModule = {
   },
 
   mutations: {
+    loadProject(context, jsonObj) {
+      if (jsonObj != null) {
+        delete circuitEditorModule.state[0];
+        window.circuitIds = Object.keys(jsonObj);
+        for (let i = 0; i < window.circuitIds.length; i++) {
+          let circuitId = window.circuitIds[i];
+          if (i == 0) {
+            window.currentCircuitId = circuitId;
+          }
+          circuitEditorModule.state[circuitId] = {...jsonObj[circuitId]};
+        }
+      }
+    },
     updateCircuitState(context, jsonObj) {
       circuitEditorModule.state[window.currentCircuitId].steps = jsonObj.steps;
     },

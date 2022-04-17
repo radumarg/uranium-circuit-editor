@@ -135,13 +135,16 @@ export default {
       gateMatrixHtml: retriveGateMatrixHtml(""),
       controlledGateMatrixHtml: retriveControlledGateMatrixHtml(""),
       gateName: "",
-      projectName: this.$store.state.circuitEditorModule[window.currentCircuitId]["project_name"],
-      circuitName: this.$store.state.circuitEditorModule[window.currentCircuitId]["circuit_name"],
-      circuitNames: this.getCircuitNameOptions(),
+      // projectName: this.$store.state.circuitEditorModule[window.currentCircuitId]["project_name"],
+      // circuitName: this.$store.state.circuitEditorModule[window.currentCircuitId]["circuit_name"],
+      // circuitNames: this.getCircuitNameOptions(),
+      projectName: "",
+      circuitName: "",
+      circuitNames: [],
     };
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['removeGateFromCircuitByUser', 'updateCircuit']),
+    ...mapActions('circuitEditorModule/', ['asynchronouslyLoadProject', 'removeGateFromCircuitByUser', 'updateCircuit']),
     updateHelpContents: function (gateName) {
 
       var note = document.getElementById("on-gates");
@@ -217,6 +220,7 @@ export default {
   },
   created() {
     this.$root.$on('updateHelpEvent', (selectedGate) => {this.updateHelpContents(selectedGate)});
+    this.asynchronouslyLoadProject();
   },
 };
 </script>

@@ -1,8 +1,179 @@
 <template>
   <div :step="step" :qrow="qrow" v-on:click="handleClick" @dragenter.prevent @dragover.prevent @drop.prevent="handleDropEvent">
 
-    <img :src="gateImageSrcEditor" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
-    
+    <img v-if="gateImageIsABox()" :src="gateImageSrcEditor" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
+
+    <div v-else-if="gateImageIsCircuit()">
+      <div v-if="getAbbreviationLength() == 1 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="8" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-else-if="getAbbreviationLength() == 2 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-else-if="getAbbreviationLength() == 3 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-if="getAbbreviationLength() == 1 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="8" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-else-if="getAbbreviationLength() == 2 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-else-if="getAbbreviationLength() == 3 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div v-else-if="gateImageIsUp()">
+      <div v-if="getAbbreviationLength() == 1 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="8" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-else-if="getAbbreviationLength() == 2 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-else-if="getAbbreviationLength() == 3 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-if="getAbbreviationLength() == 1 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="8" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-else-if="getAbbreviationLength() == 2 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-else-if="getAbbreviationLength() == 3 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div> 
+    </div>
+
+    <div v-else>
+      <div v-if="getAbbreviationLength() == 1 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="8" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-else-if="getAbbreviationLength() == 2 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-else-if="getAbbreviationLength() == 3 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-if="getAbbreviationLength() == 1 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="8" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-else-if="getAbbreviationLength() == 2 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+      <div v-else-if="getAbbreviationLength() == 3 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+          <g>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
     <b-modal ref="initial-modal-dialog" size="sm" centered hide-footer hide-header>
       <table style="table-layout:fixed;">
         <tr>
@@ -266,6 +437,7 @@ export default {
       targetsExpressionNew: this.targets_expression,
       circuitNames: this.getCircuitNameOptions(),
       circuitNameNew: this.$store.state.circuitEditorModule[this.circuit_id]["circuit_name"],
+      usingColoredGates: getUserInterfaceSetting("colored-gates") === 'true'
     }
   },
   methods: {
@@ -293,6 +465,26 @@ export default {
           return id;
         }
       }
+    },
+    getCircuitAbbreviation: function(){
+      return this.circuit_abbreviation;
+    },
+    getAbbreviationLength: function(){
+      return this.circuit_abbreviation.length;
+    },
+    gateImageIsABox(){
+      if (this.img == 'box-up') return true;
+      if (this.img == 'box-down') return true;
+      if (this.img == 'box-middle-long') return true;
+      return false;
+    },
+    gateImageIsUp(){
+      if (this.img == '_circuit-up_') return true;
+      else return false;
+    },
+    gateImageIsCircuit(){
+      if (this.img == 'circuit') return true;
+      else return false;
     },
     handleSave: function(){
       if (!Number.isInteger(this.$data.targetsNewFirst)){
@@ -336,6 +528,7 @@ export default {
 
       let circuitState = this.$store.state.circuitEditorModule[this.circuit_id];
       let noQubits = getNoQbits(circuitState);
+      noQubits = 2;
       if (targetsNew.length != noQubits) {
         alert(`The circuit needs ${noQubits} qubits, but the current target condition expression evaluates to ${targetsNew.length} targets!`);
         return;
@@ -543,7 +736,6 @@ export default {
     handleDragLeave() {
       var image = window.document.getElementById(this.id);
       if (getUserInterfaceSetting('colored-gates') === 'true'){
-        //TODO: fix this, svg img is inline
         image.src = require("../assets/colored-gates/" + this.img + ".svg");
       } else {
         image.src = require("../assets/blue-gates/" + this.img + ".svg");
@@ -590,9 +782,18 @@ td {
   max-width: 79px;
 }
 
-
 img {
   display: inline-block;
+}
+
+.circuit-gate-div {
+  display: inline-block;
+  height: 40px;
+  min-height: 40px;
+  max-height: 40px;
+  width: 40px;
+  min-width: 40px;
+  max-width: 40px;
 }
 
 </style>

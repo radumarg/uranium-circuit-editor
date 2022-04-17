@@ -393,19 +393,21 @@ export default {
   created() {
     this.$root.$on('currentCircuitSwitch', () => {this.$forceUpdate();});
     this.$root.$on("switchThemeDark", boolFlag => {
-      if (boolFlag) {
-        this.$refs["gatesTable"].style.backgroundColor = window.darkBackgroundColor;
-        this.$refs["gatesTable"].style.borderTopColor = window.darkBackgroundColor;
-        this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.darkBackgroundColor}`;
-      } else {
-        if(getUserInterfaceSetting('colored-gates') === 'true'){
-          this.$refs["gatesTable"].style.backgroundColor = window.lightBackgroundColor;
-          this.$refs["gatesTable"].style.borderTopColor = window.lightBackgroundColor;
-          this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.lightBackgroundColor}`;
+      if (this.$refs["gatesTable"] != null) {
+        if (boolFlag) {
+          this.$refs["gatesTable"].style.backgroundColor = window.darkBackgroundColor;
+          this.$refs["gatesTable"].style.borderTopColor = window.darkBackgroundColor;
+          this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.darkBackgroundColor}`;
         } else {
-          this.$refs["gatesTable"].style.backgroundColor = window.whiteBackgroundColor;
-          this.$refs["gatesTable"].style.borderTopColor = window.whiteBackgroundColor;
-          this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.whiteBackgroundColor}`;
+          if(getUserInterfaceSetting('colored-gates') === 'true'){
+            this.$refs["gatesTable"].style.backgroundColor = window.lightBackgroundColor;
+            this.$refs["gatesTable"].style.borderTopColor = window.lightBackgroundColor;
+            this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.lightBackgroundColor}`;
+          } else {
+            this.$refs["gatesTable"].style.backgroundColor = window.whiteBackgroundColor;
+            this.$refs["gatesTable"].style.borderTopColor = window.whiteBackgroundColor;
+            this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.whiteBackgroundColor}`;
+          }
         }
       }
       if (window.selectBackgroundColor)
