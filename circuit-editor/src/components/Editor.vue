@@ -391,7 +391,8 @@ export default {
     "getRowsInGatesTable"
   ]),
   created() {
-    this.$root.$on('currentCircuitSwitch', () => {this.$forceUpdate();});
+    this.$root.$on('currentCircuitSwitch', () => { this.$forceUpdate(); });
+    this.$root.$on('circuitEdited', () => { this.$forceUpdate(); });
     this.$root.$on("switchThemeDark", boolFlag => {
       if (this.$refs["gatesTable"] != null) {
         if (boolFlag) {

@@ -93,8 +93,9 @@ export default {
   created() {
     this.$root.$on('currentCircuitSwitch', () => { this.$forceUpdate(); });
     this.$root.$on("switchGateColors", () => { this.updateGateImagesColor(); });
+    this.$root.$on("projectLoaded", () => { this.projectLoaded(); });
   },
-  mounted() {
+  updated() {
     for (let i = 0; i < window.circuitIds.length; i++) {
       let svgDiv = document.getElementById(`circuit-gate-div-${i}`);
       if (svgDiv != null) {
@@ -106,6 +107,9 @@ export default {
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['refreshCircuit', 'updateCircuitName', 'updateCircuitAbbreviation']),
+    projectLoaded: function () {
+      this.$forceUpdate();
+    },
     initPenHoverStauses: function () {
       let hoverStatuses = [];
       for (let i = 0; i < this.getCompatibleCircuitIds().length; i++) {

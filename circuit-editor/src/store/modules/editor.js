@@ -115,7 +115,10 @@ export const circuitEditorModule = {
 
   actions: {
     asynchronouslyLoadProject: function () {
-      retrieve_project_circuits().then(result => this.commit('circuitEditorModule/loadProject', result));
+      retrieve_project_circuits().then(
+        result => this.commit('circuitEditorModule/loadProject', result),
+        error => alert(error)
+      );
     },
     updateCircuitName: function (context, args) {
       this.commit("circuitEditorModule/updateCircuitNameElement", args);

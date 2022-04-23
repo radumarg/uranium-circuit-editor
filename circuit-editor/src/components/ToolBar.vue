@@ -183,6 +183,7 @@ export default {
   created() {
     this.unsubscribeLoadProject = this.$store.subscribe((mutation, state) => {
       if (mutation.type == 'circuitEditorModule/loadProject') {
+        this.$root.$emit("projectLoaded");
         this.projectLoaded(state);
       }
     });
@@ -196,11 +197,14 @@ export default {
           mutation.type == 'circuitEditorModule/removeGates' ||
           mutation.type == 'circuitEditorModule/removeQbit' ||
           mutation.type == 'circuitEditorModule/removeStep'){
+        // not sure why Circuit update is not triggered automatically without this anymore
+        // this might be related to the fact that we changed the state to an array of states
+        this.$root.$emit("circuitEdited");
         this.$root.$emit("triggerSimulationRun", state.circuitEditorModule[window.currentCircuitId]);
-        this.history[window.currentCircuitId].push(JSON.stringify(state.circuitEditorModule[window.currentCircuitId]));
-        this.historyUnRoll[window.currentCircuitId] = [];
         // validate circuit in a separate thread
         sendWorkerMessage(state.circuitEditorModule[window.currentCircuitId]);
+        this.history[window.currentCircuitId].push(JSON.stringify(state.circuitEditorModule[window.currentCircuitId]));
+        this.historyUnRoll[window.currentCircuitId] = [];
       }      
     });
   },

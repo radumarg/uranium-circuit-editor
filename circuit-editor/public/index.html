@@ -36,14 +36,22 @@
       }
 
       // Set height of: state vector tab, probabilities tab, circuit
-      // Weird webpack bug: string interpolation cannot be used here.
+      // Weird webpack bug: javascript string interpolation cannot be used here.
       var tabHeight = String(document.body.clientHeight -  96) + "px";
       document.getElementById('html').style.setProperty("--tab-height", tabHeight);
 
       // Set height of gates pallete
-      // Weird webpack bug: string interpolation cannot be used here.
+      // Weird webpack bug: javascript string interpolation cannot be used here.
       var gatesPelleteHeight = String(document.body.clientHeight - 266) + "px";
       document.getElementById('html').style.setProperty("--gates-pallete-height", gatesPelleteHeight);
+
+      // Set the zoom level of help facility bootstrap-vue Sidebar
+      // Weird webpack bug: javascript string interpolation cannot be used here.
+      var sidebarZoom = 100;
+      if (cookie.hasOwnProperty('zoom-level')) {
+        sidebarZoom = (10000.0/parseFloat(cookie['zoom-level']))  + "%";
+      }
+      document.getElementById('html').style.setProperty("--help-sidebar-zoom", sidebarZoom);
 
       // Step 2: warn user not to use Firefox or Internet Explorer
       // Firefox 1.0+
