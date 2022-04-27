@@ -183,6 +183,8 @@ export default {
   created() {
     this.unsubscribeLoadProject = this.$store.subscribe((mutation, state) => {
       if (mutation.type == 'circuitEditorModule/loadProject') {
+        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule[window.currentCircuitId]);
+        this.$root.$emit("circuitEdited");
         this.$root.$emit("projectLoaded");
         this.projectLoaded(state);
       }
@@ -228,7 +230,6 @@ export default {
         this.historyUnRoll[window.currentCircuitId] = [];
         this.history[window.currentCircuitId].push(JSON.stringify(circuit));
         this.historyUnRoll[window.currentCircuitId].push(JSON.stringify(circuit));
-        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule[window.currentCircuitId]);
       }
     },
     undo: function() {
@@ -240,9 +241,11 @@ export default {
            let current_state = JSON.parse(this.history[window.currentCircuitId][lastIndex]);
            this.updateCircuit(current_state);
            this.$root.$emit("triggerSimulationRun", current_state);
+           this.$root.$emit("circuitEdited");
         } else {
           this.emptyCircuit();
           this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule[window.currentCircuitId]);
+          this.$root.$emit("circuitEdited");
         }
       }
     },
@@ -253,6 +256,7 @@ export default {
         let current_state = JSON.parse(json_txt);
         this.updateCircuit(current_state);
         this.$root.$emit("triggerSimulationRun", current_state);
+        this.$root.$emit("circuitEdited");
       }
     },
     initializeProjectHistory: function() {
@@ -375,6 +379,7 @@ it does not make much sense doing that unless you intend to save the circuit as 
       window.gatesTable.columns = window.initialColumns;
       this.$root.$emit("triggerSimulationRun", state);
       this.$root.$emit("circuitModifiedFromMenu");
+      this.$root.$emit("circuitEdited");
       if (window.toolTipsAreShown){
         JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");
         window.toolTipsAreShown = false;
@@ -436,6 +441,7 @@ If you do not want to accept cookies, you can zoom the page yourself from the ke
       this.history[window.currentCircuitId].push(JSON.stringify(circuit));
       this.$root.$emit("triggerSimulationRun", jsonObj);
       this.$root.$emit("circuitModifiedFromMenu");
+      this.$root.$emit("circuitEdited");
     }
   }
 };

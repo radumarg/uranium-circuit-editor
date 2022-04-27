@@ -4,171 +4,141 @@
     <img v-if="gateImageIsABox()" :src="gateImageSrcEditor" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
 
     <div v-else-if="gateImageIsCircuit()">
-      <div v-if="getAbbreviationLength() == 1 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-if="gateNameSpaceNeeded() == 'small' && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="8" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="26.5" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
-      <div v-else-if="getAbbreviationLength() == 2 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
-        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-          <g>
-            <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
-          </g>
-        </svg>
-      </div>
-      <div v-else-if="getAbbreviationLength() == 3 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-else-if="usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else x="19.5" y="15" style="font-size: 9px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
-      <div v-if="getAbbreviationLength() == 1 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-if="gateNameSpaceNeeded() == 'small' && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="8" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="26.5" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
-      <div v-else-if="getAbbreviationLength() == 2 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
-        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-          <g>
-            <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
-          </g>
-        </svg>
-      </div>
-      <div v-else-if="getAbbreviationLength() == 3 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-else-if="!usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
             <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else x="19.5" y="15" style="font-size: 9px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
     </div>
 
     <div v-else-if="gateImageIsUp()">
-      <div v-if="getAbbreviationLength() == 1 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-if="gateNameSpaceNeeded() == 'small' && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="8" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="26.5" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
-      <div v-else-if="getAbbreviationLength() == 2 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
-        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-          <g>
-            <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
-          </g>
-        </svg>
-      </div>
-      <div v-else-if="getAbbreviationLength() == 3 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-else-if="usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else x="19.5" y="15" style="font-size: 9px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
-      <div v-if="getAbbreviationLength() == 1 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-if="gateNameSpaceNeeded() == 'small' && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
-            <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="8" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="26.5" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
-      <div v-else-if="getAbbreviationLength() == 2 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-else-if="!usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
-            <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
-          </g>
-        </svg>
-      </div>
-      <div v-else-if="getAbbreviationLength() == 3 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
-        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-          <g>
-            <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
             <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else x="19.5" y="15" style="font-size: 9px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div> 
     </div>
 
     <div v-else>
-      <div v-if="getAbbreviationLength() == 1 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-if="gateNameSpaceNeeded() == 'small' && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="8" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="26.5" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
-      <div v-else-if="getAbbreviationLength() == 2 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
-        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-          <g>
-            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
-          </g>
-        </svg>
-      </div>
-      <div v-else-if="getAbbreviationLength() == 3 && usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-else-if="usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else x="19.5" y="15" style="font-size: 9px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
-      <div v-if="getAbbreviationLength() == 1 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-if="gateNameSpaceNeeded() == 'small' && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
-            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="8" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
+            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="26.5" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
-      <div v-else-if="getAbbreviationLength() == 2 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-else-if="!usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
-            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
-          </g>
-        </svg>
-      </div>
-      <div v-else-if="getAbbreviationLength() == 3 && !usingColoredGates" draggable="true" class="circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
-        <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
-          <g>
-            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
+            <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
             <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else x="19.5" y="15" style="font-size: 9px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
@@ -230,14 +200,6 @@
         </tr>
         <tr>
           <td></td>
-          <td width="70px" title="Last qubit. This is used to indicate the space in the circuit covered by the gate not necessarily the last target qubit. Target qubits are selected via the 'Targets Expression' which is a Javascript 'j' based expression that must evaluate to 'true' or 'false' for each qubit position identified by 'j' where j is a zero based qubit index and where index 0 corresponds to the first qubit in this dialog.">Last Qubit:</td>
-          <td width="130px" style="padding: 5px;">
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNewLast" placeholder="qbit" type="number" id="qbit-new" style="width:120px;"></b-form-input>
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
           <td width="70px" title="Target expression is used to select the array of target qubits to whom the circuit gate is applied. It must be a Javascript 'j' based expression that must evaluate to true ore false for each value of 'j'. Here 'j' is the index of the target gate where first target qubit has index 0 and the last target qubit has maximum index. The simplest example of such expression is: 'true', which, indicates a condition which is always valid regardless of value of 'j'.">Targets Expr:</td>
           <td width="130px" style="padding: 5px;">
             <b-form-input @keyup.enter.native="handleSave()" v-model.number="targetsExpressionNew" placeholder="'j' based JS expression" style="width:120px;"></b-form-input>
@@ -281,6 +243,10 @@
         </tr>
         <tr>
           <td class="no-resize-cell">
+             <div v-b-hover="handleExpandGateHover">
+              <b-icon v-if="expandGateIsHovered" v-on:click="handleExpandGate()" icon="files" title="Replicate gate" style="color: #7952b3;" font-scale="1.5"></b-icon>
+              <b-icon v-else icon="files" v-on:click="handleExpandGate()" style="color: #7952b3;" font-scale="1.3"></b-icon>
+              </div>
           </td>
           <td colspan="2">
             <div v-b-hover="handleExpandDownHover">
@@ -407,6 +373,131 @@
       </table>
     </b-modal>
 
+    <b-modal ref="replicate-gate-modal-dialog" size="lg" width="100px" centered hide-footer hide-header>
+      <table>
+        <tr>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleReplicateGateHelpHover">
+              <b-icon v-if="replicateGateHelpIsHovered" v-on:click="handleReplicateDialogHelp()" icon="question-circle" v-b-tooltip.hover title="Help" style="color: #7952b3;" font-scale="1.4"></b-icon>
+              <b-icon v-else icon="question-circle" v-on:click="handleReplicateDialogHelp()" style="color: #7952b3;" font-scale="1.2"></b-icon>
+            </div>
+          </td>
+          <td colspan="6">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleReplicateGateModalCloseHover">
+              <b-icon v-if="replicateGateModalCloseIsHovered" v-on:click="hideReplicateGateModal()" title="Close dialog" icon="x-square" style="color: #7952b3;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="x-square" v-on:click="hideReplicateGateModal()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td></td>
+          <td width="100px" class="td-2nd-modal">
+            First Qubit:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model.number="qbitFirst" placeholder="q" type="number" id="qbit-start" style="width:75px;"></b-form-input>
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            Last Qubit:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model.number="qbitLast" placeholder="q" type="number" id="qbit-stop" style="width:75px;"></b-form-input>
+          </td>
+          <td width="200px" class="td-2nd-modal">
+            Condition - 'q' based <br/>javascript expression:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="qbitConditionExpression" placeholder="q >= 0" type="text" id="qbit-cond" style="width:120px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td width="100px" class="td-2nd-modal">
+            First Step:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model.number="stepFirst" placeholder="s" type="number" id="step-start" style="width:75px;"></b-form-input>
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            Last Step:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model.number="stepLast" placeholder="s" type="number" id="step-stop" style="width:75px;"></b-form-input>
+          </td>
+          <td width="200px" class="td-2nd-modal">
+            Condition - 's' based <br/>javascript expression:
+          </td>
+          <td width="100px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="stepConditionExpression" placeholder="s >= 0" type="text" id="step-cond" style="width:120px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Conjugate Condition - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="conjugateConditionExpression" placeholder="" type="text" id="conjugate-cond" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Number of controls - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="numberOfControlsExpression" @change="onNumberOfControlsExpressionChange()" placeholder="" type="text" id="no-controls-cond" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            j'th Control Qubit - 'j, q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="controlsExpression" placeholder="" type="text" id="ctrl-qbit" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+           j'th  Control States - 'j, q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="controlstatesExpression" placeholder="" type="text" id="ctrl-state" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Power Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="powerExpression" placeholder="" type="text" id="power-expression" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td colspan="7" class="td-2nd-modal">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleReplicateGateModalSaveHover">
+              <b-icon v-if="replicateGateModalSaveIsHovered" v-on:click="handleReplicateGateModalSave()" title="Save changes" icon="check" style="color: #7952b3;" font-scale="1.8"></b-icon>
+              <b-icon v-else icon="check" v-on:click="handleReplicateGateModalSave()" style="color: #7952b3;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </b-modal>
+
   </div>
 </template>
 
@@ -415,7 +506,7 @@
 import { mapActions } from 'vuex';
 import { arraysAreEqual } from "../store/modules/javaScriptUtils.js";
 import { controlsMixin } from "../mixins/controlsMixin.js";
-import { evaluateTargetsExpression, getClosestControlledGates } from "../store/modules/editorHelper.js";
+import { getMultipleTargets, getClosestControlledGates, getCompatibleCircuitIds } from "../store/modules/editorHelper.js";
 import { getNoQbits, seatsAreTaken } from "../store/modules/gatesTable.js";
 import SingleQbitGate from "./SingleQbitGate";
 import { createCircuitDragImageGhost, getUserInterfaceSetting, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
@@ -432,12 +523,12 @@ export default {
   data() {
     return {
       targetsNewFirst: this.targets[0],
-      targetsNewLast: this.targets[this.targets.length - 1],
       circuitPowerNew: this.circuit_power,
       targetsExpressionNew: this.targets_expression,
       circuitNames: this.getCircuitNameOptions(),
       circuitNameNew: this.$store.state.circuitEditorModule[this.circuit_id]["circuit_name"],
-      usingColoredGates: getUserInterfaceSetting("colored-gates") === 'true'
+      usingColoredGates: getUserInterfaceSetting("colored-gates") === 'true',
+      powerExpression: this.circuit_power.toString(),
     }
   },
   methods: {
@@ -447,12 +538,14 @@ export default {
       this.$data.controlstatesNew = [...this.controlstates];
       this.$data.numberOfControls = this.controls.length;
       this.$data.targetsNewFirst = this.targets[0];
-      this.$data.targetsNewLast = this.targets[this.targets.length - 1];
+      this.$data.circuitPowerNew = this.circuit_power;
+      this.$data.targetsExpressionNew = this.targets_expression;
     },
     getCircuitNameOptions: function() {
       let circuitNameOptions = [];
-      for (let i = 0; i < window.circuitIds.length; i++) {
-        let id = window.circuitIds[i];
+      let compatibleCircuitIds = getCompatibleCircuitIds(this.$store.state.circuitEditorModule);
+      for (let i = 0; i < compatibleCircuitIds.length; i++) {
+        let id = compatibleCircuitIds[i];
         let circuitName = this.$store.state.circuitEditorModule[id]["circuit_name"];
         circuitNameOptions.push({ value: circuitName, text: circuitName })
       }
@@ -469,8 +562,19 @@ export default {
     getCircuitAbbreviation: function(){
       return this.circuit_abbreviation;
     },
-    getAbbreviationLength: function(){
-      return this.circuit_abbreviation.length;
+    getCircuitPower: function(){
+      if (this.circuit_power == 1) return "";
+      return this.circuit_power;
+    },
+    gateNameSpaceNeeded: function(){
+      if (this.circuit_power < -99) return "maximum";
+      if (this.circuit_power > 99) return "large";
+      if (this.circuit_power < -9) return "large";
+      if (this.circuit_abbreviation.length > 2) return "large"
+      if (this.circuit_abbreviation.length > 1) return "medium"
+      if (this.circuit_power > 9) return "medium";
+      if (this.circuit_power < 0) return "medium";
+      return "small";
     },
     gateImageIsABox(){
       if (this.img == 'box-up') return true;
@@ -491,48 +595,22 @@ export default {
         alert("Please enter an integer number for the first target qubit!");
         return;
       }
-      if (!Number.isInteger(this.$data.targetsNewLast)){
-        alert("Please enter an integer number for the last qubit!");
-        return;
-      }
       if (!Number.isInteger(this.$data.circuitPowerNew)){
         alert("Please enter an integer number circuit power!");
         return;
       }
-
-      // resolve new target qubits
-      if (this.$data.targetsNewFirst > this.$data.targetsNewLast) {
-        let tmp = this.$data.targetsNewFirst;
-        this.$data.targetsNewFirst = this.$data.targetsNewLast;
-        this.$data.targetsNewLast = tmp;
-      }
-      let targetsNew = [];
-      for (let q = this.$data.targetsNewFirst; q <= this.$data.targetsNewLast; q++) {
-        let j = q - this.$data.targetsNewFirst;
-        try {
-          let targetIsUsed = evaluateTargetsExpression(this.$data.targetsExpressionNew, j);
-          if (targetIsUsed == true) {
-            targetsNew.push(q);
-          }
-        } catch (e) {
-          alert(`Target qubit with index ${j} does not evaluate to 'true' or 'false'!`);
-          return;
-        }
-      }
+      let circuitState = this.$store.state.circuitEditorModule[this.circuit_id];
+      let noQubits = getNoQbits(circuitState);
+      let targetsNew = getMultipleTargets(this.$data.targetsNewFirst, noQubits, this.$data.targetsExpressionNew);
       if (targetsNew.length == 0) {
         alert("No qubit is selected by the targets expression!");
         return;
       }
-      this.$data.targetsNewFirst = targetsNew[0];
-      this.$data.targetsNewLast = targetsNew[targetsNew.length - 1];
-
-      let circuitState = this.$store.state.circuitEditorModule[this.circuit_id];
-      let noQubits = getNoQbits(circuitState);
-      noQubits = 2;
-      if (targetsNew.length != noQubits) {
-        alert(`The circuit needs ${noQubits} qubits, but the current target condition expression evaluates to ${targetsNew.length} targets!`);
+      if (targetsNew[0] != this.$data.targetsNewFirst) {
+        alert("Expression should evaluate to 'true' for the first qubit (j = 0)!");
         return;
       }
+      this.$data.targetsNewFirst = targetsNew[0];
       // remember current state
       let targetsOld = [...this.targets];
       let circuitPowerOld = this.circuit_power;
@@ -560,7 +638,6 @@ export default {
         // eslint-disable-next-line no-unused-vars
         error => {
           this.$data.targetsNewFirst = targetsOld[0];
-          this.$data.targetsNewLast = targetsOld[this.targetsOld.length - 1];
           this.$data.circuitPowerNew = circuitPowerOld;
           this.$data.targetsExpressionNew = targetsExpressionOld;
           this.$data.circuitNameNew = circuitNameOld;
@@ -681,7 +758,6 @@ export default {
         this.$data.targetsNew = proposedTargets;
         this.$data.controlsNew = proposedControls;
         this.$data.targetsNewFirst = this.$data.targetsNew[0];
-        this.$data.targetsNewLast = this.$data.targetsNew[this.$data.targetsNew.length - 1];
         this.$forceUpdate();
       }
     },
@@ -705,7 +781,6 @@ export default {
         this.$data.targetsNew = proposedTargets;
         this.$data.controlsNew = proposedControls;
         this.$data.targetsNewFirst = this.$data.targetsNew[0];
-        this.$data.targetsNewLast = this.$data.targetsNew[this.$data.targetsNew.length - 1];
         this.$forceUpdate();
       }
     },

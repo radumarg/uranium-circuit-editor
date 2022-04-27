@@ -607,13 +607,13 @@ export const circuitEditorModule = {
     loadProject(context, jsonObj) {
       if (jsonObj != null) {
         delete circuitEditorModule.state[0];
-        window.circuitIds = Object.keys(jsonObj);
+        window.circuitIds = Object.keys(jsonObj).map(Number);
         for (let i = 0; i < window.circuitIds.length; i++) {
-          let circuitId = window.circuitIds[i];
+          let circuitId = parseInt(window.circuitIds[i]);
           if (i == 0) {
             window.currentCircuitId = circuitId;
           }
-          circuitEditorModule.state[circuitId] = {...jsonObj[circuitId]};
+          circuitEditorModule.state[circuitId] = {...jsonObj[window.circuitIds[i]]};
         }
       }
     },

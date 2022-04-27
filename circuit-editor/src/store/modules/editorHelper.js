@@ -145,7 +145,7 @@ export function insertingOneGateInCircuit(circuitState, dto) {
 
   if (Object.prototype.hasOwnProperty.call(dto, "circuit_id")) {
     let circuitId = dto["circuit_id"];
-    gate["circuit_id"] = circuitId;
+    gate["circuit_id"] = parseInt(circuitId);
   }
   if (Object.prototype.hasOwnProperty.call(dto, "circuit_abbreviation")) {
     let circuitAbbreviation = dto["circuit_abbreviation"];
@@ -153,7 +153,7 @@ export function insertingOneGateInCircuit(circuitState, dto) {
   }
   if (Object.prototype.hasOwnProperty.call(dto, "circuit_power")) {
     let circuitPower = dto["circuit_power"];
-    gate["circuit_power"] = circuitPower;
+    gate["circuit_power"] = parseInt(circuitPower);
   }
   if (Object.prototype.hasOwnProperty.call(dto, "targets_expression")) {
     let targetsExpression = dto["targets_expression"];
@@ -664,6 +664,7 @@ export function evaluateTargetsExpression(expression, j) {
   throw new Error('Expression does not evaluate to a boolean value.');
 }
 
+// get array of targets that match expression
 export function getMatchingTargets(qmin, qmax, expression) {
 
   let targets = [];
@@ -677,7 +678,24 @@ export function getMatchingTargets(qmin, qmax, expression) {
   return targets;
 }
 
-export function gateHasVariableTragets(gateName){
+// get array of targets needed by circuit gate
+export function getMultipleTargets(startQubit, noQubits, expression) {
+
+  let targets = [];
+  let currentQubit = startQubit;
+  while (targets.length < noQubits) {
+    let targetIsUsed = evaluateTargetsExpression(expression, currentQubit - startQubit);
+    if (targetIsUsed == true) {
+      targets.push(currentQubit);
+    }
+    currentQubit += 1;
+  }
+
+  return targets;
+}
+
+
+export function gateHasVariableTargets(gateName){
   if (gateName == "qft"
     || gateName == "qft-dagger"
     ) {
@@ -687,11 +705,50 @@ export function gateHasVariableTragets(gateName){
   }
 }
 
-export function gateCanHaveManyTargets(gateName) {
+export function gateCanHaveMultipleTargets(gateName) {
 
   if (gateName == "circuit") {
     return true;
   }
 
-  return gateHasVariableTragets(gateName);
+  return gateHasVariableTargets(gateName);
+}
+
+export function getCircuitDescendents(circuitStatesArray, circuitId) {
+
+  let descendents = [];
+
+  let circuitState = circuitStatesArray[circuitId];
+  if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+    for (let i = 0; i < circuitState.steps.length; i++) {
+      let step = circuitState.steps[i];
+      if (Object.prototype.hasOwnProperty.call(step, "gates")) {
+        let gates = step["gates"];
+        for (let j = 0; j < gates.length; j++) {
+          let gate = gates[j];
+          if (gate.name == "circuit") {
+            descendents.push(gate.circuit_id);
+            let gateDescendents = getCircuitDescendents(circuitStatesArray, gate.circuit_id);
+            descendents = descendents.concat(gateDescendents);
+          }
+        }
+      }
+    }
+  }
+
+  return descendents;
+}
+
+export function getCompatibleCircuitIds(circuitStatesArray) {
+  let ids = [];
+  let currentCircuitName = circuitStatesArray[window.currentCircuitId]["circuit_name"];
+  for (let i = 0; i < window.circuitIds.length; i++) {
+    let id = window.circuitIds[i];
+    let circuitName = circuitStatesArray[id]["circuit_name"];
+    if (currentCircuitName == circuitName) continue;
+    let circuitDescendants = getCircuitDescendents(circuitStatesArray, id);
+    if (circuitDescendants.includes(window.currentCircuitId)) continue;
+    ids.push(id);
+  }
+  return ids;
 }

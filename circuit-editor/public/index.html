@@ -47,7 +47,7 @@
 
       // Set the zoom level of help facility bootstrap-vue Sidebar
       // Weird webpack bug: javascript string interpolation cannot be used here.
-      var sidebarZoom = 100;
+      var sidebarZoom = '100%';
       if (cookie.hasOwnProperty('zoom-level')) {
         sidebarZoom = (10000.0/parseFloat(cookie['zoom-level']))  + "%";
       }

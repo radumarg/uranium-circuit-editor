@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { getUserInterfaceSetting } from "./applicationWideReusableUnits.js";
 import { range } from "./javaScriptUtils.js";
-import { gateCanHaveManyTargets } from "./editorHelper.js";
+import { gateCanHaveMultipleTargets } from "./editorHelper.js";
 
 /* Holds information necessary to diplay a cell in gates table */
 class GatesTableCell {
@@ -1212,7 +1212,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
           } else if (rowMin < inputRow && inputRow < rowMax) {
             if (controls.includes(rowQbit)){
               gatesTableRowState.cells[column].name = getCtrlStubMidName(gate, controlstate);
-            } else if (gateCanHaveManyTargets(gate.name) && qubitsTakenByGate.includes(rowQbit)) {
+            } else if (gateCanHaveMultipleTargets(gate.name) && qubitsTakenByGate.includes(rowQbit)) {
               let image = getIntermediateImageForManyTargetsGates(inputRow, rowTargetMin, rowTargetMax, rowQbit, qubitsTakenByGate, gate.name);
               gatesTableRowState.cells[column].img = image;
             } else if (targets.includes(rowQbit)) {

@@ -2,7 +2,7 @@
   <div class="gates-pallete" id="gates-pallete-circuit">
 
     <table id="gates-pallete-table-circuit" style="table-layout: fixed; max-width: 269px;">
-      <div v-for="circuitIndex in this.getCompatibleCircuitIds().length" v-bind:key="circuitIndex">
+      <div v-for="circuitIndex in this.getCompatibleCircuitsNo()" v-bind:key="circuitIndex">
         <tr>
           <td style="width: 5px; height: 5px; max-height: 5px; text-align: center; padding: 5px;">
             <div @mouseover="onPenMouseOver(circuitIndex - 1)" @mouseleave="onPenMouseLeave(circuitIndex - 1)">
@@ -76,27 +76,35 @@
 
 <script>
 import { createCircuitDragImageGhost, getUserInterfaceSetting, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
+import { getCompatibleCircuitIds } from "../store/modules/editorHelper.js";
 import { mapActions } from 'vuex';
 export default {
   name: "GatesPalleteCircuits",
   data() {
     return {
+      compatibleCircuitIds: [],
       editCircuitNamePenIsHovered: this.initPenHoverStauses(),
       modalCloseIsHovered: false,
       modalSaveIsHovered:  false,
       editedCircuitId: null,
       circuitName:  "",
       circuitAbbreviation: "",
-      coloredGatesCookie: getUserInterfaceSetting("colored-gates") === 'true'
+      coloredGatesCookie: getUserInterfaceSetting("colored-gates") === 'true',
     }
   },
   created() {
-    this.$root.$on('currentCircuitSwitch', () => { this.$forceUpdate(); });
+    this.$root.$on('currentCircuitSwitch', () => {
+      this.$data.compatibleCircuitIds = getCompatibleCircuitIds(this.$store.state.circuitEditorModule);
+      this.$forceUpdate();
+    });
+    this.$root.$on("projectLoaded", () => {
+      this.$data.compatibleCircuitIds = getCompatibleCircuitIds(this.$store.state.circuitEditorModule);
+      this.$forceUpdate();
+    });
     this.$root.$on("switchGateColors", () => { this.updateGateImagesColor(); });
-    this.$root.$on("projectLoaded", () => { this.projectLoaded(); });
   },
   updated() {
-    for (let i = 0; i < window.circuitIds.length; i++) {
+    for (let i = 0; i < this.getCompatibleCircuitsNo(); i++) {
       let svgDiv = document.getElementById(`circuit-gate-div-${i}`);
       if (svgDiv != null) {
         svgDiv.innerHTML = this.getCircuitGateImage(i);
@@ -107,12 +115,12 @@ export default {
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['refreshCircuit', 'updateCircuitName', 'updateCircuitAbbreviation']),
-    projectLoaded: function () {
-      this.$forceUpdate();
+    getCompatibleCircuitsNo : function () {
+      return this.$data.compatibleCircuitIds.length;
     },
     initPenHoverStauses: function () {
       let hoverStatuses = [];
-      for (let i = 0; i < this.getCompatibleCircuitIds().length; i++) {
+      for (let i = 0; i < getCompatibleCircuitIds(this.$store.state.circuitEditorModule); i++) {
         hoverStatuses[i] = false;
       }
       return hoverStatuses;
@@ -125,26 +133,12 @@ export default {
       this.$data.editCircuitNamePenIsHovered[circuitIndex] = false;
       this.$forceUpdate();
     },
-    getCompatibleCircuitIds: function () {
-      let ids = [];
-      let currentCircuitName = this.$store.state.circuitEditorModule[window.currentCircuitId]["circuit_name"];
-      for (let i = 0; i < window.circuitIds.length; i++) {
-        let id = window.circuitIds[i];
-        let circuitName = this.$store.state.circuitEditorModule[id]["circuit_name"];
-        if (currentCircuitName != circuitName) {
-          ids.push(id);
-        }
-      }
-      return ids;
-    },
     getCircuitName: function (circuitIndex) {
-      let compatibleCicuitIds = this.getCompatibleCircuitIds();
-      let id = compatibleCicuitIds[circuitIndex];
+      let id = this.$data.compatibleCircuitIds[circuitIndex];
       return this.$store.state.circuitEditorModule[id]["circuit_name"];
     },
     getCircuitGateImage(circuitIndex) {
-      let compatibleCicuitIds = this.getCompatibleCircuitIds();
-      let id = compatibleCicuitIds[circuitIndex];
+      let id = this.$data.compatibleCircuitIds[circuitIndex];
       let abbreviation = this.$store.state.circuitEditorModule[id]["circuit_abbreviation"];
       let gateColor = window.circuitGateColor;
       if (getUserInterfaceSetting('colored-gates') === 'false'){
@@ -168,7 +162,7 @@ export default {
     },
     updateGateImagesColor(){
       // circuit gates icon
-      for (let i = 0; i < window.circuitIds.length; i++) {
+      for (let i = 0; i < this.getCompatibleCircuitsNo(); i++) {
         let svgDiv = document.getElementById(`circuit-gate-div-${i}`);
         if (svgDiv != null) {
           svgDiv.innerHTML = this.getCircuitGateImage(i);
@@ -186,8 +180,7 @@ export default {
       }
     },
     showEditCircuitModal: function (circuitIndex) {
-      let compatibleCicuitIds = this.getCompatibleCircuitIds();
-      this.$data.editedCircuitId = compatibleCicuitIds[circuitIndex];
+      this.$data.editedCircuitId = this.$data.compatibleCircuitIds[circuitIndex];
       this.$data.circuitName = this.$store.state.circuitEditorModule[this.$data.editedCircuitId]["circuit_name"];
       this.$data.circuitAbbreviation = this.$store.state.circuitEditorModule[this.$data.editedCircuitId]["circuit_abbreviation"];
       this.$refs['change-circuit-name-dialog'].show();
@@ -226,13 +219,14 @@ export default {
       this.updateCircuitAbbreviation([circuitId, circuitAbbreviation]);
       this.$refs['change-circuit-name-dialog'].hide();
       this.$forceUpdate();
-      this.refreshCircuit();
+      this.$root.$emit("circuitAbbreviationChanged");
+      //TODO: update circuit
+      //this.refreshCircuit();
     },
     dragStart: function(event) {
       hideTooltips();
       let circuitIndex = parseInt(event.target.id.replace('circuit-gate-div-', ''));
-      let compatibleCicuitIds = this.getCompatibleCircuitIds();
-      let id = compatibleCicuitIds[circuitIndex];
+      let id = this.$data.compatibleCircuitIds[circuitIndex];
       event.dataTransfer.setData("gateName", "circuit");
       event.dataTransfer.setData("drag-origin", "gates-pallete");
       event.dataTransfer.setData("circuit_id", this.$store.state.circuitEditorModule[id]["circuit_id"]);

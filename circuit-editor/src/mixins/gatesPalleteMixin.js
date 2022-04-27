@@ -6,7 +6,7 @@ import {
 } from "../store/modules/applicationWideReusableUnits.js";
 
 import {
-  gateCanHaveManyTargets,
+  gateCanHaveMultipleTargets,
 } from "../store/modules/editorHelper.js";
 
 export const gatesPalleteMixin = {
@@ -45,7 +45,7 @@ export const gatesPalleteMixin = {
       hideTooltips();
       const target = event.target;
       event.dataTransfer.setData("gateName", target.title);
-      if (gateCanHaveManyTargets(target.title)) {
+      if (gateCanHaveMultipleTargets(target.title)) {
         event.dataTransfer.setData("targets_expression", "true");
       }
       event.dataTransfer.setData("drag-origin", "gates-pallete");

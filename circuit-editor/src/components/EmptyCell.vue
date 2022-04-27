@@ -197,9 +197,9 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { seatsAreTaken } from "../store/modules/gatesTable.js";
+import { getNoQbits, seatsAreTaken } from "../store/modules/gatesTable.js";
 import { arraysAreEqual } from "../store/modules/javaScriptUtils.js";
-import { getMatchingTargets, gateHasVariableTragets, getAggregatedGatesTargets, handleSelectEvent, isDefined, getClosestControlledGates, stepContainsGates } from "../store/modules/editorHelper.js";
+import { gateHasVariableTargets, getMatchingTargets, getMultipleTargets, getAggregatedGatesTargets, handleSelectEvent, isDefined, getClosestControlledGates, stepContainsGates } from "../store/modules/editorHelper.js";
 export default {
   name: "EmptyCell",
   props: {
@@ -714,6 +714,7 @@ export default {
       let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let dragOrigin = event.dataTransfer.getData("drag-origin");
+      let targetsExpression = event.dataTransfer.getData("targets_expression");
 
       let originalControls = [];
       let draggedQbit = null;
@@ -729,6 +730,22 @@ export default {
       
       if (dragOrigin == "stub") {
         dto["targets"] = originalTargets;
+      } else if (dragOrigin == "gates-pallete" && gateName == "circuit") {
+        let circuitId = parseInt(event.dataTransfer.getData("circuit_id"));
+        let draggedGateQubitNumber = getNoQbits(this.$store.state.circuitEditorModule[circuitId]);
+        let multipleTargets = getMultipleTargets(qbit, draggedGateQubitNumber, targetsExpression);
+        let currentCircuit = this.$store.state.circuitEditorModule[window.currentCircuitId];
+        if (seatsAreTaken(currentCircuit, multipleTargets, step, [])) {
+          alert("There are not enough unoccupied qubits to add the gate here.");
+          this.handleDragLeave();
+          return;
+        } else if (draggedGateQubitNumber == 0) {
+          alert("The circuit whose gate you dragged is empty!");
+          this.handleDragLeave();
+          return;
+        } else {
+          dto["targets"] =  multipleTargets;
+        }
       } else if (dragOrigin && dragOrigin != "gates-pallete") {
         if (step == originalStep){
           let qmin = Math.min(...originalTargets, qbit);
@@ -737,8 +754,7 @@ export default {
             dto["targets"] = Array.from({length: qmax - qmin + 1}, (_, i) => i + qmin);
           } else if (gateName == "circuit") {
             dto["targets"] = originalTargets.map(function(value) { return value + delta; });
-          } else if (gateHasVariableTragets(gateName)) {
-            let targetsExpression = event.dataTransfer.getData("targets_expression");
+          } else if (gateHasVariableTargets(gateName)) {
             dto["targets"] = getMatchingTargets(qmin, qmax, targetsExpression);
           } else {
             dto["targets"] = originalTargets.map(function(item) { return item == draggedQbit ? qbit : item; });

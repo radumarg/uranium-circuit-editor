@@ -6,7 +6,7 @@
 
 <script>
 import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
-import { gateHasVariableTragets, getClosestControlledGates, getMatchingTargets, isDefined } from "../store/modules/editorHelper.js";
+import { gateHasVariableTargets, getClosestControlledGates, getMatchingTargets, isDefined } from "../store/modules/editorHelper.js";
 import { arraysAreEqual } from "../store/modules/javaScriptUtils.js";
 import { mapActions } from 'vuex';
 export default {
@@ -66,7 +66,7 @@ export default {
           } else {
             this.repositionGate(event, newTargets);
           }
-        } else if (dragOrigin == "gate" && gateHasVariableTragets(gateName)) {
+        } else if (dragOrigin == "gate" && gateHasVariableTargets(gateName)) {
           let targetsExpression = event.dataTransfer.getData("targets_expression");
           let newTargets = getMatchingTargets(qmin, qmax, targetsExpression);
           if (newTargets.length > 0) {
