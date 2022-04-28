@@ -26,7 +26,8 @@ import {
 import { 
   arraysAreEqual,
   zipArrays,
-  getUniqueValues
+  getUniqueValues,
+  range
 } from "./javaScriptUtils.js";
 
 import {
@@ -534,16 +535,19 @@ export const circuitEditorModule = {
         let controlstatesNew = dataTransferObj["controlstatesNew"];
         let existingQbits = [...targets, ...controls, ...getAggregatedGatesTargets(dataTransferObj)].filter(x => isDefined(x));
         let proposedQbits = [...targetsNew, ...controlsNew, ...getAggregatedGatesNewTargets(dataTransferObj)].filter(x => isDefined(x));
-        
+        let targetsRange = range(Math.min(...targetsNew), Math.max(...targetsNew));
+
         if (targetsNew.some((element) => element < 0) || controlsNew.some((element) => element < 0)) {
           alert("Negative qubits not permitted!");
         } else if (targetsNew.length != getUniqueValues(targetsNew).length) {
           alert("The target qubits must be different!");
         } else if (targetsNew.some(e => controlsNew.includes(e))) {
           alert("The target and control qubits must be different!");
+        } else if (targetsRange.some(e => controlsNew.includes(e))) {
+          alert("Some of the control qubit(s) is placed inside the box.");
         } else if ((!arraysAreEqual(targets, targetsNew) || !arraysAreEqual(controls, controlsNew)) &&
           seatsAreTaken(circuitEditorModule.state[window.currentCircuitId], proposedQbits, step, existingQbits)) {
-          alert("The requested seat is occupied!");
+          alert("The requested seat(s) are occupied!");
         } else {
           this.commit("circuitEditorModule/removeGateNoTrack", { step: step, targets: targets });
 

@@ -5,7 +5,7 @@
     <b-container fluid="xs" style="height: 100%;" :style="{display: liveSimulation ? 'block' : 'none'}" id="splittedEditor">
       <b-row no-gutters style="height: 100%;">
         <b-col class="single-tab" style="width: 100%;">
-          <Editor id="editor1"/>
+          <Editor id="editor1" />
         </b-col>
         <b-col style="max-width: 370px;" class="single-tab">
           <b-tabs content-class="mt-1"  id="tabbedSplitEditor" style="height: 100%;">
@@ -60,6 +60,12 @@ export default {
       lastSimulatedCircuit: undefined,
       liveSimulation: getUserInterfaceSetting("live-simulation") === 'true',
     }
+  },
+  created() {
+    this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.adjustView(simulatingLive)});
+    this.$root.$on('circuitModifiedFromMenu', () => {this.switchToEditorTab()});
+    this.$root.$on('switchLegendBase', () => {this.switchToEditorTab(); this.$data.lastSimulatedCircuit = null;});
+    this.$root.$on('switchEndianess', () => {this.endianessChange()});
   },
   methods: {
     ...mapGetters("circuitEditorModule/", ["getMaximumQbitIndex"]),
@@ -131,12 +137,6 @@ export default {
       this.$refs.circuitTab.activate();
     },
   },
-  created() {
-      this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.adjustView(simulatingLive)});
-      this.$root.$on('circuitModifiedFromMenu', () => {this.switchToEditorTab()});
-      this.$root.$on('switchLegendBase', () => {this.switchToEditorTab(); this.$data.lastSimulatedCircuit = null;});
-      this.$root.$on('switchEndianess', () => {this.endianessChange()});
-   },
 };
 </script>
 

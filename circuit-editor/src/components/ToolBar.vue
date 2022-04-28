@@ -338,7 +338,6 @@ it does not make much sense doing that unless you intend to save the circuit as 
       });
     },
     saveFile: function() {
-      let circuitNo = 1;
       let state = this.$store.state.circuitEditorModule;
       window.alertedOnFaliedSavingCircuit = false;
       const yaml = require('js-yaml');
@@ -349,8 +348,9 @@ it does not make much sense doing that unless you intend to save the circuit as 
         if (window.projectId != null && window.projectId > 0) {
           save_circuit(circuitId, yamlState);
         } else {
-          this.download(`circuit_${circuitNo}.yaml`, yamlState);
-          circuitNo += 1;
+          if (circuitId == window.currentCircuitId) {
+            this.download(`circuit.yaml`, yamlState);
+          }
         }
       }
     },

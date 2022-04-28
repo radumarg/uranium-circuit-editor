@@ -76,7 +76,7 @@
 
 <script>
 import { createCircuitDragImageGhost, getUserInterfaceSetting, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
-import { getCompatibleCircuitIds } from "../store/modules/editorHelper.js";
+import { getCompatibleCircuitIds, updateGatesAbbreviation } from "../store/modules/editorHelper.js";
 import { mapActions } from 'vuex';
 export default {
   name: "GatesPalleteCircuits",
@@ -218,10 +218,9 @@ export default {
       this.updateCircuitName([circuitId, circuitName]);
       this.updateCircuitAbbreviation([circuitId, circuitAbbreviation]);
       this.$refs['change-circuit-name-dialog'].hide();
-      this.$forceUpdate();
+      updateGatesAbbreviation(this.$store.state.circuitEditorModule, circuitId, circuitAbbreviation);
       this.$root.$emit("circuitAbbreviationChanged");
-      //TODO: update circuit
-      //this.refreshCircuit();
+      this.$forceUpdate();
     },
     dragStart: function(event) {
       hideTooltips();

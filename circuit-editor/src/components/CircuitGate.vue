@@ -599,7 +599,8 @@ export default {
         alert("Please enter an integer number circuit power!");
         return;
       }
-      let circuitState = this.$store.state.circuitEditorModule[this.circuit_id];
+      let newCircuitId = this.getCircuitId(this.$data.circuitNameNew);
+      let circuitState = this.$store.state.circuitEditorModule[newCircuitId];
       let noQubits = getNoQbits(circuitState);
       let targetsNew = getMultipleTargets(this.$data.targetsNewFirst, noQubits, this.$data.targetsExpressionNew);
       if (targetsNew.length == 0) {
@@ -616,7 +617,6 @@ export default {
       let circuitPowerOld = this.circuit_power;
       let targetsExpressionOld = this.targets_expression;
       let circuitNameOld = this.$store.state.circuitEditorModule[this.circuit_id]["circuit_name"];
-      let newCircuitId = this.getCircuitId(this.$data.circuitNameNew);
       // save action
       let promise = this.repositionGateInCircuit({
         'step': this.step,

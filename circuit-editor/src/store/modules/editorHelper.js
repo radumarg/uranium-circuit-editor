@@ -752,3 +752,25 @@ export function getCompatibleCircuitIds(circuitStatesArray) {
   }
   return ids;
 }
+
+export function updateGatesAbbreviation(circuitStatesArray, changedCircuitId, newAbbrevation) {
+  for (let i = 0; i < window.circuitIds.length; i++) {
+    let id = window.circuitIds[i];
+    if (id == changedCircuitId) continue;
+    let circuitState = circuitStatesArray[id];
+    if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+      for (let j = 0; j < circuitState.steps.length; j++) {
+        let step = circuitState.steps[j];
+        if (Object.prototype.hasOwnProperty.call(step, "gates")) {
+          let gates = step["gates"];
+          for (let k = 0; k < gates.length; k++) {
+            let gate = gates[k];
+            if (gate.name == "circuit" && gate.circuit_id == changedCircuitId) {
+              gate.circuit_abbreviation = newAbbrevation;
+            }
+          }
+        }
+      }
+    }
+  }
+}
