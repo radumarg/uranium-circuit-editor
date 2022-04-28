@@ -141,7 +141,7 @@ export function insertingOneGateInCircuit(circuitState, dto) {
   let step = dto["step"];
   let name = dto["name"];
 
-  let gate = { "name": name};
+  let gate = { "name": name };
 
   if (Object.prototype.hasOwnProperty.call(dto, "circuit_id")) {
     let circuitId = dto["circuit_id"];

@@ -392,7 +392,6 @@ export default {
   ]),
   created() {
     this.$root.$on('currentCircuitSwitch', () => { this.$forceUpdate(); });
-    this.$root.$on('circuitEdited', () => { this.$forceUpdate(); });
     this.$root.$on('circuitAbbreviationChanged', () => { this.$forceUpdate(); });
     this.$root.$on("switchThemeDark", boolFlag => {
       if (this.$refs["gatesTable"] != null) {

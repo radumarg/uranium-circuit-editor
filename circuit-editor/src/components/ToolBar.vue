@@ -184,7 +184,6 @@ export default {
     this.unsubscribeLoadProject = this.$store.subscribe((mutation, state) => {
       if (mutation.type == 'circuitEditorModule/loadProject') {
         this.$root.$emit("triggerSimulationRun", state.circuitEditorModule[window.currentCircuitId]);
-        this.$root.$emit("circuitEdited");
         this.$root.$emit("projectLoaded");
         this.projectLoaded(state);
       }
@@ -199,9 +198,6 @@ export default {
           mutation.type == 'circuitEditorModule/removeGates' ||
           mutation.type == 'circuitEditorModule/removeQbit' ||
           mutation.type == 'circuitEditorModule/removeStep'){
-        // not sure why Circuit update is not triggered automatically without this anymore
-        // this might be related to the fact that we changed the state to an array of states
-        this.$root.$emit("circuitEdited");
         this.$root.$emit("triggerSimulationRun", state.circuitEditorModule[window.currentCircuitId]);
         // validate circuit in a separate thread
         sendWorkerMessage(state.circuitEditorModule[window.currentCircuitId]);
@@ -241,11 +237,9 @@ export default {
            let current_state = JSON.parse(this.history[window.currentCircuitId][lastIndex]);
            this.updateCircuit(current_state);
            this.$root.$emit("triggerSimulationRun", current_state);
-           this.$root.$emit("circuitEdited");
         } else {
           this.emptyCircuit();
           this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule[window.currentCircuitId]);
-          this.$root.$emit("circuitEdited");
         }
       }
     },
@@ -256,7 +250,6 @@ export default {
         let current_state = JSON.parse(json_txt);
         this.updateCircuit(current_state);
         this.$root.$emit("triggerSimulationRun", current_state);
-        this.$root.$emit("circuitEdited");
       }
     },
     initializeProjectHistory: function() {
@@ -379,7 +372,6 @@ it does not make much sense doing that unless you intend to save the circuit as 
       window.gatesTable.columns = window.initialColumns;
       this.$root.$emit("triggerSimulationRun", state);
       this.$root.$emit("circuitModifiedFromMenu");
-      this.$root.$emit("circuitEdited");
       if (window.toolTipsAreShown){
         JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");
         window.toolTipsAreShown = false;
@@ -441,7 +433,6 @@ If you do not want to accept cookies, you can zoom the page yourself from the ke
       this.history[window.currentCircuitId].push(JSON.stringify(circuit));
       this.$root.$emit("triggerSimulationRun", jsonObj);
       this.$root.$emit("circuitModifiedFromMenu");
-      this.$root.$emit("circuitEdited");
     }
   }
 };

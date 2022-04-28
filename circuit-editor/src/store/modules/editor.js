@@ -35,6 +35,8 @@ import {
   all
 } from 'mathjs'
 
+import Vue from 'vue';
+
 // reduce the security risk by not allwing to evaluate arbitrary js
 // expressions: https://mathjs.org/docs/expressions/security.html
 const math = create(all);
@@ -617,7 +619,7 @@ export const circuitEditorModule = {
           if (i == 0) {
             window.currentCircuitId = circuitId;
           }
-          circuitEditorModule.state[circuitId] = {...jsonObj[window.circuitIds[i]]};
+          Vue.set(circuitEditorModule.state, circuitId, {...jsonObj[window.circuitIds[i]]})
         }
       }
     },
