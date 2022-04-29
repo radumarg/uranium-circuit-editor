@@ -422,6 +422,7 @@ export default {
         'qbitFirst': this.qbitFirst,
         'qbitLast': this.qbitLast,
         'qbitConditionExpression': this.qbitConditionExpression,
+        'numberOfControlsExpression': this.numberOfControlsExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
         'controlsExpression': this.controlsExpression,
         'controlstatesExpression': this.controlstatesExpression,

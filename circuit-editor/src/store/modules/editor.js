@@ -1,5 +1,6 @@
 import {
   computeGatesTableCells,
+  getNoQbits,
   retrieveRowsInGatesTable,
   seatsAreTaken,
   seatsInArrayAreAlreadyTaken,
@@ -9,6 +10,7 @@ import {
 import {
   getAggregatedGatesTargets,
   getAggregatedGatesNewTargets,
+  getMultipleTargets,
   insertingOneGateInCircuit,
   interpolateJavaScriptExpression,
   isDefined,
@@ -374,6 +376,14 @@ export const circuitEditorModule = {
                   let qbit2Expression = dataTransferObj["qbit2Expression"];
                   dto["targets"].push(limitedEvaluate(interpolateJavaScriptExpression(qbit2Expression, s, q)));
                 }
+
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "targets_expression")) {
+                  let circuit_id = dataTransferObj["circuit_id"];
+                  let circuitState = circuitEditorModule.state[circuit_id];
+                  let noQubits = getNoQbits(circuitState);
+                  let targets_expression = dataTransferObj["targets_expression"];
+                  dto["targets"] = getMultipleTargets(q, noQubits, targets_expression);
+                }
                 
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "numberOfControlsExpression")) {
 
@@ -419,28 +429,72 @@ export const circuitEditorModule = {
                 
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiExpression")) {
                   let phiExpression = dataTransferObj["phiExpression"];
-                  dto["phi"] = limitedEvaluate(interpolateJavaScriptExpression(phiExpression, s, q));
+                  let phi = limitedEvaluate(interpolateJavaScriptExpression(phiExpression, s, q));
+                  if (isNaN(phi)) {
+                    throw new Error("Phi expression does not evaluate to a number!");
+                  }
+                  dto["phi"] = phi;
                 }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "thetaExpression")) {
                   let thetaExpression = dataTransferObj["thetaExpression"];
-                  dto["theta"] = limitedEvaluate(interpolateJavaScriptExpression(thetaExpression, s, q));
+                  let theta = limitedEvaluate(interpolateJavaScriptExpression(thetaExpression, s, q));
+                  if (isNaN(theta)) {
+                    throw new Error("Theta expression does not evaluate to a number!");
+                  }
+                  dto["theta"] = theta;
                 }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "lambdaExpression")) {
                   let lambdaExpression = dataTransferObj["lambdaExpression"];
-                  dto["lambda"] = limitedEvaluate(interpolateJavaScriptExpression(lambdaExpression, s, q));
+                  let lambda = limitedEvaluate(interpolateJavaScriptExpression(lambdaExpression, s, q));
+                  if (isNaN(lambda)) {
+                    throw new Error("Lambda expression does not evaluate to a number!");
+                  }
+                  dto["lambda"] = lambda;
                 }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "bitExpression")) {
                   let bitExpression = dataTransferObj["bitExpression"];
-                  dto["bit"] = limitedEvaluate(interpolateJavaScriptExpression(bitExpression, s, q));
+                  let bit = limitedEvaluate(interpolateJavaScriptExpression(bitExpression, s, q));
+                  if (isNaN(bit)) {
+                    throw new Error("The classic bit expression does not evaluate to a number!");
+                  }
+                  dto["bit"] = bit;
+                }
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "powerExpression")) {
+                  let powerExpression = dataTransferObj["powerExpression"];
+                  let power = limitedEvaluate(interpolateJavaScriptExpression(powerExpression, s, q));
+                  if (isNaN(power)) {
+                    throw new Error("The power expression not evaluate to a number!");
+                  }
+                  dto["circuit_power"] = power;
                 }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "rootTExpression")) {
                   let rootTExpression = dataTransferObj["rootTExpression"];
                   let rootKExpression = dataTransferObj["rootKExpression"];
                   if (rootTExpression){
-                    dto["root"] = "1/" + limitedEvaluate(interpolateJavaScriptExpression(rootTExpression, s, q));
+                    let t = limitedEvaluate(interpolateJavaScriptExpression(rootTExpression, s, q));
+                    if (isNaN(t)) {
+                      throw new Error("The 't' based root expression not evaluate to a number!");
+                    }
+                    dto["root"] = "1/" + t;
                   } else {
-                    dto["root"] = "1/2^" + limitedEvaluate(interpolateJavaScriptExpression(rootKExpression, s, q));
+                    let k = limitedEvaluate(interpolateJavaScriptExpression(rootKExpression, s, q));
+                    if (isNaN(k)) {
+                      throw new Error("The 'k' based root expression not evaluate to a number!");
+                    }
+                    dto["root"] = "1/2^" + k;
                   }
+                }
+
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "circuit_id")) {
+                  dto["circuit_id"] = dataTransferObj["circuit_id"];
+                }
+
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "circuit_abbreviation")) {
+                  dto["circuit_abbreviation"] = dataTransferObj["circuit_abbreviation"];
+                }
+
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "targets_expression")) {
+                  dto["targets_expression"] = dataTransferObj["targets_expression"];
                 }
 
                 dtos.push(dto);

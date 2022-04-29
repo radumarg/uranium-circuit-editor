@@ -290,12 +290,18 @@ export function undoGatesSelection(resetQubits=true, overrideAll=false) {
   let rgb = hexToRgb(window.selectBackgroundColor);
   let selectColor = `rgb(${rgb.r}, ${rgb.g}, ${rgb.b})`;
   
-  $('img').each(function(){
+  $('img').each(function() {
     let id = $(this).attr('id');
     if (id != undefined && id.match(/^\d+_\d+$/)){
       if($(this).css('background-color') == selectColor || overrideAll){
         $(this).css('background-color', backgroundColor);
       }
+    }
+  });
+
+  $('.editor-circuit-gate-div').each(function() {
+    if($(this).css('background-color') == selectColor || overrideAll){
+      $(this).css('background-color', backgroundColor);
     }
   });
 
@@ -426,6 +432,18 @@ export function saveCopiedGates(circuitState, qbitStart, qbitStop, stepStart, st
             }
             if (Object.prototype.hasOwnProperty.call(gate, "bit")) {
               copiedGate.bit = gate.bit;
+            }
+            if (Object.prototype.hasOwnProperty.call(gate, "circuit_id")) {
+              copiedGate.circuit_id = gate.circuit_id;
+            }
+            if (Object.prototype.hasOwnProperty.call(gate, "circuit_abbreviation")) {
+              copiedGate.circuit_abbreviation = gate.circuit_abbreviation;
+            }
+            if (Object.prototype.hasOwnProperty.call(gate, "circuit_power")) {
+              copiedGate.circuit_power = gate.circuit_power;
+            }
+            if (Object.prototype.hasOwnProperty.call(gate, "targets_expression")) {
+              copiedGate.targets_expression = gate.targets_expression;
             }
 
             copiedGates.push(copiedGate);
