@@ -138,7 +138,7 @@ import { mapActions, mapGetters } from 'vuex';
 import { getNoQbits, getNoSteps, getNumberOfRowsThatFit, getNumberOfColumnsThatFit } from "../store/modules/gatesTable.js";
 import {save_circuit} from "../store/modules/circuitSaveAndRetrieve.js";
 import { setCookiesIfNotAlreadySet, getUserInterfaceSetting, setUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
-import {sendWorkerMessage} from '../store/modules/worker-api';
+import { sendMeasureGatesWorkerMessage, sendCircuitGatesWorkerMessage } from '../store/modules/worker-api';
 export default {
   name: "ToolBar",
   data() {
@@ -199,10 +199,12 @@ export default {
           mutation.type == 'circuitEditorModule/removeQbit' ||
           mutation.type == 'circuitEditorModule/removeStep'){
         this.$root.$emit("triggerSimulationRun", state.circuitEditorModule[window.currentCircuitId]);
-        // validate circuit in a separate thread
-        sendWorkerMessage(state.circuitEditorModule[window.currentCircuitId]);
         this.history[window.currentCircuitId].push(JSON.stringify(state.circuitEditorModule[window.currentCircuitId]));
         this.historyUnRoll[window.currentCircuitId] = [];
+        // validate circuit in a separate thread
+        sendMeasureGatesWorkerMessage(state.circuitEditorModule[window.currentCircuitId]);
+        // check available space and possibly increase space for circuit gates in a separate thread
+        sendCircuitGatesWorkerMessage([state.circuitEditorModule, window.currentCircuitId]);
       }      
     });
   },

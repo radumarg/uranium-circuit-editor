@@ -4,6 +4,7 @@
 import $ from "jquery";
 import { getUserInterfaceSetting } from "./applicationWideReusableUnits.js";
 import { arraysHaveElementsInCommon } from "./javaScriptUtils.js";
+import { seatsAreTaken } from "./gatesTable.js";
 import { create, all } from 'mathjs'
 
 // reduce the security risk by not allwing to evaluate arbitrary js
@@ -127,6 +128,51 @@ export function removingGateFromCircuit(circuitState, dto){
               if (aggregatedGate.targets.includes(target)) {
                 gates.splice(j, 1);
                 return;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+export function insertingOneQbit(state, qbit) {
+  if (Object.prototype.hasOwnProperty.call(state, "steps")) {
+    for (let i = 0; i < state.steps.length; i++) {
+      if (Object.prototype.hasOwnProperty.call(state.steps[i], "gates")) {
+        let gates = state.steps[i]["gates"];
+        for (let j = 0; j < gates.length; j++) {
+          let gate = gates[j];
+
+          if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+            let targets = [...gate.targets];
+            for (let k = 0; k < targets.length; k++){
+              if (targets[k] >= qbit) {
+                targets[k] += 1;
+              }
+            }
+            gate.targets = targets;
+          }
+
+          if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+            for (let k = 0; k < gate["controls"].length; k++) {
+              let controlInfo = gate["controls"][k];
+              let target = controlInfo["target"];
+              if (target >= qbit) {
+                controlInfo["target"] += 1;
+              }
+            }
+          }
+
+          if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+            for (let k = 0; k < gate["gates"].length; k++) {
+              let aggregatedGate = gate["gates"][k];
+              for (let l = 0; l < aggregatedGate.targets.length; l++) {
+                let target = aggregatedGate.targets[l];
+                if (target >= qbit) {
+                  aggregatedGate.targets[l] += 1;
+                }
               }
             }
           }
@@ -788,6 +834,70 @@ export function updateGatesAbbreviation(circuitStatesArray, changedCircuitId, ne
             }
           }
         }
+      }
+    }
+  }
+}
+
+// check if circuit gates needs more qubits. If empty qubit do not exist return false
+export function canAccomodateCircuitGate(circuitState, modifiedCircuitId, noModifiedCircuitQubits) {
+  for (let i = 0; i < circuitState.steps.length; i++) {
+    let step = circuitState.steps[i].index;
+    let gates = circuitState.steps[i]["gates"];
+    for (let j = 0; j < gates.length; j++) {
+      let gate = gates[j];
+      if (gate.name == "circuit" && gate.circuit_id == modifiedCircuitId){
+        let existingQbits = gate.targets;
+        let proposedQbits = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits, gate.targets_expression);
+        if (seatsAreTaken(circuitState, proposedQbits, step, existingQbits)) {
+          return false;
+        }
+      }
+    }
+  }
+
+  return true;
+}
+
+
+// update targets for circuit gates, insert qubits when existing qubits are occupied
+export function accomodateModifiedCircuitGate(store, circuitState, circuitId, noModifiedCircuitQubits, modifiedCircuitId) {
+  for (let i = 0; i < circuitState.steps.length; i++) {
+    let step = circuitState.steps[i].index;
+    let gates = circuitState.steps[i]["gates"];
+    for (let j = 0; j < gates.length; j++) {
+      let gate = gates[j];
+      if (gate.name == "circuit" && gate.circuit_id == modifiedCircuitId){
+        let existingQbits = gate.targets;
+        // remove existing gate
+        let dto = { "step": step, "targets": [gate.targets[0]], "name": "circuit" };
+        let payload = {"circuitId": circuitId, "dto": dto}
+        store.commit('circuitEditorModule/removeGateFromWorkerThread', payload);
+        let proposedQbits = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits, gate.targets_expression);
+        // insert new qubits if necessary
+        while (seatsAreTaken(circuitState, proposedQbits, step)) {
+          let payload = {"circuitId": circuitId, "qbit": existingQbits[existingQbits.length - 1]}
+          store.commit('circuitEditorModule/insertQubitFromWorkerThread', payload);
+        }
+        // insert gate
+        let controls = [];
+        let controlstates = [];
+        for (let i = 0; i < gate.controls.length; i++) {
+          let control = gate.controls[i];
+          controls.push(control.target);
+          controlstates.push(control.state);
+        }
+        dto = { "step": step,
+                "targets": [...proposedQbits],
+                "name": "circuit",
+                "controls": [...controls],
+                "controlstates": [...controlstates],
+                "circuit_id": gate.circuit_id,
+                "circuit_abbreviation": gate.circuit_abbreviation,
+                "circuit_power": gate.circuit_power,
+                "targets_expression": gate.targets_expression };
+        payload = {"circuitId": circuitId, "dto": dto}
+        store.commit('circuitEditorModule/insertingGateFromWorkerThread', payload);
       }
     }
   }

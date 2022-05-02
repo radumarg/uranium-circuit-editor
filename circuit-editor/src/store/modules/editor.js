@@ -12,6 +12,7 @@ import {
   getAggregatedGatesNewTargets,
   getMultipleTargets,
   insertingOneGateInCircuit,
+  insertingOneQbit,
   interpolateJavaScriptExpression,
   isDefined,
   removingGateFromCircuit,
@@ -686,48 +687,13 @@ export const circuitEditorModule = {
     },
     insertQbit(context, qbit) {
       let state = circuitEditorModule.state[window.currentCircuitId];
-      if (Object.prototype.hasOwnProperty.call(state, "steps")) {
-        for (let i = 0; i < state.steps.length; i++) {
-          if (Object.prototype.hasOwnProperty.call(state.steps[i], "gates")) {
-            let gates = state.steps[i]["gates"];
-            for (let j = 0; j < gates.length; j++) {
-              let gate = gates[j];
-
-              if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
-                let targets = [...gate.targets];
-                for (let k = 0; k < targets.length; k++){
-                  if (targets[k] >= qbit) {
-                    targets[k] += 1;
-                  }
-                }
-                gate.targets = targets;
-              }
-
-              if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-                for (let k = 0; k < gate["controls"].length; k++) {
-                  let controlInfo = gate["controls"][k];
-                  let target = controlInfo["target"];
-                  if (target >= qbit) {
-                    controlInfo["target"] += 1;
-                  }
-                }
-              }
-
-              if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
-                for (let k = 0; k < gate["gates"].length; k++) {
-                  let aggregatedGate = gate["gates"][k];
-                  for (let l = 0; l < aggregatedGate.targets.length; l++) {
-                    let target = aggregatedGate.targets[l];
-                    if (target >= qbit) {
-                      aggregatedGate.targets[l] += 1;
-                    }
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
+      insertingOneQbit(state, qbit);
+    },
+    insertQubitFromWorkerThread(context, payload) {
+      let circuitId = payload["circuitId"];
+      let qbit = payload["qbit"];
+      let state = circuitEditorModule.state[circuitId];
+      insertingOneQbit(state, qbit);
     },
     insertStep(context, step) {
       let state = circuitEditorModule.state[window.currentCircuitId];
@@ -745,6 +711,12 @@ export const circuitEditorModule = {
     },
     insertGate(context, dto) {
       let state = circuitEditorModule.state[window.currentCircuitId];
+      insertingOneGateInCircuit(state, dto);
+    },
+    insertingGateFromWorkerThread(context, payload) {
+      let circuitId = payload["circuitId"];
+      let dto = payload["dto"];
+      let state = circuitEditorModule.state[circuitId];
       insertingOneGateInCircuit(state, dto);
     },
     // mutation that does not trigger update to undo/redo history
@@ -776,6 +748,12 @@ export const circuitEditorModule = {
     },
     removeGate(context, dto) {
       let state = circuitEditorModule.state[window.currentCircuitId];
+      removingGateFromCircuit(state, dto);
+    },
+    removeGateFromWorkerThread(context, payload) {
+      let circuitId = payload["circuitId"];
+      let dto = payload["dto"];
+      let state = circuitEditorModule.state[circuitId];
       removingGateFromCircuit(state, dto);
     },
     // mutation that does not trigger update to undo/redo history
