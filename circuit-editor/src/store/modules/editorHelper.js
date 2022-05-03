@@ -902,3 +902,66 @@ export function accomodateModifiedCircuitGate(store, circuitState, circuitId, no
     }
   }
 }
+
+export function circuitGatesHaveValidId(currentCircuits, uploadedCircuit) {
+
+  let newCircuits = {};
+  for (let i = 0; i < window.circuitIds.length; i++) {
+    let id = window.circuitIds[i];
+    newCircuits[id] = {...currentCircuits[id]};
+  }
+
+  for (let i = 0; i < uploadedCircuit.steps.length; i++) {
+    let gates = uploadedCircuit.steps[i]["gates"];
+    for (let j = 0; j < gates.length; j++) {
+      let gate = gates[j];
+      if (gate.name == "circuit"){
+        let id = gate.circuit_id;
+        // circuit cannot contain itself
+        if (window.currentCircuitId == id) {
+          return false;
+        }
+        // circuit id is not known
+        if (!window.circuitIds.includes(id)) {
+          return false;
+        }
+      }
+    }
+  }
+
+  newCircuits[window.currentCircuitId].steps = [...uploadedCircuit.steps];
+
+  // gate with circuit id should not occur in its descendents
+  for (let i = 0; i < window.circuitIds.length; i++) {
+    let id = window.circuitIds[i];
+    if (stateDescendentsContain(newCircuits, [id], id)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+// navigate descendants for each circuit,
+function stateDescendentsContain(circuitStates, ids, startId) {
+
+  let newids = [...ids];
+  let circuitState = circuitStates[startId];
+  for (let i = 0; i < circuitState.steps.length; i++) {
+    let gates = circuitState.steps[i]["gates"];
+    for (let j = 0; j < gates.length; j++) {
+      let gate = gates[j];
+      if (gate.name == "circuit"){
+        if (newids.includes(gate.circuit_id)) {
+          return true;
+        }
+        newids.push(gate.circuit_id);
+        if (stateDescendentsContain(circuitStates, newids, gate.circuit_id)) {
+          return true;
+        }
+      }
+    }
+  }
+
+  return false;
+}

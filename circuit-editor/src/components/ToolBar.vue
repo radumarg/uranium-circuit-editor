@@ -139,6 +139,7 @@ import { getNoQbits, getNoSteps, getNumberOfRowsThatFit, getNumberOfColumnsThatF
 import {save_circuit} from "../store/modules/circuitSaveAndRetrieve.js";
 import { setCookiesIfNotAlreadySet, getUserInterfaceSetting, setUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 import { sendMeasureGatesWorkerMessage, sendCircuitGatesWorkerMessage } from '../store/modules/worker-api';
+import { circuitGatesHaveValidId } from "../store/modules/editorHelper.js";
 export default {
   name: "ToolBar",
   data() {
@@ -201,9 +202,9 @@ export default {
         this.$root.$emit("triggerSimulationRun", state.circuitEditorModule[window.currentCircuitId]);
         this.history[window.currentCircuitId].push(JSON.stringify(state.circuitEditorModule[window.currentCircuitId]));
         this.historyUnRoll[window.currentCircuitId] = [];
-        // validate circuit in a separate thread
+        // validate circuit w.r.t. measure gates in a separate thread
         sendMeasureGatesWorkerMessage(state.circuitEditorModule[window.currentCircuitId]);
-        // check available space and possibly increase space for circuit gates in a separate thread
+        // update circuit gates in a separate thread if any circuit gate exists
         sendCircuitGatesWorkerMessage([state.circuitEditorModule, window.currentCircuitId]);
       }      
     });
@@ -239,6 +240,8 @@ export default {
            let current_state = JSON.parse(this.history[window.currentCircuitId][lastIndex]);
            this.updateCircuit(current_state);
            this.$root.$emit("triggerSimulationRun", current_state);
+           // update circuit gates in a separate thread if any circuit gate exists
+          sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
         } else {
           this.emptyCircuit();
           this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule[window.currentCircuitId]);
@@ -252,6 +255,8 @@ export default {
         let current_state = JSON.parse(json_txt);
         this.updateCircuit(current_state);
         this.$root.$emit("triggerSimulationRun", current_state);
+        // update circuit gates in a separate thread if any circuit gate exists
+        sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
       }
     },
     initializeProjectHistory: function() {
@@ -428,12 +433,16 @@ If you do not want to accept cookies, you can zoom the page yourself from the ke
       let steps = getNoSteps(jsonObj);
       window.gatesTable.rows = Math.max(2 * qbits + 2, window.initialRows);
       window.gatesTable.columns = Math.max(2 * steps + 2, window.initialColumns);
+      if (!circuitGatesHaveValidId(this.$store.state.circuitEditorModule, jsonObj)) {
+        alert("The yaml you are trying to load contains circuit gates which are either not known or are not compatible with the current project.")
+        return;
+      }
       this.history[window.currentCircuitId] = [];
       this.historyUnRoll[window.currentCircuitId] = [];
       this.updateCircuit(jsonObj);
       let circuit = this.$store.state.circuitEditorModule[window.currentCircuitId];
       this.history[window.currentCircuitId].push(JSON.stringify(circuit));
-      this.$root.$emit("triggerSimulationRun", jsonObj);
+      this.$root.$emit("triggerSimulationRun", circuit);
       this.$root.$emit("circuitModifiedFromMenu");
     }
   }

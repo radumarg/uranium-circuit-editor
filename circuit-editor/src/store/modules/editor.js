@@ -679,7 +679,7 @@ export const circuitEditorModule = {
       }
     },
     updateCircuitState(context, jsonObj) {
-      circuitEditorModule.state[window.currentCircuitId].steps = jsonObj.steps;
+      circuitEditorModule.state[window.currentCircuitId].steps = [...jsonObj.steps];
     },
     resetCircuitState() {
       let emptyState = JSON.parse('{"steps":[{"index":0,"gates":[]}]}');

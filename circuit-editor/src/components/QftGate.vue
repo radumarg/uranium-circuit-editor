@@ -289,6 +289,10 @@ export default {
         alert("No qubit is selected by the targets expression! Perhaps you need to increase the number of qubits covered by the gate?");
         return;
       }
+      if (targetsNew[0] != this.$data.targetsNewFirst) {
+        alert("Expression should evaluate to 'true' for the first qubit (j = 0)!");
+        return;
+      }
       this.$data.targetsNewFirst = targetsNew[0];
       this.$data.targetsNewLast = targetsNew[targetsNew.length - 1];
 
