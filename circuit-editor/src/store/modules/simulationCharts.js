@@ -42,45 +42,56 @@ export async function getMeasureGates(circuitState) {
   return measureGates;
 }
 
-export async function getStateProbabilities(circuitState) {
+function getSeralizedCircuits(circuitStates) {
 
-    if (circuitState != undefined) {
-      let serializedCircuit = JSON.stringify(circuitState);
+  let circuits = [];
+  for (let i = 0; i < window.circuitIds.length; i++) {
+    let circuit_id = window.circuitIds[i];
+    let circuitState = circuitStates[circuit_id];
+    circuits.push({"circuit_id": circuit_id, "circuit": circuitState })
+  }
+  return JSON.stringify(circuits);
+}
+
+export async function getStateProbabilities(circuitStates) {
+
+    if (circuitStates != undefined) {
+      let serializedCircuits = getSeralizedCircuits(circuitStates);
       await init('./wasm/moara_js_bg.wasm');
       let bigEndianOrdering = getUserInterfaceSetting('big-endian-ordering');
       if (bigEndianOrdering === 'true') {
-        return get_probabilities(serializedCircuit, "bigendian");
+        return get_probabilities(serializedCircuits, window.currentCircuitId, "bigendian");
       } else {
-        return get_probabilities(serializedCircuit, "littleendian");
+        return get_probabilities(serializedCircuits, window.currentCircuitId, "littleendian");
       }
     }
 
     return []
 }
 
-async function getStateVector(circuitState) {
+async function getStateVector(circuitStates) {
 
-  if (circuitState != undefined) {
-    let serializedCircuit = JSON.stringify(circuitState);
+  if (circuitStates != undefined) {
+    let serializedCircuits = getSeralizedCircuits(circuitStates);
     await init('./wasm/moara_js_bg.wasm');
     let bigEndianOrdering = getUserInterfaceSetting('big-endian-ordering');
     if (bigEndianOrdering === 'true') {
-      return get_statevector(serializedCircuit, "bigendian");
+      return get_statevector(serializedCircuits, window.currentCircuitId, "bigendian");
     } else {
-      return get_statevector(serializedCircuit, "littleendian");
+      return get_statevector(serializedCircuits, window.currentCircuitId,"littleendian");
     }
   }
   
   return []
 }
 
-export async function getStateVectorEntries(circuitState, qubits) {
+export async function getStateVectorEntries(circuitStates, qubits) {
 
   let realValues = [];
   let imaginaryValues = [];
   let max = 0;
   let quantumStatesBase = getUserInterfaceSetting('legend-base');
-  let stateVector = await getStateVector(circuitState);
+  let stateVector = await getStateVector(circuitStates);
   
   for (let i = 0; i < stateVector.length; i++) {
       let complexString = stateVector[i];

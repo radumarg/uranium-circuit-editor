@@ -184,7 +184,7 @@ export default {
   created() {
     this.unsubscribeLoadProject = this.$store.subscribe((mutation, state) => {
       if (mutation.type == 'circuitEditorModule/loadProject') {
-        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule[window.currentCircuitId]);
+        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
         this.$root.$emit("projectLoaded");
         this.projectLoaded(state);
       }
@@ -199,7 +199,7 @@ export default {
           mutation.type == 'circuitEditorModule/removeGates' ||
           mutation.type == 'circuitEditorModule/removeQbit' ||
           mutation.type == 'circuitEditorModule/removeStep'){
-        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule[window.currentCircuitId]);
+        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
         this.history[window.currentCircuitId].push(JSON.stringify(state.circuitEditorModule[window.currentCircuitId]));
         this.historyUnRoll[window.currentCircuitId] = [];
         // validate circuit w.r.t. measure gates in a separate thread
@@ -239,12 +239,12 @@ export default {
            let lastIndex = this.history[window.currentCircuitId].length - 1;
            let current_state = JSON.parse(this.history[window.currentCircuitId][lastIndex]);
            this.updateCircuit(current_state);
-           this.$root.$emit("triggerSimulationRun", current_state);
+           this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
            // update circuit gates in a separate thread if any circuit gate exists
           sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
         } else {
           this.emptyCircuit();
-          this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule[window.currentCircuitId]);
+          this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
         }
       }
     },
@@ -254,7 +254,7 @@ export default {
         this.history[window.currentCircuitId].push(json_txt);
         let current_state = JSON.parse(json_txt);
         this.updateCircuit(current_state);
-        this.$root.$emit("triggerSimulationRun", current_state);
+        this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
         // update circuit gates in a separate thread if any circuit gate exists
         sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
       }
@@ -374,10 +374,10 @@ it does not make much sense doing that unless you intend to save the circuit as 
       this.emptyCircuit();
       this.history[window.currentCircuitId] = [];
       this.historyUnRoll[window.currentCircuitId] = [];
-      let state = this.getCircuitState();
+      let states = this.getCircuitStates();
       window.gatesTable.rows = window.initialRows;
       window.gatesTable.columns = window.initialColumns;
-      this.$root.$emit("triggerSimulationRun", state);
+      this.$root.$emit("triggerSimulationRun", states);
       this.$root.$emit("circuitModifiedFromMenu");
       if (window.toolTipsAreShown){
         JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");
@@ -442,7 +442,7 @@ If you do not want to accept cookies, you can zoom the page yourself from the ke
       this.updateCircuit(jsonObj);
       let circuit = this.$store.state.circuitEditorModule[window.currentCircuitId];
       this.history[window.currentCircuitId].push(JSON.stringify(circuit));
-      this.$root.$emit("triggerSimulationRun", circuit);
+      this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
       this.$root.$emit("circuitModifiedFromMenu");
     }
   }

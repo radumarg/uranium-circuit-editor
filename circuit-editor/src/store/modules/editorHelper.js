@@ -433,7 +433,10 @@ export function saveCopiedGates(circuitState, qbitStart, qbitStop, stepStart, st
           let copiedGate = {"step": stepIndex - stepStart, "name": gate.name };
           
           if (gate.name == "barrier"){
-            copiedGates.push(copiedGate);
+            if (stepIndex >= stepStart &&
+                stepIndex <= stepStop) {
+                  copiedGates.push(copiedGate);
+                }
             continue;
           } else if (
               Math.min(...targetsForGate) >= qbitStart &&

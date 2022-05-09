@@ -102,6 +102,12 @@ export default {
       this.$forceUpdate();
     });
     this.$root.$on("switchGateColors", () => { this.updateGateImagesColor(); });
+    // this is a hack to make drag gate image shwo even for the first drag attempt
+    // whithout this, drag image does not show in first drag, presumably because drag image ghost
+    // is created inside drag event, so drag would have already started by the time
+    // we create your custom ghost image. Not sure why this problem does not occur for other gates though ..
+    let dragImageGhost = createCircuitDragImageGhost();
+    document.body.removeChild(dragImageGhost);
   },
   updated() {
     for (let i = 0; i < this.getCompatibleCircuitsNo(); i++) {

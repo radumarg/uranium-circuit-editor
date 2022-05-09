@@ -161,7 +161,7 @@ export default {
 
          // reset plot range if number of qubits has changed
          let maxQubitIndex = this.getMaximumQbitIndex();
-         let measureGates = getMeasureGates(stateProbabilities);
+         let measureGates = getMeasureGates(this.$store.state.circuitEditorModule[window.currentCircuitId]);
          if (maxQubitIndex == -1) {
             this.$data.minRange = 0;
             this.$data.maxRange = 1024;

@@ -72,8 +72,8 @@ export const circuitEditorModule = {
     getRowsInGatesTable: () => {
       return retrieveRowsInGatesTable(circuitEditorModule.state[window.currentCircuitId]);
     },
-    getCircuitState: () => {
-      return circuitEditorModule.state[window.currentCircuitId];
+    getCircuitStates: () => {
+      return circuitEditorModule.state;
     },
     getMaximumStepIndex: () => {
       let maxStep = 0;

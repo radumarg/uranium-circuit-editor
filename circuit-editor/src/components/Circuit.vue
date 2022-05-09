@@ -86,13 +86,13 @@ export default {
         return;
       }
       
-      let circuitState = this.$store.state.circuitEditorModule[window.currentCircuitId];
-      if (this.$data.lastSimulatedCircuit !== JSON.stringify(circuitState)){
-        this.$data.lastSimulatedCircuit = JSON.stringify(circuitState);        
+      let circuitStates = this.$store.state.circuitEditorModule;
+      if (this.$data.lastSimulatedCircuit !== JSON.stringify(circuitStates[window.currentCircuitId])){
+        this.$data.lastSimulatedCircuit = JSON.stringify(circuitStates[window.currentCircuitId]);
         this.$root.$emit("showSpinners");
         var element = document.getElementById("editor2");
         var positionInfo = element.getBoundingClientRect();
-        this.triggerSimulationJob(circuitState, positionInfo); 
+        this.triggerSimulationJob(circuitStates, positionInfo); 
       } 
     },
     onProbabilitiesTabChanged: function() {
@@ -103,18 +103,18 @@ export default {
       this.$root.$emit("probabilitiesTabActivated", false);
       this.$root.$emit("statevectorTabActivated", true);
     },
-    triggerSimulationJob:  async function(circuitState, positionInfo){
-      let stateProbabilities = await getStateProbabilities(circuitState);
+    triggerSimulationJob:  async function(circuitStates, positionInfo){
+      let stateProbabilities = await getStateProbabilities(circuitStates);
       this.$root.$emit("showColumnChart", stateProbabilities, positionInfo.width, positionInfo.height);
       this.$root.$emit("showPieChart", getTopEntriesStateProbabilities(stateProbabilities), positionInfo.width, positionInfo.height);
     },
     endianessChange(){
-      let circuitState = this.$store.state.circuitEditorModule[window.currentCircuitId];
-      this.$data.lastSimulatedCircuit = JSON.stringify(circuitState);
+      let circuitStates = this.$store.state.circuitEditorModule;
+      this.$data.lastSimulatedCircuit = JSON.stringify(circuitStates[window.currentCircuitId]);
       this.$root.$emit("showSpinners");
       var element = document.getElementById("editor2");
       var positionInfo = element.getBoundingClientRect();
-      this.triggerSimulationJob(circuitState, positionInfo);
+      this.triggerSimulationJob(circuitStates, positionInfo);
     },
     adjustView: function(simulatingLive){
       let tabbedEditor = document.getElementById("tabbedEditor");

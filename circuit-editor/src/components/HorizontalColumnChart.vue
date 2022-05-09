@@ -78,10 +78,10 @@ export default {
             },
          };
       },
-      runSimulation: async function (circuitState) {
+      runSimulation: async function (circuitStates) {
         if (this.$data.liveSimulation == true && this.$data.activated) {
           let maxQubitIndex = this.getMaximumQbitIndex();
-          let measureGates = getMeasureGates(circuitState);
+          let measureGates = getMeasureGates(circuitStates[window.currentCircuitId]);
           if (maxQubitIndex == -1){
               this.$data.stateProbabilities = [];
               this.$data.minRange = 0;
@@ -89,7 +89,7 @@ export default {
               this.$data.qubits = 0;
               this.$data.measureGates = {};
           } else if (maxQubitIndex < 20){
-              let stateProbabilities = await getStateProbabilities(circuitState);
+              let stateProbabilities = await getStateProbabilities(circuitStates);
               this.$data.stateProbabilities = stateProbabilities;
               if (this.$data.qubits != maxQubitIndex + 1 ||                      // qubit added/removed
                   this.$data.measureGates != measureGates){                      // measure gates added/removed
@@ -140,11 +140,11 @@ export default {
       },
       updateView(simulatingLive){
         this.$data.liveSimulation = simulatingLive;
-        this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId], simulatingLive && this.$data.activated);
+        this.runSimulation(this.$store.state.circuitEditorModule, simulatingLive && this.$data.activated);
       },
       tabActivated(activated){
         this.$data.activated = activated;
-        this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId], true);
+        this.runSimulation(this.$store.state.circuitEditorModule, true);
       },
    },
    options: {
@@ -156,12 +156,12 @@ export default {
       JSCharting
    },
    created() {
-      this.$root.$on('triggerSimulationRun', (circuitState) => {this.runSimulation(circuitState)});
-      this.$root.$on('switchLegendBase', () => {this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId])});
+      this.$root.$on('triggerSimulationRun', (circuitStates) => {this.runSimulation(circuitStates)});
+      this.$root.$on('switchLegendBase', () => {this.runSimulation(this.$store.state.circuitEditorModule)});
       this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.updateView(simulatingLive)});
       this.$root.$on('probabilitiesTabActivated', (activated) => {this.tabActivated(activated)});
-      this.$root.$on('switchEndianess', () => {this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId], false)});
-      this.$root.$on('currentCircuitSwitch', () => {this.runSimulation(this.$store.state.circuitEditorModule[window.currentCircuitId])});
+      this.$root.$on('switchEndianess', () => {this.runSimulation(this.$store.state.circuitEditorModule, false)});
+      this.$root.$on('currentCircuitSwitch', () => {this.runSimulation(this.$store.state.circuitEditorModule)});
    },
 }
 </script>
