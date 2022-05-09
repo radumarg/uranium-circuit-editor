@@ -237,7 +237,6 @@ export default {
       event.dataTransfer.setData("circuit_id", this.$store.state.circuitEditorModule[id]["circuit_id"]);
       event.dataTransfer.setData("circuit_abbreviation", this.$store.state.circuitEditorModule[id]["circuit_abbreviation"]);
       event.dataTransfer.setData("circuit_power", "1");
-      event.dataTransfer.setData("targets_expression", "true");
       let dragImageGhost = createCircuitDragImageGhost();
       event.dataTransfer.setDragImage(dragImageGhost, 20, 20);
     },

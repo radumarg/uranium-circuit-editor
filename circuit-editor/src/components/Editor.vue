@@ -309,7 +309,7 @@
               <BoxVerticalTransitionCellShort :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'circuit'">
-              <CircuitGate :id="cell.id" :circuit_id="cell.circuit_id" :circuit_abbreviation="cell.circuit_abbreviation" :circuit_power="cell.circuit_power" :targets_expression="cell.targets_expression" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <CircuitGate :id="cell.id" :circuit_id="cell.circuit_id" :circuit_abbreviation="cell.circuit_abbreviation" :circuit_power="cell.circuit_power" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'barrier'">
               <Barrier :id="cell.id" :step="cell.step" :name="cell.name" :key="cell.key"/>

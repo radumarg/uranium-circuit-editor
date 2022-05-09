@@ -733,7 +733,7 @@ export default {
       } else if (dragOrigin == "gates-pallete" && gateName == "circuit") {
         let circuitId = parseInt(event.dataTransfer.getData("circuit_id"));
         let draggedGateQubitNumber = getNoQbits(this.$store.state.circuitEditorModule[circuitId]);
-        let multipleTargets = getMultipleTargets(qbit, draggedGateQubitNumber, targetsExpression);
+        let multipleTargets = getMultipleTargets(qbit, draggedGateQubitNumber);
         let currentCircuit = this.$store.state.circuitEditorModule[window.currentCircuitId];
         if (seatsAreTaken(currentCircuit, multipleTargets, step, [])) {
           alert("There are not enough unoccupied qubits to add the gate here.");

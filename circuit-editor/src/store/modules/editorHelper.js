@@ -746,15 +746,12 @@ export function getMatchingTargets(qmin, qmax, expression) {
 }
 
 // get array of targets needed by circuit gate
-export function getMultipleTargets(startQubit, noQubits, expression) {
+export function getMultipleTargets(startQubit, noQubits) {
 
   let targets = [];
   let currentQubit = startQubit;
   while (targets.length < noQubits) {
-    let targetIsUsed = evaluateTargetsExpression(expression, currentQubit - startQubit);
-    if (targetIsUsed == true) {
-      targets.push(currentQubit);
-    }
+    targets.push(currentQubit);
     currentQubit += 1;
   }
 
@@ -851,7 +848,7 @@ export function canAccomodateCircuitGate(circuitState, modifiedCircuitId, noModi
       let gate = gates[j];
       if (gate.name == "circuit" && gate.circuit_id == modifiedCircuitId){
         let existingQbits = gate.targets;
-        let proposedQbits = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits, gate.targets_expression);
+        let proposedQbits = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits);
         if (seatsAreTaken(circuitState, proposedQbits, step, existingQbits)) {
           return false;
         }
@@ -876,7 +873,7 @@ export function accomodateModifiedCircuitGate(store, circuitState, circuitId, no
         let dto = { "step": step, "targets": [gate.targets[0]], "name": "circuit" };
         let payload = {"circuitId": circuitId, "dto": dto}
         store.commit('circuitEditorModule/removeGateFromWorkerThread', payload);
-        let proposedQbits = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits, gate.targets_expression);
+        let proposedQbits = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits);
         // insert new qubits if necessary
         while (seatsAreTaken(circuitState, proposedQbits, step)) {
           let payload = {"circuitId": circuitId, "qbit": existingQbits[existingQbits.length - 1]}

@@ -192,25 +192,17 @@
         </tr>
         <tr>
           <td></td>
-          <td width="70px" title="First qubit. This is used to indicate the first target qubit. Target qubits are selected via the 'Targets Expression' which is a Javascript 'j' based expression that must evaluate to 'true' or 'false' for each qubit position identified by 'j' where j is a zero based qubit index and where index 0 corresponds to the first qubit in this dialog.">First Qubit:</td>
-          <td width="130px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNewFirst" placeholder="qbit" type="number" id="qbit-new" style="width:120px;"></b-form-input>
+          <td width="100px" title="First qubit. This is used to indicate the first target qubit. Target qubits are selected via the 'Targets Expression' which is a Javascript 'j' based expression that must evaluate to 'true' or 'false' for each qubit position identified by 'j' where j is a zero based qubit index and where index 0 corresponds to the first qubit in this dialog.">First Qubit:</td>
+          <td width="100px" style="padding: 5px;">
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNewFirst" placeholder="qbit" type="number" id="qbit-new" style="width:100px;"></b-form-input>
           </td>
           <td></td>
         </tr>
         <tr>
           <td></td>
-          <td width="70px" title="Target expression is used to select the array of target qubits to whom the circuit gate is applied. It must be a Javascript 'j' based expression that must evaluate to true ore false for each value of 'j'. Here 'j' is the index of the target gate where first target qubit has index 0 and the last target qubit has maximum index. The simplest example of such expression is: 'true', which, indicates a condition which is always valid regardless of value of 'j'.">Targets Expr:</td>
-          <td width="130px" style="padding: 5px;">
-            <b-form-input @keyup.enter.native="handleSave()" v-model.number="targetsExpressionNew" placeholder="'j' based JS expression" style="width:120px;"></b-form-input>
-          </td>
-          <td></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td width="70px" title="Indicates the power used to apply this gate in circuit. It must be a pozitive or negative integer where negative indicates that the inverse of this circuit is applied.">Gate Power:</td>
-          <td width="130px" style="padding: 5px;">
-            <b-form-input @keyup.enter.native="handleSave()" v-model.number="circuitPowerNew" placeholder="power" type="number" style="width:120px;"></b-form-input>
+          <td width="100px" title="Indicates the power used to apply this gate in circuit. It must be a pozitive or negative integer where negative indicates that the inverse of this circuit is applied.">Gate Power:</td>
+          <td width="100px" style="padding: 5px;">
+            <b-form-input @keyup.enter.native="handleSave()" v-model.number="circuitPowerNew" placeholder="power" type="number" style="width:100px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -518,13 +510,11 @@ export default {
     'circuit_id': Number,
     'circuit_abbreviation': String,
     'circuit_power': Number,
-    'targets_expression': String,
   },
   data() {
     return {
       targetsNewFirst: this.targets[0],
       circuitPowerNew: this.circuit_power,
-      targetsExpressionNew: this.targets_expression,
       circuitNames: this.getCircuitNameOptions(),
       circuitNameNew: this.$store.state.circuitEditorModule[this.circuit_id]["circuit_name"],
       usingColoredGates: getUserInterfaceSetting("colored-gates") === 'true',
@@ -539,7 +529,6 @@ export default {
       this.$data.numberOfControls = this.controls.length;
       this.$data.targetsNewFirst = this.targets[0];
       this.$data.circuitPowerNew = this.circuit_power;
-      this.$data.targetsExpressionNew = this.targets_expression;
     },
     getCircuitNameOptions: function() {
       let circuitNameOptions = [];
@@ -606,20 +595,11 @@ export default {
         alert("The selected circuit has zero gates!");
         return;
       }
-      let targetsNew = getMultipleTargets(this.$data.targetsNewFirst, noQubits, this.$data.targetsExpressionNew);
-      if (targetsNew.length == 0) {
-        alert("No qubit is selected by the targets expression!");
-        return;
-      }
-      if (targetsNew[0] != this.$data.targetsNewFirst) {
-        alert("Expression should evaluate to 'true' for the first qubit (j = 0)!");
-        return;
-      }
+      let targetsNew = getMultipleTargets(this.$data.targetsNewFirst, noQubits);
       this.$data.targetsNewFirst = targetsNew[0];
       // remember current state
       let targetsOld = [...this.targets];
       let circuitPowerOld = this.circuit_power;
-      let targetsExpressionOld = this.targets_expression;
       let circuitNameOld = this.$store.state.circuitEditorModule[this.circuit_id]["circuit_name"];
       // save action
       let promise = this.repositionGateInCircuit({
@@ -630,7 +610,6 @@ export default {
         'circuit_abbreviation': this.$store.state.circuitEditorModule[newCircuitId]["circuit_abbreviation"],
         'circuit_power': this.circuitPowerNew,
         'targets': [...this.targets],
-        'targets_expression': this.targetsExpressionNew,
         'controls': [...this.controls],
         'targetsNew': [...targetsNew],
         'controlsNew': [...this.$data.controlsNew],
@@ -643,7 +622,6 @@ export default {
         error => {
           this.$data.targetsNewFirst = targetsOld[0];
           this.$data.circuitPowerNew = circuitPowerOld;
-          this.$data.targetsExpressionNew = targetsExpressionOld;
           this.$data.circuitNameNew = circuitNameOld;
         }
       );
@@ -682,7 +660,6 @@ export default {
       let circuitId = parseInt(event.currentTarget.getAttribute("circuit_id"));
       let circuitAbbreviation = event.dataTransfer.getData("circuit_abbreviation");
       let circuitPower = parseInt(event.currentTarget.getAttribute("circuit_power"));
-      let targetsExpression = parseInt(event.currentTarget.getAttribute("targets_expression"));
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
       let originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
@@ -698,7 +675,7 @@ export default {
       }
 
       // add the new gate mandatory params
-      let dto = { "step": step, "name": gateName, "controls": originalControls, "controlstates": controlstates, "circuit_id": circuitId, "circuit_abbreviation": circuitAbbreviation, "circuit_power": circuitPower, "targets_expression": targetsExpression };
+      let dto = { "step": step, "name": gateName, "controls": originalControls, "controlstates": controlstates, "circuit_id": circuitId, "circuit_abbreviation": circuitAbbreviation, "circuit_power": circuitPower };
 
       if (draggedQbit ==  originalTargets[0]) {
         let min = dropQbit;
@@ -724,10 +701,6 @@ export default {
       if (event.dataTransfer.types.includes("circuit_power")) {
         let circuitPower = event.dataTransfer.getData("circuit_power");
         dto["circuit_power"] = circuitPower;
-      }
-      if (event.dataTransfer.types.includes("targets_expression")) {
-        let targetsExpression = event.dataTransfer.getData("targets_expression");
-        dto["targets_expression"] = targetsExpression;
       }
 
       // step1 - remove original gate if drag event started from a cell
@@ -800,7 +773,6 @@ export default {
       event.dataTransfer.setData("circuit_id", this.circuit_id);
       event.dataTransfer.setData("circuit_abbreviation", this.circuit_abbreviation);
       event.dataTransfer.setData("circuit_power", this.circuit_power);
-      event.dataTransfer.setData("targets_expression", this.targets_expression);
       let dragImageGhost = createCircuitDragImageGhost();
       event.dataTransfer.setDragImage(dragImageGhost, 20, 20);
     },
@@ -833,7 +805,6 @@ export default {
         'qbitLast': this.qbitLast,
         'circuit_id': this.circuit_id,
         'circuit_abbreviation': this.circuit_abbreviation,
-        'targets_expression': this.targets_expression,
         'qbitConditionExpression': this.qbitConditionExpression,
         'conjugateConditionExpression': this.conjugateConditionExpression,
         'numberOfControlsExpression': this.numberOfControlsExpression,

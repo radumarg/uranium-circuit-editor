@@ -378,12 +378,11 @@ export const circuitEditorModule = {
                   dto["targets"].push(limitedEvaluate(interpolateJavaScriptExpression(qbit2Expression, s, q)));
                 }
 
-                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "targets_expression")) {
+                if (name == "circuit") {
                   let circuit_id = dataTransferObj["circuit_id"];
                   let circuitState = circuitEditorModule.state[circuit_id];
                   let noQubits = getNoQbits(circuitState);
-                  let targets_expression = dataTransferObj["targets_expression"];
-                  dto["targets"] = getMultipleTargets(q, noQubits, targets_expression);
+                  dto["targets"] = getMultipleTargets(q, noQubits);
                 }
                 
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "numberOfControlsExpression")) {
@@ -492,10 +491,6 @@ export const circuitEditorModule = {
 
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "circuit_abbreviation")) {
                   dto["circuit_abbreviation"] = dataTransferObj["circuit_abbreviation"];
-                }
-
-                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "targets_expression")) {
-                  dto["targets_expression"] = dataTransferObj["targets_expression"];
                 }
 
                 dtos.push(dto);
