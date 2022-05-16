@@ -425,7 +425,7 @@ If you do not want to accept cookies, you can zoom the page yourself from the ke
       const yaml = require('js-yaml');
       var contents = event.target.result;
       let jsonObj = yaml.safeLoad(contents);
-      if (!jsonObj.version || jsonObj.version == "1.0" || jsonObj.version == "1.1") {
+      if (!jsonObj.version || jsonObj.version == "1.0") {
         alert("Unfortunately this circuit format is outdated. Please delete this circuit and create a new one.");
         return;
       }
