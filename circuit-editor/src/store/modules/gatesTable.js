@@ -144,19 +144,23 @@ export function classicBitsAreValid(circuitState){
 }
 
 // make sure that no non-measure gate is placed after a measure gate on any given qubit
-export function measureGatesArePositionedLast(circuitState){
-  let measureGates = [];
+export function measureGatesArePositionedLast(circuitStates, currentCircuitId, collectedMeasureGates, qubitStart){
+  let circuitState = circuitStates[currentCircuitId];
   for (let i = 0; i < circuitState.steps.length; i++) {
     let gates = circuitState.steps[i]["gates"];
     for (let j = 0; j < gates.length; j++) {
       let gate = gates[j];
       if (gate.name.includes("measure-")){
-        measureGates.push(gate.targets[0]);
+        collectedMeasureGates.push(gate.targets[0] + qubitStart);
+      } else if (gate.name == "circuit"){
+        if (!measureGatesArePositionedLast(circuitStates, gate.circuit_id, collectedMeasureGates, gate.targets[0] + qubitStart)) {
+          return false;
+        }
       } else {
         if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
           let targets = gate.targets;
           for (let j = 0; j < targets.length; j++){
-            if (measureGates.includes(targets[j])) {
+            if (collectedMeasureGates.includes(targets[j] + qubitStart)) {
               return false;
             }
           }
@@ -165,7 +169,7 @@ export function measureGatesArePositionedLast(circuitState){
           for (let i = 0; i < gate["controls"].length; i++) {
             let controlInfo = gate["controls"][i];
             let target = controlInfo["target"];
-            if (measureGates.includes(target)) {
+            if (collectedMeasureGates.includes(target + qubitStart)) {
               return false;
             }
           }
@@ -175,7 +179,7 @@ export function measureGatesArePositionedLast(circuitState){
             let aggregatedGate = gate["gates"][i];
             for (let j = 0; j < aggregatedGate.targets.length; j++) {
               let target = aggregatedGate.targets[j];
-              if (measureGates.includes(target)) {
+              if (collectedMeasureGates.includes(target + qubitStart)) {
                 return false;
               }
             }

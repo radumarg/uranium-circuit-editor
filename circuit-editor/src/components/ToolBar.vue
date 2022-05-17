@@ -203,7 +203,7 @@ export default {
         this.history[window.currentCircuitId].push(JSON.stringify(state.circuitEditorModule[window.currentCircuitId]));
         this.historyUnRoll[window.currentCircuitId] = [];
         // validate circuit w.r.t. measure gates in a separate thread
-        sendMeasureGatesWorkerMessage(state.circuitEditorModule[window.currentCircuitId]);
+        sendMeasureGatesWorkerMessage([state.circuitEditorModule, window.currentCircuitId]);
         // update circuit gates in a separate thread if any circuit gate exists
         sendCircuitGatesWorkerMessage([state.circuitEditorModule, window.currentCircuitId]);
       }      

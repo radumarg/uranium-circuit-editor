@@ -874,6 +874,9 @@ export function accomodateModifiedCircuitGate(store, circuitState, circuitId, no
         let payload = {"circuitId": circuitId, "dto": dto}
         store.commit('circuitEditorModule/removeGateFromWorkerThread', payload);
         let proposedQbits = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits);
+        if (proposedQbits.length == 0) {
+          continue;
+        }
         // insert new qubits if necessary
         while (seatsAreTaken(circuitState, proposedQbits, step)) {
           let payload = {"circuitId": circuitId, "qbit": existingQbits[existingQbits.length - 1]}
@@ -964,4 +967,15 @@ function stateDescendentsContain(circuitStates, ids, startId) {
   }
 
   return false;
+}
+
+export function getCircuitGateIds(gates) {
+  let ids = [];
+  for (let i = 0; i < gates.length; i++){
+    let gate = gates[i];
+    if (gate["name"] == "circuit") {
+      ids.push(gate["circuit_id"]);
+    }
+  }
+  return ids;
 }
