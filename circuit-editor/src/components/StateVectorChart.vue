@@ -127,7 +127,7 @@ export default {
       },
       runSimulation: async function (circuitStates, forceReRender = false) {
         if (this.$data.liveSimulation == true && this.$data.activated) {
-          let qubits = this.getMaximumQbitIndex() + 1;
+          let qubits = this.getMaximumQbitIndex()(window.currentCircuitId) + 1;
           if (qubits <= 0){
             this.updateData([{ x: '0', y: 0 }, { x: '1', y: 0 }], [{ x: '0', y: 0 }, { x: '1', y: 0 }], 1.0);
           } else if (qubits <= 8){

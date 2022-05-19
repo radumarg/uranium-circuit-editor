@@ -9,7 +9,7 @@ import { MdButton, MdCheckbox, MdToolbar, MdTooltip } from 'vue-material/dist/co
 import 'vue-material/dist/vue-material.min.css';
 import 'vue-material/dist/theme/default.css';
 import VueCookies from 'vue-cookies';
-import { extractSelectionRange, getCircuitGateIds, getCompatibleCircuitIds, getPastedGates, isDefined, undoGatesSelection,  saveCopiedGates  } from "./store/modules/editorHelper.js";
+import { extractSelectionRange, getCompatibleCircuitIds, getPastedGates, isDefined, undoGatesSelection,  saveCopiedGates  } from "./store/modules/editorHelper.js";
 import { seatIsTaken, seatsInArrayAreAlreadyTaken } from "./store/modules/gatesTable.js";
 
 Vue.use(MdButton);
@@ -150,13 +150,15 @@ $(document).on('keyup', function(e) {
         if (seatsInArrayAreAlreadyTaken(store.state.circuitEditorModule[window.currentCircuitId], gates)){
           alert("Not all the proposed seats are empty.");
         } else {
-          let circuit_gate_ids = getCircuitGateIds(gates);
           let compatibleCircuitIds = getCompatibleCircuitIds(store.state.circuitEditorModule);
-          for (let i = 0; i < circuit_gate_ids.length; i++){
-            let circuit_gate_id = circuit_gate_ids[i];
-            if (!compatibleCircuitIds.includes(circuit_gate_id)) {
-              alert(`Cannot insert circuit gate with id = ${circuit_gate_id} here.`);
-              return;
+          for (let i = 0; i < gates.length; i++){
+            let gate = gates[i];
+            if (gate["name"] == "circuit") {
+              let circuit_gate_id = gate["circuit_id"];
+              if (!compatibleCircuitIds.includes(circuit_gate_id)) {
+                alert(`Cannot insert circuit gate with name abbreviation '${gate["circuit_abbreviation"]}' here.`);
+                return;
+              }
             }
           }
           store.dispatch('circuitEditorModule/insertGatesInCircuit', {"dtos": gates, "existingStep": null, "existingQbit": null});

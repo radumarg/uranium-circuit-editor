@@ -290,7 +290,7 @@ export default {
       this.expandDownIsHovered = hovered;
     },
     expandCircuitLeft: function(){
-      if (window.gatesTable.columns/2 == this.getMaximumStepIndex() + 2){
+      if (window.gatesTable.columns/2 == this.getMaximumStepIndex()(window.currentCircuitId) + 2){
         alert("Please increase the number of steps in the circuit first.");
         return;
       }
@@ -298,7 +298,7 @@ export default {
       this.insertStepInCircuit(this.step);
     },
     expandCircuitRight: function(){
-      if (window.gatesTable.columns/2 == this.getMaximumStepIndex() + 2){
+      if (window.gatesTable.columns/2 == this.getMaximumStepIndex()(window.currentCircuitId) + 2){
         alert("Please increase the number of steps in the circuit first.");
         return;
       }
@@ -306,7 +306,7 @@ export default {
       this.insertStepInCircuit(this.step + 1);
     },
     expandCircuitUp: function () {
-      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex() + 1) {
+      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex()(window.currentCircuitId) + 1) {
         alert("Please increase the number qubits in the circuit first.");
         return;
       }
@@ -314,7 +314,7 @@ export default {
       this.insertQbitInCircuit(this.control);
     },
     expandCircuitDown: function () {
-      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex() + 1) {
+      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex()(window.currentCircuitId) + 1) {
         alert("Please increase the number qubits in the circuit first.");
         return;
       }

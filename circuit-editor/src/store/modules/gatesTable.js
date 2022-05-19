@@ -153,8 +153,10 @@ export function measureGatesArePositionedLast(circuitStates, currentCircuitId, c
       if (gate.name.includes("measure-")){
         collectedMeasureGates.push(gate.targets[0] + qubitStart);
       } else if (gate.name == "circuit"){
-        if (!measureGatesArePositionedLast(circuitStates, gate.circuit_id, collectedMeasureGates, gate.targets[0] + qubitStart)) {
-          return false;
+        for (let k = 0; k < Math.abs(gate.circuit_power); k++) {
+          if (!measureGatesArePositionedLast(circuitStates, gate.circuit_id, collectedMeasureGates, gate.targets[0] + qubitStart)) {
+            return false;
+          }
         }
       } else {
         if (Object.prototype.hasOwnProperty.call(gate, "targets")) {

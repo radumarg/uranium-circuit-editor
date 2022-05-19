@@ -71,7 +71,7 @@ export default {
     ...mapGetters("circuitEditorModule/", ["getMaximumQbitIndex"]),
     onTabChanged: function() {
       
-      let maxQubitIndex = this.getMaximumQbitIndex();
+      let maxQubitIndex = this.getMaximumQbitIndex()(window.currentCircuitId);
 
       if (maxQubitIndex == -1) {
         this.$root.$emit("showColumnChart", []);

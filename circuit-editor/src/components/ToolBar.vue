@@ -294,8 +294,8 @@ export default {
       this.saveIsHovered = hovered;
     },
     handleSaveStepsAndQbits: function(){
-      let qbitsNew = Math.max(this.getMaximumQbitIndex() + 1, this.$data.qbitsNew);
-      let stepsNew = Math.max(this.getMaximumStepIndex() + 1, this.$data.stepsNew);
+      let qbitsNew = Math.max(this.getMaximumQbitIndex()(window.currentCircuitId) + 1, this.$data.qbitsNew);
+      let stepsNew = Math.max(this.getMaximumStepIndex()(window.currentCircuitId) + 1, this.$data.stepsNew);
       let qubitsThatFitScreen = getNumberOfRowsThatFit() / 2;
       let stepsThatFitScreen = getNumberOfColumnsThatFit() / 2;
       let newrows = 2 * qbitsNew;

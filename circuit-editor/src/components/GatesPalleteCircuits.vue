@@ -230,15 +230,17 @@ export default {
     },
     dragStart: function(event) {
       hideTooltips();
-      let circuitIndex = parseInt(event.target.id.replace('circuit-gate-div-', ''));
-      let id = this.$data.compatibleCircuitIds[circuitIndex];
-      event.dataTransfer.setData("gateName", "circuit");
-      event.dataTransfer.setData("drag-origin", "gates-pallete");
-      event.dataTransfer.setData("circuit_id", this.$store.state.circuitEditorModule[id]["circuit_id"]);
-      event.dataTransfer.setData("circuit_abbreviation", this.$store.state.circuitEditorModule[id]["circuit_abbreviation"]);
-      event.dataTransfer.setData("circuit_power", "1");
-      let dragImageGhost = createCircuitDragImageGhost();
-      event.dataTransfer.setDragImage(dragImageGhost, 20, 20);
+      if (event && event.target) {
+        let circuitIndex = parseInt(event.target.id.replace('circuit-gate-div-', ''));
+        let id = this.$data.compatibleCircuitIds[circuitIndex];
+        event.dataTransfer.setData("gateName", "circuit");
+        event.dataTransfer.setData("drag-origin", "gates-pallete");
+        event.dataTransfer.setData("circuit_id", this.$store.state.circuitEditorModule[id]["circuit_id"]);
+        event.dataTransfer.setData("circuit_abbreviation", this.$store.state.circuitEditorModule[id]["circuit_abbreviation"]);
+        event.dataTransfer.setData("circuit_power", "1");
+        let dragImageGhost = createCircuitDragImageGhost();
+        event.dataTransfer.setDragImage(dragImageGhost, 20, 20);
+      }
     },
     dragEnd: function() {
       let dragImageGhost = window.document.getElementById("dragged-gate-ghost");

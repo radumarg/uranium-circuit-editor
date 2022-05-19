@@ -8,6 +8,7 @@ import {
 } from "./gatesTable.js";
 
 import {
+  computeMaximumQubitIndex,
   getAggregatedGatesTargets,
   getAggregatedGatesNewTargets,
   getMultipleTargets,
@@ -75,48 +76,19 @@ export const circuitEditorModule = {
     getCircuitStates: () => {
       return circuitEditorModule.state;
     },
-    getMaximumStepIndex: () => {
+    getMaximumStepIndex: (state) => (circuitId) => {
       let maxStep = 0;
-      let state = circuitEditorModule.state[window.currentCircuitId];
-      if (Object.prototype.hasOwnProperty.call(state, "steps")) {
-        for (let i = 0; i < state.steps.length; i++) {
-          maxStep = Math.max(maxStep, state.steps[i].index);
+      let circuitState = state[circuitId];
+      if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+        for (let i = 0; i < circuitState.steps.length; i++) {
+          maxStep = Math.max(maxStep, circuitState.steps[i].index);
         } 
       }
       return maxStep;
     },
-    getMaximumQbitIndex: () => {
-      let maxQbit = -1;
-      let state = circuitEditorModule.state[window.currentCircuitId];
-      if (Object.prototype.hasOwnProperty.call(state, "steps")) {
-        for (let i = 0; i < state.steps.length; i++) {
-          let step = state.steps[i];
-          if (Object.prototype.hasOwnProperty.call(step, "gates")) {
-            let gates = step["gates"];
-            for (let j = 0; j < gates.length; j++) {
-              let gate = gates[j];
-              if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
-                maxQbit = Math.max(maxQbit, ...gate.targets);
-              }
-              if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
-                for (let k = 0; k < gate.gates.length; k++) {
-                  let aggregatedGate = gate.gates[k];
-                  maxQbit = Math.max(maxQbit, ...aggregatedGate.targets);
-                }
-              }
-              if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-                for (let i = 0; i < gate["controls"].length; i++) {
-                  let controlInfo = gate["controls"][i];
-                  let target = controlInfo["target"];
-                  maxQbit = Math.max(maxQbit, target);
-                }
-              }
-            } 
-          }
-        }
-      }
-      return maxQbit;
-    },
+    getMaximumQbitIndex: (state) => (circuitId) => {
+      return computeMaximumQubitIndex(state, circuitId);
+    }
   },
 
   actions: {

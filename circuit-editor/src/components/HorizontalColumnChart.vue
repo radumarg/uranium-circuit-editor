@@ -80,8 +80,8 @@ export default {
       },
       runSimulation: async function (circuitStates) {
         if (this.$data.liveSimulation == true && this.$data.activated) {
-          let maxQubitIndex = this.getMaximumQbitIndex();
-          let measureGates = getMeasureGates(circuitStates[window.currentCircuitId]);
+          let maxQubitIndex = this.getMaximumQbitIndex()(window.currentCircuitId);
+          let measureGates = getMeasureGates(circuitStates, window.currentCircuitId);
           if (maxQubitIndex == -1){
               this.$data.stateProbabilities = [];
               this.$data.minRange = 0;

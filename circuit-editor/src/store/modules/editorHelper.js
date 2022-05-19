@@ -969,13 +969,36 @@ function stateDescendentsContain(circuitStates, ids, startId) {
   return false;
 }
 
-export function getCircuitGateIds(gates) {
-  let ids = [];
-  for (let i = 0; i < gates.length; i++){
-    let gate = gates[i];
-    if (gate["name"] == "circuit") {
-      ids.push(gate["circuit_id"]);
+export function computeMaximumQubitIndex(circuitStates, circuitId) {
+  let maxQbit = -1;
+  let state = circuitStates[circuitId];
+  if (Object.prototype.hasOwnProperty.call(state, "steps")) {
+    for (let i = 0; i < state.steps.length; i++) {
+      let step = state.steps[i];
+      if (Object.prototype.hasOwnProperty.call(step, "gates")) {
+        let gates = step["gates"];
+        for (let j = 0; j < gates.length; j++) {
+          let gate = gates[j];
+          if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+            maxQbit = Math.max(maxQbit, ...gate.targets);
+          }
+          if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+            for (let k = 0; k < gate.gates.length; k++) {
+              let aggregatedGate = gate.gates[k];
+              maxQbit = Math.max(maxQbit, ...aggregatedGate.targets);
+            }
+          }
+          if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+            for (let i = 0; i < gate["controls"].length; i++) {
+              let controlInfo = gate["controls"][i];
+              let target = controlInfo["target"];
+              maxQbit = Math.max(maxQbit, target);
+            }
+          }
+        }
+      }
     }
   }
-  return ids;
+
+  return maxQbit;
 }
