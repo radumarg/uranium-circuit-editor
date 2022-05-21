@@ -112,6 +112,7 @@ import GatesPalleteCircuits from "./components/GatesPalleteCircuits";
 import Logo from "./components/Logo";
 import ToolBar from "./components/ToolBar";
 import { mapActions} from 'vuex';
+import { undoGatesSelection } from "./store/modules/editorHelper.js";
 import { retriveNoteHtml, retriveSimpleGateHelpHtml, retriveControlledGateHelpHtml, retriveGateMatrixHtml, retriveControlledGateMatrixHtml } from "./help/help.js";
 import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "./store/modules/applicationWideReusableUnits.js";
 
@@ -199,6 +200,7 @@ export default {
       }
     },
     switchCircuit: function(){
+      undoGatesSelection();
       for (let i = 0; i < window.circuitIds.length; i++) {
         let id = window.circuitIds[i];
         if (this.$store.state.circuitEditorModule[id]["circuit_name"] == this.circuitName) {

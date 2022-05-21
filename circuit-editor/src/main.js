@@ -156,7 +156,8 @@ $(document).on('keyup', function(e) {
             if (gate["name"] == "circuit") {
               let circuit_gate_id = gate["circuit_id"];
               if (!compatibleCircuitIds.includes(circuit_gate_id)) {
-                alert(`Cannot insert circuit gate with name abbreviation '${gate["circuit_abbreviation"]}' here.`);
+                alert(`Cannot insert circuit gate with name abbreviation '${gate["circuit_abbreviation"]}' here. \
+The circuit gate ids are not compatible with current project.`);
                 return;
               }
             }
