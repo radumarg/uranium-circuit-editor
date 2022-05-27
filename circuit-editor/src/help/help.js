@@ -1188,8 +1188,6 @@ export function retriveGateMatrixHtml(gateName) {
       </tr>\
       </table></td>\
       </table>";
-    } else if (gateName == "xy") {
-      return "";
     } else if (gateName == "a") {
       return "<div style='text-align: left;'> Matrix representation:</div> <br/> \
       <table class='matrix'> \

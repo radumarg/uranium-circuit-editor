@@ -280,7 +280,7 @@ export default {
     },
     showChangeQbitsStepsModal: function() {
       this.$data.qbitsNew = parseInt(window.gatesTable.rows / 2);
-      this.$data.stepsNew = parseInt(window.gatesTable.columns / 2),
+      this.$data.stepsNew = parseInt(window.gatesTable.columns / 2);
       this.$refs['change-steps-qubits-dialog'].show();
       this.closeIsHovered = false;
       this.saveIsHovered = false;

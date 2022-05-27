@@ -7,9 +7,9 @@ export function arraysAreEqual(a, b) {
   return a.every(item => b.includes(item)) && b.every(item => a.includes(item));
 }
 
-export function getDuplicateValues(array){
+export function getDuplicateValues(inputArray){
   const findDuplicatesArrow = array => array.filter((item, index) => array.indexOf(item) !== index)
-  return findDuplicatesArrow(array);
+  return findDuplicatesArrow(inputArray);
 }
 
 export function getUniqueValues(array){

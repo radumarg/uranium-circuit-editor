@@ -193,15 +193,6 @@ export function measureGatesArePositionedLast(circuitStates, currentCircuitId, c
   return true;
 }
 
-export function getProximFreeSeat(circuitState, qbit, step) {
-  if (!seatIsTaken(circuitState, qbit + 1, step)) {
-    return qbit + 1;
-  } else if (!seatIsTaken(circuitState, qbit - 1, step)) {
-    return qbit - 1;
-  }
-  return null;
-}
-
 // Verifiy if position is filled
 export function positionIsFilled(circuitState, step, qubit) {
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
@@ -293,6 +284,15 @@ export function seatIsTaken(circuitState, qbit, step) {
     }
   }
   return false;
+}
+
+export function getProximFreeSeat(circuitState, qbit, step) {
+  if (!seatIsTaken(circuitState, qbit + 1, step)) {
+    return qbit + 1;
+  } else if (!seatIsTaken(circuitState, qbit - 1, step)) {
+    return qbit - 1;
+  }
+  return null;
 }
 
 export function qbitIsTaken(circuitState, qbit, step) {
