@@ -125,6 +125,9 @@ export const circuitEditorModule = {
     insertQbitInCircuit: function (context, qbit) {
       this.commit("circuitEditorModule/insertQbit", qbit);
     },
+    insertQubitInCircuitFromWorkerThread: function (context, payload) {
+      this.commit("circuitEditorModule/insertQubitFromWorkerThread", payload);
+    },
     insertStepInCircuit: function (context, step) {
       this.commit("circuitEditorModule/insertStep", step);
     },
@@ -304,8 +307,14 @@ export const circuitEditorModule = {
     insertGatesInCircuit(context, dto) {
       this.commit("circuitEditorModule/insertGates", dto);
     },
+    insertGateInCircuitFromWorkerThread(context, dto) {
+      this.commit("circuitEditorModule/insertGateFromWorkerThread", dto);
+    },
     removeGatesFromCircuit(context, dto) {
       this.commit("circuitEditorModule/removeGates", dto);
+    },
+    removeGateFromCircuitFromWorkerThread(context, payload) {
+      this.commit("circuitEditorModule/removeGateFromWorkerThread", payload);
     },
     replicateGate: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
@@ -677,7 +686,7 @@ export const circuitEditorModule = {
       let state = circuitEditorModule.state[window.currentCircuitId];
       insertingOneGateInCircuit(state, dto);
     },
-    insertingGateFromWorkerThread(context, payload) {
+    insertGateFromWorkerThread(context, payload) {
       let circuitId = payload["circuitId"];
       let dto = payload["dto"];
       let state = circuitEditorModule.state[circuitId];

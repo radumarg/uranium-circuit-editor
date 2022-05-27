@@ -849,7 +849,7 @@ export function canAccomodateCircuitGate(circuitState, modifiedCircuitId, noModi
     for (let j = 0; j < gates.length; j++) {
       let gate = gates[j];
       if (gate.name == "circuit" && gate.circuit_id == modifiedCircuitId){
-        let existingTargets = gate.targets;
+        let existingTargets = [...gate.targets];
         let existingControls = [];
         for (let i = 0; i < gate.controls.length; i++) {
           let controlInfo = gate.controls[i];
@@ -881,7 +881,7 @@ function insertQubitsToAccomodateModifiedCircuitGate(store, circuitId, modifiedC
       let gate = gates[j];
       if (gate.name == "circuit" && gate.circuit_id == modifiedCircuitId){
 
-        let existingTargets = gate.targets;
+        let existingTargets = [...gate.targets];
         let existingControls = [];
         for (let i = 0; i < gate.controls.length; i++) {
           let controlInfo = gate.controls[i];
@@ -906,7 +906,7 @@ function insertQubitsToAccomodateModifiedCircuitGate(store, circuitId, modifiedC
                 seatsAreTaken(circuitState, proposedQbits, step, existingTargets.concat(existingControls))
           ) {
           let payload = {"circuitId": circuitId, "qbit": insertPosition}
-          store.commit('circuitEditorModule/insertQubitFromWorkerThread', payload);
+          store.dispatch('circuitEditorModule/insertQubitInCircuitFromWorkerThread', payload, { root:true })
           circuitState = store.state.circuitEditorModule[circuitId];
           existingTargets.push(insertPosition + 1);
           for (let i = 0; i < existingControls.length; i++) {
@@ -935,7 +935,7 @@ function updateCircuitGatesToAccomodateModifiedCircuitGate(store, circuitId, mod
         // remove existing gate
         let dto = { "step": step, "targets": [gate.targets[0]], "name": "circuit" };
         let payload = {"circuitId": circuitId, "dto": dto}
-        store.commit('circuitEditorModule/removeGateFromWorkerThread', payload);
+        store.dispatch('circuitEditorModule/removeGateFromCircuitFromWorkerThread', payload, { root:true })
         let newTargtes = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits);
         if (newTargtes.length == 0) {
           continue;
@@ -958,7 +958,7 @@ function updateCircuitGatesToAccomodateModifiedCircuitGate(store, circuitId, mod
                 "circuit_power": gate.circuit_power,
                 "targets_expression": gate.targets_expression };
         payload = {"circuitId": circuitId, "dto": dto}
-        store.commit('circuitEditorModule/insertingGateFromWorkerThread', payload);
+        store.dispatch('circuitEditorModule/insertGateInCircuitFromWorkerThread', payload, { root:true })
       }
     }
   }
