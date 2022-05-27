@@ -3,8 +3,8 @@
 */
 import $ from "jquery";
 import { getUserInterfaceSetting } from "./applicationWideReusableUnits.js";
-import { arraysHaveElementsInCommon } from "./javaScriptUtils.js";
-import { seatsAreTaken } from "./gatesTable.js";
+import { arraysHaveElementsInCommon, arraysAreEqual } from "./javaScriptUtils.js";
+import { getNoQbits, seatsAreTaken } from "./gatesTable.js";
 import { create, all } from 'mathjs'
 
 // reduce the security risk by not allwing to evaluate arbitrary js
@@ -146,13 +146,15 @@ export function insertingOneQbit(state, qbit) {
           let gate = gates[j];
 
           if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
-            let targets = [...gate.targets];
-            for (let k = 0; k < targets.length; k++){
-              if (targets[k] >= qbit) {
-                targets[k] += 1;
+            if (!gateCanHaveMultipleTargets(gate.name) || gate.targets[0] >= qbit ) {
+              let targets = [...gate.targets];
+              for (let k = 0; k < targets.length; k++){
+                if (targets[k] >= qbit) {
+                  targets[k] += 1;
+                }
               }
+              gate.targets = targets;
             }
-            gate.targets = targets;
           }
 
           if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
@@ -847,9 +849,17 @@ export function canAccomodateCircuitGate(circuitState, modifiedCircuitId, noModi
     for (let j = 0; j < gates.length; j++) {
       let gate = gates[j];
       if (gate.name == "circuit" && gate.circuit_id == modifiedCircuitId){
-        let existingQbits = gate.targets;
+        let existingTargets = gate.targets;
+        let existingControls = [];
+        for (let i = 0; i < gate.controls.length; i++) {
+          let controlInfo = gate.controls[i];
+          existingControls.push(controlInfo.target);
+        }
         let proposedQbits = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits);
-        if (seatsAreTaken(circuitState, proposedQbits, step, existingQbits)) {
+        if (
+          seatsAreTaken(circuitState, proposedQbits, step, existingTargets.concat(existingControls)) ||
+          arraysHaveElementsInCommon(existingControls, proposedQbits)
+          ) {
           return false;
         }
       }
@@ -859,30 +869,78 @@ export function canAccomodateCircuitGate(circuitState, modifiedCircuitId, noModi
   return true;
 }
 
+// insert more qubits where needed to accomodate modified circuit gate
+function insertQubitsToAccomodateModifiedCircuitGate(store, circuitId, modifiedCircuitId, noModifiedCircuitQubits) {
+  let circuitGateTargetsNeedUpdating = false;
+  let circuitState = store.state.circuitEditorModule[circuitId];
 
-// update targets for circuit gates, insert qubits when existing qubits are occupied
-export function accomodateModifiedCircuitGate(store, circuitState, circuitId, noModifiedCircuitQubits, modifiedCircuitId) {
   for (let i = 0; i < circuitState.steps.length; i++) {
     let step = circuitState.steps[i].index;
     let gates = circuitState.steps[i]["gates"];
     for (let j = 0; j < gates.length; j++) {
       let gate = gates[j];
       if (gate.name == "circuit" && gate.circuit_id == modifiedCircuitId){
-        let existingQbits = gate.targets;
+
+        let existingTargets = gate.targets;
+        let existingControls = [];
+        for (let i = 0; i < gate.controls.length; i++) {
+          let controlInfo = gate.controls[i];
+          existingControls.push(controlInfo.target);
+        }
+
+        let proposedQbits = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits);
+        if (!arraysAreEqual(existingTargets, proposedQbits)) {
+          circuitGateTargetsNeedUpdating = true;
+        }
+
+        // circuit is empty, no need to check for space
+        if (proposedQbits.length == 0) {
+          continue;
+        }
+
+        // insert new qubits as needed starting from here
+        let insertPosition = existingTargets[existingTargets.length - 1];
+
+        // now insert new qubits if necessary
+        while ( arraysHaveElementsInCommon(proposedQbits, existingControls) ||
+                seatsAreTaken(circuitState, proposedQbits, step, existingTargets.concat(existingControls))
+          ) {
+          let payload = {"circuitId": circuitId, "qbit": insertPosition}
+          store.commit('circuitEditorModule/insertQubitFromWorkerThread', payload);
+          circuitState = store.state.circuitEditorModule[circuitId];
+          existingTargets.push(insertPosition + 1);
+          for (let i = 0; i < existingControls.length; i++) {
+            let controlTarget = existingControls[i];
+            if (controlTarget > insertPosition) {
+              existingControls[i] += 1;
+            }
+          }
+          insertPosition += 1;
+        }
+      }
+    }
+  }
+  return circuitGateTargetsNeedUpdating;
+}
+
+// remove all gates for modified circuit and add them back with updated targets
+function updateCircuitGatesToAccomodateModifiedCircuitGate(store, circuitId, modifiedCircuitId, noModifiedCircuitQubits) {
+  let circuitState = store.state.circuitEditorModule[circuitId];
+  for (let i = 0; i < circuitState.steps.length; i++) {
+    let step = circuitState.steps[i].index;
+    let gates = circuitState.steps[i]["gates"];
+    for (let j = 0; j < gates.length; j++) {
+      let gate = gates[j];
+      if (gate.name == "circuit" && gate.circuit_id == modifiedCircuitId){
         // remove existing gate
         let dto = { "step": step, "targets": [gate.targets[0]], "name": "circuit" };
         let payload = {"circuitId": circuitId, "dto": dto}
         store.commit('circuitEditorModule/removeGateFromWorkerThread', payload);
-        let proposedQbits = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits);
-        if (proposedQbits.length == 0) {
+        let newTargtes = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits);
+        if (newTargtes.length == 0) {
           continue;
         }
-        // insert new qubits if necessary
-        while (seatsAreTaken(circuitState, proposedQbits, step)) {
-          let payload = {"circuitId": circuitId, "qbit": existingQbits[existingQbits.length - 1]}
-          store.commit('circuitEditorModule/insertQubitFromWorkerThread', payload);
-        }
-        // insert gate
+        // insert gate back with updated targets
         let controls = [];
         let controlstates = [];
         for (let i = 0; i < gate.controls.length; i++) {
@@ -891,7 +949,7 @@ export function accomodateModifiedCircuitGate(store, circuitState, circuitId, no
           controlstates.push(control.state);
         }
         dto = { "step": step,
-                "targets": [...proposedQbits],
+                "targets": [...newTargtes],
                 "name": "circuit",
                 "controls": [...controls],
                 "controlstates": [...controlstates],
@@ -904,6 +962,20 @@ export function accomodateModifiedCircuitGate(store, circuitState, circuitId, no
       }
     }
   }
+}
+
+
+export function accomodateModifiedCircuitGate(store, circuitId, modifiedCircuitId) {
+
+  let noModifiedCircuitQubits = getNoQbits(store.state.circuitEditorModule[modifiedCircuitId]);
+
+  let circuitGateTargetsNeedUpdating = insertQubitsToAccomodateModifiedCircuitGate(store, circuitId, modifiedCircuitId, noModifiedCircuitQubits);
+
+  if (!circuitGateTargetsNeedUpdating) return circuitGateTargetsNeedUpdating;
+
+  updateCircuitGatesToAccomodateModifiedCircuitGate(store, circuitId, modifiedCircuitId, noModifiedCircuitQubits);
+
+  return circuitGateTargetsNeedUpdating;
 }
 
 export function circuitGatesHaveValidId(currentCircuits, uploadedCircuit) {

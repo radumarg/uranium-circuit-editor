@@ -7,12 +7,12 @@
           <td style="width: 5px; height: 5px; max-height: 5px; text-align: center; padding: 5px;">
             <div @mouseover="onPenMouseOver(circuitIndex - 1)" @mouseleave="onPenMouseLeave(circuitIndex - 1)">
               <div v-if="coloredGatesCookie">
-                <b-icon class="pencil" v-if="editCircuitNamePenIsHovered[circuitIndex - 1]" icon="pencil-fill" v-on:click="showEditCircuitModal(circuitIndex - 1)" title="Edit circuit name and abbreviation" style="color: MediumSlateBlue;" font-scale="1.4"></b-icon>
-                <b-icon class="pencil" v-else icon="pencil" style="color: MediumSlateBlue;" font-scale="1.4"></b-icon>
+                <b-icon v-if="editCircuitNamePenIsHovered[circuitIndex - 1]" class="pencil" draggable="false" icon="pencil-fill" v-on:click="showEditCircuitModal(circuitIndex - 1)" title="Edit circuit name and abbreviation" style="color: MediumSlateBlue;" font-scale="1.4"></b-icon>
+                <b-icon v-else class="pencil" draggable="false" icon="pencil" style="color: MediumSlateBlue;" font-scale="1.4"></b-icon>
               </div>
               <div v-else>
-                <b-icon class="pencil" v-if="editCircuitNamePenIsHovered[circuitIndex - 1]" icon="pencil-fill" v-on:click="showEditCircuitModal(circuitIndex - 1)" title="Edit circuit name and abbreviation" style="color: #678efa;" font-scale="1.4"></b-icon>
-                <b-icon class="pencil" v-else icon="pencil" style="color: #678efa;" font-scale="1.4"></b-icon>
+                <b-icon v-if="editCircuitNamePenIsHovered[circuitIndex - 1]" class="pencil" draggable="false" icon="pencil-fill" v-on:click="showEditCircuitModal(circuitIndex - 1)" title="Edit circuit name and abbreviation" style="color: #678efa;" font-scale="1.4"></b-icon>
+                <b-icon v-else icon="pencil" class="pencil" draggable="false" style="color: #678efa;" font-scale="1.4"></b-icon>
               </div>
             </div>
           </td>

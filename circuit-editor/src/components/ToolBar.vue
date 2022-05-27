@@ -245,6 +245,7 @@ export default {
         } else {
           this.emptyCircuit();
           this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
+          sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
         }
       }
     },
@@ -304,7 +305,7 @@ export default {
         if (qbitsNew < qubitsThatFitScreen || stepsNew < stepsThatFitScreen) {
           if (!confirm("Unused higher end steps and qubits are simply being ignored. \
 While you are allowed to reduce the number of steps or qubits under the area of circuit that fits your display, \
-it does not make much sense doing that unless you intend to save the circuit as an SVG image next. Do you want to continue?")) {
+it does not make much sense doing that unless you intend to save the circuit as a PNG image next. Do you want to continue?")) {
            return;
           }
         }
@@ -374,10 +375,9 @@ it does not make much sense doing that unless you intend to save the circuit as 
       this.emptyCircuit();
       this.history[window.currentCircuitId] = [];
       this.historyUnRoll[window.currentCircuitId] = [];
-      let states = this.getCircuitStates();
       window.gatesTable.rows = window.initialRows;
       window.gatesTable.columns = window.initialColumns;
-      this.$root.$emit("triggerSimulationRun", states);
+      this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
       this.$root.$emit("circuitModifiedFromMenu");
       if (window.toolTipsAreShown){
         JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");

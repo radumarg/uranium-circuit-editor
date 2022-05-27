@@ -1,4 +1,6 @@
-// worker thread used to perform some calculation outside the main javascript thread
+// Worker thread used to update circuit gates data outside the main javascript thread.
+// We need this, because when we modify number of qubits in a circuit we also need to
+// update the circuits that reference the modified circuit in form of a circuit type gate.
 
 import { getNoQbits } from "./gatesTable.js"
 import { canAccomodateCircuitGate } from "./editorHelper"

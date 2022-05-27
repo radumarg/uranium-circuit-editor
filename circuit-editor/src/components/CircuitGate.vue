@@ -4,7 +4,7 @@
     <img v-if="gateImageIsABox()" :src="gateImageSrcEditor" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
 
     <div v-else-if="gateImageIsCircuit()">
-      <div v-if="gateNameSpaceNeeded() == 'small' && usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-if="gateNameSpaceNeeded() == 'small' && usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave"  @mousedown="handleMouseDown">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
@@ -13,7 +13,7 @@
           </g>
         </svg>
       </div>
-      <div v-else-if="usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-else-if="usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave"  @mousedown="handleMouseDown">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
@@ -24,7 +24,7 @@
           </g>
         </svg>
       </div>
-      <div v-if="gateNameSpaceNeeded() == 'small' && !usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-if="gateNameSpaceNeeded() == 'small' && !usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave"  @mousedown="handleMouseDown">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
@@ -33,7 +33,7 @@
           </g>
         </svg>
       </div>
-      <div v-else-if="!usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-else-if="!usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave"  @mousedown="handleMouseDown">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
@@ -47,7 +47,7 @@
     </div>
 
     <div v-else-if="gateImageIsUp()">
-      <div v-if="gateNameSpaceNeeded() == 'small' && usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-if="gateNameSpaceNeeded() == 'small' && usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave"  @mousedown="handleMouseDown">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
@@ -58,7 +58,7 @@
           </g>
         </svg>
       </div>
-      <div v-else-if="usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-else-if="usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave"  @mousedown="handleMouseDown">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
@@ -71,7 +71,7 @@
           </g>
         </svg>
       </div>
-      <div v-if="gateNameSpaceNeeded() == 'small' && !usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-if="gateNameSpaceNeeded() == 'small' && !usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave"  @mousedown="handleMouseDown">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
@@ -82,7 +82,7 @@
           </g>
         </svg>
       </div>
-      <div v-else-if="!usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-else-if="!usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave"  @mousedown="handleMouseDown">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
@@ -98,7 +98,7 @@
     </div>
 
     <div v-else>
-      <div v-if="gateNameSpaceNeeded() == 'small' && usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-if="gateNameSpaceNeeded() == 'small' && usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave"  @mousedown="handleMouseDown">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
@@ -108,7 +108,7 @@
           </g>
         </svg>
       </div>
-      <div v-else-if="usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-else-if="usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave"  @mousedown="handleMouseDown">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
@@ -120,7 +120,7 @@
           </g>
         </svg>
       </div>
-      <div v-if="gateNameSpaceNeeded() == 'small' && !usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-if="gateNameSpaceNeeded() == 'small' && !usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave"  @mousedown="handleMouseDown">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
@@ -130,7 +130,7 @@
           </g>
         </svg>
       </div>
-      <div v-else-if="!usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave">
+      <div v-else-if="!usingColoredGates" draggable="true" class="editor-circuit-gate-div" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave"  @mousedown="handleMouseDown">
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
@@ -588,6 +588,10 @@ export default {
         alert("Please enter an integer number circuit power!");
         return;
       }
+      if (this.$data.circuitPowerNew == 0){
+        alert("Circuit power cannot be zero!");
+        return;
+      }
       let newCircuitId = this.getCircuitId(this.$data.circuitNameNew);
       let circuitState = this.$store.state.circuitEditorModule[newCircuitId];
       let noQubits = getNoQbits(circuitState);
@@ -791,6 +795,10 @@ export default {
       } else {
         image.src = require("../assets/blue-gates/" + this.img + ".svg");
       }
+    },
+    handleMouseDown(event) {
+      if (event.shiftKey)
+        alert("Due to known bug in Chromium Shift + Drag will not work here. You can Shift + Drag a circuit type gate by acting on portion of the gate that contains no text.")
     },
     handleReplicateGateModalSave: function(){
       let promise = this.replicateGate({
