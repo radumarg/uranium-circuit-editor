@@ -106,38 +106,42 @@
     }
   }
   
-  /* use Django REST API to save circuit */
-  export function save_circuit(circuitId, yaml){
+  /* use Django REST API to save project */
+  export function save_project(projectId, circuitStates){
 
+    let json = JSON.stringify(circuitStates);
+
+    // note, this implicitely remove all undefined values
+    // which is good, not sure how these get created though
     let xmlHttpReq = new XMLHttpRequest();
 
     xmlHttpReq.timeout = 10000;
     xmlHttpReq.ontimeout = function () {
       if (!window.alertedOnFaliedSavingCircuit) {
-        alert("For some unknown reason saving one of your circuits has failed, please try again a bit later.");
+        alert("For some unknown reason saving your project has failed, please try again a bit later.");
         window.alertedOnFaliedSavingCircuit = true;
       }
     };
 
     xmlHttpReq.onerror = function () {
       if (!window.alertedOnFaliedSavingCircuit) {
-        alert("For some unknown reason saving one of your circuits has failed, please try again a bit later.");
+        alert("For some unknown reason saving your project has failed, please try again a bit later.");
         window.alertedOnFaliedSavingCircuit = true;
       }
     };
 
-    let url = '/projects/circuits-api/?circuitid='.concat(circuitId);
-    xmlHttpReq.open( "POST", url, true);
+    let url = '/projects/projects-api/?projectid='.concat(projectId);
+    xmlHttpReq.open("POST", url, true);
 
     let authToken = getCookie('auth-token');
     xmlHttpReq.setRequestHeader('Authorization', authToken);
     let csrfToken = getCookie('csrftoken');
     xmlHttpReq.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-    let encodedCircuit = encodeURI(yaml);
+    let encodedCircuit = encodeURI(json);
     // '+' character is a reserved character and not encoded corectly, not sure why
     // at server side according to specs + is treated as space and %2B is decoded as literal "+"
     encodedCircuit = encodedCircuit.replaceAll('+', '%2B');
-    let data = `yaml-code=${encodedCircuit}&csrfmiddlewaretoken=${csrfToken}`;
+    let data = `json-code=${encodedCircuit}&csrfmiddlewaretoken=${csrfToken}`;
 
     xmlHttpReq.send(data);    
   }

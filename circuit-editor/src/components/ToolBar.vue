@@ -70,7 +70,7 @@
           Open
           <md-tooltip md-direction="left">Load Circuit from Disk</md-tooltip>
         </md-button>
-        <md-button class="md-raised md-primary" v-on:click="saveFile()">
+        <md-button class="md-raised md-primary" v-on:click="saveProjectOrFile()">
           Save
           <md-tooltip md-direction="left">Save Circuit</md-tooltip>
         </md-button>
@@ -136,10 +136,10 @@ import * as htmlToImage from 'html-to-image';
 import JQuery from 'jquery';
 import { mapActions, mapGetters } from 'vuex';
 import { getNoQbits, getNoSteps, getNumberOfRowsThatFit, getNumberOfColumnsThatFit } from "../store/modules/gatesTable.js";
-import {save_circuit} from "../store/modules/circuitSaveAndRetrieve.js";
+import { save_project } from "../store/modules/circuitSaveAndRetrieve.js";
 import { setCookiesIfNotAlreadySet, getUserInterfaceSetting, setUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 import { sendMeasureGatesWorkerMessage, sendCircuitGatesWorkerMessage } from '../store/modules/worker-api';
-import { circuitGatesHaveValidId } from "../store/modules/editorHelper.js";
+import { circuitGatesHaveValidId, circuitGatesHaveValidSize } from "../store/modules/editorHelper.js";
 export default {
   name: "ToolBar",
   data() {
@@ -338,21 +338,17 @@ it does not make much sense doing that unless you intend to save the circuit as 
         alert(error)
       });
     },
-    saveFile: function() {
-      let state = this.$store.state.circuitEditorModule;
+    saveProjectOrFile: function() {
       window.alertedOnFaliedSavingCircuit = false;
-      const yaml = require('js-yaml');
-      for (const [key, value] of Object.entries(state)) {
-        let circuitId = key;
-        let circuitState = value;
-        let yamlState = yaml.safeDump(circuitState);
-        if (window.projectId != null && window.projectId > 0) {
-          save_circuit(circuitId, yamlState);
-        } else {
-          if (circuitId == window.currentCircuitId) {
-            this.download(`circuit.yaml`, yamlState);
-          }
-        }
+      if (window.projectId != null && window.projectId > 0) {
+        save_project(window.projectId, this.$store.state.circuitEditorModule);
+      } else {
+        const yaml = require('js-yaml');
+        let circuitId = window.currentCircuitId;
+        let circuitState = this.$store.state.circuitEditorModule[circuitId];
+        // undefined values should not occur, this is just a precaution
+        let yamlState = yaml.safeDump(circuitState, { skipInvalid: true });
+        this.download(`circuit.yaml`, yamlState);
       }
     },
     download: function(filename, text) {
@@ -383,6 +379,7 @@ it does not make much sense doing that unless you intend to save the circuit as 
         JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");
         window.toolTipsAreShown = false;
       }
+      sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
     },
     switchTheme: function(){
       setUserInterfaceSetting('dark-theme', this.darkTheme);
@@ -433,8 +430,18 @@ If you do not want to accept cookies, you can zoom the page yourself from the ke
       let steps = getNoSteps(jsonObj);
       window.gatesTable.rows = Math.max(2 * qbits + 2, window.initialRows);
       window.gatesTable.columns = Math.max(2 * steps + 2, window.initialColumns);
-      if (!circuitGatesHaveValidId(this.$store.state.circuitEditorModule, jsonObj)) {
-        alert("The yaml you are trying to load contains circuit gates which are either not known or are not compatible with the current project.")
+      if (!Object.prototype.hasOwnProperty.call(jsonObj, "steps")) {
+        alert("This circuit looks empty");
+        return;
+      }
+      let circuitValidationMessage = circuitGatesHaveValidId(this.$store.state.circuitEditorModule, jsonObj);
+      if (circuitValidationMessage.length > 0) {
+        alert(circuitValidationMessage);
+        return;
+      }
+      circuitValidationMessage = circuitGatesHaveValidSize(this.$store.state.circuitEditorModule, jsonObj);
+      if (circuitValidationMessage.length > 0) {
+        alert(circuitValidationMessage);
         return;
       }
       this.history[window.currentCircuitId] = [];
@@ -444,6 +451,7 @@ If you do not want to accept cookies, you can zoom the page yourself from the ke
       this.history[window.currentCircuitId].push(JSON.stringify(circuit));
       this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
       this.$root.$emit("circuitModifiedFromMenu");
+      sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
     }
   }
 };

@@ -898,20 +898,20 @@ function insertQubitsToAccomodateModifiedCircuitGate(store, circuitId, modifiedC
           continue;
         }
 
-        // insert new qubits as needed starting from here
-        let insertPosition = existingTargets[existingTargets.length - 1];
+        // insert new qubits as needed starting from this qubit
+        let insertPosition = existingTargets[existingTargets.length - 1] + 1;
 
         // now insert new qubits if necessary
-        while ( arraysHaveElementsInCommon(proposedQbits, existingControls) ||
-                seatsAreTaken(circuitState, proposedQbits, step, existingTargets.concat(existingControls))
+        while (arraysHaveElementsInCommon(proposedQbits, existingControls) ||
+               seatsAreTaken(circuitState, proposedQbits, step, existingTargets.concat(existingControls))
           ) {
           let payload = {"circuitId": circuitId, "qbit": insertPosition}
           store.dispatch('circuitEditorModule/insertQubitInCircuitFromWorkerThread', payload, { root:true })
           circuitState = store.state.circuitEditorModule[circuitId];
-          existingTargets.push(insertPosition + 1);
+          existingTargets.push(insertPosition);
           for (let i = 0; i < existingControls.length; i++) {
             let controlTarget = existingControls[i];
-            if (controlTarget > insertPosition) {
+            if (controlTarget >= insertPosition) {
               existingControls[i] += 1;
             }
           }
@@ -955,8 +955,7 @@ function updateCircuitGatesToAccomodateModifiedCircuitGate(store, circuitId, mod
                 "controlstates": [...controlstates],
                 "circuit_id": gate.circuit_id,
                 "circuit_abbreviation": gate.circuit_abbreviation,
-                "circuit_power": gate.circuit_power,
-                "targets_expression": gate.targets_expression };
+                "circuit_power": gate.circuit_power };
         payload = {"circuitId": circuitId, "dto": dto}
         store.dispatch('circuitEditorModule/insertGateInCircuitFromWorkerThread', payload, { root:true })
       }
@@ -992,13 +991,11 @@ export function circuitGatesHaveValidId(currentCircuits, uploadedCircuit) {
       let gate = gates[j];
       if (gate.name == "circuit"){
         let id = gate.circuit_id;
-        // circuit cannot contain itself
         if (window.currentCircuitId == id) {
-          return false;
+          return "Canot load this file, a circuit cannot containd itself!";
         }
-        // circuit id is not known
         if (!window.circuitIds.includes(id)) {
-          return false;
+          return "Canot load this file, this circuit contains circuit id(s) not known in current project!";
         }
       }
     }
@@ -1006,32 +1003,48 @@ export function circuitGatesHaveValidId(currentCircuits, uploadedCircuit) {
 
   newCircuits[window.currentCircuitId].steps = [...uploadedCircuit.steps];
 
-  // gate with circuit id should not occur in its descendents
   for (let i = 0; i < window.circuitIds.length; i++) {
     let id = window.circuitIds[i];
     if (stateDescendentsContain(newCircuits, [id], id)) {
-      return false;
+      return `Canot load this file because circuit with id ${id} has circuit gate with the same id among its descendents!`;
     }
   }
 
-  return true;
+  return "";
+}
+
+export function circuitGatesHaveValidSize(currentCircuits, uploadedCircuit) {
+
+  for (let i = 0; i < uploadedCircuit.steps.length; i++) {
+    let gates = uploadedCircuit.steps[i]["gates"];
+    for (let j = 0; j < gates.length; j++) {
+      let gate = gates[j];
+      if (gate.name == "circuit"){
+        let id = gate.circuit_id;
+        let qbits = getNoQbits(currentCircuits[id]);
+        if (qbits != gate["targets"].length) {
+          return `Canot load this file, the circuit gate with circuit id ${gate.circuit_id} has incorrect number of target qubits!`;
+        }
+      }
+    }
+  }
+
+  return "";
 }
 
 // navigate descendants for each circuit,
-function stateDescendentsContain(circuitStates, ids, startId) {
+function stateDescendentsContain(circuitStates, forbiddenIds, startId) {
 
-  let newids = [...ids];
   let circuitState = circuitStates[startId];
   for (let i = 0; i < circuitState.steps.length; i++) {
     let gates = circuitState.steps[i]["gates"];
     for (let j = 0; j < gates.length; j++) {
       let gate = gates[j];
       if (gate.name == "circuit"){
-        if (newids.includes(gate.circuit_id)) {
+        if (forbiddenIds.includes(gate.circuit_id)) {
           return true;
         }
-        newids.push(gate.circuit_id);
-        if (stateDescendentsContain(circuitStates, newids, gate.circuit_id)) {
+        if (stateDescendentsContain(circuitStates, [gate.circuit_id].concat(forbiddenIds), gate.circuit_id)) {
           return true;
         }
       }
@@ -1073,4 +1086,29 @@ export function computeMaximumQubitIndex(circuitStates, circuitId) {
   }
 
   return maxQbit;
+}
+
+// needed for debugging: identify undefined variables
+export function replaceVars(objSource){
+
+  objSource = JSON.parse(JSON.stringify(objSource, function (key, value) {return (value === undefined) ? "aaa" : value}));
+
+  if (typeof objSource === "object" ) {
+      if(objSource === null) return null;
+
+      if (objSource instanceof Array){
+          for(var i = 0; i < objSource.length; i++) {
+           objSource[i] =  replaceVars(objSource[i]);
+          }
+      } else {
+          for(var property in objSource) {
+              objSource[property] = replaceVars(objSource[property]);
+          }
+      }
+
+      return objSource;
+
+  }
+
+  return objSource;
 }

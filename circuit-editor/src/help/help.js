@@ -148,7 +148,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
       return 'In the context of IBMQ, a barier indicates a boundary in a circuit across which optimizations or circuit re-writes are not \
       performed during transpiling phase. In the limited context of Uranium, the barrier may be used to separate different portions of a \
       circuit in order to make the implementation of an algorithm more readable. However please keep in mind the IBMQ usecase which will \
-      apply when (sooner rather than later) you will be able to execute your circuits directly on IBMQ devices.'
+      apply when you will execute your circuits on IBMQ devices.'
     }
 
     return "In order to work with the Circuit Editor use the gates pallete on the left to drag & drop gates in the circuit \
