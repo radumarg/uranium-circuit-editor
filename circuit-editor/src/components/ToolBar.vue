@@ -312,7 +312,7 @@ export default {
       let newrows = 2 * qbitsNew + 2;
       let newcolumns = 2 * stepsNew + 2;
       if (newrows != window.gatesTable.rows || newcolumns != window.gatesTable.columns){
-        if (qbitsNew < qubitsThatFitScreen || stepsNew < stepsThatFitScreen) {
+        if (qbitsNew < (qubitsThatFitScreen - 3) || stepsNew < (stepsThatFitScreen - 3)) {
           if (!confirm("Unused higher end steps and qubits are simply being ignored. \
 While you are allowed to reduce the number of steps or qubits under the area of circuit that fits your display, \
 it does not make much sense doing that unless you intend to save the circuit as a PNG image next. Do you want to continue?")) {
