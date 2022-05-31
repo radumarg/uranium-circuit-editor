@@ -208,6 +208,16 @@ export default {
         sendCircuitGatesWorkerMessage([state.circuitEditorModule, window.currentCircuitId]);
       }      
     });
+    this.unsubscribeEditProject = this.$store.subscribe((mutation, state) => {
+      if (mutation.type == 'circuitEditorModule/insertGateFromWorkerThread' ||
+          mutation.type == 'circuitEditorModule/removeGateFromWorkerThread' ||
+          mutation.type == 'circuitEditorModule/insertQubitFromWorkerThread'){
+        // when we modify circuit gates, edit history may no longer be compatible with latest project configuration
+        let circuitId = mutation.payload["circuitId"];
+        this.history[circuitId] = [JSON.stringify(state.circuitEditorModule[circuitId])];
+        this.historyUnRoll[circuitId] = [];
+      }
+    });
   },
   mounted() {
     let darkTheme = (getUserInterfaceSetting("dark-theme") === 'true')
@@ -299,8 +309,8 @@ export default {
       let stepsNew = Math.max(this.getMaximumStepIndex()(window.currentCircuitId) + 1, this.$data.stepsNew);
       let qubitsThatFitScreen = getNumberOfRowsThatFit() / 2;
       let stepsThatFitScreen = getNumberOfColumnsThatFit() / 2;
-      let newrows = 2 * qbitsNew;
-      let newcolumns = 2 * stepsNew;
+      let newrows = 2 * qbitsNew + 2;
+      let newcolumns = 2 * stepsNew + 2;
       if (newrows != window.gatesTable.rows || newcolumns != window.gatesTable.columns){
         if (qbitsNew < qubitsThatFitScreen || stepsNew < stepsThatFitScreen) {
           if (!confirm("Unused higher end steps and qubits are simply being ignored. \
@@ -309,10 +319,17 @@ it does not make much sense doing that unless you intend to save the circuit as 
            return;
           }
         }
+        // I don't understand why this works only this way
+        // (need to switch to first circuit) but id does
+        // and does not seem to work otherwise:
+        let currentId = window.currentCircuitId;
+        window.currentCircuitId = window.circuitIds[0];
         window.gatesTable.rows = newrows;
         window.gatesTable.columns = newcolumns;
-        this.$refs['change-steps-qubits-dialog'].hide();
         this.refreshCircuit();
+        window.currentCircuitId = currentId;
+        // when we are done, remove popup dialog
+        this.$refs['change-steps-qubits-dialog'].hide();
       }
     },
     openFile: function() {
