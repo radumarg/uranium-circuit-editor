@@ -123,14 +123,11 @@ export function getTopEntriesStateProbabilities(stateProbabilities) {
 
     const ENTRIES = 20;
 
-    if (stateProbabilities === undefined){
+    if (stateProbabilities === undefined || stateProbabilities.length == 0){
         return [];
     }
 
-    let qubits = 0;
-    if (stateProbabilities.length > 0) {
-        qubits = Math.log2(stateProbabilities.length);
-    }
+    let qubits = Math.log2(stateProbabilities.length);
 
     let initialSlice = [... stateProbabilities.slice(0, Math.min(ENTRIES, stateProbabilities.length))];
 
@@ -170,7 +167,7 @@ export function getTopEntriesStateProbabilities(stateProbabilities) {
 
 export function getBinnedProbabilities(fullStateProbabilities, min, max, numberOfBins) {
     
-    if (fullStateProbabilities == undefined){
+    if (fullStateProbabilities == undefined || fullStateProbabilities.length == 0){
         return [[], 0]
     }
     
