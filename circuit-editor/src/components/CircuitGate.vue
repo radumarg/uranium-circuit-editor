@@ -8,7 +8,7 @@
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
             <text x="26.5" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
@@ -17,7 +17,10 @@
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else x="19.5" y="15" style="font-size: 9px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
@@ -28,7 +31,7 @@
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
             <text x="26.5" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
@@ -37,7 +40,10 @@
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else x="19.5" y="15" style="font-size: 9px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
@@ -53,7 +59,7 @@
             <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
             <text x="26.5" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
@@ -64,7 +70,10 @@
             <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else x="19.5" y="15" style="font-size: 9px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
@@ -77,7 +86,7 @@
             <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
             <text x="26.5" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
@@ -88,7 +97,10 @@
             <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else x="19.5" y="15" style="font-size: 9px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
@@ -103,7 +115,7 @@
           <g>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
             <text x="26.5" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
@@ -113,7 +125,10 @@
           <g>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else x="19.5" y="15" style="font-size: 9px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
@@ -125,7 +140,7 @@
           <g>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text x="7" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">{{ getCircuitAbbreviation() }}</tspan></text>
             <text x="26.5" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
@@ -135,7 +150,10 @@
           <g>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
-            <text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">{{ getCircuitAbbreviation() }}</tspan></text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else x="19.5" y="15" style="font-size: 9px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>

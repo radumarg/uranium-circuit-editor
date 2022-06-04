@@ -21,6 +21,7 @@ import {
   proposedNewGatesAreInvalid,
   proposedNewSeatsOverlap,
   stepContainsGates,
+  updateGatesAbbreviation,
 } from "./editorHelper.js";
 
 import {
@@ -95,11 +96,8 @@ export const circuitEditorModule = {
         error => alert(error)
       );
     },
-    updateCircuitName: function (context, args) {
-      this.commit("circuitEditorModule/updateCircuitNameElement", args);
-    },
-    updateCircuitAbbreviation: function (context, args) {
-      this.commit("circuitEditorModule/updateCircuitAbbreviationElement", args);
+    updateCircuitNameAndAbbreviationInCircuits: function (context, args) {
+      this.commit("circuitEditorModule/updateCircuitNameAndAbbreviation", args);
     },
     // need a way to force circuit redraw, perhaps there is a better way
     refreshCircuit: function () {
@@ -615,6 +613,9 @@ export const circuitEditorModule = {
         reject(false);
       })
     },
+    updateCircuitGateNameAndAbbreviationInCircuit(context, payload) {
+      this.commit("circuitEditorModule/updateCircuitGateNameAndAbbreviation", payload);
+    },
     removeGateFromCircuit: function (context, dataTransferObj) {
       this.commit("circuitEditorModule/removeGateNoTrack", dataTransferObj);
       this.commit("circuitEditorModule/removeEmptySteps");
@@ -697,15 +698,18 @@ export const circuitEditorModule = {
       let state = circuitEditorModule.state[window.currentCircuitId];
       insertingOneGateInCircuit(state, dto);
     },
-    updateCircuitNameElement(context, args) {
-      let circuitId = args[0];
+    updateCircuitNameAndAbbreviation(context, args) {
+      let changedCircuitId = args[0];
       let newCircuitName = args[1];
-      circuitEditorModule.state[circuitId]["circuit_name"] = newCircuitName;
-    },
-    updateCircuitAbbreviationElement(context, args) {
-      let circuitId = args[0];
-      let newCircuitAbbreviation = args[1];
-      circuitEditorModule.state[circuitId]["circuit_abbreviation"] = newCircuitAbbreviation;
+      let newCircuitAbbreviation = args[2];
+      circuitEditorModule.state[changedCircuitId]["circuit_name"] = newCircuitName;
+      circuitEditorModule.state[changedCircuitId]["circuit_abbreviation"] = newCircuitAbbreviation;
+      for (let i = 0; i < window.circuitIds.length; i++) {
+        let id = window.circuitIds[i];
+        if (id == changedCircuitId) continue;
+        let circuitState = circuitEditorModule.state[id];
+        updateGatesAbbreviation(circuitState, changedCircuitId, newCircuitAbbreviation);
+      }
     },
     insertGates(context, dataTransferObj) {
       let dtos = dataTransferObj["dtos"];

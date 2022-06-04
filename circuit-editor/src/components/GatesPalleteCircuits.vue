@@ -76,7 +76,7 @@
 
 <script>
 import { createCircuitDragImageGhost, getUserInterfaceSetting, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
-import { getCompatibleCircuitIds, updateGatesAbbreviation } from "../store/modules/editorHelper.js";
+import { getCompatibleCircuitIds } from "../store/modules/editorHelper.js";
 import { mapActions } from 'vuex';
 export default {
   name: "GatesPalleteCircuits",
@@ -120,7 +120,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['refreshCircuit', 'updateCircuitName', 'updateCircuitAbbreviation']),
+    ...mapActions('circuitEditorModule/', ['refreshCircuit', 'updateCircuitNameAndAbbreviationInCircuits']),
     getCompatibleCircuitsNo : function () {
       return this.$data.compatibleCircuitIds.length;
     },
@@ -221,10 +221,8 @@ export default {
       }
 
       let circuitId = this.$data.editedCircuitId;
-      this.updateCircuitName([circuitId, circuitName]);
-      this.updateCircuitAbbreviation([circuitId, circuitAbbreviation]);
+      this.updateCircuitNameAndAbbreviationInCircuits([circuitId, circuitName, circuitAbbreviation]);
       this.$refs['change-circuit-name-dialog'].hide();
-      updateGatesAbbreviation(this.$store.state.circuitEditorModule, circuitId, circuitAbbreviation);
       this.$root.$emit("circuitAbbreviationChanged");
       this.$forceUpdate();
     },

@@ -139,7 +139,7 @@ import { getNoQbits, getNoSteps, getNumberOfRowsThatFit, getNumberOfColumnsThatF
 import { save_project } from "../store/modules/circuitSaveAndRetrieve.js";
 import { setCookiesIfNotAlreadySet, getUserInterfaceSetting, setUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 import { sendMeasureGatesWorkerMessage, sendCircuitGatesWorkerMessage } from '../store/modules/worker-api';
-import { circuitGatesHaveValidId, circuitGatesHaveValidSize } from "../store/modules/editorHelper.js";
+import { circuitGatesHaveValidId, circuitGatesHaveValidSize, updateGatesAbbreviation } from "../store/modules/editorHelper.js";
 export default {
   name: "ToolBar",
   data() {
@@ -208,7 +208,7 @@ export default {
         sendCircuitGatesWorkerMessage([state.circuitEditorModule, window.currentCircuitId]);
       }      
     });
-    this.unsubscribeEditProject = this.$store.subscribe((mutation, state) => {
+    this.unsubscribeInsertRemoveGatesAndQubits = this.$store.subscribe((mutation, state) => {
       if (mutation.type == 'circuitEditorModule/insertGateFromWorkerThread' ||
           mutation.type == 'circuitEditorModule/removeGateFromWorkerThread' ||
           mutation.type == 'circuitEditorModule/insertQubitFromWorkerThread'){
@@ -216,6 +216,22 @@ export default {
         let circuitId = mutation.payload["circuitId"];
         this.history[circuitId] = [JSON.stringify(state.circuitEditorModule[circuitId])];
         this.historyUnRoll[circuitId] = [];
+      }
+    });
+    // eslint-disable-next-line no-unused-vars
+    this.unsubscribeChangeAbbreviation = this.$store.subscribe((mutation, state) => {
+      if (mutation.type == 'circuitEditorModule/updateCircuitNameAndAbbreviation') {
+        let changedCircuitId = mutation.payload[0];
+        let newCircuitAbbreviation = mutation.payload[2];
+        for (let i = 0; i < window.circuitIds.length; i++) {
+          let circuitId = window.circuitIds[i];
+          if (circuitId == changedCircuitId) continue;
+          for (let j = 0; j < this.history[circuitId].length; j++) {
+            let circuitState = JSON.parse(this.history[circuitId][j]);
+            updateGatesAbbreviation(circuitState, changedCircuitId, newCircuitAbbreviation);
+            this.history[circuitId][j] = JSON.stringify(circuitState);
+          }
+        }
       }
     });
   },
@@ -226,6 +242,8 @@ export default {
   beforeDestroy() {
     this.unsubscribeLoadProject();
     this.unsubscribeEditProject();
+    this.unsubscribeInsertRemoveGatesAndQubits();
+    this.unsubscribeChangeAbbreviation();
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['emptyCircuit', 'updateCircuit', 'refreshCircuit']),
