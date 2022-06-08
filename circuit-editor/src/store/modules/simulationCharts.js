@@ -38,7 +38,7 @@ function extractMeasureGates(circuitStates, circuitId, measureGates, qbitstart) 
         let gates = circuitState.steps[i]["gates"];
         for (let j = 0; j < gates.length; j++) {
           let gate = gates[j];
-          if (gate.name == "barrier") {
+          if (gate.name == "barrier" || gate.name == "aggregate") {
             continue;
           }
           let actual_gate_target = gate.targets[0] + qbitstart;

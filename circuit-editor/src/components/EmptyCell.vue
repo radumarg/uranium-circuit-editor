@@ -680,6 +680,14 @@ export default {
             if (!seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], [currentQubit], step)) {
               let dtoNew = JSON.parse(JSON.stringify(dto));
               dtoNew["targets"] = [currentQubit];
+              if (event.dataTransfer.types.includes("bit")) {
+                let initialBit = parseInt(event.dataTransfer.getData("bit"));
+                if (initialBit >= originalTargets[0] || qbit > originalTargets[0]) {
+                  dtoNew["bit"] = initialBit + currentQubit - originalTargets[0];
+                } else {
+                  dtoNew["bit"] = currentQubit;
+                }
+              }
               dtos.push(dtoNew);
             }
             currentQubit += 1;

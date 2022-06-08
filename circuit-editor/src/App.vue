@@ -67,10 +67,10 @@
               </td>
             </tr>
           </table>
-          <table style="width:286px; max-width: 286px; min-width: 286px;">
+          <table style="width:286px; max-width: 286px; min-width: 286px; table-layout: fixed;">
             <tr>
-              <td class="project-details" style="width: 1%;">Project:</td>
-              <td style="color: slategray;">{{ projectName }}</td>
+              <td class="project-details" style="width: 15%; text-align: left">Proj:</td>
+              <td style="color: slategray; text-align: left; overflow: hidden; white-space: nowrap;"> &nbsp;{{ projectName }} </td>
             </tr>
             <tr>
               <td colspan="2" class="project-details">
