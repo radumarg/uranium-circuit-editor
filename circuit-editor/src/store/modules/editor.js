@@ -797,13 +797,13 @@ export const circuitEditorModule = {
         if (Object.prototype.hasOwnProperty.call(state, "steps")) {
           for (let i = 0; i < state.steps.length; i++) {
             let gates = state.steps[i]["gates"];
-            
+
             for (let j = 0; j < gates.length; j++) {
               let gate = gates[j];
               if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
                 if (gate.targets.includes(qbit)) {
                   gates.splice(j, 1);
-                } 
+                }
               }
             }
             for (let j = 0; j < gates.length; j++) {
