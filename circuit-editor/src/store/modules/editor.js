@@ -653,50 +653,82 @@ export const circuitEditorModule = {
       }
     },
     updateCircuitState(context, jsonObj) {
-      circuitEditorModule.state[window.currentCircuitId].steps = [...jsonObj.steps];
+      if (window.currentCircuitId != 0) {
+        circuitEditorModule.state[window.currentCircuitId].steps = [...jsonObj.steps];
+      } else {
+        alert("Failed load current project, our server may respond a bit too slow. Please try again in a few seconds. If this still does not work please try to reload the page.")
+      }
     },
     resetCircuitState() {
-      let emptyState = JSON.parse('{"steps":[{"index":0,"gates":[]}]}');
-      circuitEditorModule.state[window.currentCircuitId].steps = emptyState.steps;
+      if (window.currentCircuitId != 0) {
+        let emptyState = JSON.parse('{"steps":[{"index":0,"gates":[]}]}');
+        circuitEditorModule.state[window.currentCircuitId].steps = emptyState.steps;
+      } else {
+        alert("Failed load current project, our server may respond a bit too slow. Please try again in a few seconds. If this still does not work please try to reload the page.")
+      }
     },
     insertQbit(context, qbit) {
-      let state = circuitEditorModule.state[window.currentCircuitId];
-      insertingOneQbit(state, qbit);
+      if (window.currentCircuitId != 0) {
+        let state = circuitEditorModule.state[window.currentCircuitId];
+        insertingOneQbit(state, qbit);
+      } else {
+        alert("Failed load current project, our server may respond a bit too slow. Please try again in a few seconds. If this still does not work please try to reload the page.")
+      }
     },
     insertQubitFromWorkerThread(context, payload) {
-      let circuitId = payload["circuitId"];
-      let qbit = payload["qbit"];
-      let state = circuitEditorModule.state[circuitId];
-      insertingOneQbit(state, qbit);
+      if (window.currentCircuitId != 0) {
+        let circuitId = payload["circuitId"];
+        let qbit = payload["qbit"];
+        let state = circuitEditorModule.state[circuitId];
+        insertingOneQbit(state, qbit);
+      } else {
+        alert("Failed load current project, our server may respond a bit too slow. Please try again in a few seconds. If this still does not work please try to reload the page.")
+      }
     },
     insertStep(context, step) {
-      let state = circuitEditorModule.state[window.currentCircuitId];
-      if (Object.prototype.hasOwnProperty.call(state, "steps")) {
-        for (let i = 0; i < state.steps.length; i++) {
-          let currentStep = state.steps[i];
-          if (currentStep.index >= step) {
-            currentStep.index = parseInt(currentStep.index) + 1;
+      if (window.currentCircuitId != 0) {
+        let state = circuitEditorModule.state[window.currentCircuitId];
+        if (Object.prototype.hasOwnProperty.call(state, "steps")) {
+          for (let i = 0; i < state.steps.length; i++) {
+            let currentStep = state.steps[i];
+            if (currentStep.index >= step) {
+              currentStep.index = parseInt(currentStep.index) + 1;
+            }
           }
+        } else {
+          state.steps = []
+          state.steps.push({ "index": step, "gates": [] });
         }
       } else {
-        state.steps = []
-        state.steps.push({ "index": step, "gates": [] });
+        alert("Failed load current project, our server may respond a bit too slow. Please try again in a few seconds. If this still does not work please try to reload the page.")
       }
     },
     insertGate(context, dto) {
-      let state = circuitEditorModule.state[window.currentCircuitId];
-      insertingOneGateInCircuit(state, dto);
+      if (window.currentCircuitId != 0) {
+        let state = circuitEditorModule.state[window.currentCircuitId];
+        insertingOneGateInCircuit(state, dto);
+      } else {
+        alert("Failed load current project, our server may respond a bit too slow. Please try again in a few seconds. If this still does not work please try to reload the page.")
+      }
     },
     insertGateFromWorkerThread(context, payload) {
-      let circuitId = payload["circuitId"];
-      let dto = payload["dto"];
-      let state = circuitEditorModule.state[circuitId];
-      insertingOneGateInCircuit(state, dto);
+      if (window.currentCircuitId != 0) {
+        let circuitId = payload["circuitId"];
+        let dto = payload["dto"];
+        let state = circuitEditorModule.state[circuitId];
+        insertingOneGateInCircuit(state, dto);
+      } else {
+        alert("Failed load current project, our server may respond a bit too slow. Please try again in a few seconds. If this still does not work please try to reload the page.")
+      }
     },
     // mutation that does not trigger update to undo/redo history
     insertGateNoTrack(context, dto) {
-      let state = circuitEditorModule.state[window.currentCircuitId];
-      insertingOneGateInCircuit(state, dto);
+      if (window.currentCircuitId != 0) {
+        let state = circuitEditorModule.state[window.currentCircuitId];
+        insertingOneGateInCircuit(state, dto);
+      } else {
+        alert("Failed load current project, our server may respond a bit too slow. Please try again in a few seconds. If this still does not work please try to reload the page.")
+      }
     },
     updateCircuitNameAndAbbreviation(context, args) {
       let changedCircuitId = args[0];
@@ -712,15 +744,19 @@ export const circuitEditorModule = {
       }
     },
     insertGates(context, dataTransferObj) {
-      let dtos = dataTransferObj["dtos"];
-      let existingStep = dataTransferObj["existingStep"];
-      let existingQbits = dataTransferObj["existingQbits"];
-      let state = circuitEditorModule.state[window.currentCircuitId];
-      if (isDefined(existingStep) && existingQbits && existingQbits.length > 0){
-        removingGateFromCircuit(state, {"step": existingStep, "targets": [...existingQbits]});
-      }
-      for (let i = 0; i < dtos.length; i++){
-        insertingOneGateInCircuit(state, dtos[i]);
+      if (window.currentCircuitId != 0) {
+        let dtos = dataTransferObj["dtos"];
+        let existingStep = dataTransferObj["existingStep"];
+        let existingQbits = dataTransferObj["existingQbits"];
+        let state = circuitEditorModule.state[window.currentCircuitId];
+        if (isDefined(existingStep) && existingQbits && existingQbits.length > 0){
+          removingGateFromCircuit(state, {"step": existingStep, "targets": [...existingQbits]});
+        }
+        for (let i = 0; i < dtos.length; i++){
+          insertingOneGateInCircuit(state, dtos[i]);
+        }
+      } else {
+        alert("Failed load current project, our server may respond a bit too slow. Please try again in a few seconds. If this still does not work please try to reload the page.")
       }
     },
     removeGate(context, dto) {
@@ -755,106 +791,118 @@ export const circuitEditorModule = {
       removingBarrierFromCircuit(state, dto);
     },
     removeQbit(context, dto) {
-      let qbit = dto["targets"][0];
-      let state = circuitEditorModule.state[window.currentCircuitId];
-      if (Object.prototype.hasOwnProperty.call(state, "steps")) {
-        for (let i = 0; i < state.steps.length; i++) {
-          let gates = state.steps[i]["gates"];
-          
-          for (let j = 0; j < gates.length; j++) {
-            let gate = gates[j];
-            if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
-              if (gate.targets.includes(qbit)) {
-                gates.splice(j, 1);
-              } 
-            }
-          }
-          for (let j = 0; j < gates.length; j++) {
-            let gate = gates[j];
-            if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
-              let targets = gate.targets;
-              for (let k = 0; k < targets.length; k++){
-                if (targets[k] > qbit)
-                  targets[k] -= 1;
+      if (window.currentCircuitId != 0) {
+        let qbit = dto["targets"][0];
+        let state = circuitEditorModule.state[window.currentCircuitId];
+        if (Object.prototype.hasOwnProperty.call(state, "steps")) {
+          for (let i = 0; i < state.steps.length; i++) {
+            let gates = state.steps[i]["gates"];
+            
+            for (let j = 0; j < gates.length; j++) {
+              let gate = gates[j];
+              if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+                if (gate.targets.includes(qbit)) {
+                  gates.splice(j, 1);
+                } 
               }
             }
-          }
-          for (let j = 0; j < gates.length; j++) {
-            let gate = gates[j];
-            if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-              let controls = gate.controls;
-              for (let k = 0; k < controls.length; k++){
-                if (controls[k].target == qbit)
-                  controls.splice(k, 1);
+            for (let j = 0; j < gates.length; j++) {
+              let gate = gates[j];
+              if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
+                let targets = gate.targets;
+                for (let k = 0; k < targets.length; k++){
+                  if (targets[k] > qbit)
+                    targets[k] -= 1;
+                }
               }
             }
-          }
-          for (let j = 0; j < gates.length; j++) {
-            let gate = gates[j];
-            if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
-              let controls = gate.controls;
-              for (let k = 0; k < controls.length; k++){
-                if (controls[k].target > qbit)
-                  controls[k].target -= 1;
+            for (let j = 0; j < gates.length; j++) {
+              let gate = gates[j];
+              if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+                let controls = gate.controls;
+                for (let k = 0; k < controls.length; k++){
+                  if (controls[k].target == qbit)
+                    controls.splice(k, 1);
+                }
               }
             }
-          }
-          for (let j = 0; j < gates.length; j++) {
-            let gate = gates[j];
-            if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
-              let gates = gate.gates;
-              for (let k = 0; k < gates.length; k++){
-                if (gates[k].targets.includes(qbit))
-                  gate.gates.splice(k, 1);
+            for (let j = 0; j < gates.length; j++) {
+              let gate = gates[j];
+              if (Object.prototype.hasOwnProperty.call(gate, "controls")) {
+                let controls = gate.controls;
+                for (let k = 0; k < controls.length; k++){
+                  if (controls[k].target > qbit)
+                    controls[k].target -= 1;
+                }
               }
             }
-          }
-          for (let j = 0; j < gates.length; j++) {
-            let gate = gates[j];
-            if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
-              let gates = gate.gates;
-              for (let k = 0; k < gates.length; k++){
-                let aggregatedGate = gates[k];
-                for (let l = 0; l < aggregatedGate.targets.length; l++){
-                  if (aggregatedGate.targets[l] > qbit)
-                    aggregatedGate.targets[l] -= 1;
+            for (let j = 0; j < gates.length; j++) {
+              let gate = gates[j];
+              if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+                let gates = gate.gates;
+                for (let k = 0; k < gates.length; k++){
+                  if (gates[k].targets.includes(qbit))
+                    gate.gates.splice(k, 1);
+                }
+              }
+            }
+            for (let j = 0; j < gates.length; j++) {
+              let gate = gates[j];
+              if (Object.prototype.hasOwnProperty.call(gate, "gates")) {
+                let gates = gate.gates;
+                for (let k = 0; k < gates.length; k++){
+                  let aggregatedGate = gates[k];
+                  for (let l = 0; l < aggregatedGate.targets.length; l++){
+                    if (aggregatedGate.targets[l] > qbit)
+                      aggregatedGate.targets[l] -= 1;
+                  }
                 }
               }
             }
           }
         }
+      } else {
+        alert("Failed load current project, our server may respond a bit too slow. Please try again in a few seconds. If this still does not work please try to reload the page.")
       }
     },
     removeStep(context, dto) {
-      let step = dto["step"];
-      let state = circuitEditorModule.state[window.currentCircuitId];
-      if (Object.prototype.hasOwnProperty.call(state, "steps")) {
-        for (let i = 0; i < state.steps.length; i++) {
-          let stepIndex = parseInt(state.steps[i].index)
-          if (stepIndex == step) {
-            state.steps.splice(i, 1);
-          } 
-        }
-        for (let i = 0; i < state.steps.length; i++) {
-          let stepIndex = parseInt(state.steps[i].index)
-          if (stepIndex > step) {
-            state.steps[i].index = stepIndex - 1;
-          }
-        }
-      }
-    },
-    removeEmptySteps() {
-      let state = circuitEditorModule.state[window.currentCircuitId];
-      if (Object.prototype.hasOwnProperty.call(state, "steps")) {
-        for (let i = 0; i < state.steps.length; i++) {
-          let step = state.steps[i];
-          if (Object.prototype.hasOwnProperty.call(step, "gates")) {
-            let gates = step["gates"];
-            if (gates.length === 0){
+      if (window.currentCircuitId != 0) {
+        let step = dto["step"];
+        let state = circuitEditorModule.state[window.currentCircuitId];
+        if (Object.prototype.hasOwnProperty.call(state, "steps")) {
+          for (let i = 0; i < state.steps.length; i++) {
+            let stepIndex = parseInt(state.steps[i].index)
+            if (stepIndex == step) {
               state.steps.splice(i, 1);
             }
           }
+          for (let i = 0; i < state.steps.length; i++) {
+            let stepIndex = parseInt(state.steps[i].index)
+            if (stepIndex > step) {
+              state.steps[i].index = stepIndex - 1;
+            }
+          }
         }
+      } else {
+        alert("Failed load current project, our server may respond a bit too slow. Please try again in a few seconds. If this still does not work please try to reload the page.")
+      }
+    },
+    removeEmptySteps() {
+      if (window.currentCircuitId != 0) {
+        let state = circuitEditorModule.state[window.currentCircuitId];
+        if (Object.prototype.hasOwnProperty.call(state, "steps")) {
+          for (let i = 0; i < state.steps.length; i++) {
+            let step = state.steps[i];
+            if (Object.prototype.hasOwnProperty.call(step, "gates")) {
+              let gates = step["gates"];
+              if (gates.length === 0){
+                state.steps.splice(i, 1);
+              }
+            }
+          }
+        }
+      } else {
+        alert("Failed load current project, our server may respond a bit too slow. Please try again in a few seconds. If this still does not work please try to reload the page.")
       }
     },
   },
