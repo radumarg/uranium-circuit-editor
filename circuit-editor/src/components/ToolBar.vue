@@ -374,7 +374,7 @@ it does not make much sense doing that unless you intend to save the circuit as 
       });
     },
     saveProjectOrFile: function() {
-      let publicProject = window.location.href.includes("/circuit-editor/public/");
+      let publicProject = window.location.href.includes("public=true");
       window.alertedOnFaliedSavingCircuit = false;
       if (window.projectId != null && window.projectId > 0 && !publicProject) {
         save_project(window.projectId, this.$store.state.circuitEditorModule);
