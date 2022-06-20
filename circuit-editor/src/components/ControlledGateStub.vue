@@ -3,7 +3,7 @@
     
     <img :src="gateImageSource" :id="id" @dragend="dragEnd" @dragstart="dragStart" alt="Controlled Gates Stubs" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;" />
   
-    <b-modal ref="modal-dialog" size="sm"  centered hide-footer hide-header>
+    <b-modal ref="modal-dialog" size="sm" modal-class="help-sidebar" centered hide-footer hide-header>
 
       <table style="table-layout:fixed;">
         <tr>

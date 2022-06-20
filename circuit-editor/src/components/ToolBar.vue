@@ -84,7 +84,7 @@
     <!-- input form used to open json files to read circuit state from -->
     <input id="file-input" type="file" style="display:none;" />
 
-    <b-modal ref="change-steps-qubits-dialog" size="sm"  centered hide-footer hide-header>
+    <b-modal ref="change-steps-qubits-dialog" size="sm" modal-class="help-sidebar" centered hide-footer hide-header>
 
       <table style="table-layout:fixed;">
         <tr>

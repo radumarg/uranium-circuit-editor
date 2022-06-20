@@ -26,7 +26,7 @@
       </div>
     </table>
 
-    <b-modal ref="change-circuit-name-dialog" size="lg"  centered hide-footer hide-header>
+    <b-modal ref="change-circuit-name-dialog" size="lg" modal-class="help-sidebar" centered hide-footer hide-header>
 
       <table class="modal-dialog-table">
         <tr>

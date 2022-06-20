@@ -23,7 +23,7 @@
       "
     />
 
-    <b-modal ref="modal-dialog" size="sm" centered hide-footer hide-header>
+    <b-modal ref="modal-dialog" size="sm" modal-class="help-sidebar" centered hide-footer hide-header>
       <table style="table-layout: fixed">
         <tr>
           <td colspan="2"></td>
