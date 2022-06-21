@@ -129,6 +129,9 @@ export const circuitEditorModule = {
     insertStepInCircuit: function (context, step) {
       this.commit("circuitEditorModule/insertStep", step);
     },
+    switchGateInCircuit: function (context, dto) {
+      this.commit("circuitEditorModule/switchGate", dto);
+    },
     insertGateInCircuit: function (context, dataTransferObj) {
       return new Promise((resolve, reject) => {
         let elementaryGates = ["identity"];
@@ -702,6 +705,11 @@ export const circuitEditorModule = {
       } else {
         alert("Failed load current project, our server may respond a bit too slow. Please try again in a few seconds. If this still does not work please try to reload the page.")
       }
+    },
+    switchGate(context, dto) {
+      let state = circuitEditorModule.state[window.currentCircuitId];
+      removingGateFromCircuit(state, dto);
+      insertingOneGateInCircuit(state, dto);
     },
     insertGate(context, dto) {
       if (window.currentCircuitId != 0) {

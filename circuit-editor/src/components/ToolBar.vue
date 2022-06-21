@@ -198,7 +198,8 @@ export default {
           mutation.type == 'circuitEditorModule/removeBarrier' ||
           mutation.type == 'circuitEditorModule/removeGates' ||
           mutation.type == 'circuitEditorModule/removeQbit' ||
-          mutation.type == 'circuitEditorModule/removeStep'){
+          mutation.type == 'circuitEditorModule/removeStep' ||
+          mutation.type == 'circuitEditorModule/switchGate') {
         this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
         this.history[window.currentCircuitId].push(JSON.stringify(state.circuitEditorModule[window.currentCircuitId]));
         this.historyUnRoll[window.currentCircuitId] = [];

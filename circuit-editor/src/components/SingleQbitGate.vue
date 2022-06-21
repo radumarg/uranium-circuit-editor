@@ -330,6 +330,40 @@
       </table>
     </b-modal>
 
+    <b-modal ref="switch-gate-dialog" size="sm" modal-class="help-sidebar" centered hide-footer hide-header>
+
+      <table style="table-layout:fixed;">
+        <tr>
+          <td colspan="3" valign="top">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleSwitchGateCloseHover">
+              <b-icon v-if="switchGateCloseIsHovered" v-on:click="hideSwitchGateModal()" v-b-tooltip.hover title="Close dialog" icon="x-square" style="color: #7952b3; float: right;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="x-square" v-on:click="hideSwitchGateModal()" v-b-tooltip.hover title="Close dialog" style="color: #7952b3; float: right;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td width="5px"></td>
+          <td v-b-tooltip.hover width="80px" style="padding: 5px;">New Gate:</td>
+          <td width="180px" style="padding: 5px;">
+            <b-form-select min="0" @keyup.enter.native="handleSwitchGate()" v-model="gateNewName" :options="gatesNames" id="gate-new" style="width:175px;"></b-form-select>
+          </td>
+          <td width="30px"></td>
+        </tr>
+        <tr>
+          <td colspan="3"></td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleSwitchGateSaveHover">
+              <b-icon v-if="switchGateSaveIsHovered" v-on:click="handleSwitchGate()" icon="check" title="Save changes" style="color: #7952b3; float: right;" font-scale="1.7"></b-icon>
+              <b-icon v-else v-on:click="handleSwitchGate()" icon="check" style="color: #7952b3; float: right;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+    </b-modal>
+
   </div>
 </template>
 
@@ -357,9 +391,11 @@ export default {
       trashIsHovered: false,
       closeIsHovered: false,
       replicateGateHelpIsHovered:  false,
+      switchGateCloseIsHovered: false,
       replicateGateModalCloseIsHovered: false,
       saveIsHovered:  false,
       replicateGateModalSaveIsHovered:  false,
+      switchGateSaveIsHovered:  false,
       expandLeftIsHovered:  false,
       expandRightIsHovered:  false,
       expandUpIsHovered:  false,
@@ -378,6 +414,43 @@ export default {
       controlsExpression: this.controls.length > 0 ? this.controls[0] : '',
       controlstatesExpression: this.controlstates.length > 0 ? this.controlstates[0] : '',
       numberOfControlsExpression: this.controls.length,
+      gateNewName: null,
+      gatesNames: [
+        { value: 'c', text: 'c' },
+        { value: 'c-dagger', text: 'c-dagger' },
+        { value: 'h', text: 'h' },
+        { value: 'h-dagger', text: 'h-dagger' },
+        { value: 'hadamard', text: 'hadamard' },
+        { value: 'hadamard-xy', text: 'hadamard-xy' },
+        { value: 'hadamard-yz', text: 'hadamard-yz' },
+        { value: 'hadamard-zx', text: 'hadamard-zx' },
+        { value: 'id', text: 'id' },
+        { value: 'measure-x', text: 'measure-x' },
+        { value: 'measure-y', text: 'measure-y' },
+        { value: 'measure-z', text: 'measure-z' },
+        { value: 'pauli-x', text: 'pauli-x' },
+        { value: 'pauli-y', text: 'pauli-y' },
+        { value: 'pauli-z', text: 'pauli-z' },
+        { value: 'pauli-x-root', text: 'pauli-x-root' },
+        { value: 'pauli-y-root', text: 'pauli-y-root' },
+        { value: 'pauli-z-root', text: 'pauli-z-root' },
+        { value: 'pauli-x-root-dagger', text: 'pauli-x-root-dagger' },
+        { value: 'pauli-y-root-dagger', text: 'pauli-y-root-dagger' },
+        { value: 'pauli-z-root-dagger', text: 'pauli-z-root-dagger' },
+        { value: 'p', text: 'p' },
+        { value: 'rx-theta', text: 'rx-theta' },
+        { value: 'ry-theta', text: 'ry-theta' },
+        { value: 'rz-theta', text: 'rz-theta' },
+        { value: 's', text: 's' },
+        { value: 's-dagger', text: 's-dagger' },
+        { value: 't', text: 't' },
+        { value: 't-dagger', text: 't-dagger' },
+        { value: 'u1', text: 'u1' },
+        { value: 'u2', text: 'u2' },
+        { value: 'u3', text: 'u3' },
+        { value: 'v', text: 'v' },
+        { value: 'v-dagger', text: 'v-dagger' },
+      ],
     }
   },
   watch: {
@@ -413,7 +486,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['insertQbitInCircuit', 'insertStepInCircuit', 'removeGateFromCircuitByUser', 'repositionGateInCircuit', 'replicateGate']),
+    ...mapActions('circuitEditorModule/', ['insertQbitInCircuit', 'insertStepInCircuit', 'removeGateFromCircuitByUser', 'repositionGateInCircuit', 'replicateGate', 'switchGateInCircuit']),
     ...mapGetters("circuitEditorModule/", ["getMaximumStepIndex", "getMaximumQbitIndex"]),
     initializeData: function () {
       this.$data.targetsNew = [...this.targets];
@@ -426,6 +499,9 @@ export default {
         this.selectImage();
       } else if (window.currKey == 'd' || window.currKey == 'D') {
         this.removeGateFromCircuitByUser({'step': this.step, 'targets': this.targets});
+      } else if (window.currKey == 's' || window.currKey == 'S') {
+        this.$data.gateNewName = this.name;
+        this.showSwitchGateModal();
       } else {
         this.initializeData();
         this.showModal();
@@ -514,11 +590,17 @@ number of controls is chosen to be greater than zero. Control state expression m
     handleReplicateGateModalCloseHover(hovered) {
       this.replicateGateModalCloseIsHovered = hovered;
     },
+    handleSwitchGateCloseHover(hovered) {
+      this.switchGateCloseIsHovered = hovered;
+    },
     handleSaveHover(hovered) {
       this.saveIsHovered = hovered;
     },
     handleReplicateGateModalSaveHover(hovered) {
       this.replicateGateModalSaveIsHovered = hovered;
+    },
+    handleSwitchGateSaveHover(hovered) {
+      this.switchGateSaveIsHovered = hovered;
     },
     handleExpandLeftHover(hovered) {
       this.expandLeftIsHovered = hovered;
@@ -638,6 +720,60 @@ number of controls is chosen to be greater than zero. Control state expression m
       this.numberOfControlsExpression = this.controls.length;
       this.$refs['initial-modal-dialog'].hide();
       this.$refs['replicate-gate-modal-dialog'].show();
+    },
+    handleSwitchGate: function(){
+      let gatesWithThetaParameter = ["a", "givens", "cross-resonance", "cross-resonance-dagger", "p", "rx-theta", "ry-theta", "rz-theta", "swap-theta", "u3", "xx", "yy", "zz", "xy"];
+      let gatesWithPhiParameter = ["u2", "u3"];
+      let gatesWithLambdaParameter = ["u1", "u2", "u3"];
+      let gatesWithRootParameter = ["pauli-x-root", "pauli-y-root", "pauli-z-root", "pauli-x-root-dagger", "pauli-y-root-dagger", "pauli-z-root-dagger", "swap-root", "swap-root-dagger"];
+      let gatesWithBitParameter = ["measure-x", "measure-y", "measure-z"];
+      let dto = {"step": this.step, "targets": [...this.targets], "name": this.$data.gateNewName};
+      if (gatesWithPhiParameter.includes(this.$data.gateNewName)) {
+        if (isDefined(this.phi)) {
+          dto['phi'] = this.phi;
+        } else {
+          dto['phi'] = 0;
+        }
+      }
+      if (gatesWithThetaParameter.includes(this.$data.gateNewName)){
+        if (isDefined(this.theta)) {
+          dto['theta'] = this.theta;
+        } else {
+          dto['theta'] = 0;
+        }
+      }
+      if (gatesWithLambdaParameter.includes(this.$data.gateNewName)) {
+        if (isDefined(this.lambda)) {
+        dto['lambda'] = this.lambda;
+        } else {
+          dto['lambda'] = 0;
+        }
+      }
+      if (gatesWithRootParameter.includes(this.$data.gateNewName)) {
+        if (isDefined(this.root)) {
+          dto['root'] = this.root;
+        } else {
+          dto['root'] = "1/1";
+        }
+      }
+      if (gatesWithBitParameter.includes(this.$data.gateNewName)) {
+        if (isDefined(this.bit)) {
+          dto['bit'] = this.bit;
+        } else {
+          dto['bit'] = this.targets[0];
+        }
+      }
+      this.switchGateInCircuit(dto);
+      // when we are done, remove popup dialog
+      this.$refs['switch-gate-dialog'].hide();
+    },
+    showSwitchGateModal: function() {
+      this.switchGateSaveIsHovered = false;
+      this.switchGateCloseIsHovered = false;
+      this.$refs['switch-gate-dialog'].show();
+    },
+    hideSwitchGateModal: function() {
+      this.$refs['switch-gate-dialog'].hide();
     },
     onNumberOfControlsExpressionChange(){
       let controls = parseInt(this.numberOfControlsExpression.toString().trim());

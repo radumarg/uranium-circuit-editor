@@ -221,6 +221,40 @@
       </table>
     </b-modal>
 
+    <b-modal ref="switch-gate-dialog" size="sm" modal-class="help-sidebar" centered hide-footer hide-header>
+
+      <table style="table-layout:fixed;">
+        <tr>
+          <td colspan="3" valign="top">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleSwitchGateCloseHover">
+              <b-icon v-if="switchGateCloseIsHovered" v-on:click="hideSwitchGateModal()" v-b-tooltip.hover title="Close dialog" icon="x-square" style="color: #7952b3; float: right;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="x-square" v-on:click="hideSwitchGateModal()" v-b-tooltip.hover title="Close dialog" style="color: #7952b3; float: right;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td width="5px"></td>
+          <td v-b-tooltip.hover width="80px" style="padding: 5px;">New Gate:</td>
+          <td width="180px" style="padding: 5px;">
+            <b-form-select min="0" @keyup.enter.native="handleSwitchGate()" v-model="gateNewName" :options="gatesNames" id="gate-new" style="width:175px;"></b-form-select>
+          </td>
+          <td width="30px"></td>
+        </tr>
+        <tr>
+          <td colspan="3"></td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleSwitchGateSaveHover">
+              <b-icon v-if="switchGateSaveIsHovered" v-on:click="handleSwitchGate()" icon="check" title="Save changes" style="color: #7952b3; float: right;" font-scale="1.7"></b-icon>
+              <b-icon v-else v-on:click="handleSwitchGate()" icon="check" style="color: #7952b3; float: right;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+    </b-modal>
+
   </div>
 </template>
 
