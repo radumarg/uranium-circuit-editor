@@ -279,6 +279,10 @@ export default {
       targetsNewFirst: this.targets[0],
       targetsNewLast: this.targets[this.targets.length - 1],
       targetsExpressionNew: this.targets_expression,
+      gatesNames: [
+        { value: 'qft', text: 'qft' },
+        { value: 'qft-dagger', text: 'qft-dagger' },
+      ],
     }
   },
   methods: {

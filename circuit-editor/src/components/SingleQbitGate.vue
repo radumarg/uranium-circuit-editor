@@ -424,7 +424,7 @@ export default {
         { value: 'hadamard-xy', text: 'hadamard-xy' },
         { value: 'hadamard-yz', text: 'hadamard-yz' },
         { value: 'hadamard-zx', text: 'hadamard-zx' },
-        { value: 'id', text: 'id' },
+        { value: 'identity', text: 'identity' },
         { value: 'measure-x', text: 'measure-x' },
         { value: 'measure-y', text: 'measure-y' },
         { value: 'measure-z', text: 'measure-z' },
@@ -723,11 +723,17 @@ number of controls is chosen to be greater than zero. Control state expression m
     },
     handleSwitchGate: function(){
       let gatesWithThetaParameter = ["a", "givens", "cross-resonance", "cross-resonance-dagger", "p", "rx-theta", "ry-theta", "rz-theta", "swap-theta", "u3", "xx", "yy", "zz", "xy"];
-      let gatesWithPhiParameter = ["u2", "u3"];
+      let gatesWithPhiParameter = ["a", "u2", "u3"];
       let gatesWithLambdaParameter = ["u1", "u2", "u3"];
       let gatesWithRootParameter = ["pauli-x-root", "pauli-y-root", "pauli-z-root", "pauli-x-root-dagger", "pauli-y-root-dagger", "pauli-z-root-dagger", "swap-root", "swap-root-dagger"];
       let gatesWithBitParameter = ["measure-x", "measure-y", "measure-z"];
       let dto = {"step": this.step, "targets": [...this.targets], "name": this.$data.gateNewName};
+      if (this.controls && this.controls.length > 0){
+        dto['controls'] = [...this.controls];
+      }
+      if (this.controlstates && this.controlstates.length > 0){
+        dto['controlstates'] = [...this.controlstates];
+      }
       if (gatesWithPhiParameter.includes(this.$data.gateNewName)) {
         if (isDefined(this.phi)) {
           dto['phi'] = this.phi;
