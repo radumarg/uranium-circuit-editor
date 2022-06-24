@@ -47,8 +47,12 @@
 
       // Set height of: state vector tab, probabilities tab, circuit
       // Weird webpack bug: javascript string interpolation cannot be used here.
-      var tabHeight = String(document.body.clientHeight -  96) + "px";
-      document.getElementById('html').style.setProperty("--tab-height", tabHeight);
+      var circuitHeight = String(document.body.clientHeight -  96) + "px";
+      document.getElementById('html').style.setProperty("--circuit-height", circuitHeight);
+
+
+      var tabCircuitHeight = String(document.body.clientHeight -  142) + "px";
+      document.getElementById('html').style.setProperty("--tab-circuit-height", tabCircuitHeight);
 
       // Set height of gates pallete
       // Weird webpack bug: javascript string interpolation cannot be used here.

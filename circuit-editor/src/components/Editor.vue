@@ -393,9 +393,20 @@ export default {
   created() {
     this.$root.$on('currentCircuitSwitch', () => { this.$forceUpdate(); });
     this.$root.$on('circuitAbbreviationChanged', () => { this.$forceUpdate(); });
-    this.$root.$on("switchThemeDark", boolFlag => {
+    this.$root.$on("switchThemeDark", darkTheme => {
+      this.setTheme(darkTheme);
+      if (window.selectBackgroundColor)
+        undoGatesSelection(true, true);
+    });
+  },
+  mounted() {
+    let darkTheme = (getUserInterfaceSetting("dark-theme") === 'true');
+    this.setTheme(darkTheme);
+  },
+  methods: {
+    setTheme: function (darkTheme) {
       if (this.$refs["gatesTable"] != null) {
-        if (boolFlag) {
+        if (darkTheme) {
           this.$refs["gatesTable"].style.backgroundColor = window.darkBackgroundColor;
           this.$refs["gatesTable"].style.borderTopColor = window.darkBackgroundColor;
           this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.darkBackgroundColor}`;
@@ -411,10 +422,8 @@ export default {
           }
         }
       }
-      if (window.selectBackgroundColor)
-        undoGatesSelection(true, true);
-    });
-  },
+    }
+  }
 };
 </script>
 

@@ -276,6 +276,7 @@ export default {
           this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
           sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
         }
+        this.$root.$emit("circuitModifiedFromMenu");
       }
     },
     redo: function() {
@@ -287,6 +288,7 @@ export default {
         this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
         // update circuit gates in a separate thread if any circuit gate exists
         sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
+        this.$root.$emit("circuitModifiedFromMenu");
       }
     },
     initializeProjectHistory: function() {

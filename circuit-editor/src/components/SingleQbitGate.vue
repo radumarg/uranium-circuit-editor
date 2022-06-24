@@ -499,7 +499,7 @@ export default {
         this.selectImage();
       } else if (window.currKey == 'd' || window.currKey == 'D') {
         this.removeGateFromCircuitByUser({'step': this.step, 'targets': this.targets});
-      } else if (window.currKey == 's' || window.currKey == 'S') {
+      } else if ((window.currKey == 's' || window.currKey == 'S') && this.name != 'circuit' && this.name != 'aggregate') {
         this.$data.gateNewName = this.name;
         this.showSwitchGateModal();
       } else {

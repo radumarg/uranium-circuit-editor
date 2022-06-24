@@ -2,13 +2,13 @@
 
   <b-container fluid="xs" class="h-100">
 
-    <b-container fluid="xs" style="height: 100%;" :style="{display: liveSimulation ? 'block' : 'none'}" id="splittedEditor">
+    <b-container v-if="liveSimulation" fluid="xs" style="height: 100%;">
       <b-row no-gutters style="height: 100%;">
         <b-col class="single-tab" style="width: 100%;">
           <Editor id="editor1" />
         </b-col>
         <b-col style="max-width: 370px;" class="single-tab">
-          <b-tabs content-class="mt-1"  id="tabbedSplitEditor" style="height: 100%;">
+          <b-tabs content-class="mt-1" style="height: 100%;">
             <b-tab title="Probabilities" v-on:click="onProbabilitiesTabChanged" style="height: 100%;">
               <HorizontalColumnChart style="height: 100%;"/>
             </b-tab>
@@ -20,15 +20,15 @@
       </b-row>
     </b-container>
 
-    <b-tabs content-class="mt-1" :style="{display: !liveSimulation ? 'block' : 'none'}" class="single-tab" id="tabbedEditor">
-      <b-tab title="Circuit" ref="circuitTab">
-        <Editor id="editor2" />
+    <b-tabs content-class="mt-1 flex-grow-1"  class="h-100 d-flex flex-column">
+      <b-tab title="Circuit" ref="circuitTab" class="h-10">
+        <Editor id="editor2" class="editor"/>
       </b-tab>
-      <b-tab title="Column Chart" v-on:click="onTabChanged" >
-        <VerticalColumnChart />
+      <b-tab title="Column Chart" v-on:click="onTabChanged" class="h-100">
+        <VerticalColumnChart class="chart-in-tab"/>
       </b-tab>
-      <b-tab title="Pie Chart" v-on:click="onTabChanged">
-        <PieChart />
+      <b-tab title="Pie Chart" v-on:click="onTabChanged" class="h-100">
+        <PieChart class="chart-in-tab" />
       </b-tab>
     </b-tabs>
 
@@ -62,7 +62,7 @@ export default {
     }
   },
   created() {
-    this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.adjustView(simulatingLive)});
+    this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.adjustView(simulatingLive);});
     this.$root.$on('circuitModifiedFromMenu', () => {this.switchToEditorTab()});
     this.$root.$on('switchLegendBase', () => {this.switchToEditorTab(); this.$data.lastSimulatedCircuit = null;});
     this.$root.$on('switchEndianess', () => {this.endianessChange()});
@@ -117,21 +117,8 @@ export default {
       this.triggerSimulationJob(circuitStates, positionInfo);
     },
     adjustView: function(simulatingLive){
-      let tabbedEditor = document.getElementById("tabbedEditor");
-      if (simulatingLive == true){
-        tabbedEditor.style.display = "none";
-      } else {
-        tabbedEditor.style.display = "block";
-      }
-      
-      let splittedEditor = document.getElementById("splittedEditor");
-      if (simulatingLive == true){
-        splittedEditor.style.display = "block";
-      } else {
-        splittedEditor.style.display = "none";
-      }
-
-      this.$refs.circuitTab.activate();
+      this.$data.liveSimulation = simulatingLive;
+      this.$forceUpdate();
     },
     switchToEditorTab: function(){
       this.$refs.circuitTab.activate();
@@ -144,7 +131,21 @@ export default {
 
 .single-tab {
   overflow-x: scroll;
-  height: calc(var(--tab-height));
+  height: calc(var(--circuit-height));
 }
+
+.chart-in-tab {
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
+
+.editor {
+  overflow-x: scroll;
+  overflow-y: scroll;
+  height: calc(var(--tab-circuit-height));
+  max-height: calc(var(--tab-circuit-height));
+  min-height: calc(var(--tab-circuit-height));
+}
+
 
 </style>
