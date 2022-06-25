@@ -7,13 +7,13 @@
         <b-col class="single-tab" style="width: 100%;">
           <Editor id="editor1" />
         </b-col>
-        <b-col style="max-width: 370px;" class="single-tab">
-          <b-tabs content-class="mt-1" style="height: 100%;">
-            <b-tab title="Probabilities" v-on:click="onProbabilitiesTabChanged" style="height: 100%;">
-              <HorizontalColumnChart style="height: 100%;"/>
+        <b-col style="max-width: 370px;" class="horizontal-plots">
+          <b-tabs content-class="mt-1">
+            <b-tab title="Probabilities" v-on:click="onProbabilitiesTabChanged">
+              <HorizontalColumnChart style="overflow: scroll;"/>
             </b-tab>
             <b-tab title="State-Vector (Max 8-Q)" v-on:click="onStatevectorTabChanged">
-              <StateVectorChart style="height: 100%;"/>
+              <StateVectorChart style="overflow: scroll;"/>
             </b-tab>
           </b-tabs>
         </b-col>
@@ -21,7 +21,7 @@
     </b-container>
 
     <b-tabs content-class="mt-1 flex-grow-1"  class="h-100 d-flex flex-column">
-      <b-tab title="Circuit" ref="circuitTab" class="h-10">
+      <b-tab title="Circuit" ref="circuitTab">
         <Editor id="editor2" class="editor"/>
       </b-tab>
       <b-tab title="Column Chart" v-on:click="onTabChanged" class="h-100">
@@ -62,7 +62,12 @@ export default {
     }
   },
   created() {
-    this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.adjustView(simulatingLive);});
+    this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {
+      this.adjustView(simulatingLive);
+      if (!simulatingLive) {
+        this.switchToEditorTab();
+      }
+    });
     this.$root.$on('circuitModifiedFromMenu', () => {this.switchToEditorTab()});
     this.$root.$on('switchLegendBase', () => {this.switchToEditorTab(); this.$data.lastSimulatedCircuit = null;});
     this.$root.$on('switchEndianess', () => {this.endianessChange()});
@@ -147,5 +152,10 @@ export default {
   min-height: calc(var(--tab-circuit-height));
 }
 
+.horizontal-plots {
+  zoom: calc(var(--help-sidebar-zoom));
+  overflow-y: scroll;
+  overflow-x: scroll;
+}
 
 </style>

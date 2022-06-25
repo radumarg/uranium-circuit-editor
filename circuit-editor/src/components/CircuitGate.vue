@@ -633,11 +633,11 @@ export default {
     },
     handleSave: function(){
       if (!Number.isInteger(this.$data.targetsNewFirst)){
-        alert("Please enter an integer number for the first target qubit!");
+        alert("The first target qubit must be an integer positive number!");
         return;
       }
       if (!Number.isInteger(this.$data.circuitPowerNew)){
-        alert("Please enter an integer number circuit power!");
+        alert("The circuit power must be an integer number!");
         return;
       }
       if (this.$data.circuitPowerNew == 0){

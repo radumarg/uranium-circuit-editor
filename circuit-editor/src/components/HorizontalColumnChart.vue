@@ -53,12 +53,18 @@ export default {
         measureGates: {},
         defaultNumberOfBins: 128,
         liveSimulation: getUserInterfaceSetting("live-simulation") === 'true',
+        updateKey: 0,
       }
    },
    methods: {
       ...mapGetters("circuitEditorModule/", ["getMaximumQbitIndex"]),
       updateData(probabilitiesDTO) {
-         const [binnedStateProbabilities, maxProbability] = probabilitiesDTO;
+         let [binnedStateProbabilities, maxProbability] = probabilitiesDTO;
+         if (binnedStateProbabilities.length == 0) {
+          // this is needed s.t. probabilities
+          // plot is cleared on circuit reset
+          binnedStateProbabilities = null;
+         }
          this.$data.chartOptionsProbabilities = {
             type: 'horizontal column',
             axisToZoom: "x",
@@ -163,6 +169,10 @@ export default {
       this.$root.$on('switchEndianess', () => {this.runSimulation(this.$store.state.circuitEditorModule, false)});
       this.$root.$on('currentCircuitSwitch', () => {this.runSimulation(this.$store.state.circuitEditorModule)});
    },
+  mounted() {
+    // neded to display results when switching to live simulation mode
+    this.runSimulation(this.$store.state.circuitEditorModule);
+  },
 }
 </script>
 
