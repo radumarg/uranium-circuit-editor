@@ -154,13 +154,18 @@ export default {
       gateImage += '<g>';
       if (abbreviation.length == 1){
         gateImage += `<rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke:${gateColor}; stroke-width:3.8; stroke-opacity:1;"/>`;
-        gateImage += `<text x="8" y="28" style="font-size: 27px; font-style: italic; fill: ${gateColor}; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">${abbreviation}</tspan></text>`;
+        gateImage += `<text x="8" y="28" style="font-size: 26px; font-style: italic; fill: ${gateColor}; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">${abbreviation}</tspan></text>`;
       } else if (abbreviation.length == 2){
         gateImage += `<rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke:${gateColor}; stroke-width:3.8; stroke-opacity:1;"/>`;
-        gateImage += `<text x="5" y="28" style="font-size: 27px; font-style: italic; fill: ${gateColor}; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 11px;">${abbreviation}</tspan></text>`;
+        gateImage += `<text x="5" y="28" style="font-size: 26px; font-style: italic; fill: ${gateColor}; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 12px;">${abbreviation}</tspan></text>`;
+      } else if (abbreviation == abbreviation.toLowerCase()){
+        gateImage += `<rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke:${gateColor}; stroke-width:3.8; stroke-opacity:1;"/>`;
+        gateImage += `<text x="2.5" y="28" style="font-size: 26px; font-style: italic; fill: ${gateColor}; white-space: pre;">C</text>`;
+        gateImage += `<text x="17" y="33" style="font-size: 12px; font-style: italic; fill: ${gateColor}; white-space: pre;">${abbreviation}</text>`;
       } else {
         gateImage += `<rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke:${gateColor}; stroke-width:3.8; stroke-opacity:1;"/>`;
-        gateImage += `<text x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: ${gateColor}; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 10px;">${abbreviation}</tspan></text>`;
+        gateImage += `<text x="2.5" y="28" style="font-size: 26px; font-style: italic; fill: ${gateColor}; white-space: pre;">C</text>`;
+        gateImage += `<text x="15.5" y="33" style="font-size: 11px; font-style: italic; fill: ${gateColor}; white-space: pre;">${abbreviation}</text>`;
       }
       gateImage += '</g>';
       gateImage += '</svg>';

@@ -385,7 +385,7 @@
           <td width="5px"></td>
           <td v-b-tooltip.hover width="80px" style="padding: 5px;">New Gate:</td>
           <td width="180px" style="padding: 5px;">
-            <b-form-select min="0" @keyup.enter.native="handleSwitchGate()" v-model="gateNewName" :options="gatesNames" id="gate-new" style="width:175px;"></b-form-select>
+            <b-form-select min="0" @change="handleSwitchGate()" v-model="gateNewName" :options="gatesNames" id="gate-new" style="width:175px;"></b-form-select>
           </td>
           <td width="30px"></td>
         </tr>

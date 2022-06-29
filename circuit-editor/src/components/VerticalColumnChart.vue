@@ -25,6 +25,7 @@ import JSCharting from 'jscharting-vue';
 import { mapGetters } from "vuex";
 import { JSC } from 'jscharting-vue';
 import { getBinnedProbabilities, getMeasureGates } from "../store/modules/simulationCharts.js";
+import { getUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
 
 export default {
    name: 'VerticalColumnChart',
@@ -126,7 +127,7 @@ export default {
          maxRange: undefined,
          qubits: 0,
          measureGates: {},
-         defaultNumberOfBins: 256,
+         defaultNumberOfBins: parseInt(getUserInterfaceSetting('probability-bins')),
       }
    },
    methods: {
@@ -146,6 +147,7 @@ export default {
                   interval: maxProbability/10.0,
                }
             },
+            events_selection: this.selectionHandler,
          };
       },
       showSpinner: function () {
@@ -190,7 +192,7 @@ export default {
          let chartDiv = document.getElementById("chartContainerColumns");
          chartDiv.style.display = "block";
       },
-      selectionHandler(ev) { 
+      selectionHandler(ev) {
          let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateProbabilities.length);
          if (this.$data.maxRange - this.$data.minRange > numberOfBins)
          {

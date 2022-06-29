@@ -27,7 +27,20 @@
         Please not that while all other controls from tool bar, tool bar included are Vue Material controls, b-form-select is a BootstrapVue control.
         At some point we should migrate the entire toolbar to BootstrapVue, Vue Material is less customizable than BootstrapVue.  
       -->
-      <b-form-select style="width:120px; max-width: 120px; min-width: 120px;" v-model="zoomLevel" v-on:change="switchZoomLevel()" :options="zoomLevels" size="sm" class="mt-1"></b-form-select>
+      <table>
+      <tr>
+        <td>
+          <b-form-select style="width:120px; max-width: 120px; min-width: 120px; height: 28px;" v-model="zoomLevel" v-on:change="switchZoomLevel()" :options="zoomLevels" size="sm" class="mt-1"></b-form-select>
+          <md-tooltip md-direction="left">Page zoom factor</md-tooltip>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding-bottom: 4px">
+          <b-form-select style="width:120px; max-width: 120px; min-width: 120px; height: 28px;" v-model="probabilityBins" v-on:change="switchProbabilityBins()" :options="probabilityBinValues" size="sm" class="mt-1"></b-form-select>
+          <md-tooltip md-direction="left">No bins in probability plot</md-tooltip>
+        </td>
+      </tr>
+      </table>
 
       <div class="md-toolbar-offset">
         <table>
@@ -172,6 +185,14 @@ export default {
           { value: '35', text: 'Zoom: 35%' },
           { value: '30', text: 'Zoom: 30%' },
           { value: '25', text: 'Zoom: 25%' },
+        ],
+      probabilityBins: getUserInterfaceSetting("probability-bins"),
+      probabilityBinValues: [
+          { value: '32', text: 'Pr. Bins: 32' },
+          { value: '64', text: 'Pr. Bins: 64' },
+          { value: '128', text: 'Pr. Bins: 128' },
+          { value: '256', text: 'Pr. Bins: 256' },
+          { value: '512', text: 'Pr. Bins: 512' },
         ],
       closeIsHovered: false,
       saveIsHovered:  false,
@@ -455,6 +476,17 @@ it does not make much sense doing that unless you intend to save the circuit as 
 for this domain from the lock image in the browser url box, reload the page and when prompted accept functionality cookies. \
 If you do not want to accept cookies, you can zoom the page yourself from the keyboard.");
         this.zoomLevel = '100';
+      }
+    },
+    switchProbabilityBins: function(){
+      if (Vue.$cookies.get('functionality_cookies') === 'accepted'){
+        setUserInterfaceSetting('probability-bins', this.probabilityBins);
+        window.location.reload();
+      } else {
+        alert("You have not accepted functionality cookies hence changing page zoom level will not work. You can remove all cookies \
+for this domain from the lock image in the browser url box, reload the page and when prompted accept functionality cookies. \
+If you do not want to accept cookies, you can zoom the page yourself from the keyboard.");
+        this.probabilityBins = 128;
       }
     },
     commitCircuitState: function(event) {

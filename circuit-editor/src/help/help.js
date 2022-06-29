@@ -10,11 +10,11 @@ export function retriveNoteHtml(gateName) {
 export function retriveSimpleGateHelpHtml(gateName) {
 
     if (gateName == "u3") {
-        return 'This is a generic, three parametric, unitary single bit gate. It can be expressed in termed of elementary rotations as around X, Y and Z axes as: U3(θ, φ, λ) = Rz(φ)&nbsp;Ry(θ)&nbsp;Rz(λ). The range for θ, φ and λ is [0, 4π).';
+        return 'This is a generic, three parametric, unitary single bit gate. It can be expressed in termed of elementary rotations as around X, Y and Z axes as: U3(θ, φ, λ) = Rz(φ)&nbsp;Ry(θ)&nbsp;Rz(λ). The range for the absolute values of φ and λ is [0, 2π) while for θ the range is [0, π). Angles are always specified in radians.';
     } else if (gateName == "u2") {
-        return 'This is a generic, two parametric, unitary single bit gate and is defined as: u3(π/2, φ, λ). It can be expressed in termed of elementary rotations as around X, Y and Z axes as: U2(φ, λ) = Rz(φ)&nbsp;Ry(π/2)&nbsp;Rz(λ).  The range for θ and φ is [0, 4π).';
+        return 'This is a generic, two parametric, unitary single bit gate and is defined as: u3(π/2, φ, λ). It can be expressed in termed of elementary rotations as around X, Y and Z axes as: U2(φ, λ) = Rz(φ)&nbsp;Ry(π/2)&nbsp;Rz(λ).  The range for the absolute values of φ and λ is [0, 2π), angles are always specified in radians.';
     } else if (gateName == "u1") {
-        return 'This is a generic, one parameter, unitary single bit gate and is defined as: u3(0, 0, λ). The "u1" gate acts on a single qubit. Leaves the basis state |0⟩ unchanged and map |1⟩ to exp(i*λ)|1⟩. The probability of measuring a |0⟩ or |1⟩ is unchanged after applying this gate, however it modifies the phase of the quantum state. The z, s and t gates are special cases of "u1" for λ values given by π, π/2 and π/4 respectively.  The range for λ is [0, 4π).'
+        return 'This is a generic, one parameter, unitary single bit gate and is defined as: u3(0, 0, λ). The "u1" gate acts on a single qubit. Leaves the basis state |0⟩ unchanged and map |1⟩ to exp(i*λ)|1⟩. The probability of measuring a |0⟩ or |1⟩ is unchanged after applying this gate, however it modifies the phase of the quantum state. The z, s and t gates are special cases of "u1" for λ values given by π, π/2 and π/4 respectively.  The range for the absolute value of λ is [0, 2π), angles are always specified in radians.'
     } else if (gateName == "hadamard") {
         return 'The "hadamard" gate acts on a single qubit and is defined as: u2(0, π). This gate creates a superposition by mapping |0⟩ to |+⟩ and |1⟩ to |-⟩. It is the combination of two rotations, first a π rotation about the Z-axis of the Bloch sphere followed by a π/2 about the Y-axis. Alternatively, it can be represented as a π rotation around an axis diagonal in the Z-X plane. The Hadamard gate is the one-qubit version of the quantum Fourier transform.';
     } else if (gateName == "aggregate") {
@@ -22,7 +22,7 @@ export function retriveSimpleGateHelpHtml(gateName) {
     }  else if (gateName == "identity") {
       return 'The "identity" gate acts on a single qubit and preserves current state of the qubit it is applied to.';
     }  else if (gateName == "p") {
-      return 'This is the phase shift gate, it shifts the phase of the |1⟩ state relative to the |0⟩ state. It leaves the basis state |0⟩ unchanged and map |1⟩ to exp(i*θ)|1⟩. The range for θ is [0, 4π). It is identical to "u1" gate (except for the name of free parameter) and it was added only because it might be considered more expressive in certain contexts. Should not be confused with the "s" gate which historically was sometimes named "p".'
+      return 'This is the phase shift gate, it shifts the phase of the |1⟩ state relative to the |0⟩ state. It leaves the basis state |0⟩ unchanged and map |1⟩ to exp(i*θ)|1⟩. The range for the absolute values of θ is [0, 4π), angles are always specified in radians. It is identical to "u1" gate (except for the name of free parameter) and it was added only because it might be considered more expressive in certain contexts. Should not be confused with the "s" gate which historically was sometimes named "p".'
     }   else if (gateName == "pauli-x") {
         return 'The "pauli-x" gate acts on a single qubit and is defined as: u3(π, 0, π). With respect to the computational basis it is the quantum equivalent of the NOT gate for classical computers since it maps |0⟩ to |1⟩ and |1⟩ to |0⟩. It is equivalent to a rotation around the X-axis of the Bloch sphere by π radians.';
     } else if (gateName == "pauli-y") {
@@ -38,11 +38,11 @@ export function retriveSimpleGateHelpHtml(gateName) {
     } else if (gateName == "t-dagger") {
         return 'The "t-dagger" gate acts on a single qubit and is defined as: u1(-π/4). It is the conjugate transpose of "t" gate. It represents a clockwise π/4 radians rotation around the Z-axis of the Bloch sphere up to a global phase factor. Leaves the basis state |0⟩ unchanged and map |1⟩ to exp(-i*π/4) |1⟩. The probability of measuring a |0⟩ or |1⟩ is unchanged after applying this gate, however it modifies the phase of the quantum state. This gate is an example of a non-Clifford gate.';
     } else if (gateName == "rx-theta") {
-        return 'The "rx-theta" gate acts on a single qubit and is defined as: u3(θ, -π/2, π/2). It is an anti-clockwise rotation through angle θ radians around the X-axis of the Bloch sphere and can be expressed in terms of X Pauli operator as: exp(-i * θ/2 * X). The range for θ is [0, 4π).';
+        return 'The "rx-theta" gate acts on a single qubit and is defined as: u3(θ, -π/2, π/2). It is an anti-clockwise rotation through angle θ radians around the X-axis of the Bloch sphere and can be expressed in terms of X Pauli operator as: exp(-i * θ/2 * X). The range for the absolute values of θ is [0, 4π), angles are always specified in radians.';
     } else if (gateName == "ry-theta") {
-        return 'The "ry-theta" gate acts on a single qubit and is defined as: u3(θ, 0, 0). It is an anti-clockwise rotation through angle θ radians around the Y-axis of the Bloch sphere and can be expressed in terms of Y Pauli operator as: exp(-i * θ/2 *Y). The range for θ is [0, 4π).';
+        return 'The "ry-theta" gate acts on a single qubit and is defined as: u3(θ, 0, 0). It is an anti-clockwise rotation through angle θ radians around the Y-axis of the Bloch sphere and can be expressed in terms of Y Pauli operator as: exp(-i * θ/2 *Y). The range for the absolute values of θ is [0, 4π), angles are always specified in radians.';
     } else if (gateName == "rz-theta") {
-        return 'The "rz-theta" gate acts on a single qubit and is different from u1(θ) by a global phase given by exp(-iθ/2). It is an anti-clockwise rotation through angle θ radians around the Z-axis of the Bloch sphere  and can be expressed in terms of Z Pauli operator as: exp(-i * θ/2 * Z). The range for θ is [0, 4π).';
+        return 'The "rz-theta" gate acts on a single qubit and is different from u1(θ) by a global phase given by exp(-iθ/2). It is an anti-clockwise rotation through angle θ radians around the Z-axis of the Bloch sphere  and can be expressed in terms of Z Pauli operator as: exp(-i * θ/2 * Z). The range for the absolute values of θ is [0, 4π), angles are always specified in radians.';
     } else if (gateName == "s") {
         return 'The "s" gate acts on a single qubit and is defined as: u1(π/2). It represents an anti-clockwise π/2 radians rotation around the Z-axis of the Bloch sphere. The "s" gate is related to the "t" gate by the relationship s = t * t. It is also the square root of pauli-z gate. The "s" gate is a special cases of "u1" for λ equal to π/2.';
     } else if (gateName == "s-dagger") {
@@ -52,7 +52,7 @@ export function retriveSimpleGateHelpHtml(gateName) {
     } else if (gateName == "sqrt-swap") {
         return 'This gate performs half-way a two-qubit swap.  It the square root of swap gate and when expressed as a canonical gate is equal to Canonical(1/4, 1/4, 1/4).';
     } else if (gateName == "swap-theta") {
-        return 'This gate performs partial a two-qubit swap and is equivalent to Canonical(1/2, 1/2, 1/2 - θ/π). Equivalence between two gates means they have the same unitary operator up to a global phase factor. The range for θ is [0, 4π).';
+        return 'This gate performs partial a two-qubit swap and is equivalent to Canonical(1/2, 1/2, 1/2 - θ/π). Equivalence between two gates means they have the same unitary operator up to a global phase factor. The range for the absolute values of θ is [0, 4π), angles are always specified in radians.';
     } else if (gateName == "iswap") {
         return 'This gate performs partial a two-qubit swap and is equivalent to Canonical(-1/2, -1/2, 0). Equivalence between two gates means they have the same unitary operator up to a global phase factor.';
     } else if (gateName == "measure-x") {
@@ -68,11 +68,11 @@ each qubit is measured into a classical bit with index equal to the qubit index 
 When multiple qubits are measured in the same classical bit the result is given by addition modulo 2 of each measurement result. When no measure gates are present in the circuit simulation results are identical to the situation where \
 each qubit is measured into a classical bit with index equal to the qubit index of the measure gate.';
     } else if (gateName == "xx") {
-        return 'XX Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * X⊗X). The range for θ is [0, 4π). When expressed in terms of  canonical gate it is equal to Canonical(θ, 0, 0). The Ising XX, YY and ZZ gates all commute with one another.';
+        return 'XX Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * X⊗X). The range for the absolute values of θ is [0, 4π), angles are always specified in radians. When expressed in terms of  canonical gate it is equal to Canonical(θ, 0, 0). The Ising XX, YY and ZZ gates all commute with one another.';
     } else if (gateName == "yy") {
-        return 'YY Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * Y⊗Y). The range for θ is [0, 4π). When expressed in terms of  canonical gate it is equal to Canonical(0, θ, 0). The Ising XX, YY and ZZ gates all commute with one another.';
+        return 'YY Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * Y⊗Y). The range for the absolute values of θ is [0, 4π), angles are always specified in radians. When expressed in terms of  canonical gate it is equal to Canonical(0, θ, 0). The Ising XX, YY and ZZ gates all commute with one another.';
     } else if (gateName == "zz") {
-        return 'ZZ Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * Z⊗Z). The range for θ is [0, 4π). When expressed in terms of  canonical gate it is equal to Canonical(0, 0, θ). The Ising XX, YY and ZZ gates all commute with one another.';
+        return 'ZZ Ising gate is a native gate for laser driven trapped ions devices and it is defined as: exp(-i * θ/2 * Z⊗Z). The range for the absolute values of θ is [0, 4π), angles are always specified in radians. When expressed in terms of  canonical gate it is equal to Canonical(0, 0, θ). The Ising XX, YY and ZZ gates all commute with one another.';
     } else if (gateName == "pauli-x-root") {
         return 'The "pauli-x-root" gate is the root of a "pauli-x" gate. Because the non integer power of a matrix is not uniquely determined, this gate is defined as an anti-clockwise rotation around X-axis of Bloch sphere with an angle given by π/t or, depending on the chosen parametrization, π/2^k radians.';
     } else if (gateName == "pauli-y-root") {
@@ -116,9 +116,9 @@ each qubit is measured into a classical bit with index equal to the qubit index 
     } else if (gateName == "molmer-sorensen-dagger") {
       return 'This is the conjugate transpose of Mølmer-Sørensen gate. Ir is a natural gate for laser driven trapped ions and when expressed as a canonical gate is equal to Canonical(1/2, 0, 0).';
     } else if (gateName == "xy") {
-      return 'This is the "xy" gate and it is defined as: exp(-i * θ/2 * (X⊗X + Y⊗Y)). When expressed in terms of  canonical gate it is equal to Canonical(θ, θ, 0). The range for θ is [0, 4π).';
+      return 'This is the "xy" gate and it is defined as: exp(-i * θ/2 * (X⊗X + Y⊗Y)). When expressed in terms of  canonical gate it is equal to Canonical(θ, θ, 0). The range for the absolute values of θ is [0, 4π), angles are always specified in radians.';
     } else if (gateName == "a") {
-      return 'The "a" gate conserves the number of 1s versus 0s in the computational basis and is used in the VQE ansatz. The range for θ and φ is [0, 4π).'
+      return 'The "a" gate conserves the number of 1s versus 0s in the computational basis and is used in the VQE ansatz. The range for the absolute values of θ and φ is [0, 4π).'
     } else if (gateName == "berkeley") {
       return 'This is the Berkeley gate. When expressed in terms of canonical gate it is equal to Canonical(−1/2, −1/4, 0).';
     } else if (gateName == "berkeley-dagger") {
@@ -136,7 +136,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
     } else if (gateName == "canonical") {
       return 'The canonical gate is a 3-parameter quantum logic gate that acts on two qubits and appears in Kraus-Cirac decomposition.';
     } else if (gateName == "givens") {
-      return 'This "givens" gate is defined as: exp(-i * θ/2 * (X⊗X - Y⊗Y)). The range for θ is [0, 4π). The Givens gate occurs in quantum computational chemistry and when expressed as a canonical gate is equivalent to Canonical(θ/π, θ/π, 0). Equivalence between two gates means they have the same unitary operator up to a global phase factor.';
+      return 'This "givens" gate is defined as: exp(-i * θ/2 * (X⊗X - Y⊗Y)). The range for the absolute values of θ is [0, 4π), angles are always specified in radians. The Givens gate occurs in quantum computational chemistry and when expressed as a canonical gate is equivalent to Canonical(θ/π, θ/π, 0). Equivalence between two gates means they have the same unitary operator up to a global phase factor.';
     } else if (gateName == "cross-resonance") {
       return 'The "cross-resonance" gate (CR) for superconducting qubits implements a ZX interaction and is defined as: exp(-i * θ/2 * (Z⊗X)). Because in real life the CR gate is implemented using weakly anharmonic transmon qubits in practice there exist other smaller interactions terms in the interaction hamiltonian besides the dominant Z⊗X term. The CR gate is maximally entangling at θ = π/2.';
     } else if (gateName == "cross-resonance-dagger") {
@@ -190,6 +190,7 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             will figure out which is the nearest gate in order to attach the control to. <br> \
             - clicking over a control qubit opens up a pop-up dialog where control settings can be adjusted or the control can be removed. <br> \
             - a control can also be deleted by pressing the <i>'d'</i> or <i>'D'</i> key while clicking the control image in the circuit.  <br> \
+            - the state of a control can be toggled can by pressing the <i>'s'</i> or <i>'S'</i> key (think of this as switch), while clicking the control image in the circuit.  <br> \
             - a control position can be adjusted by dragging the control image similar to how it's done for regular gate. <br> \
             - if the <i>'Shift'</i> key is pressed during dragging a control qubit the original control is not removed and a copy of the \
             control is placed at the drop location.  <br> \

@@ -277,6 +277,69 @@ export default {
       );
       this.$refs['modal-dialog'].hide();
     },
+    handleToggleControl: function(){
+      let controlStatesNew = [...this.controlstates]
+      let controlsNew = [...this.controls];
+      let controlIndex = this.controls.indexOf(this.control);
+      let controlState = controlStatesNew[controlIndex];
+      if (controlState == '1') {
+        controlStatesNew[controlIndex] = '0';
+      } else if (controlState == '0') {
+        controlStatesNew[controlIndex] = '1';
+      } else if (controlState == '+') {
+        controlStatesNew[controlIndex] = '-';
+      } else if (controlState == '-') {
+        controlStatesNew[controlIndex] = '+';
+      } else if (controlState == '+i') {
+        controlStatesNew[controlIndex] = '-i';
+      } else if (controlState == '-i') {
+        controlStatesNew[controlIndex] = '+i';
+      }
+      let dto = {
+        'name': this.gate,
+        'step': this.step,
+        'targets': [...this.targets],
+        'controls': [...this.controls],
+        'targetsNew': [...this.targets],
+        'controlsNew': [...controlsNew],
+        'controlstatesNew': [...controlStatesNew],
+      }
+      if (this.gates){
+        dto['gates'] = [...this.gates];
+      }
+      if (isDefined(this.phi)) {
+        dto['phiNew'] = this.phi;
+      }
+      if (isDefined(this.theta)) {
+        dto['thetaNew'] = this.theta;
+      }
+      if (isDefined(this.lambda)) {
+        dto['lambdaNew'] = this.lambda;
+      }
+      if (isDefined(this.root)) {
+        dto['rootNew'] = this.root;
+      }
+      if (isDefined(this.circuit_id)){
+        dto['circuit_id'] = this.circuit_id;
+      }
+      if (isDefined(this.circuit_abbreviation)){
+        dto['circuit_abbreviation'] = this.circuit_abbreviation;
+      }
+      if (isDefined(this.circuit_power)){
+        dto['circuit_power'] = this.circuit_power;
+      }
+      if (isDefined(this.targets_expression)){
+        dto['targets_expression'] = this.targets_expression;
+      }
+      let promise = this.repositionGateInCircuit(dto);
+      promise.then(
+        // eslint-disable-next-line no-unused-vars
+        result => {},
+        // eslint-disable-next-line no-unused-vars
+        error => {}
+      );
+      this.$refs['modal-dialog'].hide();
+    },
     handleExpandLeftHover(hovered) {
       this.expandLeftIsHovered = hovered;
     },
@@ -337,6 +400,8 @@ export default {
         this.selectImage();
       } else if (window.currKey == 'd' || window.currKey == 'D') {
         this.handleDeleteControl();
+      } else if (window.currKey == 's' || window.currKey == 'S') {
+        this.handleToggleControl();
       }  else {
         this.showModal();
       }

@@ -66,7 +66,7 @@ export function hideTooltips(){
   window.toolTipsAreShown = false;
 }
 
-const defaultCookieValues = {'colored-gates': 'true', 'dark-theme': 'false', 'live-simulation': 'true', 'legend-base': '2', 'big-endian-ordering': 'true', 'zoom-level': '100'};
+const defaultCookieValues = {'colored-gates': 'true', 'dark-theme': 'false', 'live-simulation': 'true', 'legend-base': '2', 'big-endian-ordering': 'true', 'zoom-level': '100', 'probability-bins': '128'};
 
 export function setCookiesIfNotAlreadySet(){ 
   if (Vue.$cookies.get('functionality_cookies') === 'accepted')
@@ -76,6 +76,10 @@ export function setCookiesIfNotAlreadySet(){
     d.setTime(d.getTime() + 100 * 365 * 24 * 60 * 60 * 1000);
     let expires = "expires=" + d.toUTCString();
 
+    let bigEndianOrdering = Vue.$cookies.get('big-endian-ordering');
+    if (bigEndianOrdering == null){
+      Vue.$cookies.set('big-endian-ordering', defaultCookieValues['big-endian-ordering'], expires);
+    }
     let useColoreGates = Vue.$cookies.get('colored-gates');
     if (useColoreGates == null){
       Vue.$cookies.set('colored-gates', defaultCookieValues['colored-gates'], expires);
@@ -92,9 +96,9 @@ export function setCookiesIfNotAlreadySet(){
     if (legendBase == null){
       Vue.$cookies.set('legend-base', defaultCookieValues['legend-base'], expires);
     }
-    let bigEndianOrdering = Vue.$cookies.get('big-endian-ordering');
-    if (bigEndianOrdering == null){
-      Vue.$cookies.set('big-endian-ordering', defaultCookieValues['big-endian-ordering'], expires);
+    let probabilityBins = Vue.$cookies.get('probability-bins');
+    if (probabilityBins == null){
+      Vue.$cookies.set('probability-bins', defaultCookieValues['probability-bins'], expires);
     }
     let zoomLevel = Vue.$cookies.get('zoom-level');
     if (zoomLevel == null){
@@ -103,11 +107,12 @@ export function setCookiesIfNotAlreadySet(){
   } else {
     if (!window.userInterfaceSettings) {
       window.userInterfaceSettings = {};
+      window.userInterfaceSettings['big-endian-ordering'] = defaultCookieValues['big-endian-ordering'];
       window.userInterfaceSettings['colored-gates'] = defaultCookieValues['colored-gates'];
       window.userInterfaceSettings['dark-theme'] = defaultCookieValues['dark-theme'];
       window.userInterfaceSettings['live-simulation'] = defaultCookieValues['live-simulation'];
       window.userInterfaceSettings['legend-base'] = defaultCookieValues['legend-base'];
-      window.userInterfaceSettings['big-endian-ordering'] = defaultCookieValues['big-endian-ordering'];
+      window.userInterfaceSettings['probability-bins'] = defaultCookieValues['probability-bins'];
       window.userInterfaceSettings['zoom-level'] = defaultCookieValues['zoom-level'];
     }
   }

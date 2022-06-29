@@ -51,7 +51,7 @@ export default {
         tooManyQubitsAlertShown: false,
         qubits: 0,
         measureGates: {},
-        defaultNumberOfBins: 128,
+        defaultNumberOfBins: parseInt(getUserInterfaceSetting('probability-bins')),
         liveSimulation: getUserInterfaceSetting("live-simulation") === 'true',
         updateKey: 0,
       }
@@ -76,12 +76,26 @@ export default {
                   color: "#448AFF"
                }
             ],
+            toolbar: {
+                items: {
+                  RESET: {
+                      position: 'inside top left',
+                      margin_top: 10,
+                      margin_left: 20,
+                      width: 58,
+                      height: 33,
+                      events_click: this.reset
+                  },
+                }
+            },
             yAxis: {
                scale: {
                   range: { min: 0, max: maxProbability * 1.01},
                   interval: maxProbability/5.0,
-               }
+               },
+               formatString: 'F6',
             },
+            events_selection: this.selectionHandler,
          };
       },
       runSimulation: async function (circuitStates) {
@@ -115,7 +129,7 @@ export default {
           this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, this.$data.minRange, this.$data.maxRange, numberOfBins));
         }        
       },
-      selectionHandler(ev) { 
+      selectionHandler(ev) {
         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateProbabilities.length);
         if (this.$data.maxRange - this.$data.minRange > numberOfBins)
         {

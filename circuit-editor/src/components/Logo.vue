@@ -18,6 +18,10 @@ export default {
   methods: {
     goBack: function() {
       var previousURL = document.referrer;
+      if (previousURL.includes("public-project")) {
+        // only works for tabs opened via javascript or with target blank
+        window.close();
+      }
       if (previousURL.includes("transilvania-quantum") && previousURL.includes("projects/project/")){
         window.location.href = previousURL;
       } else {
