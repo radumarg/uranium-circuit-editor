@@ -117,7 +117,7 @@ export default {
     'id': String,
     'circuit_id': Number,
     'circuit_abbreviation': String,
-    'circuit_power': Number,
+    'circuit_power': String,
     'targets_expression': String,
   },
   data() {
@@ -211,7 +211,7 @@ export default {
       if (isDefined(this.circuit_abbreviation)){
         dto['circuit_abbreviation'] = this.circuit_abbreviation;
       }
-      if (isDefined(this.circuit_power)){
+      if (this.circuit_power != null && this.circuit_power != undefined) {
         dto['circuit_power'] = this.circuit_power;
       }
       if (isDefined(this.targets_expression)){
@@ -262,7 +262,7 @@ export default {
       if (isDefined(this.circuit_abbreviation)){
         dto['circuit_abbreviation'] = this.circuit_abbreviation;
       }
-      if (isDefined(this.circuit_power)){
+      if (this.circuit_power != null && this.circuit_power != undefined){
         dto['circuit_power'] = this.circuit_power;
       }
       if (isDefined(this.targets_expression)){
@@ -325,7 +325,7 @@ export default {
       if (isDefined(this.circuit_abbreviation)){
         dto['circuit_abbreviation'] = this.circuit_abbreviation;
       }
-      if (isDefined(this.circuit_power)){
+      if (this.circuit_power != null && this.circuit_power != undefined){
         dto['circuit_power'] = this.circuit_power;
       }
       if (isDefined(this.targets_expression)){
@@ -439,7 +439,7 @@ export default {
       if (isDefined(this.circuit_abbreviation)){
         event.dataTransfer.setData("circuit_abbreviation", this.circuit_abbreviation);
       }
-      if (isDefined(this.circuit_power)){
+      if (this.circuit_power != null && this.circuit_power != undefined){
         event.dataTransfer.setData("circuit_power", this.circuit_power);
       }
       if (isDefined(this.targets_expression)){

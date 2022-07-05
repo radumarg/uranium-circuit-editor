@@ -1,7 +1,7 @@
 import Vue from 'vue';
 import { getUserInterfaceSetting } from "./applicationWideReusableUnits.js";
 import { range } from "./javaScriptUtils.js";
-import { gateCanHaveMultipleTargets } from "./editorHelper.js";
+import { gateCanHaveMultipleTargets, getNumericValueOfCircuitPower } from "./editorHelper.js";
 
 /* Holds information necessary to diplay a cell in gates table */
 class GatesTableCell {
@@ -153,7 +153,8 @@ export function measureGatesArePositionedLast(circuitStates, currentCircuitId, c
       if (gate.name.includes("measure-")){
         collectedMeasureGates.push(gate.targets[0] + qubitStart);
       } else if (gate.name == "circuit"){
-        for (let k = 0; k < Math.abs(gate.circuit_power); k++) {
+        let power = getNumericValueOfCircuitPower(gate.circuit_power);
+        for (let k = 0; k < Math.abs(power); k++) {
           if (!measureGatesArePositionedLast(circuitStates, gate.circuit_id, collectedMeasureGates, gate.targets[0] + qubitStart)) {
             return false;
           }
@@ -1119,7 +1120,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             gatesTableRowState.cells[column].circuit_abbreviation = gate.circuit_abbreviation;
           }
           if (Object.prototype.hasOwnProperty.call(gate, "circuit_power")) {
-            gatesTableRowState.cells[column].circuit_power = parseInt(gate.circuit_power);
+            gatesTableRowState.cells[column].circuit_power = gate.circuit_power;
           }
           if (Object.prototype.hasOwnProperty.call(gate, "targets_expression")) {
             gatesTableRowState.cells[column].targets_expression = gate.targets_expression;

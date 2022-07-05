@@ -201,7 +201,7 @@ export function insertingOneGateInCircuit(circuitState, dto) {
   }
   if (Object.prototype.hasOwnProperty.call(dto, "circuit_power")) {
     let circuitPower = dto["circuit_power"];
-    gate["circuit_power"] = parseInt(circuitPower);
+    gate["circuit_power"] = circuitPower;
   }
   if (Object.prototype.hasOwnProperty.call(dto, "targets_expression")) {
     let targetsExpression = dto["targets_expression"];
@@ -933,6 +933,7 @@ function updateCircuitGatesToAccomodateModifiedCircuitGate(store, circuitId, mod
         store.dispatch('circuitEditorModule/removeGateFromCircuitFromWorkerThread', payload, { root:true })
         let newTargtes = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits);
         if (newTargtes.length == 0) {
+          alert("Because the circuit with the abbreviation " + gate.circuit_abbreviation + " has been rendered empty, the corresponding circuit gates have been removed from the circuit named: " + circuitState["circuit_name"] + "!");
           continue;
         }
         // insert gate back with updated targets
@@ -1106,4 +1107,20 @@ export function replaceVars(objSource){
   }
 
   return objSource;
+}
+
+export function getNumericValueOfCircuitPower(circuit_power){
+
+  let sign = 1;
+  if (circuit_power[0] == "-") {
+    sign = -1;
+    circuit_power = circuit_power.slice(1);
+  }
+
+  if (circuit_power.includes("2^")){
+    circuit_power = circuit_power.slice(2);
+    return sign * (2 ** parseInt(circuit_power));
+  }
+
+  return sign * parseInt(circuit_power);
 }

@@ -17,13 +17,16 @@
         <svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
           <g>
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 25px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 25px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-else x="2.5" y="28" style="font-size: 20px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
+            <text v-else x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else x="19.5" y="15" style="font-size: 9px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="19" y="15" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="16" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else x="10" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
@@ -42,11 +45,13 @@
             <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
+            <text v-else x="2.5" y="28" style="font-size: 20px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else x="19.5" y="15" style="font-size: 9px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="19" y="15" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="16" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else x="10" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
@@ -70,13 +75,15 @@
             <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 25px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 25px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-else x="2.5" y="28" style="font-size: 20px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else x="19.5" y="15" style="font-size: 9px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="19" y="15" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="16" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else x="10" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
@@ -97,13 +104,15 @@
             <line x1="0" y1="0" x2="40" y2="0" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
-            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 25px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 25px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
+            <text v-else x="2.5" y="28" style="font-size: 20px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else x="19.5" y="15" style="font-size: 9px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="19" y="15" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="16" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else x="10" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div> 
@@ -125,13 +134,15 @@
           <g>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
-            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 25px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 25px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
+            <text v-else x="2.5" y="28" style="font-size: 20px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else x="19.5" y="15" style="font-size: 9px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="19" y="15" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="16" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else x="10" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
@@ -150,13 +161,15 @@
           <g>
             <line x1="0" y1="0" x2="0" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
             <line x1="40" y1="0" x2="40" y2="40" style="opacity:1; fill:none; stroke: #678efa; stroke-width:3.8; stroke-opacity:1;"/>
-            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
+            <text v-if="gateNameSpaceNeeded() == 'medium'" x="4.5" y="28" style="font-size: 25px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 25px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
+            <text v-else x="2.5" y="28" style="font-size: 20px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="21" y="15" style="font-size: 10px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else x="19.5" y="15" style="font-size: 9px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="19" y="15" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="16" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else x="10" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
       </div>
@@ -210,17 +223,32 @@
         </tr>
         <tr>
           <td></td>
-          <td width="100px" title="First qubit. This is used to indicate the first target qubit. Target qubits are selected via the 'Targets Expression' which is a Javascript 'j' based expression that must evaluate to 'true' or 'false' for each qubit position identified by 'j' where j is a zero based qubit index and where index 0 corresponds to the first qubit in this dialog.">First Qubit:</td>
-          <td width="100px" style="padding: 5px;">
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNewFirst" placeholder="qbit" type="number" id="qbit-new" style="width:100px;"></b-form-input>
+          <td colspan="2" style="padding: 5px;">
+            <b-form-select style="width:190px; max-width: 190px; min-width: 190px;" v-model="powerSignNew" :options="powerSignSettings" class="mt-1"></b-form-select>
           </td>
           <td></td>
         </tr>
         <tr>
           <td></td>
-          <td width="100px" title="Indicates the power used to apply this gate in circuit. It must be a pozitive or negative integer where negative indicates that the inverse of this circuit is applied.">Gate Power:</td>
+          <td width="100px" title="Indicates the power used to apply this gate in circuit. It must be a pozitive or negative integer where negative indicates that the inverse of this circuit is applied.">Power (t):</td>
           <td width="100px" style="padding: 5px;">
-            <b-form-input @keyup.enter.native="handleSave()" v-model.number="circuitPowerNew" placeholder="power" type="number" style="width:100px;"></b-form-input>
+            <b-form-input @keyup.enter.native="handleSave()" v-model.number="circuitPowerNewT" id="power-new-t" v-on:click="resetPowerK()" v-on:change="resetPowerK()" placeholder="" type="number" style="width:100px;"></b-form-input>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td width="100px" title="Indicates the power used to apply this gate in circuit. It must be a pozitive or negative integer where negative indicates that the inverse of this circuit is applied.">Power (k): <br/>(t = 2^k)</td>
+          <td width="100px" style="padding: 5px;">
+            <b-form-input @keyup.enter.native="handleSave()" v-model.number="circuitPowerNewK" id="power-new-k" v-on:click="resetPowerT()" v-on:change="resetPowerT()" placeholder="" type="number" style="width:100px;"></b-form-input>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td width="100px" title="First qubit. This is used to indicate the first target qubit. Target qubits are selected via the 'Targets Expression' which is a Javascript 'j' based expression that must evaluate to 'true' or 'false' for each qubit position identified by 'j' where j is a zero based qubit index and where index 0 corresponds to the first qubit in this dialog.">First Qubit:</td>
+          <td width="100px" style="padding: 5px;">
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNewFirst" placeholder="qbit" type="number" id="qbit-new" style="width:100px;"></b-form-input>
           </td>
           <td></td>
         </tr>
@@ -488,10 +516,30 @@
         <tr>
           <td></td>
           <td colspan="3" width="300px" class="td-2nd-modal">
-            Power Value - 'q, s' based <br/>javascript expression:
+            Power Sign - 'q, s' based <br/>javascript expression:
           </td>
           <td colspan="3" width="400px" class="td-2nd-modal">
-            <b-form-input min="0" v-model="powerExpression" placeholder="" type="text" id="power-expression" style="min-width:400px;"></b-form-input>
+            <b-form-input min="0" v-model="powerSignExpression" placeholder="" type="text" id="power-t-expression" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Power (t) Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="powerTExpression" placeholder="" type="text" id="power-t-expression" v-on:click="resetPowerKExpression()" v-on:change="resetPowerKExpression()" style="min-width:400px;"></b-form-input>
+          </td>
+          <td class="no-resize-cell"></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td colspan="3" width="300px" class="td-2nd-modal">
+            Power (k) Value - 'q, s' based <br/>javascript expression:
+          </td>
+          <td colspan="3" width="400px" class="td-2nd-modal">
+            <b-form-input min="0" v-model="powerKExpression" placeholder="" type="text" id="power-k-expression" v-on:click="resetPowerTExpression()" v-on:change="resetPowerTExpression()" style="min-width:400px;"></b-form-input>
           </td>
           <td class="no-resize-cell"></td>
         </tr>
@@ -550,7 +598,7 @@
 import { mapActions } from 'vuex';
 import { arraysAreEqual } from "../store/modules/javaScriptUtils.js";
 import { controlsMixin } from "../mixins/controlsMixin.js";
-import { getMultipleTargets, getClosestControlledGates, getCompatibleCircuitIds } from "../store/modules/editorHelper.js";
+import { getMultipleTargets, getClosestControlledGates, getCompatibleCircuitIds, getNumericValueOfCircuitPower } from "../store/modules/editorHelper.js";
 import { getNoQbits, seatsAreTaken } from "../store/modules/gatesTable.js";
 import SingleQbitGate from "./SingleQbitGate";
 import { createCircuitDragImageGhost, getUserInterfaceSetting, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
@@ -561,16 +609,33 @@ export default {
   props: {
     'circuit_id': Number,
     'circuit_abbreviation': String,
-    'circuit_power': Number,
+    'circuit_power': String,
   },
   data() {
     return {
       targetsNewFirst: this.targets[0],
-      circuitPowerNew: this.circuit_power,
+      circuitPowerNewT: this.getTPower(),
+      circuitPowerNewK: this.getKPower(),
       circuitNames: this.getCircuitNameOptions(),
       circuitNameNew: this.$store.state.circuitEditorModule[this.circuit_id]["circuit_name"],
       usingColoredGates: getUserInterfaceSetting("colored-gates") === 'true',
-      powerExpression: this.circuit_power.toString(),
+      powerTExpression: this.getTPower(),
+      powerKExpression: this.getKPower(),
+      powerSignExpression: this.getPowerSign(),
+      powerSignNew: this.getPowerSign(),
+      powerSignSettings: [
+        { value: 1, text: 'Power Sign: +' },
+        { value: -1, text: 'Power Sign: -' },
+      ]
+    }
+  },
+  watch: {
+    control: function() {
+      // need this in order to update rootNew
+      // when doing drag & drop on the stub
+      this.$data.circuitPowerNewT = this.getTPower();
+      this.$data.circuitPowerNewK = this.getKPower();
+      this.$data.powerSignNew = this.getPowerSign();
     }
   },
   methods: {
@@ -580,7 +645,9 @@ export default {
       this.$data.controlstatesNew = [...this.controlstates];
       this.$data.numberOfControls = this.controls.length;
       this.$data.targetsNewFirst = this.targets[0];
-      this.$data.circuitPowerNew = this.circuit_power;
+      this.$data.circuitPowerNewT = this.getTPower();
+      this.$data.circuitPowerNewK = this.getKPower();
+      this.$data.powerSignNew = this.getPowerSign();
     },
     getCircuitNameOptions: function() {
       let circuitNameOptions = [];
@@ -603,12 +670,17 @@ export default {
     getCircuitAbbreviation: function(){
       return this.circuit_abbreviation;
     },
+    // TODO: fix this
     getCircuitPower: function(){
-      if (this.circuit_power == 1) return "";
+      if (getNumericValueOfCircuitPower(this.circuit_power) == 1) return "";
       return this.circuit_power;
     },
     gateNameSpaceNeeded: function(){
-      if (this.circuit_power < -99) return "maximum";
+      if (this.circuit_power.includes("-2^")) return "maximum";
+      if (this.circuit_power < -999) return "maximum";
+      if (this.circuit_power > 999) return "maximum";
+      if (this.circuit_power.includes("2^")) return "ultra-large";
+      if (this.circuit_power < -99) return "ultra-large";
       if (this.circuit_power > 99) return "large";
       if (this.circuit_power < -9) return "large";
       if (this.circuit_abbreviation.length > 2) return "large"
@@ -632,16 +704,30 @@ export default {
       else return false;
     },
     handleSave: function(){
+      if (this.$data.circuitPowerNewT == null && this.$data.circuitPowerNewK == null) {
+        alert("Either circuit power 't' or circuit power 'k' expression must be defined!");
+        return;
+      }
       if (!Number.isInteger(this.$data.targetsNewFirst)){
         alert("The first target qubit must be an integer positive number!");
         return;
       }
-      if (!Number.isInteger(this.$data.circuitPowerNew)){
-        alert("The circuit power must be an integer number!");
+      if (this.$data.circuitPowerNewT != null &&
+         (!Number.isInteger(this.$data.circuitPowerNewT) || this.$data.circuitPowerNewT < 0)){
+        alert("The circuit power (t) must be an integer positive number!");
         return;
       }
-      if (this.$data.circuitPowerNew == 0){
-        alert("Circuit power cannot be zero!");
+      if (this.$data.circuitPowerNewK != null &&
+         (!Number.isInteger(this.$data.circuitPowerNewK) || this.$data.circuitPowerNewK < 0)){
+        alert("The circuit power (k) must be an integer positive number!");
+        return;
+      }
+      if (this.$data.circuitPowerNewT == 0){
+        alert("Circuit power (t) cannot be zero!");
+        return;
+      }
+      if (this.$data.circuitPowerNewK == 0){
+        alert("Circuit power (k) cannot be zero!");
         return;
       }
       let newCircuitId = this.getCircuitId(this.$data.circuitNameNew);
@@ -655,7 +741,6 @@ export default {
       this.$data.targetsNewFirst = targetsNew[0];
       // remember current state
       let targetsOld = [...this.targets];
-      let circuitPowerOld = this.circuit_power;
       let circuitNameOld = this.$store.state.circuitEditorModule[this.circuit_id]["circuit_name"];
       // save action
       let promise = this.repositionGateInCircuit({
@@ -664,7 +749,7 @@ export default {
         'img': this.img,
         'circuit_id': newCircuitId,
         'circuit_abbreviation': this.$store.state.circuitEditorModule[newCircuitId]["circuit_abbreviation"],
-        'circuit_power': this.circuitPowerNew,
+        'circuit_power': this.getCircuitPowerNew(),
         'targets': [...this.targets],
         'controls': [...this.controls],
         'targetsNew': [...targetsNew],
@@ -677,8 +762,10 @@ export default {
         // eslint-disable-next-line no-unused-vars
         error => {
           this.$data.targetsNewFirst = targetsOld[0];
-          this.$data.circuitPowerNew = circuitPowerOld;
           this.$data.circuitNameNew = circuitNameOld;
+          this.$data.circuitPowerNewT = this.getTPower();
+          this.$data.circuitPowerNewK = this.getKPower();
+          this.$data.powerSignNew = this.getPowerSign();
         }
       );
       this.$refs['initial-modal-dialog'].hide();
@@ -870,7 +957,9 @@ export default {
         'numberOfControlsExpression': this.numberOfControlsExpression,
         'controlsExpression': this.controlsExpression,
         'controlstatesExpression': this.controlstatesExpression,
-        'powerExpression': this.powerExpression,
+        'powerSignExpression': this.powerSignExpression,
+        'powerTExpression': this.powerTExpression,
+        'powerKExpression': this.powerKExpression,
       });
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -881,6 +970,57 @@ export default {
         error => {},
       );
     },
+    getTPower(){
+      if (this.circuit_power.includes("2^")){
+        return null;
+      } else {
+        let power = this.circuit_power;
+        if (power[0] == "-") {
+          power = power.slice(1);
+        }
+        return parseInt(power);
+      }
+    },
+    getKPower(){
+      if (this.circuit_power.includes("2^")){
+        let power = this.circuit_power;
+        if (power[0] == "-") {
+          power = power.slice(1);
+        }
+        power = power.slice(2);
+        return parseInt(power);
+      } else {
+        return null;
+      }
+    },
+    resetPowerK(){
+      this.$data.circuitPowerNewK = null;
+    },
+    resetPowerT(){
+      this.$data.circuitPowerNewT = null;
+    },
+    resetPowerKExpression(){
+      this.$data.powerKExpression = null;
+    },
+    resetPowerTExpression(){
+      this.$data.powerTExpression = null;
+    },
+    getPowerSign(){
+      if (this.circuit_power[0] == "-") {
+        return -1;
+      }
+      return 1;
+    },
+    getCircuitPowerNew() {
+      let sign = "";
+      if (this.$data.powerSignNew < 0) {
+        sign = "-"
+      }
+      if (this.$data.circuitPowerNewK == null) {
+        return sign + this.$data.circuitPowerNewT;
+      }
+      return sign + "2^" + this.$data.circuitPowerNewK;
+    }
   },
 }
 </script>

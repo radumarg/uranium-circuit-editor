@@ -445,8 +445,8 @@ export default {
         let circuitAbbreviation = closestGate.circuit_abbreviation;
         dto["circuit_abbreviation"] = circuitAbbreviation;
       }
-      if (isDefined(closestGate.circuit_power)) {
-        let circuitPower = closestGate.circuit_power;
+      if (closestGate["circuit_power"] != null && closestGate["circuit_power"] != undefined) {
+        let circuitPower = closestGate["circuit_power"];
         dto["circuit_power"] = circuitPower;
       }
       if (closestGate["targets_expression"]) {

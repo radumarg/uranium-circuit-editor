@@ -54,7 +54,7 @@
             <td>
               <md-checkbox class="md-primary" v-model="bigEndianOrdering" v-on:change="switchQubitOrdering()">
                 Bigendian Ordering
-                <md-tooltip md-direction="left">Ordering of qubits in state vectors</md-tooltip>
+                <md-tooltip md-direction="left">Ordering of qubits in output state vector</md-tooltip>
               </md-checkbox>
             </td>
           </tr>
@@ -165,6 +165,10 @@ export default {
       bigEndianOrdering: getUserInterfaceSetting("big-endian-ordering") === 'true',
       zoomLevel: getUserInterfaceSetting("zoom-level"),
       zoomLevels: [
+          { value: '140', text: 'Zoom: 140%' },
+          { value: '135', text: 'Zoom: 135%' },
+          { value: '130', text: 'Zoom: 130%' },
+          { value: '125', text: 'Zoom: 125%' },
           { value: '120', text: 'Zoom: 120%' },
           { value: '115', text: 'Zoom: 115%' },
           { value: '110', text: 'Zoom: 110%' },
@@ -480,6 +484,7 @@ If you do not want to accept cookies, you can zoom the page yourself from the ke
     },
     switchProbabilityBins: function(){
       if (Vue.$cookies.get('functionality_cookies') === 'accepted'){
+        alert("The optimum number of bins in probability plots is 128. You can choose a larger setting, but the responsiveness of the simulation results charts will deteriorate.");
         setUserInterfaceSetting('probability-bins', this.probabilityBins);
         window.location.reload();
       } else {

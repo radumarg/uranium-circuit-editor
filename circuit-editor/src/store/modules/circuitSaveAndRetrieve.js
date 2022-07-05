@@ -23,15 +23,13 @@
     // In order to test while developing, launch chrome in the following flags:
     // google-chrome --disable-site-isolation-trials --disable-web-security --user-data-dir="/tmp"
     window.projectId = get_request_param('projectid');
-    let authToken = getCookie('auth-token');
-    if (window.projectId && authToken){
+    if (window.projectId){
 
       return new Promise( (resolve, reject) => {
   
         let xmlHttpReq = new XMLHttpRequest();
         let url = '/projects/projects-api/?projectid='.concat(window.projectId);
         xmlHttpReq.open( 'GET', url, true);
-        xmlHttpReq.setRequestHeader('Authorization', authToken);
         xmlHttpReq.setRequestHeader('Accept', 'application/json');
         xmlHttpReq.timeout = 5000;
 

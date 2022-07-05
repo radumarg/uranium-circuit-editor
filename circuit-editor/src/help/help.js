@@ -22,7 +22,7 @@ export function retriveSimpleGateHelpHtml(gateName) {
     }  else if (gateName == "identity") {
       return 'The "identity" gate acts on a single qubit and preserves current state of the qubit it is applied to.';
     }  else if (gateName == "p") {
-      return 'This is the phase shift gate, it shifts the phase of the |1⟩ state relative to the |0⟩ state. It leaves the basis state |0⟩ unchanged and map |1⟩ to exp(i*θ)|1⟩. The range for the absolute values of θ is [0, 4π), angles are always specified in radians. It is identical to "u1" gate (except for the name of free parameter) and it was added only because it might be considered more expressive in certain contexts. Should not be confused with the "s" gate which historically was sometimes named "p".'
+      return 'This is the phase shift gate, it shifts the phase of the |1⟩ state relative to the |0⟩ state. It leaves the basis state |0⟩ unchanged and map |1⟩ to exp(i*θ)|1⟩. The range for the absolute values of θ is [0, 2π), angles are always specified in radians. It is identical to "u1" gate (except for the name of free parameter) and it was added only because it might be considered more expressive in certain contexts. Should not be confused with the "s" gate which historically was sometimes named "p".'
     }   else if (gateName == "pauli-x") {
         return 'The "pauli-x" gate acts on a single qubit and is defined as: u3(π, 0, π). With respect to the computational basis it is the quantum equivalent of the NOT gate for classical computers since it maps |0⟩ to |1⟩ and |1⟩ to |0⟩. It is equivalent to a rotation around the X-axis of the Bloch sphere by π radians.';
     } else if (gateName == "pauli-y") {
@@ -260,14 +260,20 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             - when simulating a circuit the gates in circuit editor are applied from left to right which is the generally accepted convention. \
             <br> \
             - visually, the circuit editor has an implicit ordering of qubits from top to bottom where the qubit with index zero is placed on top \
-            and the qubit with highest index is placed at the bottom of the editor. \
+            and the qubit with highest index is placed at the bottom of the editor. You can press the tooltips button to verify this ordering. \
             <br> \
-            - A valid question to be asked is how should the state vector be represented for a quantum register that consists of a given number of qubits. \
-            In principle, these qubits can be orderer either from left to right or from right to left. In most physics textbooks qubits are ordered \
-            starting with the first one (lowest qubit index) on the left and last one (higher qubit index) on the right when representing a state vector \
-            as a tensor product of single qubit states. This is typically refered to as big endian convention. However many commercial quantum computing \
-            platform use the little endian convention which means the order of qubits (as well as bits in classical registers) is reversed. \
-            In Uranium you can choose either one of the two orderings."
+            - A valid question to be asked is how should the state vector be represented for a quantum register that consists of a given set of qubits. \
+            The state can be represented as a tensor product of qubits where the first qubit in our editor is placed at the start of the tensor product \
+            as the left-most qubit while the last qubit is placed in the right-most position. This ordering feels very natural and perhaps this is the \
+            reason it is being used in most physics textbooks. We will refer to this ordering as Big-Endian ordering. However, using this convention \
+            puts the most significant bit (MSB) on the right, and the least significant bit (LSB) on the left. This is a problem because when casting \
+            a state vector in binary representation to a decimal number, the most significant bit (MSB) should be put on the left, and the least significant \
+            bit (LSB) on the right. For this purpose, we provide a checkbox that allows reversing the order of qubit/bits in the output state to Little-Endian. \
+            Many commercial quantum computing platforms like Qiskit (IBM), Forest (Rigetti), QSharp (Microsoft) and perhaps others use the Little-Endian convention \
+            so you should be aware of this when comparing circuits in our editor to circuits found on the web because the first qubit in our editor might be placed \
+            last in the representation of those circuits. In summary, while the default order used by the editor is Big-Endian, and the qubits are numbered starting \
+            with the first qubit on top of the editor in those situations where you want to cast a state as a representation of a binary number to a decimal number, \
+            you should switch to Little-Endian ordering of the output state from the checkbox in the top editor UI."
 
 }
 

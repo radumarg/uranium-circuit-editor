@@ -438,13 +438,35 @@ export const circuitEditorModule = {
                   }
                   dto["bit"] = bit;
                 }
-                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "powerExpression")) {
-                  let powerExpression = dataTransferObj["powerExpression"];
-                  let power = limitedEvaluate(interpolateJavaScriptExpression(powerExpression, s, q));
-                  if (isNaN(power)) {
-                    throw new Error("The power expression not evaluate to a number!");
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "powerSignExpression")) {
+                  let powerSignExpression = dataTransferObj["powerSignExpression"];
+                  let powerSign = limitedEvaluate(interpolateJavaScriptExpression(powerSignExpression, s, q));
+                  if (powerSign != 1 && powerSign != -1 && powerSign != "+" && powerSign != "-") {
+                    throw new Error("The power sign must evaluate to 1, -1, '+' or '-'!");
                   }
-                  dto["circuit_power"] = power;
+                  if (powerSign == "+") powerSign = 1;
+                  else if (powerSign == "-") powerSign = -1;
+                  else if (powerSign == "1") powerSign = 1;
+                  else if (powerSign == "-1") powerSign = -1;
+
+                  let powerTExpression = dataTransferObj["powerTExpression"];
+                  let powerKExpression = dataTransferObj["powerKExpression"];
+
+                  if (powerTExpression){
+                    let power = limitedEvaluate(interpolateJavaScriptExpression(powerTExpression, s, q));
+                    if (isNaN(power) || power <= 0) {
+                      throw new Error("The power (t) expression not evaluate to a pozitive non null number!");
+                    }
+                    if (powerSign > 0) dto["circuit_power"] = toString(power);
+                    else dto["circuit_power"] = "-" + toString(power);
+                  } else {
+                    let power = limitedEvaluate(interpolateJavaScriptExpression(powerKExpression, s, q));
+                    if (isNaN(power) || power < 0) {
+                      throw new Error("The power (k) expression not evaluate to a pozitive number!");
+                    }
+                    if (powerSign > 0) dto["circuit_power"] = "2^" + toString(power);
+                    else dto["circuit_power"] = "-2^" + toString(power);
+                  }
                 }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "rootTExpression")) {
                   let rootTExpression = dataTransferObj["rootTExpression"];
