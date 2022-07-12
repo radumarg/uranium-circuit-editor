@@ -262,18 +262,18 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             - visually, the circuit editor has an implicit ordering of qubits from top to bottom where the qubit with index zero is placed on top \
             and the qubit with highest index is placed at the bottom of the editor. You can press the tooltips button to verify this ordering. \
             <br> \
-            - A valid question to be asked is how should the state vector be represented for a quantum register that consists of a given set of qubits. \
-            The state can be represented as a tensor product of qubits where the first qubit in our editor is placed at the start of the tensor product \
-            as the left-most qubit while the last qubit is placed in the right-most position. This ordering feels very natural and perhaps this is the \
+            - a valid question to be asked is how should the state vector be represented for a quantum register that consists of a given set of qubits. \
+            The state can be represented as a tensor product of qubits where the topmost qubit in our editor is placed at the start of the tensor product \
+            as the left-most qubit while the last (bottom) qubit is placed in the right-most position. This ordering feels very natural and perhaps this is the \
             reason it is being used in most physics textbooks. We will refer to this ordering as Big-Endian ordering. However, using this convention \
-            puts the most significant bit (MSB) on the right, and the least significant bit (LSB) on the left. This is a problem because when casting \
-            a state vector in binary representation to a decimal number, the most significant bit (MSB) should be put on the left, and the least significant \
-            bit (LSB) on the right. For this purpose, we provide a checkbox that allows reversing the order of qubit/bits in the output state to Little-Endian. \
-            Many commercial quantum computing platforms like Qiskit (IBM), Forest (Rigetti), QSharp (Microsoft) and perhaps others use the Little-Endian convention \
-            so you should be aware of this when comparing circuits in our editor to circuits found on the web because the first qubit in our editor might be placed \
-            last in the representation of those circuits. In summary, while the default order used by the editor is Big-Endian, and the qubits are numbered starting \
-            with the first qubit on top of the editor in those situations where you want to cast a state as a representation of a binary number to a decimal number, \
-            you should switch to Little-Endian ordering of the output state from the checkbox in the top editor UI."
+            puts the most significant bit (MSB) on the right, and the least significant bit (LSB) on the left (imagine for example that you want to \
+            perform some simple arithmetic using a quantum circuit by adding the top two qubits into the third qubit using some CNOT gates). \
+            This is a problem because when casting a state vector in binary representation to a decimal number, \
+            the most significant bit (MSB) should be put on the left, and the least significant bit (LSB) on the right. In order to acomodate this scenario \
+            we provide a checkbox that allows reversing the order of qubit/bits in the output state to Little-Endian. Many commercial quantum computing platforms \
+            like Qiskit (IBM), Forest (Rigetti), QSharp (Microsoft) and perhaps others use the Little-Endian convention. If you choose to work in the Little-Endian mode, \
+            the 0th index qubit gate should be placed at the bottom the circuit in our editor, not at the top, like this is rutinely done in Qiskit for example. The QFT gate is \
+            adapted to work with both the Little-Endian and the Big-Endian convention."
 
 }
 
