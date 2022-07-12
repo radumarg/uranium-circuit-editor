@@ -346,6 +346,29 @@ export const circuitEditorModule = {
             let condConjugate = interpolateJavaScriptExpression(conjugateConditionExpression, s, q);
 
             try {
+              limitedEvaluate(condStep)
+            } catch {
+              alert("The 's' based conditon is not a valid javascript expression!");
+              reject(false);
+              return;
+            }
+
+            try {
+              limitedEvaluate(condQbit)
+            } catch {
+              alert("The 'q' based conditon is not a valid javascript expression!");
+              reject(false);
+              return;
+            }
+            try {
+              limitedEvaluate(condConjugate)
+            } catch {
+              alert("The 'q' and 's' conjugate condition is not a valid javascript expression!");
+              reject(false);
+              return;
+            }
+
+            try {
               if (limitedEvaluate(condStep) && 
                   limitedEvaluate(condQbit) && 
                   limitedEvaluate(condConjugate)){
@@ -354,7 +377,11 @@ export const circuitEditorModule = {
 
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "qbit2Expression")) {
                   let qbit2Expression = dataTransferObj["qbit2Expression"];
-                  dto["targets"].push(limitedEvaluate(interpolateJavaScriptExpression(qbit2Expression, s, q)));
+                  try {
+                    dto["targets"].push(limitedEvaluate(interpolateJavaScriptExpression(qbit2Expression, s, q)));
+                  } catch {
+                    throw new Error("The second qubit expression is not a valid javascript expression!");
+                  }
                 }
 
                 if (name == "circuit") {
@@ -367,7 +394,12 @@ export const circuitEditorModule = {
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "numberOfControlsExpression")) {
 
                   let numberOfControlsExpression = dataTransferObj["numberOfControlsExpression"];
-                  let noControls = parseInt(limitedEvaluate(interpolateJavaScriptExpression(numberOfControlsExpression, s, q)));
+                  let noControls = 0;
+                  try {
+                    noControls = parseInt(limitedEvaluate(interpolateJavaScriptExpression(numberOfControlsExpression, s, q)));
+                  } catch {
+                    throw new Error("The number of controls expression is not a valid javascript expression!");
+                  }
                   if (isNaN(noControls)) {
                     throw new Error("Number of controls does not evaluate to a number!");
                   }
@@ -385,7 +417,12 @@ export const circuitEditorModule = {
 
                     dto["controls"] = [];
                     for (let j = 0; j < noControls; j++) {
-                      let control = parseInt(limitedEvaluate(interpolateJavaScriptExpression(controlsExpression, s, q, j)));
+                      let control = null;
+                      try {
+                        control = parseInt(limitedEvaluate(interpolateJavaScriptExpression(controlsExpression, s, q, j)));
+                      } catch {
+                        throw new Error("The control(s) expression is not a valid javascript expression!");
+                      }
                       if (isNaN(control)) {
                         throw new Error(`The ${j}'th' control does not evaluate to a number`);
                        }
@@ -394,7 +431,12 @@ export const circuitEditorModule = {
 
                     dto["controlstates"] = [];
                     for (let j = 0; j < noControls; j++) {
-                      let controlstate = limitedEvaluate(interpolateJavaScriptExpression(controlstatesExpression, s, q, j)).toString().trim();
+                      let controlstate = null;
+                      try {
+                        controlstate = limitedEvaluate(interpolateJavaScriptExpression(controlstatesExpression, s, q, j)).toString().trim();
+                      } catch {
+                        throw new Error("The control state(s) expression is not a valid javascript expression!");
+                      }
                       if (!controlstate){
                         throw new Error(`The ${j}'th' control state is an empty string.`);
                       }
@@ -408,7 +450,12 @@ export const circuitEditorModule = {
                 
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "phiExpression")) {
                   let phiExpression = dataTransferObj["phiExpression"];
-                  let phi = limitedEvaluate(interpolateJavaScriptExpression(phiExpression, s, q));
+                  let phi = null;
+                  try {
+                    phi = limitedEvaluate(interpolateJavaScriptExpression(phiExpression, s, q));
+                  } catch {
+                    throw new Error("The expression for phi is not a valid javascript expression!");
+                  }
                   if (isNaN(phi)) {
                     throw new Error("Phi expression does not evaluate to a number!");
                   }
@@ -416,7 +463,12 @@ export const circuitEditorModule = {
                 }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "thetaExpression")) {
                   let thetaExpression = dataTransferObj["thetaExpression"];
-                  let theta = limitedEvaluate(interpolateJavaScriptExpression(thetaExpression, s, q));
+                  let theta = null;
+                  try {
+                    theta = limitedEvaluate(interpolateJavaScriptExpression(thetaExpression, s, q));
+                  } catch {
+                    throw new Error("The expression for theta is not a valid javascript expression!");
+                  }
                   if (isNaN(theta)) {
                     throw new Error("Theta expression does not evaluate to a number!");
                   }
@@ -424,7 +476,12 @@ export const circuitEditorModule = {
                 }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "lambdaExpression")) {
                   let lambdaExpression = dataTransferObj["lambdaExpression"];
-                  let lambda = limitedEvaluate(interpolateJavaScriptExpression(lambdaExpression, s, q));
+                  let lambda = null;
+                  try {
+                    lambda = limitedEvaluate(interpolateJavaScriptExpression(lambdaExpression, s, q));
+                  } catch {
+                    throw new Error("The expression for lambda is not a valid javascript expression!");
+                  }
                   if (isNaN(lambda)) {
                     throw new Error("Lambda expression does not evaluate to a number!");
                   }
@@ -432,7 +489,12 @@ export const circuitEditorModule = {
                 }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "bitExpression")) {
                   let bitExpression = dataTransferObj["bitExpression"];
-                  let bit = limitedEvaluate(interpolateJavaScriptExpression(bitExpression, s, q));
+                  let bit = null;
+                  try {
+                    bit = limitedEvaluate(interpolateJavaScriptExpression(bitExpression, s, q));
+                  } catch {
+                    throw new Error("The expression for classic bit value is not a valid javascript expression!");
+                  }
                   if (isNaN(bit)) {
                     throw new Error("The classic bit expression does not evaluate to a number!");
                   }
@@ -440,45 +502,69 @@ export const circuitEditorModule = {
                 }
                 if (Object.prototype.hasOwnProperty.call(dataTransferObj, "powerSignExpression")) {
                   let powerSignExpression = dataTransferObj["powerSignExpression"];
-                  let powerSign = limitedEvaluate(interpolateJavaScriptExpression(powerSignExpression, s, q));
-                  if (powerSign != 1 && powerSign != -1 && powerSign != "+" && powerSign != "-") {
-                    throw new Error("The power sign must evaluate to 1, -1, '+' or '-'!");
+
+                  let powerSign = 1;
+                  try  {
+                    powerSign = limitedEvaluate(interpolateJavaScriptExpression(powerSignExpression, s, q));
+                  } catch {
+                    throw new Error("The power sign must evaluate to 1 or -1!");
                   }
-                  if (powerSign == "+") powerSign = 1;
-                  else if (powerSign == "-") powerSign = -1;
-                  else if (powerSign == "1") powerSign = 1;
-                  else if (powerSign == "-1") powerSign = -1;
+                  if (powerSign != 1 && powerSign != -1) {
+                    throw new Error("The power sign must evaluate to 1 or -1!");
+                  }
+                  if (powerSign == -1) powerSign = 1;
 
                   let powerTExpression = dataTransferObj["powerTExpression"];
                   let powerKExpression = dataTransferObj["powerKExpression"];
 
                   if (powerTExpression){
-                    let power = limitedEvaluate(interpolateJavaScriptExpression(powerTExpression, s, q));
+                    let power = null;
+                    try {
+                      power = limitedEvaluate(interpolateJavaScriptExpression(powerTExpression, s, q));
+                    } catch {
+                      throw new Error("The expression circuit power (t) value is not a valid javascript expression!");
+                    }
                     if (isNaN(power) || power <= 0) {
                       throw new Error("The power (t) expression not evaluate to a pozitive non null number!");
                     }
-                    if (powerSign > 0) dto["circuit_power"] = toString(power);
-                    else dto["circuit_power"] = "-" + toString(power);
+                    if (powerSign > 0) dto["circuit_power"] = power.toString();
+                    else dto["circuit_power"] = "-" + power.toString();
                   } else {
-                    let power = limitedEvaluate(interpolateJavaScriptExpression(powerKExpression, s, q));
+                    let power = null;
+                    try  {
+                      power = limitedEvaluate(interpolateJavaScriptExpression(powerKExpression, s, q));
+                    } catch {
+                      throw new Error("The expression circuit power (k) value is not a valid javascript expression!");
+                    }
                     if (isNaN(power) || power < 0) {
                       throw new Error("The power (k) expression not evaluate to a pozitive number!");
                     }
-                    if (powerSign > 0) dto["circuit_power"] = "2^" + toString(power);
-                    else dto["circuit_power"] = "-2^" + toString(power);
+                    if (powerSign > 0) dto["circuit_power"] = "2^" + power.toString();
+                    else dto["circuit_power"] = "-2^" + power.toString();
                   }
                 }
-                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "rootTExpression")) {
+                if (Object.prototype.hasOwnProperty.call(dataTransferObj, "rootTExpression") ||
+                    Object.prototype.hasOwnProperty.call(dataTransferObj, "rootKExpression")) {
                   let rootTExpression = dataTransferObj["rootTExpression"];
                   let rootKExpression = dataTransferObj["rootKExpression"];
                   if (rootTExpression){
-                    let t = limitedEvaluate(interpolateJavaScriptExpression(rootTExpression, s, q));
+                    let t = null;
+                    try  {
+                      t = limitedEvaluate(interpolateJavaScriptExpression(rootTExpression, s, q));
+                    } catch {
+                      throw new Error("The expression for root (t) is not a valid javascript expression!");
+                    }
                     if (isNaN(t)) {
                       throw new Error("The 't' based root expression not evaluate to a number!");
                     }
                     dto["root"] = "1/" + t;
                   } else {
-                    let k = limitedEvaluate(interpolateJavaScriptExpression(rootKExpression, s, q));
+                    let k = null;
+                    try  {
+                      k = limitedEvaluate(interpolateJavaScriptExpression(rootKExpression, s, q));
+                    } catch {
+                      throw new Error("The expression for root (k) is not a valid javascript expression!");
+                    }
                     if (isNaN(k)) {
                       throw new Error("The 'k' based root expression not evaluate to a number!");
                     }

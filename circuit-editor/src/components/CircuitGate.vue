@@ -676,7 +676,7 @@ export default {
       return this.circuit_power;
     },
     gateNameSpaceNeeded: function(){
-      if (this.circuit_power.includes("-2^")) return "maximum";
+      if (this.circuit_power.includes("2^") && this.circuit_power.length > 4) return "maximum";
       if (this.circuit_power < -999) return "maximum";
       if (this.circuit_power > 999) return "maximum";
       if (this.circuit_power.includes("2^")) return "ultra-large";
