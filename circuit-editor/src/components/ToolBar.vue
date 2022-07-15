@@ -484,9 +484,11 @@ If you do not want to accept cookies, you can zoom the page yourself from the ke
     },
     switchProbabilityBins: function(){
       if (Vue.$cookies.get('functionality_cookies') === 'accepted'){
-        alert("The optimum number of bins in probability plots is 128. You can choose a larger setting, but the responsiveness of the simulation results charts will deteriorate.");
+        if (this.probabilityBins != 128) {
+          alert("The optimum number of bins in probability plots is 128. You can choose a larger setting, but the responsiveness of the simulation results charts will deteriorate.");
+        }
         setUserInterfaceSetting('probability-bins', this.probabilityBins);
-        window.location.reload();
+        this.$root.$emit("probabilityBinsChanged");
       } else {
         alert("You have not accepted functionality cookies hence changing page zoom level will not work. You can remove all cookies \
 for this domain from the lock image in the browser url box, reload the page and when prompted accept functionality cookies. \

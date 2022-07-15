@@ -21,11 +21,10 @@
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 25px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
             <text v-else x="2.5" y="28" style="font-size: 20px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-else x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="19" y="15" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="16" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="14" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else x="10" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
@@ -47,10 +46,10 @@
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 27px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
             <text v-else x="2.5" y="28" style="font-size: 20px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
+            <text v-else x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="19" y="15" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="16" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="14" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else x="10" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
@@ -79,10 +78,10 @@
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 25px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
             <text v-else x="2.5" y="28" style="font-size: 20px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
+            <text v-else x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="19" y="15" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="16" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="14" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else x="10" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
@@ -108,10 +107,10 @@
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 25px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
             <text v-else x="2.5" y="28" style="font-size: 20px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
+            <text v-else x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="19" y="15" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="16" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="14" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else x="10" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
@@ -138,10 +137,10 @@
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 25px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
             <text v-else x="2.5" y="28" style="font-size: 20px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">C</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
+            <text v-else x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: MediumSlateBlue; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="19" y="15" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="16" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="14" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else x="10" y="13" style="font-size: 11px; fill: MediumSlateBlue; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
@@ -165,10 +164,10 @@
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="2.5" y="28" style="font-size: 25px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
             <text v-else x="2.5" y="28" style="font-size: 20px; font-style: italic; fill: #678efa; white-space: pre;">C</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="17.5" y="35" style="font-size: 12px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'large'" x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
+            <text v-else x="15.5" y="35" style="font-size: 11px; font-style: italic; fill: #678efa; white-space: pre;">{{ getCircuitAbbreviation() }}</text>
             <text v-if="gateNameSpaceNeeded() == 'medium'" x="21" y="15" style="font-size: 13px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else-if="gateNameSpaceNeeded() == 'large'" x="19" y="15" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
-            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="16" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
+            <text v-else-if="gateNameSpaceNeeded() == 'ultra-large'" x="14" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
             <text v-else x="10" y="13" style="font-size: 11px; fill: #678efa; font-style: italic;">{{ getCircuitPower() }}</text>
           </g>
         </svg>
