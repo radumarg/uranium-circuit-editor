@@ -314,6 +314,12 @@ export const circuitEditorModule = {
     removeGatesFromCircuit(context, dto) {
       this.commit("circuitEditorModule/removeGates", dto);
     },
+    undoEdit() {
+      this.commit("circuitEditorModule/undo");
+    },
+    redoEdit() {
+      this.commit("circuitEditorModule/redo");
+    },
     removeGateFromCircuitFromWorkerThread(context, payload) {
       this.commit("circuitEditorModule/removeGateFromWorkerThread", payload);
     },
@@ -896,6 +902,12 @@ export const circuitEditorModule = {
         let state = circuitEditorModule.state[window.currentCircuitId];
         removingGateFromCircuit(state, dtos[i]);
       }
+    },
+    undo() {
+      // do nothing, need this mutation to subscribe to it in Toolbar.vue and trigger a call to undo function
+    },
+    redo() {
+      // do nothing, need this mutation to subscribe to it in Toolbar.vue and trigger a call to redo function
     },
     removeBarrier(context, dto) {
       let state = circuitEditorModule.state[window.currentCircuitId];

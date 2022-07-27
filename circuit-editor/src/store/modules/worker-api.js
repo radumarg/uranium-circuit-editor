@@ -65,8 +65,8 @@ function warnUserIfMoreEditorSpaceIsNeeded() {
     let noQubits = getNoQbits(store.state.circuitEditorModule[circuitId]);
     maxQubits = Math.max(maxQubits, noQubits);
   }
-  maxSteps += 2;
-  maxQubits += 2;
+  maxSteps += 1;
+  maxQubits += 1;
 
   if ((maxSteps * 2 > window.gatesTable.columns) && (maxQubits * 2 > window.gatesTable.rows)) {
     alert(`You should increase the number of steps/qubits from the toolbar button. At least ${maxSteps} steps and ${maxQubits} qubits are needed to display each circuit in you current project.`);

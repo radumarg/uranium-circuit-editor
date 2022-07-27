@@ -408,6 +408,8 @@ export function handleSelectEvent(qbit, step) {
             img.style.background = window.selectBackgroundColor;
           }
         }
+      } else {
+        undoGatesSelection(true, false);
       }
     }
   } else {
@@ -921,6 +923,7 @@ function insertQubitsToAccomodateModifiedCircuitGate(store, circuitId, modifiedC
 // remove all gates for modified circuit and add them back with updated targets
 function updateCircuitGatesToAccomodateModifiedCircuitGate(store, circuitId, modifiedCircuitId, noModifiedCircuitQubits) {
   let circuitState = store.state.circuitEditorModule[circuitId];
+  let removeGateAlertShown = new Object();
   for (let i = 0; i < circuitState.steps.length; i++) {
     let step = circuitState.steps[i].index;
     let gates = circuitState.steps[i]["gates"];
@@ -933,7 +936,10 @@ function updateCircuitGatesToAccomodateModifiedCircuitGate(store, circuitId, mod
         store.dispatch('circuitEditorModule/removeGateFromCircuitFromWorkerThread', payload, { root:true })
         let newTargtes = getMultipleTargets(gate.targets[0], noModifiedCircuitQubits);
         if (newTargtes.length == 0) {
-          alert("Because the circuit with the abbreviation " + gate.circuit_abbreviation + " has been rendered empty, the corresponding circuit gates have been removed from the circuit named: " + circuitState["circuit_name"] + "!");
+          if (!(gate.circuit_abbreviation in removeGateAlertShown)) {
+            alert("Because the circuit with the abbreviation " + gate.circuit_abbreviation + " has been rendered empty, the corresponding circuit gates have been removed from the circuit named: " + circuitState["circuit_name"] + "!");
+            removeGateAlertShown[gate.circuit_abbreviation] = true;
+          }
           continue;
         }
         // insert gate back with updated targets

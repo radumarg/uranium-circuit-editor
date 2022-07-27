@@ -191,6 +191,10 @@ The circuit gate ids are not compatible with current project.`);
       store.dispatch('circuitEditorModule/removeGatesFromCircuit', {"dtos": dtos});
       undoGatesSelection();
     }
+  } else if ((e.key == 'z' || e.key == 'Z') && e.ctrlKey){
+    store.dispatch('circuitEditorModule/undoEdit');
+  } else if ((e.key == 'y' || e.key == 'Y') && e.ctrlKey){
+    store.dispatch('circuitEditorModule/redoEdit');
   }
 
 });

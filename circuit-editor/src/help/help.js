@@ -256,19 +256,18 @@ each qubit is measured into a classical bit with index equal to the qubit index 
             <br/> \
             <b> Ordering of bits and qubits:</b> \
             <br> \
+            - when simulating a circuit, the gates in the circuit editor are applied from left to right, which is the generally accepted convention. \
             <br> \
-            - when simulating a circuit the gates in circuit editor are applied from left to right which is the generally accepted convention. \
-            <br> \
-            - visually, the circuit editor has an implicit ordering of qubits from top to bottom where the qubit with index zero is placed on top \
-            and the qubit with highest index is placed at the bottom of the editor. You can press the tooltips button to verify this ordering. \
+            Visually, the circuit editor has an implicit ordering of qubits from top to bottom, where the qubit with index zero is placed on top and \
+            the qubit with the highest index is placed at the bottom of the editor. You can press the tooltips button to verify this ordering.\
             <br> \
             - a valid question to be asked is how should the state vector be represented for a quantum register that consists of a given set of qubits. \
             The state can be represented as a tensor product of qubits where the topmost qubit in our editor is placed at the start of the tensor product \
-            as the left-most qubit while the last (bottom) qubit is placed in the right-most position. This ordering feels very natural and perhaps this is the \
+            as the left-most qubit while the last (bottom) qubit is placed in the right-most position. This ordering feels very natural, and perhaps this is the \
             reason it is being used in most physics textbooks. We will refer to this ordering as Big-Endian ordering. However, using this convention \
-            puts the most significant bit (MSB) on the right, and the least significant bit (LSB) on the left (imagine for example that you want to \
+            puts the most significant bit (MSB) on the right of the tensor product, and the least significant bit (LSB) on the left (imagine for example that you want to \
             perform some simple arithmetic using a quantum circuit by adding the top two qubits into the third qubit using some CNOT gates). \
-            This is a problem because when casting a state vector in binary representation to a decimal number, \
+            This is a problem because when casting a binary representation of a state vector to a decimal number, \
             the most significant bit (MSB) should be put on the left, and the least significant bit (LSB) on the right. In order to acomodate this scenario \
             we provide a checkbox that allows reversing the order of qubit/bits in the output state to Little-Endian. Many commercial quantum computing platforms \
             like Qiskit (IBM), Forest (Rigetti), QSharp (Microsoft) and perhaps others use the Little-Endian convention. If you choose to work in the Little-Endian mode, \

@@ -950,6 +950,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
     for (let i = 0; i < circuitState.steps.length; i++) {
       let column = getColumnFromStep(circuitState.steps[i].index);
+      if (column > gatesTableRowState.cells.length - 1) break;
       if (Object.prototype.hasOwnProperty.call(circuitState.steps[i], "gates")) {
         let gates = circuitState.steps[i]["gates"];
         for (let j = 0; j < gates.length; j++) {

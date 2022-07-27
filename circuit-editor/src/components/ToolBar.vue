@@ -212,6 +212,29 @@ export default {
         this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
         this.$root.$emit("projectLoaded");
         this.projectLoaded(state);
+
+        // automatically update number of steps and qubit to fit circuit
+        let maxrows = 0;
+        let maxcolumns = 0;
+        for (let i = 0; i < window.circuitIds.length; i++) {
+          let circuitId = parseInt(window.circuitIds[i]);
+          let newrows = 2 * Math.max(this.getMaximumQbitIndex()(circuitId) + 1, parseInt(window.gatesTable.rows / 2));
+          let newcolumns = 2 * Math.max(this.getMaximumStepIndex()(circuitId) + 1, parseInt(window.gatesTable.columns / 2));
+          maxrows = Math.max(maxrows, newrows);
+          maxcolumns = Math.max(maxcolumns, newcolumns);
+        }
+        if (maxrows > window.gatesTable.rows || maxcolumns > window.gatesTable.columns){
+          alert("The circuit editor number of qubits and steps will be automatically adjusted to fit all circuits in this project.")
+          // I don't understand why this works only this way
+          // (need to switch to first circuit) but id does
+          // and does not seem to work otherwise:
+          let currentId = window.currentCircuitId;
+          window.currentCircuitId = window.circuitIds[0];
+          window.gatesTable.rows = maxrows;
+          window.gatesTable.columns = maxcolumns;
+          this.refreshCircuit();
+          window.currentCircuitId = currentId;
+        }
       }
     });
     this.unsubscribeEditProject = this.$store.subscribe((mutation, state) => {
@@ -242,6 +265,16 @@ export default {
         let circuitId = mutation.payload["circuitId"];
         this.history[circuitId] = [JSON.stringify(state.circuitEditorModule[circuitId])];
         this.historyUnRoll[circuitId] = [];
+      }
+    });
+    this.unsubscribeInsertRemoveGatesAndQubits = this.$store.subscribe((mutation) => {
+      if (mutation.type == 'circuitEditorModule/undo'){
+        this.undo();
+      }
+    });
+    this.unsubscribeInsertRemoveGatesAndQubits = this.$store.subscribe((mutation) => {
+      if (mutation.type == 'circuitEditorModule/redo'){
+        this.redo();
       }
     });
     // eslint-disable-next-line no-unused-vars
@@ -358,7 +391,7 @@ export default {
       let newrows = 2 * qbitsNew + 2;
       let newcolumns = 2 * stepsNew + 2;
       if (newrows != window.gatesTable.rows || newcolumns != window.gatesTable.columns){
-        if (qbitsNew < (qubitsThatFitScreen - 1) || stepsNew < (stepsThatFitScreen - 1)) {
+        if (qbitsNew < (qubitsThatFitScreen - 1) && stepsNew < (stepsThatFitScreen - 1)) {
           if (!confirm("Unused higher end steps and qubits are simply being ignored. \
 While you are allowed to reduce the number of steps or qubits under the area of circuit that fits your display, \
 it does not make much sense doing that unless you intend to save the circuit as a PNG image next. Do you want to continue?")) {
