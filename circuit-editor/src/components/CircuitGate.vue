@@ -808,6 +808,8 @@ export default {
       let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
 
+      if (dropQbit == draggedQbit) return;
+
       let controlstates = [];
       if (event.dataTransfer.types.includes("controlstates")) {
         let controlstatesData = event.dataTransfer.getData("controlstates");
@@ -819,18 +821,7 @@ export default {
       // add the new gate mandatory params
       let dto = { "step": step, "name": gateName, "controls": originalControls, "controlstates": controlstates, "circuit_id": circuitId, "circuit_abbreviation": circuitAbbreviation, "circuit_power": circuitPower };
 
-      if (draggedQbit ==  originalTargets[0]) {
-        let min = dropQbit;
-        let max = originalTargets[originalTargets.length - 1];
-        dto["targets"] = Array.from({length: max - min + 1}, (_, i) => i + min);
-      } else if (draggedQbit == originalTargets[originalTargets.length - 1]) {
-        let min = originalTargets[0];
-        let max = dropQbit;
-        dto["targets"] = Array.from({length: max - min + 1}, (_, i) => i + min);
-      } else {
-        // not strictly needed, this is defensive coding
-        return;
-      }
+      dto["targets"] = Array.from(originalTargets, x => x + dropQbit - draggedQbit);
 
       if (event.dataTransfer.types.includes("circuit_id")) {
         let circuitId = event.dataTransfer.getData("circuit_id");
