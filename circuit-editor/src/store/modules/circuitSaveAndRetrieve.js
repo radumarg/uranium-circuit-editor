@@ -31,7 +31,7 @@
         let url = '/projects/projects-api/?projectid='.concat(window.projectId);
         xmlHttpReq.open( 'GET', url, true);
         xmlHttpReq.setRequestHeader('Accept', 'application/json');
-        xmlHttpReq.timeout = 5000;
+        xmlHttpReq.timeout = 20000;
 
         xmlHttpReq.onload = function () {
           if (xmlHttpReq.readyState === 4) {
