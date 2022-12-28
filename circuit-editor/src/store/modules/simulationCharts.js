@@ -18,69 +18,92 @@ function toState(dec, totalLength, base) {
     return output.concat(state);
 }
 
-export async function getMeasureGates(circuitState) {
+export function getMeasureGates(circuitStates, circuitId) {
 
   let measureGates = {};
 
-  if (circuitState != undefined) {
-    if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
-      for (let i = 0; i < circuitState.steps.length; i++) {
-        if (Object.prototype.hasOwnProperty.call(circuitState.steps[i], "gates"))
-        {
-          let gates = circuitState.steps[i]["gates"];
-          for (let j = 0; j < gates.length; j++) {
-            let gate = gates[j];
-            if (gate.name.includes("measure-")){
-              measureGates[gate.targets[0]] = [gate.name, gate.bit];
-            }
-          }
-        }
-      }
-    }
+  if (circuitStates != undefined) {
+    extractMeasureGates(circuitStates, circuitId, measureGates, 0);
   }
 
   return measureGates;
 }
 
-export async function getStateProbabilities(circuitState) {
+function extractMeasureGates(circuitStates, circuitId, measureGates, qbitstart) {
+  let circuitState = circuitStates[circuitId];
+  if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
+    for (let i = 0; i < circuitState.steps.length; i++) {
+      if (Object.prototype.hasOwnProperty.call(circuitState.steps[i], "gates"))
+      {
+        let gates = circuitState.steps[i]["gates"];
+        for (let j = 0; j < gates.length; j++) {
+          let gate = gates[j];
+          if (gate.name == "barrier" || gate.name == "aggregate") {
+            continue;
+          }
+          let actual_gate_target = gate.targets[0] + qbitstart;
+          if (gate.name.includes("measure-")){
+            measureGates[actual_gate_target] = [gate.name, gate.bit];
+          }
+          if (gate.name == "circuit") {
+            extractMeasureGates(circuitStates, gate.circuit_id, measureGates, actual_gate_target);
+          }
+        }
+      }
+    }
+  }
+}
 
-    if (circuitState != undefined) {
-      let serializedCircuit = JSON.stringify(circuitState);
+function getSeralizedCircuits(circuitStates) {
+
+  let circuits = [];
+  for (let i = 0; i < window.circuitIds.length; i++) {
+    let circuit_id = window.circuitIds[i];
+    let circuitState = circuitStates[circuit_id];
+    circuits.push({"circuit_id": circuit_id, "circuit": circuitState })
+  }
+  return JSON.stringify(circuits);
+}
+
+export async function getStateProbabilities(circuitStates) {
+
+    if (circuitStates != undefined) {
+      let serializedCircuits = getSeralizedCircuits(circuitStates);
       await init('./wasm/moara_js_bg.wasm');
       let bigEndianOrdering = getUserInterfaceSetting('big-endian-ordering');
       if (bigEndianOrdering === 'true') {
-        return get_probabilities(serializedCircuit, "bigendian");
+        return get_probabilities(serializedCircuits, window.currentCircuitId, "bigendian");
       } else {
-        return get_probabilities(serializedCircuit, "littleendian");
+        return get_probabilities(serializedCircuits, window.currentCircuitId, "littleendian");
       }
     }
 
     return []
 }
 
-async function getStateVector(circuitState) {
+async function getStateVector(circuitStates) {
 
-  if (circuitState != undefined) {
-    let serializedCircuit = JSON.stringify(circuitState);
+  if (circuitStates != undefined) {
+    let serializedCircuits = getSeralizedCircuits(circuitStates);
     await init('./wasm/moara_js_bg.wasm');
     let bigEndianOrdering = getUserInterfaceSetting('big-endian-ordering');
     if (bigEndianOrdering === 'true') {
-      return get_statevector(serializedCircuit, "bigendian");
+      return get_statevector(serializedCircuits, window.currentCircuitId, "bigendian");
     } else {
-      return get_statevector(serializedCircuit, "littleendian");
+      return get_statevector(serializedCircuits, window.currentCircuitId,"littleendian");
     }
   }
   
   return []
 }
 
-export async function getStateVectorEntries(circuitState, qubits) {
+export async function getStateVectorEntries(circuitStates, qubits) {
 
   let realValues = [];
   let imaginaryValues = [];
   let max = 0;
   let quantumStatesBase = getUserInterfaceSetting('legend-base');
-  let stateVector = await getStateVector(circuitState);
+  let stateVector = await getStateVector(circuitStates);
   
   for (let i = 0; i < stateVector.length; i++) {
       let complexString = stateVector[i];
@@ -103,14 +126,11 @@ export function getTopEntriesStateProbabilities(stateProbabilities) {
 
     const ENTRIES = 20;
 
-    if (stateProbabilities === undefined){
+    if (stateProbabilities === undefined || stateProbabilities.length == 0){
         return [];
     }
 
-    let qubits = 0;
-    if (stateProbabilities.length > 0) {
-        qubits = Math.log2(stateProbabilities.length);
-    }
+    let qubits = Math.log2(stateProbabilities.length);
 
     let initialSlice = [... stateProbabilities.slice(0, Math.min(ENTRIES, stateProbabilities.length))];
 
@@ -150,7 +170,7 @@ export function getTopEntriesStateProbabilities(stateProbabilities) {
 
 export function getBinnedProbabilities(fullStateProbabilities, min, max, numberOfBins) {
     
-    if (fullStateProbabilities == undefined){
+    if (fullStateProbabilities == undefined || fullStateProbabilities.length == 0){
         return [[], 0]
     }
     

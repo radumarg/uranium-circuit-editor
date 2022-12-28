@@ -1,35 +1,38 @@
 /* tslint:disable */
 /* eslint-disable */
 /**
-* @param {string} serialized_circuit
+* @param {string} seralized_circuit_states
+* @param {number} current_circuit_id
 * @param {number} shots
 * @param {string | undefined} endianess
 * @param {number | undefined} qubit_count
 * @returns {Uint32Array}
 */
-export function simulate(serialized_circuit: string, shots: number, endianess?: string, qubit_count?: number): Uint32Array;
+export function simulate(seralized_circuit_states: string, current_circuit_id: number, shots: number, endianess?: string, qubit_count?: number): Uint32Array;
 /**
-* @param {string} serialized_circuit
+* @param {string} seralized_circuit_states
+* @param {number} current_circuit_id
 * @param {string | undefined} endianess
 * @param {number | undefined} qubit_count
 * @returns {Float32Array}
 */
-export function get_probabilities(serialized_circuit: string, endianess?: string, qubit_count?: number): Float32Array;
+export function get_probabilities(seralized_circuit_states: string, current_circuit_id: number, endianess?: string, qubit_count?: number): Float32Array;
 /**
-* @param {string} serialized_circuit
+* @param {string} seralized_circuit_states
+* @param {number} current_circuit_id
 * @param {string | undefined} endianess
 * @param {number | undefined} qubit_count
 * @returns {Array<any>}
 */
-export function get_statevector(serialized_circuit: string, endianess?: string, qubit_count?: number): Array<any>;
+export function get_statevector(seralized_circuit_states: string, current_circuit_id: number, endianess?: string, qubit_count?: number): Array<any>;
 
 export type InitInput = RequestInfo | URL | Response | BufferSource | WebAssembly.Module;
 
 export interface InitOutput {
   readonly memory: WebAssembly.Memory;
-  readonly simulate: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => void;
-  readonly get_probabilities: (a: number, b: number, c: number, d: number, e: number, f: number) => void;
-  readonly get_statevector: (a: number, b: number, c: number, d: number, e: number) => number;
+  readonly simulate: (a: number, b: number, c: number, d: number, e: number, f: number, g: number, h: number) => void;
+  readonly get_probabilities: (a: number, b: number, c: number, d: number, e: number, f: number, g: number) => void;
+  readonly get_statevector: (a: number, b: number, c: number, d: number, e: number, f: number) => number;
   readonly __wbindgen_add_to_stack_pointer: (a: number) => number;
   readonly __wbindgen_malloc: (a: number) => number;
   readonly __wbindgen_realloc: (a: number, b: number, c: number) => number;

@@ -23,7 +23,7 @@
       "
     />
 
-    <b-modal ref="modal-dialog" size="sm" centered hide-footer hide-header>
+    <b-modal ref="modal-dialog" size="sm" modal-class="help-sidebar" centered hide-footer hide-header>
       <table style="table-layout: fixed">
         <tr>
           <td colspan="2"></td>
@@ -197,8 +197,9 @@
 
 <script>
 import { mapActions, mapGetters } from "vuex";
-import { seatsAreTaken } from "../store/modules/gatesTable.js";
-import { getAggregatedGatesTargets, handleSelectEvent, isDefined, getClosestControlledGates, stepContainsGates } from "../store/modules/editorHelper.js";
+import { getNoQbits, seatsAreTaken } from "../store/modules/gatesTable.js";
+import { arraysAreEqual } from "../store/modules/javaScriptUtils.js";
+import { gateHasVariableTargets, getMatchingTargets, getMultipleTargets, getAggregatedGatesTargets, handleSelectEvent, isDefined, getClosestControlledGates, stepContainsGates } from "../store/modules/editorHelper.js";
 export default {
   name: "EmptyCell",
   props: {
@@ -281,28 +282,28 @@ export default {
       image.src = require("../assets/gray-line.svg");
     },
     expandCircuitLeft: function () {
-      if (window.gatesTable.columns / 2 == this.getMaximumStepIndex() + 2) {
+      if (window.gatesTable.columns / 2 == this.getMaximumStepIndex()(window.currentCircuitId) + 2) {
         alert("Please increase the number of steps in the circuit first.");
         return;
       }
       this.insertStepInCircuit(this.step);
     },
     expandCircuitRight: function () {
-      if (window.gatesTable.columns / 2 == this.getMaximumStepIndex() + 2) {
+      if (window.gatesTable.columns / 2 == this.getMaximumStepIndex()(window.currentCircuitId) + 2) {
         alert("Please increase the number of steps in the circuit first.");
         return;
       }
       this.insertStepInCircuit(this.step + 1);
     },
     expandCircuitUp: function () {
-      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex() + 1) {
+      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex()(window.currentCircuitId) + 1) {
         alert("Please increase the number targets in the circuit first.");
         return;
       }
       this.insertQbitInCircuit(this.qrow);
     },
     expandCircuitDown: function () {
-      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex() + 1) {
+      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex()(window.currentCircuitId) + 1) {
         alert("Please increase the number targets in the circuit first.");
         return;
       }
@@ -323,7 +324,7 @@ export default {
     handleDropEvent: function (event) {
 
       let step = parseInt(event.currentTarget.getAttribute("step"));
-      let circuitState = this.$store.state.circuitEditorModule;
+      let circuitState = this.$store.state.circuitEditorModule[window.currentCircuitId];
       let gateName = event.dataTransfer.getData("gateName");
 
       let draggedQbit = null;
@@ -334,7 +335,7 @@ export default {
       let dragOrigin = event.dataTransfer.getData("drag-origin");
       if (!dragOrigin){
         // handles the case where we are dragging by accident the gates pallete 
-        // tab title, don't know how to disable the drag action for these
+        // tab title, don't know how to disable the drag action for those
         this.handleDragLeave();
         return;
       }
@@ -384,7 +385,7 @@ export default {
     findClosestGateAndAddNewControl: function (event) {
       let step = parseInt(event.currentTarget.getAttribute("step"));
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
-      let circuitState = this.$store.state.circuitEditorModule;
+      let circuitState = this.$store.state.circuitEditorModule[window.currentCircuitId];
       let closestGates = getClosestControlledGates(circuitState, step, dropQbit);
       if (closestGates.length >= 2) {
         alert(
@@ -432,7 +433,23 @@ export default {
         if (closestGate["root"]) {
           let root = closestGate.root;
           dto["root"] = root;
-        }     
+        }
+        if (closestGate["circuit_id"]) {
+          let circuitId = closestGate.circuit_id;
+          dto["circuit_id"] = circuitId;
+        }
+        if (closestGate["circuit_abbreviation"]) {
+          let circuitAbbreviation = closestGate.circuit_abbreviation;
+          dto["circuit_abbreviation"] = circuitAbbreviation;
+        }
+        if (closestGate["circuit_power"] != null && closestGate["circuit_power"] != undefined) {
+          let circuitPower = closestGate["circuit_power"];
+          dto["circuit_power"] = circuitPower;
+        }
+        if (isDefined(closestGate["targets_expression"])) {
+          let targetsExpression = closestGate.targets_expression;
+          dto["targets_expression"] = targetsExpression;
+        }
 
         this.removeGateFromCircuit(dto);
         this.insertGateInCircuit(dto);
@@ -476,6 +493,22 @@ export default {
       if (event.dataTransfer.types.includes("root")) {
         let root = event.dataTransfer.getData("root");
         dto["root"] = root;
+      }
+      if (event.dataTransfer.types.includes("circuit_id")) {
+        let circuitId = event.dataTransfer.getData("circuit_id");
+        dto["circuit_id"] = circuitId;
+      }
+      if (event.dataTransfer.types.includes("circuit_abbreviation")) {
+        let circuitAbbreviation = event.dataTransfer.getData("circuit_abbreviation");
+        dto["circuit_abbreviation"] = circuitAbbreviation;
+      }
+      if (event.dataTransfer.types.includes("circuit_power")) {
+        let circuitPower = event.dataTransfer.getData("circuit_power");
+        dto["circuit_power"] = circuitPower;
+      }
+      if (event.dataTransfer.types.includes("targets_expression")) {
+        let targetsExpression = event.dataTransfer.getData("targets_expression");
+        dto["targets_expression"] = targetsExpression;
       }
 
       this.removeGateFromCircuit(dto);
@@ -529,6 +562,22 @@ export default {
       if (event.dataTransfer.types.includes("bit")) {
         dto["bit"] = qbit;
       }
+      if (event.dataTransfer.types.includes("circuit_id")) {
+        let circuitId = event.dataTransfer.getData("circuit_id");
+        dto["circuit_id"] = circuitId;
+      }
+      if (event.dataTransfer.types.includes("circuit_abbreviation")) {
+        let circuitAbbreviation = event.dataTransfer.getData("circuit_abbreviation");
+        dto["circuit_abbreviation"] = circuitAbbreviation;
+      }
+      if (event.dataTransfer.types.includes("circuit_power")) {
+        let circuitPower = event.dataTransfer.getData("circuit_power");
+        dto["circuit_power"] = circuitPower;
+      }
+      if (event.dataTransfer.types.includes("targets_expression")) {
+        let targetsExpression = event.dataTransfer.getData("targets_expression");
+        dto["targets_expression"] = targetsExpression;
+      }
 
       let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
 
@@ -538,7 +587,7 @@ export default {
         return;
       }
 
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step)) {
+      if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, step)) {
         alert("Cannot add this gate here, not all required qubits are available!");
         this.handleDragLeave();
         return;
@@ -597,6 +646,22 @@ export default {
       if (event.dataTransfer.types.includes("bit")) {
         dto["bit"] = qbit;
       }
+      if (event.dataTransfer.types.includes("circuit_id")) {
+        let circuitId = event.dataTransfer.getData("circuit_id");
+        dto["circuit_id"] = circuitId;
+      }
+      if (event.dataTransfer.types.includes("circuit_abbreviation")) {
+        let circuitAbbreviation = event.dataTransfer.getData("circuit_abbreviation");
+        dto["circuit_abbreviation"] = circuitAbbreviation;
+      }
+      if (event.dataTransfer.types.includes("circuit_power")) {
+        let circuitPower = event.dataTransfer.getData("circuit_power");
+        dto["circuit_power"] = circuitPower;
+      }
+      if (event.dataTransfer.types.includes("targets_expression")) {
+        let targetsExpression = event.dataTransfer.getData("targets_expression");
+        dto["targets_expression"] = targetsExpression;
+      }
 
       let dtos = [];
 
@@ -612,9 +677,17 @@ export default {
           let currentQubit = Math.min(qbit, originalTargets[0]);
           let lastQubit = Math.max(qbit, originalTargets[0]);
           while (currentQubit <= lastQubit){
-            if (!seatsAreTaken(this.$store.state.circuitEditorModule, [currentQubit], step)) {
+            if (!seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], [currentQubit], step)) {
               let dtoNew = JSON.parse(JSON.stringify(dto));
               dtoNew["targets"] = [currentQubit];
+              if (event.dataTransfer.types.includes("bit")) {
+                let initialBit = parseInt(event.dataTransfer.getData("bit"));
+                if (initialBit >= originalTargets[0] || qbit > originalTargets[0]) {
+                  dtoNew["bit"] = initialBit + currentQubit - originalTargets[0];
+                } else {
+                  dtoNew["bit"] = currentQubit;
+                }
+              }
               dtos.push(dtoNew);
             }
             currentQubit += 1;
@@ -626,7 +699,7 @@ export default {
         while (currentStep <= lastStep){
           if (currentStep != originalStep){
             let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
-            if (!seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, currentStep)) {
+            if (!seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, currentStep)) {
               let dtoNew = JSON.parse(JSON.stringify(dto));
               dtoNew.step = currentStep;
               dtos.push(dtoNew);
@@ -649,6 +722,7 @@ export default {
       let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let dragOrigin = event.dataTransfer.getData("drag-origin");
+      let targetsExpression = event.dataTransfer.getData("targets_expression");
 
       let originalControls = [];
       let draggedQbit = null;
@@ -664,19 +738,46 @@ export default {
       
       if (dragOrigin == "stub") {
         dto["targets"] = originalTargets;
+      } else if (dragOrigin == "gates-pallete" && gateName == "circuit") {
+        let circuitId = parseInt(event.dataTransfer.getData("circuit_id"));
+        let draggedGateQubitNumber = getNoQbits(this.$store.state.circuitEditorModule[circuitId]);
+        let multipleTargets = getMultipleTargets(qbit, draggedGateQubitNumber);
+        let currentCircuit = this.$store.state.circuitEditorModule[window.currentCircuitId];
+        if (seatsAreTaken(currentCircuit, multipleTargets, step, [])) {
+          alert("There are not enough unoccupied qubits to add the gate here.");
+          this.handleDragLeave();
+          return;
+        } else if (draggedGateQubitNumber == 0) {
+          alert("The circuit whose gate you dragged is empty!");
+          this.handleDragLeave();
+          return;
+        } else {
+          dto["targets"] =  multipleTargets;
+        }
       } else if (dragOrigin && dragOrigin != "gates-pallete") {
         if (step == originalStep){
-          if (gateName == "qft" || gateName == "qft-dagger") {
-            let min = Math.min(...originalTargets, qbit);
-            let max = Math.max(...originalTargets, qbit);
-            dto["targets"] = Array.from({length: max - min + 1}, (_, i) => i + min);
+          let qmin = Math.min(...originalTargets, qbit);
+          let qmax = Math.max(...originalTargets, qbit);
+          if (gateName == "sn") {
+            dto["targets"] = Array.from({length: qmax - qmin + 1}, (_, i) => i + qmin);
+          } else if (gateName == "circuit") {
+            dto["targets"] = originalTargets.map(function(value) { return value + delta; });
+          } else if (gateHasVariableTargets(gateName)) {
+            dto["targets"] = getMatchingTargets(qmin, qmax, targetsExpression);
           } else {
             dto["targets"] = originalTargets.map(function(item) { return item == draggedQbit ? qbit : item; });
           }
         } else {
-          dto["targets"] = originalTargets.map(function(value) {return value + delta;}).filter(val => val >= 0);
+          dto["targets"] = originalTargets.map(function(value) { return value + delta; });
         }
       }
+
+      if (dto["targets"].some(x => x < 0)) {
+        alert("Negative target qubits not allowed.");
+        this.handleDragLeave();
+        return;
+      }
+
       // notice lower case needed for types.includes
       if (event.dataTransfer.types.includes("originalcontrols")) {
         originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
@@ -690,15 +791,30 @@ export default {
           if (dragOrigin == "stub"){
             dto["controls"] = originalControls.map(function(item) { return item == draggedQbit ? qbit : item; });
           } else {
-            dto["controls"] = originalControls.map(val => val + delta).filter(val => val >= 0);
+            dto["controls"] = originalControls.map(val => val + delta);
           }
         }
       }
+
+      if (dto["controls"].some(x => x < 0)) {
+        alert("Negative control qubits not allowed.");
+        this.handleDragLeave();
+        return;
+      }
+
       if (event.dataTransfer.types.includes("controlstates")) {
         let controlstates = event.dataTransfer.getData("controlstates");
         if (controlstates) {
           dto["controlstates"] = controlstates.split(",");
         }
+      }
+
+      if (step == originalStep &&
+          arraysAreEqual(dto["targets"], originalTargets) &&
+          arraysAreEqual(dto["controls"], originalControls)) {
+        alert("Proposed new targets and controls are the same with old ones.");
+        this.handleDragLeave();
+        return;
       }
 
       let originalAggregatedGateTargets = [];
@@ -740,6 +856,22 @@ export default {
         // in case we relocate the gate, it makes much
         //  more sense to assign bit to the new qbit
         dto["bit"] = qbit;
+      }
+      if (event.dataTransfer.types.includes("circuit_id")) {
+        let circuitId = event.dataTransfer.getData("circuit_id");
+        dto["circuit_id"] = circuitId;
+      }
+      if (event.dataTransfer.types.includes("circuit_abbreviation")) {
+        let circuitAbbreviation = event.dataTransfer.getData("circuit_abbreviation");
+        dto["circuit_abbreviation"] = circuitAbbreviation;
+      }
+      if (event.dataTransfer.types.includes("circuit_power")) {
+        let circuitPower = event.dataTransfer.getData("circuit_power");
+        dto["circuit_power"] = circuitPower;
+      }
+      if (event.dataTransfer.types.includes("targets_expression")) {
+        let targetsExpression = event.dataTransfer.getData("targets_expression");
+        dto["targets_expression"] = targetsExpression;
       }
 
       let existingQbits = [
@@ -824,7 +956,7 @@ export default {
 
       let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
       
-      if (success && seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)){
+      if (success && seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, step, existingQbits)){
         if (step != originalStep) {
           alert("There are not enough free seats in order to move the gate here.");
         } else {
@@ -839,14 +971,14 @@ the action which was attempted was to adjust the dragged qubit not to move the g
     tryAppendingSecondTargetQubit(dto, qbit, step, existingQbits) {
       dto["targets"] = [qbit, qbit + 1];
       let proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)) {
+      if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, step, existingQbits)) {
         if (qbit == 0) {
           alert("Cannot allocate second target qubit for this gate!");
           return false;
         }
         dto["targets"] = [qbit, qbit - 1];
         proposedQbits = [...dto["targets"], ...dto["controls"], ...getAggregatedGatesTargets(dto)].filter(x => isDefined(x));
-        if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, step, existingQbits)) {
+        if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, step, existingQbits)) {
           alert("Cannot allocate second target qubit for this gate!");
           return false;
         }

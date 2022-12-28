@@ -27,7 +27,20 @@
         Please not that while all other controls from tool bar, tool bar included are Vue Material controls, b-form-select is a BootstrapVue control.
         At some point we should migrate the entire toolbar to BootstrapVue, Vue Material is less customizable than BootstrapVue.  
       -->
-      <b-form-select style="width:120px; max-width: 120px; min-width: 120px;" v-model="zoomLevel" v-on:change="switchZoomLevel()" :options="zoomLevels" size="sm" class="mt-1"></b-form-select>
+      <table>
+      <tr>
+        <td>
+          <b-form-select style="width:120px; max-width: 120px; min-width: 120px; height: 28px;" v-model="zoomLevel" v-on:change="switchZoomLevel()" :options="zoomLevels" size="sm" class="mt-1"></b-form-select>
+          <md-tooltip md-direction="left">Page zoom factor</md-tooltip>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding-bottom: 4px">
+          <b-form-select style="width:120px; max-width: 120px; min-width: 120px; height: 28px;" v-model="probabilityBins" v-on:change="switchProbabilityBins()" :options="probabilityBinValues" size="sm" class="mt-1"></b-form-select>
+          <md-tooltip md-direction="left">No bins in probability plot</md-tooltip>
+        </td>
+      </tr>
+      </table>
 
       <div class="md-toolbar-offset">
         <table>
@@ -41,7 +54,7 @@
             <td>
               <md-checkbox class="md-primary" v-model="bigEndianOrdering" v-on:change="switchQubitOrdering()">
                 Bigendian Ordering
-                <md-tooltip md-direction="left">Ordering of qubits in state vectors</md-tooltip>
+                <md-tooltip md-direction="left">Ordering of qubits in output state vector</md-tooltip>
               </md-checkbox>
             </td>
           </tr>
@@ -70,7 +83,7 @@
           Open
           <md-tooltip md-direction="left">Load Circuit from Disk</md-tooltip>
         </md-button>
-        <md-button class="md-raised md-primary" v-on:click="saveFile()">
+        <md-button class="md-raised md-primary" v-on:click="saveProjectOrFile()">
           Save
           <md-tooltip md-direction="left">Save Circuit</md-tooltip>
         </md-button>
@@ -84,7 +97,7 @@
     <!-- input form used to open json files to read circuit state from -->
     <input id="file-input" type="file" style="display:none;" />
 
-    <b-modal ref="change-steps-qubits-dialog" size="sm"  centered hide-footer hide-header>
+    <b-modal ref="change-steps-qubits-dialog" size="sm" modal-class="help-sidebar" centered hide-footer hide-header>
 
       <table style="table-layout:fixed;">
         <tr>
@@ -136,9 +149,10 @@ import * as htmlToImage from 'html-to-image';
 import JQuery from 'jquery';
 import { mapActions, mapGetters } from 'vuex';
 import { getNoQbits, getNoSteps, getNumberOfRowsThatFit, getNumberOfColumnsThatFit } from "../store/modules/gatesTable.js";
-import {save_circuit} from "../store/modules/circuitSaveAndRetrieve.js";
+import { save_project } from "../store/modules/circuitSaveAndRetrieve.js";
 import { setCookiesIfNotAlreadySet, getUserInterfaceSetting, setUserInterfaceSetting } from "../store/modules/applicationWideReusableUnits.js";
-import {sendWorkerMessage} from '../store/modules/worker-api';
+import { sendMeasureGatesWorkerMessage, sendCircuitGatesWorkerMessage } from '../store/modules/worker-api';
+import { circuitGatesHaveValidId, circuitGatesHaveValidSize, updateGatesAbbreviation } from "../store/modules/editorHelper.js";
 export default {
   name: "ToolBar",
   data() {
@@ -151,6 +165,14 @@ export default {
       bigEndianOrdering: getUserInterfaceSetting("big-endian-ordering") === 'true',
       zoomLevel: getUserInterfaceSetting("zoom-level"),
       zoomLevels: [
+          { value: '140', text: 'Zoom: 140%' },
+          { value: '135', text: 'Zoom: 135%' },
+          { value: '130', text: 'Zoom: 130%' },
+          { value: '125', text: 'Zoom: 125%' },
+          { value: '120', text: 'Zoom: 120%' },
+          { value: '115', text: 'Zoom: 115%' },
+          { value: '110', text: 'Zoom: 110%' },
+          { value: '105', text: 'Zoom: 105%' },
           { value: '100', text: 'Zoom: 100%' },
           { value: '95', text: 'Zoom: 95%' },
           { value: '90', text: 'Zoom: 90%' },
@@ -168,16 +190,54 @@ export default {
           { value: '30', text: 'Zoom: 30%' },
           { value: '25', text: 'Zoom: 25%' },
         ],
+      probabilityBins: getUserInterfaceSetting("probability-bins"),
+      probabilityBinValues: [
+          { value: '32', text: 'Pr. Bins: 32' },
+          { value: '64', text: 'Pr. Bins: 64' },
+          { value: '128', text: 'Pr. Bins: 128' },
+          { value: '256', text: 'Pr. Bins: 256' },
+          { value: '512', text: 'Pr. Bins: 512' },
+        ],
       closeIsHovered: false,
       saveIsHovered:  false,
       qbitsNew: 0,
       stepsNew: 0,
-      history: [],
-      historyUnRoll: [],
+      history: this.initializeProjectHistory(),
+      historyUnRoll: this.initializeProjectHistory(),
     }
   },
   created() {
-    this.unsubscribe = this.$store.subscribe((mutation, state) => {
+    this.unsubscribeLoadProject = this.$store.subscribe((mutation, state) => {
+      if (mutation.type == 'circuitEditorModule/loadProject') {
+        this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
+        this.$root.$emit("projectLoaded");
+        this.projectLoaded(state);
+
+        // automatically update number of steps and qubit to fit circuit
+        let maxrows = 0;
+        let maxcolumns = 0;
+        for (let i = 0; i < window.circuitIds.length; i++) {
+          let circuitId = parseInt(window.circuitIds[i]);
+          let newrows = 2 * Math.max(this.getMaximumQbitIndex()(circuitId) + 1, parseInt(window.gatesTable.rows / 2));
+          let newcolumns = 2 * Math.max(this.getMaximumStepIndex()(circuitId) + 1, parseInt(window.gatesTable.columns / 2));
+          maxrows = Math.max(maxrows, newrows);
+          maxcolumns = Math.max(maxcolumns, newcolumns);
+        }
+        if (maxrows > window.gatesTable.rows || maxcolumns > window.gatesTable.columns){
+          alert("The circuit editor number of qubits and steps will be automatically adjusted to fit all circuits in this project.")
+          // I don't understand why this works only this way
+          // (need to switch to first circuit) but id does
+          // and does not seem to work otherwise:
+          let currentId = window.currentCircuitId;
+          window.currentCircuitId = window.circuitIds[0];
+          window.gatesTable.rows = maxrows;
+          window.gatesTable.columns = maxcolumns;
+          this.refreshCircuit();
+          window.currentCircuitId = currentId;
+        }
+      }
+    });
+    this.unsubscribeEditProject = this.$store.subscribe((mutation, state) => {
       if (mutation.type == 'circuitEditorModule/insertGate' ||
           mutation.type == 'circuitEditorModule/insertGates' ||
           mutation.type == 'circuitEditorModule/insertQbit' ||
@@ -186,51 +246,116 @@ export default {
           mutation.type == 'circuitEditorModule/removeBarrier' ||
           mutation.type == 'circuitEditorModule/removeGates' ||
           mutation.type == 'circuitEditorModule/removeQbit' ||
-          mutation.type == 'circuitEditorModule/removeStep'){
+          mutation.type == 'circuitEditorModule/removeStep' ||
+          mutation.type == 'circuitEditorModule/switchGate') {
         this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
-        this.history.push(JSON.stringify(state));
-        this.historyUnRoll = [];
-        // validate circuit in a separate thread
-        sendWorkerMessage(state.circuitEditorModule);
+        this.history[window.currentCircuitId].push(JSON.stringify(state.circuitEditorModule[window.currentCircuitId]));
+        this.historyUnRoll[window.currentCircuitId] = [];
+        // validate circuit w.r.t. measure gates in a separate thread
+        sendMeasureGatesWorkerMessage([state.circuitEditorModule, window.currentCircuitId]);
+        // update circuit gates in a separate thread if any circuit gate exists
+        sendCircuitGatesWorkerMessage([state.circuitEditorModule, window.currentCircuitId]);
       }      
+    });
+    this.unsubscribeInsertRemoveGatesAndQubits = this.$store.subscribe((mutation, state) => {
+      if (mutation.type == 'circuitEditorModule/insertGateFromWorkerThread' ||
+          mutation.type == 'circuitEditorModule/removeGateFromWorkerThread' ||
+          mutation.type == 'circuitEditorModule/insertQubitFromWorkerThread'){
+        // when we modify circuit gates, edit history may no longer be compatible with latest project configuration
+        let circuitId = mutation.payload["circuitId"];
+        this.history[circuitId] = [JSON.stringify(state.circuitEditorModule[circuitId])];
+        this.historyUnRoll[circuitId] = [];
+      }
+    });
+    this.unsubscribeInsertRemoveGatesAndQubits = this.$store.subscribe((mutation) => {
+      if (mutation.type == 'circuitEditorModule/undo'){
+        this.undo();
+      }
+    });
+    this.unsubscribeInsertRemoveGatesAndQubits = this.$store.subscribe((mutation) => {
+      if (mutation.type == 'circuitEditorModule/redo'){
+        this.redo();
+      }
+    });
+    // eslint-disable-next-line no-unused-vars
+    this.unsubscribeChangeAbbreviation = this.$store.subscribe((mutation, state) => {
+      if (mutation.type == 'circuitEditorModule/updateCircuitNameAndAbbreviation') {
+        let changedCircuitId = mutation.payload[0];
+        let newCircuitAbbreviation = mutation.payload[2];
+        for (let i = 0; i < window.circuitIds.length; i++) {
+          let circuitId = window.circuitIds[i];
+          if (circuitId == changedCircuitId) continue;
+          for (let j = 0; j < this.history[circuitId].length; j++) {
+            let circuitState = JSON.parse(this.history[circuitId][j]);
+            updateGatesAbbreviation(circuitState, changedCircuitId, newCircuitAbbreviation);
+            this.history[circuitId][j] = JSON.stringify(circuitState);
+          }
+        }
+      }
     });
   },
   mounted() {
     let darkTheme = (getUserInterfaceSetting("dark-theme") === 'true')
     this.$root.$emit("switchThemeDark", darkTheme);
-    if (this.$store.state.circuitEditorModule.steps.length > 0){
-      this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
-      this.history.push(JSON.stringify(this.$store.state));
-    }
   },
   beforeDestroy() {
-    this.unsubscribe();
+    this.unsubscribeLoadProject();
+    this.unsubscribeEditProject();
+    this.unsubscribeInsertRemoveGatesAndQubits();
+    this.unsubscribeChangeAbbreviation();
   },
   methods: {
     ...mapActions('circuitEditorModule/', ['emptyCircuit', 'updateCircuit', 'refreshCircuit']),
     ...mapGetters("circuitEditorModule/", ["getCircuitState", "getMaximumStepIndex", "getMaximumQbitIndex"]),
+    projectLoaded: function(state) {
+      this.history = this.initializeProjectHistory();
+      this.historyUnRoll = this.initializeProjectHistory();
+      if (state.circuitEditorModule[window.currentCircuitId].steps.length > 0){
+        let circuit = state.circuitEditorModule[window.currentCircuitId];
+        this.history[window.currentCircuitId] = [];
+        this.historyUnRoll[window.currentCircuitId] = [];
+        this.history[window.currentCircuitId].push(JSON.stringify(circuit));
+        this.historyUnRoll[window.currentCircuitId].push(JSON.stringify(circuit));
+      }
+    },
     undo: function() {
-      if (this.history.length > 0) {
-        let prev_state = this.history.pop();
-        this.historyUnRoll.push(prev_state);
-        if (this.history.length > 0){
-           let current_state = JSON.parse(this.history[this.history.length - 1]);
-           this.updateCircuit(current_state.circuitEditorModule);
-           this.$root.$emit("triggerSimulationRun", current_state.circuitEditorModule);
+      if (this.history[window.currentCircuitId].length > 0) {
+        let prev_state = this.history[window.currentCircuitId].pop();
+        this.historyUnRoll[window.currentCircuitId].push(prev_state);
+        if (this.history[window.currentCircuitId].length > 0){
+           let lastIndex = this.history[window.currentCircuitId].length - 1;
+           let current_state = JSON.parse(this.history[window.currentCircuitId][lastIndex]);
+           this.updateCircuit(current_state);
+           this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
+           // update circuit gates in a separate thread if any circuit gate exists
+          sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
         } else {
           this.emptyCircuit();
           this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
+          sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
         }
+        this.$root.$emit("circuitModifiedFromMenu");
       }
     },
     redo: function() {
-      if(this.historyUnRoll.length > 0){
-        let json_txt = this.historyUnRoll.pop();
-        this.history.push(json_txt);
+      if(this.historyUnRoll[window.currentCircuitId].length > 0){
+        let json_txt = this.historyUnRoll[window.currentCircuitId].pop();
+        this.history[window.currentCircuitId].push(json_txt);
         let current_state = JSON.parse(json_txt);
-        this.updateCircuit(current_state.circuitEditorModule);
-        this.$root.$emit("triggerSimulationRun", current_state.circuitEditorModule);
+        this.updateCircuit(current_state);
+        this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
+        // update circuit gates in a separate thread if any circuit gate exists
+        sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
+        this.$root.$emit("circuitModifiedFromMenu");
       }
+    },
+    initializeProjectHistory: function() {
+      let projectHistory = {};
+      for (let i = 0; i < window.circuitIds.length; i++) {
+        let id = window.circuitIds[i];
+        projectHistory[id] = [];
+      }
+      return projectHistory;
     },
     toggleTooltips: function() {    
       this.refreshCircuit();  
@@ -244,7 +369,7 @@ export default {
     },
     showChangeQbitsStepsModal: function() {
       this.$data.qbitsNew = parseInt(window.gatesTable.rows / 2);
-      this.$data.stepsNew = parseInt(window.gatesTable.columns / 2),
+      this.$data.stepsNew = parseInt(window.gatesTable.columns / 2);
       this.$refs['change-steps-qubits-dialog'].show();
       this.closeIsHovered = false;
       this.saveIsHovered = false;
@@ -259,24 +384,31 @@ export default {
       this.saveIsHovered = hovered;
     },
     handleSaveStepsAndQbits: function(){
-      let qbitsNew = Math.max(this.getMaximumQbitIndex() + 1, this.$data.qbitsNew);
-      let stepsNew = Math.max(this.getMaximumStepIndex() + 1, this.$data.stepsNew);
+      let qbitsNew = Math.max(this.getMaximumQbitIndex()(window.currentCircuitId) + 1, this.$data.qbitsNew);
+      let stepsNew = Math.max(this.getMaximumStepIndex()(window.currentCircuitId) + 1, this.$data.stepsNew);
       let qubitsThatFitScreen = getNumberOfRowsThatFit() / 2;
       let stepsThatFitScreen = getNumberOfColumnsThatFit() / 2;
-      let newrows = 2 * qbitsNew;
-      let newcolumns = 2 * stepsNew;
+      let newrows = 2 * qbitsNew + 2;
+      let newcolumns = 2 * stepsNew + 2;
       if (newrows != window.gatesTable.rows || newcolumns != window.gatesTable.columns){
-        if (qbitsNew < qubitsThatFitScreen || stepsNew < stepsThatFitScreen) {
+        if (qbitsNew < (qubitsThatFitScreen - 1) && stepsNew < (stepsThatFitScreen - 1)) {
           if (!confirm("Unused higher end steps and qubits are simply being ignored. \
 While you are allowed to reduce the number of steps or qubits under the area of circuit that fits your display, \
-it does not make much sense doing that unless you intend to save the circuit as an SVG image next. Do you want to continue?")) {
+it does not make much sense doing that unless you intend to save the circuit as a PNG image next. Do you want to continue?")) {
            return;
           }
         }
+        // I don't understand why this works only this way
+        // (need to switch to first circuit) but id does
+        // and does not seem to work otherwise:
+        let currentId = window.currentCircuitId;
+        window.currentCircuitId = window.circuitIds[0];
         window.gatesTable.rows = newrows;
         window.gatesTable.columns = newcolumns;
-        this.$refs['change-steps-qubits-dialog'].hide();
         this.refreshCircuit();
+        window.currentCircuitId = currentId;
+        // when we are done, remove popup dialog
+        this.$refs['change-steps-qubits-dialog'].hide();
       }
     },
     openFile: function() {
@@ -302,18 +434,22 @@ it does not make much sense doing that unless you intend to save the circuit as 
         alert(error)
       });
     },
-    saveFile: function() {
-      let state = this.getCircuitState();
-      const yaml = require('js-yaml');
-      let yamlState = yaml.safeDump(state);
-      if (window.circuitId){
-        save_circuit(yamlState);
+    saveProjectOrFile: function() {
+      let publicProject = window.location.href.includes("public=true");
+      window.alertedOnFaliedSavingCircuit = false;
+      if (window.projectId != null && window.projectId > 0 && !publicProject) {
+        save_project(window.projectId, this.$store.state.circuitEditorModule);
       } else {
-        this.download("circuit.yaml", yamlState);
+        const yaml = require('js-yaml');
+        let circuitId = window.currentCircuitId;
+        let circuitState = this.$store.state.circuitEditorModule[circuitId];
+        // undefined values should not occur, this is just a precaution
+        let yamlState = yaml.safeDump(circuitState, { skipInvalid: true });
+        this.download(`circuit.yaml`, yamlState);
       }
     },
     download: function(filename, text) {
-      // add temp element for downloading files with user
+      // add temporary element for downloading files with user
       // consent, works on all HTML5 Ready browsers
       var element = document.createElement('a');
       element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(text));
@@ -330,17 +466,17 @@ it does not make much sense doing that unless you intend to save the circuit as 
     },
     resetCircuit: function() {
       this.emptyCircuit();
-      this.history = [];
-      this.historyUnRoll = [];
-      let state = this.getCircuitState();
+      this.history[window.currentCircuitId] = [];
+      this.historyUnRoll[window.currentCircuitId] = [];
       window.gatesTable.rows = window.initialRows;
       window.gatesTable.columns = window.initialColumns;
-      this.$root.$emit("triggerSimulationRun", state.circuitEditorModule);
+      this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
       this.$root.$emit("circuitModifiedFromMenu");
       if (window.toolTipsAreShown){
         JQuery('[data-toggle="tooltip"], .tooltip').tooltip("hide");
         window.toolTipsAreShown = false;
       }
+      sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
     },
     switchTheme: function(){
       setUserInterfaceSetting('dark-theme', this.darkTheme);
@@ -379,24 +515,54 @@ If you do not want to accept cookies, you can zoom the page yourself from the ke
         this.zoomLevel = '100';
       }
     },
+    switchProbabilityBins: function(){
+      if (Vue.$cookies.get('functionality_cookies') === 'accepted'){
+        if (this.probabilityBins != 128) {
+          alert("The optimum number of bins in probability plots is 128. You can choose a larger setting, but the responsiveness of the simulation results charts will deteriorate.");
+        }
+        setUserInterfaceSetting('probability-bins', this.probabilityBins);
+        this.$root.$emit("probabilityBinsChanged");
+      } else {
+        alert("You have not accepted functionality cookies hence changing page zoom level will not work. You can remove all cookies \
+for this domain from the lock image in the browser url box, reload the page and when prompted accept functionality cookies. \
+If you do not want to accept cookies, you can zoom the page yourself from the keyboard.");
+        this.probabilityBins = 128;
+      }
+    },
     commitCircuitState: function(event) {
       const yaml = require('js-yaml');
       var contents = event.target.result;
       let jsonObj = yaml.safeLoad(contents);
-      if (!jsonObj.version || jsonObj.version == "1.0"){
-        alert("Unfortunately this circuit format is outdated. We will refrain from introducing backwards incompatible changes in the future.")
-        jsonObj = JSON.parse('{"version": "1.1", "circuit-type": "simple", "steps": []}');
+      if (!jsonObj.version || jsonObj.version == "1.0") {
+        alert("Unfortunately this circuit format is outdated. Please delete this circuit and create a new one.");
+        return;
       }
       let qbits = getNoQbits(jsonObj);
       let steps = getNoSteps(jsonObj);
       window.gatesTable.rows = Math.max(2 * qbits + 2, window.initialRows);
       window.gatesTable.columns = Math.max(2 * steps + 2, window.initialColumns);
-      this.history = [];
-      this.historyUnRoll = [];
+      if (!Object.prototype.hasOwnProperty.call(jsonObj, "steps")) {
+        alert("This circuit looks empty");
+        return;
+      }
+      let circuitValidationMessage = circuitGatesHaveValidId(this.$store.state.circuitEditorModule, jsonObj);
+      if (circuitValidationMessage.length > 0) {
+        alert(circuitValidationMessage);
+        return;
+      }
+      circuitValidationMessage = circuitGatesHaveValidSize(this.$store.state.circuitEditorModule, jsonObj);
+      if (circuitValidationMessage.length > 0) {
+        alert(circuitValidationMessage);
+        return;
+      }
+      this.history[window.currentCircuitId] = [];
+      this.historyUnRoll[window.currentCircuitId] = [];
       this.updateCircuit(jsonObj);
-      this.history.push(JSON.stringify(this.$store.state));
-      this.$root.$emit("triggerSimulationRun", jsonObj);
+      let circuit = this.$store.state.circuitEditorModule[window.currentCircuitId];
+      this.history[window.currentCircuitId].push(JSON.stringify(circuit));
+      this.$root.$emit("triggerSimulationRun", this.$store.state.circuitEditorModule);
       this.$root.$emit("circuitModifiedFromMenu");
+      sendCircuitGatesWorkerMessage([this.$store.state.circuitEditorModule, window.currentCircuitId]);
     }
   }
 };

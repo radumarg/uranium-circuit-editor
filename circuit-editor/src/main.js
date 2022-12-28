@@ -9,7 +9,7 @@ import { MdButton, MdCheckbox, MdToolbar, MdTooltip } from 'vue-material/dist/co
 import 'vue-material/dist/vue-material.min.css';
 import 'vue-material/dist/theme/default.css';
 import VueCookies from 'vue-cookies';
-import { extractSelectionRange, getPastedGates, isDefined, undoGatesSelection,  saveCopiedGates  } from "./store/modules/editorHelper.js";
+import { extractSelectionRange, getCompatibleCircuitIds, getPastedGates, isDefined, undoGatesSelection,  saveCopiedGates  } from "./store/modules/editorHelper.js";
 import { seatIsTaken, seatsInArrayAreAlreadyTaken } from "./store/modules/gatesTable.js";
 
 Vue.use(MdButton);
@@ -60,6 +60,12 @@ window.selectBackgroundColor = "#C0C0C0";
 window.lightBackgroundColor = "ghostwhite";
 window.whiteBackgroundColor = "white";
 window.darkBackgroundColor = "#374048";
+window.blueGatesColor = "#678efa";
+window.circuitGateColor = "MediumSlateBlue";
+
+// Temporary values until circuit will be loaded asynchronously
+window.circuitIds = [0];
+window.currentCircuitId = 0;
 
 
 // Need a method to detect keys pressed
@@ -116,7 +122,7 @@ $(document).on('keyup', function(e) {
     let selectionRange = extractSelectionRange();
 
     if (selectionRange.length){
-      saveCopiedGates(store.state.circuitEditorModule, selectionRange[0], selectionRange[1], selectionRange[2], selectionRange[3]);
+      saveCopiedGates(store.state.circuitEditorModule[window.currentCircuitId], selectionRange[0], selectionRange[1], selectionRange[2], selectionRange[3]);
       undoGatesSelection();
     }
     
@@ -133,7 +139,7 @@ $(document).on('keyup', function(e) {
       return;
     }
 
-    if (seatIsTaken(store.state.circuitEditorModule, window.selectQbitStart, window.selectStepStart)){
+    if (seatIsTaken(store.state.circuitEditorModule[window.currentCircuitId], window.selectQbitStart, window.selectStepStart)){
       alert("Please select a single empty cell where you want to start pasting gates.");
       return;
     }
@@ -141,9 +147,21 @@ $(document).on('keyup', function(e) {
     getPastedGates(window.selectQbitStart, window.selectStepStart)
     .then(function(gates) {
       if (gates.length > 0){
-        if (seatsInArrayAreAlreadyTaken(store.state.circuitEditorModule, gates)){
+        if (seatsInArrayAreAlreadyTaken(store.state.circuitEditorModule[window.currentCircuitId], gates)){
           alert("Not all the proposed seats are empty.");
         } else {
+          let compatibleCircuitIds = getCompatibleCircuitIds(store.state.circuitEditorModule);
+          for (let i = 0; i < gates.length; i++){
+            let gate = gates[i];
+            if (gate["name"] == "circuit") {
+              let circuit_gate_id = gate["circuit_id"];
+              if (!compatibleCircuitIds.includes(circuit_gate_id)) {
+                alert(`Cannot insert circuit gate with name abbreviation '${gate["circuit_abbreviation"]}' here. \
+The circuit gate ids are not compatible with current project.`);
+                return;
+              }
+            }
+          }
           store.dispatch('circuitEditorModule/insertGatesInCircuit', {"dtos": gates, "existingStep": null, "existingQbit": null});
           undoGatesSelection();
         }
@@ -169,10 +187,14 @@ $(document).on('keyup', function(e) {
           dtos.push(dto);
         }
       }
-      saveCopiedGates(store.state.circuitEditorModule, selectionRange[0], selectionRange[1], selectionRange[2], selectionRange[3]);
+      saveCopiedGates(store.state.circuitEditorModule[window.currentCircuitId], selectionRange[0], selectionRange[1], selectionRange[2], selectionRange[3]);
       store.dispatch('circuitEditorModule/removeGatesFromCircuit', {"dtos": dtos});
       undoGatesSelection();
     }
+  } else if ((e.key == 'z' || e.key == 'Z') && e.ctrlKey){
+    store.dispatch('circuitEditorModule/undoEdit');
+  } else if ((e.key == 'y' || e.key == 'Y') && e.ctrlKey){
+    store.dispatch('circuitEditorModule/redoEdit');
   }
 
 });

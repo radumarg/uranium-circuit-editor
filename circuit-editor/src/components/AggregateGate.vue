@@ -3,7 +3,7 @@
 
     <img :src="gateImageSrcEditor" :id="id" :title="title" data-toggle="tooltip" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
-    <b-modal ref="initial-modal-dialog" size="sm"  centered hide-footer hide-header>
+    <b-modal ref="initial-modal-dialog" size="sm" modal-class="help-sidebar" centered hide-footer hide-header >
 
       <table style="table-layout:fixed;">
         <tr>
@@ -100,7 +100,7 @@
 
     </b-modal>
 
-    <b-modal ref="edit-controls-modal-dialog" :size="editGateAndControlsModalSize()" centered hide-footer hide-header>
+    <b-modal ref="edit-controls-modal-dialog" :size="editGateAndControlsModalSize()" modal-class="help-sidebar" centered hide-footer hide-header>
       <table>
         <tr>
           <td class="no-resize-cell">
@@ -225,7 +225,7 @@
       </table>
     </b-modal>
 
-    <b-modal ref="edit-gates-modal-dialog" :size="editGateAndControlsModalSize()" centered hide-footer hide-header>
+    <b-modal ref="edit-gates-modal-dialog" :size="editGateAndControlsModalSize()" modal-class="help-sidebar" centered hide-footer hide-header>
       <table>
         <tr>
           <td class="no-resize-cell">
@@ -693,7 +693,7 @@ export default {
       
       if (this.targets.length > 0 && this.$data.gatesNew.length == 0) {
         newTarget = this.targets[0];
-      } else if (minQubit > 0 && !seatIsTaken(this.$store.state.circuitEditorModule, minQubit - 1, this.step)) {
+      } else if (minQubit > 0 && !seatIsTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], minQubit - 1, this.step)) {
         newTarget = minQubit - 1;
       } else {
         let currentQubit = minQubit;
@@ -708,14 +708,14 @@ export default {
           if (aggregatedGatesTargets.includes(currentQubit)) {
             continue;
           }
-          if (!qbitIsTaken(this.$store.state.circuitEditorModule, currentQubit, this.step)) {
+          if (!qbitIsTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], currentQubit, this.step)) {
             newTarget = currentQubit;
             break;
           }
         }
       } 
       
-      if (newTarget == null && !seatIsTaken(this.$store.state.circuitEditorModule, maxQubit + 1, this.step)){
+      if (newTarget == null && !seatIsTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], maxQubit + 1, this.step)){
         newTarget = maxQubit + 1;
       }
       
@@ -876,7 +876,7 @@ export default {
       let existingQbits = [...this.targets, ...this.controls, ...getAggregatedGatesTargets(this)].filter(x => isDefined(x));
       let proposedQbits = [...proposedTargets, ...proposedControls, ...proposedGatesTargets].filter(x => isDefined(x));
 
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
+      if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, this.step, existingQbits)) {
         alert("There are no free seats to move control upwards!");
       } else {
         this.$data.targetsNew = proposedTargets;
@@ -908,7 +908,7 @@ export default {
       let existingQbits = [...this.targets, ...this.controls, ...getAggregatedGatesTargets(this)].filter(x => isDefined(x));
       let proposedQbits = [...proposedTargets, ...proposedControls, ...proposedGatesTargets].filter(x => isDefined(x));
 
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
+      if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, this.step, existingQbits)) {
         alert("There are no free seats to move control downwards!");
       } else {
         this.$data.targetsNew = proposedTargets;

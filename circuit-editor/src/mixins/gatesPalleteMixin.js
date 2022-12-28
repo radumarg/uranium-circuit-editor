@@ -1,9 +1,13 @@
 
 import { 
-  createDragImageGhost, 
+  createDragImageGhost,
   hideTooltips,
   getUserInterfaceSetting
 } from "../store/modules/applicationWideReusableUnits.js";
+
+import {
+  gateCanHaveMultipleTargets,
+} from "../store/modules/editorHelper.js";
 
 export const gatesPalleteMixin = {
   methods: {
@@ -18,7 +22,7 @@ export const gatesPalleteMixin = {
       }
       let selectedCellBgColor = cell.style.backgroundColor.toUpperCase();
       // reset bckg for all cells
-      for (const id of ["gates-pallete-table-1", "gates-pallete-table-2", "gates-pallete-table-n"])
+      for (const id of ["gates-pallete-table-1", "gates-pallete-table-2", "gates-pallete-table-n", "gates-pallete-table-circuit"])
       { 
         let table = document.getElementById(id);
         let cells = table.getElementsByTagName("TD");
@@ -41,6 +45,9 @@ export const gatesPalleteMixin = {
       hideTooltips();
       const target = event.target;
       event.dataTransfer.setData("gateName", target.title);
+      if (gateCanHaveMultipleTargets(target.title)) {
+        event.dataTransfer.setData("targets_expression", "true");
+      }
       event.dataTransfer.setData("drag-origin", "gates-pallete");
       let dragImageGhost = createDragImageGhost(target);  
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);

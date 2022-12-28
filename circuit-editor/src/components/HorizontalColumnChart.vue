@@ -1,5 +1,5 @@
 <template>
-   <JSCharting :options="chartOptionsProbabilities" ref="chartProbabilities" class="chart" :key="updateKey"></JSCharting>
+   <JSCharting :options="chartOptionsProbabilities" ref="chartProbabilities" class="chart"></JSCharting>
 </template>
 
 <script>
@@ -51,15 +51,20 @@ export default {
         tooManyQubitsAlertShown: false,
         qubits: 0,
         measureGates: {},
-        defaultNumberOfBins: 128,
+        defaultNumberOfBins: parseInt(getUserInterfaceSetting('probability-bins')),
         liveSimulation: getUserInterfaceSetting("live-simulation") === 'true',
         updateKey: 0,
       }
    },
    methods: {
       ...mapGetters("circuitEditorModule/", ["getMaximumQbitIndex"]),
-      updateData(probabilitiesDTO, forceReRender = false) {
-         const [binnedStateProbabilities, maxProbability] = probabilitiesDTO;
+      updateData(probabilitiesDTO) {
+         let [binnedStateProbabilities, maxProbability] = probabilitiesDTO;
+         if (binnedStateProbabilities.length == 0) {
+          // this is needed s.t. probabilities
+          // plot is cleared on circuit reset
+          binnedStateProbabilities = null;
+         }
          this.$data.chartOptionsProbabilities = {
             type: 'horizontal column',
             axisToZoom: "x",
@@ -71,21 +76,32 @@ export default {
                   color: "#448AFF"
                }
             ],
+            toolbar: {
+                items: {
+                  RESET: {
+                      position: 'inside top left',
+                      margin_top: 10,
+                      margin_left: 20,
+                      width: 58,
+                      height: 33,
+                      events_click: this.reset
+                  },
+                }
+            },
             yAxis: {
                scale: {
                   range: { min: 0, max: maxProbability * 1.01},
                   interval: maxProbability/5.0,
-               }
+               },
+               formatString: 'F6',
             },
+            events_selection: this.selectionHandler,
          };
-         if (forceReRender) {
-           this.forceRerender();
-         }
       },
-      runSimulation: async function (circuitState, forceReRender = false) {
+      runSimulation: async function (circuitStates) {
         if (this.$data.liveSimulation == true && this.$data.activated) {
-          let maxQubitIndex = this.getMaximumQbitIndex();
-          let measureGates = getMeasureGates(circuitState);
+          let maxQubitIndex = this.getMaximumQbitIndex()(window.currentCircuitId);
+          let measureGates = getMeasureGates(circuitStates, window.currentCircuitId);
           if (maxQubitIndex == -1){
               this.$data.stateProbabilities = [];
               this.$data.minRange = 0;
@@ -93,7 +109,7 @@ export default {
               this.$data.qubits = 0;
               this.$data.measureGates = {};
           } else if (maxQubitIndex < 20){
-              let stateProbabilities = await getStateProbabilities(circuitState);
+              let stateProbabilities = await getStateProbabilities(circuitStates);
               this.$data.stateProbabilities = stateProbabilities;
               if (this.$data.qubits != maxQubitIndex + 1 ||                      // qubit added/removed
                   this.$data.measureGates != measureGates){                      // measure gates added/removed
@@ -110,10 +126,10 @@ export default {
           }
           this.$data.qubits = maxQubitIndex + 1;
           let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateProbabilities.length);
-          this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, this.$data.minRange, this.$data.maxRange, numberOfBins), forceReRender);
+          this.updateData(getBinnedProbabilities(this.$data.stateProbabilities, this.$data.minRange, this.$data.maxRange, numberOfBins));
         }        
       },
-      selectionHandler(ev) { 
+      selectionHandler(ev) {
         let numberOfBins = Math.min(this.$data.defaultNumberOfBins, this.$data.stateProbabilities.length);
         if (this.$data.maxRange - this.$data.minRange > numberOfBins)
         {
@@ -150,10 +166,6 @@ export default {
         this.$data.activated = activated;
         this.runSimulation(this.$store.state.circuitEditorModule, true);
       },
-      forceRerender() {
-        // this creates a memory leak
-        this.updateKey += 1;
-      }
    },
    options: {
       responsive: true,
@@ -164,12 +176,21 @@ export default {
       JSCharting
    },
    created() {
-      this.$root.$on('triggerSimulationRun', (circuitState) => {this.runSimulation(circuitState)});
+      this.$root.$on('triggerSimulationRun', (circuitStates) => {this.runSimulation(circuitStates)});
       this.$root.$on('switchLegendBase', () => {this.runSimulation(this.$store.state.circuitEditorModule)});
       this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.updateView(simulatingLive)});
       this.$root.$on('probabilitiesTabActivated', (activated) => {this.tabActivated(activated)});
       this.$root.$on('switchEndianess', () => {this.runSimulation(this.$store.state.circuitEditorModule, false)});
+      this.$root.$on('currentCircuitSwitch', () => {this.runSimulation(this.$store.state.circuitEditorModule)});
+      this.$root.$on('probabilityBinsChanged', () => {
+        this.$data.defaultNumberOfBins = parseInt(getUserInterfaceSetting('probability-bins'));
+        this.runSimulation(this.$store.state.circuitEditorModule);
+      });
    },
+  mounted() {
+    // neded to display results when switching to live simulation mode
+    this.runSimulation(this.$store.state.circuitEditorModule);
+  },
 }
 </script>
 

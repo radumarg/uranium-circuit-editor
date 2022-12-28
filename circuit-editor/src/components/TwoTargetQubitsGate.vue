@@ -3,7 +3,7 @@
 
     <img :src="gateImageSrcEditor" :id="id" :title="title" data-toggle="tooltip" :name="name" @dragend="dragEnd" @dragstart="dragStart" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
-    <b-modal ref="initial-modal-dialog" size="sm" centered hide-footer hide-header>
+    <b-modal ref="initial-modal-dialog" size="sm" modal-class="help-sidebar" centered hide-footer hide-header>
 
       <table style="table-layout:fixed;">
         <tr>
@@ -110,7 +110,7 @@
 
     </b-modal>
 
-    <b-modal ref="replicate-gate-modal-dialog" size="lg" width="100px" centered hide-footer hide-header>
+    <b-modal ref="replicate-gate-modal-dialog" size="lg" width="100px" modal-class="help-sidebar" centered hide-footer hide-header>
       <table>
         <tr>
           <td class="no-resize-cell">
@@ -235,7 +235,7 @@
       </table>
     </b-modal>
 
-    <b-modal ref="edit-controls-modal-dialog" :size="editControlsModalSize()" centered hide-footer hide-header>
+    <b-modal ref="edit-controls-modal-dialog" :size="editControlsModalSize()" modal-class="help-sidebar" centered hide-footer hide-header>
       <table>
         <tr>
           <td class="no-resize-cell">
@@ -350,6 +350,40 @@
       </table>
     </b-modal>
 
+    <b-modal ref="switch-gate-dialog" size="sm" modal-class="help-sidebar" centered hide-footer hide-header>
+
+      <table style="table-layout:fixed;">
+        <tr>
+          <td colspan="3" valign="top">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleSwitchGateCloseHover">
+              <b-icon v-if="switchGateCloseIsHovered" v-on:click="hideSwitchGateModal()" v-b-tooltip.hover title="Close dialog" icon="x-square" style="color: #7952b3; float: right;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="x-square" v-on:click="hideSwitchGateModal()" v-b-tooltip.hover title="Close dialog" style="color: #7952b3; float: right;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td width="5px"></td>
+          <td v-b-tooltip.hover width="80px" style="padding: 5px;">New Gate:</td>
+          <td width="180px" style="padding: 5px;">
+            <b-form-select min="0" @change="handleSwitchGate()" v-model="gateNewName" :options="gatesNames" id="gate-new" style="width:175px;"></b-form-select>
+          </td>
+          <td width="30px"></td>
+        </tr>
+        <tr>
+          <td colspan="3"></td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleSwitchGateSaveHover">
+              <b-icon v-if="switchGateSaveIsHovered" v-on:click="handleSwitchGate()" icon="check" title="Save changes" style="color: #7952b3; float: right;" font-scale="1.7"></b-icon>
+              <b-icon v-else v-on:click="handleSwitchGate()" icon="check" style="color: #7952b3; float: right;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+    </b-modal>
+
   </div>
 </template>
 
@@ -367,6 +401,33 @@ export default {
     return {
       qbit2Expression: `${this.targets[1]} + q - ${this.targets[0]}`,
       targetsString: `${this.targets[0]},  ${this.targets[1]}`,
+      gatesNames: [
+        { value: 'a', text: 'a' },
+        { value: 'berkeley', text: 'berkeley' },
+        { value: 'berkeley-dagger', text: 'berkeley-dagger' },
+        { value: 'cross-resonance', text: 'cross-resonance' },
+        { value: 'cross-resonance-dagger', text: 'cross-resonance-dagger' },
+        { value: 'ecp', text: 'ecp' },
+        { value: 'ecp-dagger', text: 'ecp-dagger' },
+        { value: 'fswap', text: 'fswap' },
+        { value: 'givens', text: 'givens' },
+        { value: 'iswap', text: 'iswap' },
+        { value: 'magic', text: 'magic' },
+        { value: 'magic-dagger', text: 'magic-dagger' },
+        { value: 'molmer-sorensen', text: 'molmer-sorensen' },
+        { value: 'molmer-sorensen-dagger', text: 'molmer-sorensen-dagger' },
+        { value: 'sqrt-swap', text: 'sqrt-swap' },
+        { value: 'sqrt-swap-dagger', text: 'sqrt-swap-dagger' },
+        { value: 'swap', text: 'swap' },
+        { value: 'swap-root', text: 'swap-root' },
+        { value: 'swap-root-dagger', text: 'swap-root-dagger' },
+        { value: 'swap-theta', text: 'swap-theta' },
+        { value: 'xx', text: 'xx' },
+        { value: 'xy', text: 'xy' },
+        { value: 'yy', text: 'yy' },
+        { value: 'zz', text: 'zz' },
+        { value: 'w', text: 'w' },
+      ],
     }
   },
   methods: {

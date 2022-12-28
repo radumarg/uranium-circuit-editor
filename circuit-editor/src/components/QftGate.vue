@@ -3,7 +3,7 @@
 
     <img :src="gateImageSrcEditor" :id="id" :title="title" :name="name" @dragend="dragEnd" @dragstart="dragStart" @dragover="handleDragOver" @dragleave="handleDragLeave" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;"/>
     
-    <b-modal ref="initial-modal-dialog" size="sm" centered hide-footer hide-header>
+    <b-modal ref="initial-modal-dialog" size="sm" modal-class="help-sidebar" centered hide-footer hide-header>
       <table style="table-layout:fixed;">
         <tr>
           <td class="no-resize-cell">
@@ -44,24 +44,32 @@
         </tr>
         <tr>
           <td></td>
-          <td title="First target qubit" width="110px" style="padding: 5px;">Target First:</td>
-          <td width="100px" style="padding: 5px;"> 
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNewFirst" placeholder="qbit" type="number" id="qbit-new" style="width:75px;"></b-form-input>
+          <td width="70px" title="First qubit. This is used to indicate the space in the circuit covered by the gate not necessarily the first target qubit. Target qubits are selected via the 'Targets Expression' which is a Javascript 'j' based expression that must evaluate to 'true' or 'false' for each qubit position identified by 'j' where j is a zero based qubit index and where index 0 corresponds to the first qubit in this dialog.">First Qubit:</td>
+          <td width="130px" style="padding: 5px;"> 
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNewFirst" placeholder="qbit" type="number" id="qbit-new" style="width:120px;"></b-form-input>
           </td>
           <td></td>
         </tr>
         <tr>
           <td></td>
-          <td title="Last target qubit" width="110px" style="padding: 5px;">Target Last:</td>
-          <td width="100px" style="padding: 5px;">
-            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNewLast" placeholder="qbit" type="number" id="qbit-new" style="width:75px;"></b-form-input>
+          <td width="70px" title="Last qubit. This is used to indicate the space in the circuit covered by the gate not necessarily the last target qubit. Target qubits are selected via the 'Targets Expression' which is a Javascript 'j' based expression that must evaluate to 'true' or 'false' for each qubit position identified by 'j' where j is a zero based qubit index and where index 0 corresponds to the first qubit in this dialog.'">Last Qubit:</td>
+          <td width="130px" style="padding: 5px;">
+            <b-form-input min="0" @keyup.enter.native="handleSave()" v-model.number="targetsNewLast" placeholder="qbit" type="number" id="qbit-new" style="width:120px;"></b-form-input>
           </td>
           <td></td>
         </tr>
         <tr>
           <td></td>
-           <td title="Edit control qubits" width="100px" style="padding: 5px;">Controls:</td>
-           <td width="100px" style="padding: 5px;">
+          <td width="70px" title="Target expression is used to select the array of target qubits to whom this gate is applied. It must be a Javascript 'j' based expression that must evaluate to true ore false for each value of 'j'. Here 'j' is the index of the target gate where first target qubit has index 0 and the last target qubit has maximum index. The simplest example of such expression is: 'true', which, indicates a condition which is always valid regardless of value of 'j'.">Targets Expr:</td>
+          <td width="130px" style="padding: 5px;">
+            <b-form-input @keyup.enter.native="handleSave()" v-model.number="targetsExpressionNew" placeholder="'j' based JS expression" style="width:120px;"></b-form-input>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+           <td title="Edit control qubits" width="70px">Controls:</td>
+           <td width="130px" style="padding: 5px;">
              <div v-b-hover="handleEditControlsHover">
               <b-icon v-if="editControlsIsHovered" icon="pencil-fill" v-on:click="handleEditControls()" title="Edit controls" style="color: #7952b3;" font-scale="1.4"></b-icon>
               <b-icon v-else icon="pencil" style="color: #7952b3;" font-scale="1.4"></b-icon>
@@ -104,7 +112,7 @@
       </table>
     </b-modal>
 
-    <b-modal ref="edit-controls-modal-dialog" :size="editControlsModalSize()" centered hide-footer hide-header>
+    <b-modal ref="edit-controls-modal-dialog" :size="editControlsModalSize()" modal-class="help-sidebar" centered hide-footer hide-header>
       <table>
         <tr>
           <td class="no-resize-cell">
@@ -213,6 +221,40 @@
       </table>
     </b-modal>
 
+    <b-modal ref="switch-gate-dialog" size="sm" modal-class="help-sidebar" centered hide-footer hide-header>
+
+      <table style="table-layout:fixed;">
+        <tr>
+          <td colspan="3" valign="top">
+          </td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleSwitchGateCloseHover">
+              <b-icon v-if="switchGateCloseIsHovered" v-on:click="hideSwitchGateModal()" v-b-tooltip.hover title="Close dialog" icon="x-square" style="color: #7952b3; float: right;" font-scale="1.6"></b-icon>
+              <b-icon v-else icon="x-square" v-on:click="hideSwitchGateModal()" v-b-tooltip.hover title="Close dialog" style="color: #7952b3; float: right;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td width="5px"></td>
+          <td v-b-tooltip.hover width="80px" style="padding: 5px;">New Gate:</td>
+          <td width="180px" style="padding: 5px;">
+            <b-form-select min="0" @change="handleSwitchGate()" v-model="gateNewName" :options="gatesNames" id="gate-new" style="width:175px;"></b-form-select>
+          </td>
+          <td width="30px"></td>
+        </tr>
+        <tr>
+          <td colspan="3"></td>
+          <td class="no-resize-cell">
+            <div v-b-hover="handleSwitchGateSaveHover">
+              <b-icon v-if="switchGateSaveIsHovered" v-on:click="handleSwitchGate()" icon="check" title="Save changes" style="color: #7952b3; float: right;" font-scale="1.7"></b-icon>
+              <b-icon v-else v-on:click="handleSwitchGate()" icon="check" style="color: #7952b3; float: right;" font-scale="1.4"></b-icon>
+            </div>
+          </td>
+        </tr>
+      </table>
+
+    </b-modal>
+
   </div>
 </template>
 
@@ -221,7 +263,7 @@
 import { mapActions } from 'vuex';
 import { arraysAreEqual } from "../store/modules/javaScriptUtils.js";
 import { controlsMixin } from "../mixins/controlsMixin.js";
-import { getClosestControlledGates } from "../store/modules/editorHelper.js";
+import { evaluateTargetsExpression, getClosestControlledGates } from "../store/modules/editorHelper.js";
 import { seatsAreTaken } from "../store/modules/gatesTable.js";
 import SingleQbitGate from "./SingleQbitGate";
 import { createDragImageGhost, getUserInterfaceSetting, hideTooltips } from "../store/modules/applicationWideReusableUnits.js";
@@ -229,10 +271,18 @@ export default {
   name: "QftGate",
   extends: SingleQbitGate,
   mixins: [controlsMixin],
+  props: {
+    'targets_expression': String,
+  },
   data() {
     return {
       targetsNewFirst: this.targets[0],
       targetsNewLast: this.targets[this.targets.length - 1],
+      targetsExpressionNew: this.targets_expression,
+      gatesNames: [
+        { value: 'qft', text: 'qft' },
+        { value: 'qft-dagger', text: 'qft-dagger' },
+      ],
     }
   },
   methods: {
@@ -258,17 +308,40 @@ export default {
         this.$data.targetsNewFirst = this.$data.targetsNewLast;
         this.$data.targetsNewLast = tmp;
       }
-      let targetsOld = [...this.targets];
+      
+      // resolve new target qubits
       let targetsNew = [];
-      for (let i = this.$data.targetsNewFirst; i <= this.$data.targetsNewLast; i++) {
-        if (!targetsNew.includes(i))
-          targetsNew.push(i);
+      for (let q = this.$data.targetsNewFirst; q <= this.$data.targetsNewLast; q++) {
+        let j = q - this.$data.targetsNewFirst;
+        try {
+          let targetIsUsed = evaluateTargetsExpression(this.$data.targetsExpressionNew, j);
+          if (targetIsUsed == true) {
+            targetsNew.push(q);
+          }
+        } catch (e) {
+          alert(`Target qubit with index ${j} does not evaluate to 'true' or 'false'!`);
+          return;
+        }
       }
+      if (targetsNew.length == 0) {
+        alert("No qubit is selected by the targets expression! Perhaps you need to increase the number of qubits covered by the gate?");
+        return;
+      }
+      if (targetsNew[0] != this.$data.targetsNewFirst) {
+        alert("Expression should evaluate to 'true' for the first qubit (j = 0)!");
+        return;
+      }
+      this.$data.targetsNewFirst = targetsNew[0];
+      this.$data.targetsNewLast = targetsNew[targetsNew.length - 1];
+
+      let targetsOld = [...this.targets];
+      let targetsExpressionOld = this.targets_expression;
       let promise = this.repositionGateInCircuit({
         'step': this.step,
         'name': this.name,
         'img': this.img,
         'targets': [...this.targets],
+        'targets_expression': this.targetsExpressionNew,
         'controls': [...this.controls],
         'targetsNew': [...targetsNew],
         'controlsNew': [...this.$data.controlsNew],
@@ -281,6 +354,7 @@ export default {
         error => {
           this.$data.targetsNewFirst = targetsOld[0];
           this.$data.targetsNewLast = targetsOld[this.targetsOld.length - 1];
+          this.$data.targetsExpressionNew = targetsExpressionOld;
         }
       );
       this.$refs['initial-modal-dialog'].hide();
@@ -290,7 +364,7 @@ export default {
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
       let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
-      let circuitState = this.$store.state.circuitEditorModule;
+      let circuitState = this.$store.state.circuitEditorModule[window.currentCircuitId];
       let closestGates = getClosestControlledGates(circuitState, step, dropQbit);
 
       if (step == originalStep && closestGates.length == 1 && dropQbit != draggedQbit) {
@@ -318,6 +392,7 @@ export default {
       let originalStep = parseInt(event.dataTransfer.getData("originalStep"));
       let originalTargets = JSON.parse("[" +  event.dataTransfer.getData("originalTargets") + "]");
       let originalControls = JSON.parse("[" +  event.dataTransfer.getData("originalControls") + "]");
+      let targetsExpression = parseInt(event.currentTarget.getAttribute("targets_expression"));
       let draggedQbit = parseInt(event.dataTransfer.getData("dragged-qbit"));
       let dropQbit = parseInt(event.currentTarget.getAttribute("qrow"));
 
@@ -330,7 +405,7 @@ export default {
       }
 
       // add the new gate mandatory params
-      let dto = { "step": step, "name": gateName, "controls": originalControls, "controlstates": controlstates};
+      let dto = { "step": step, "name": gateName, "controls": originalControls, "controlstates": controlstates, "targets_expression": targetsExpression};
 
       if (draggedQbit ==  originalTargets[0]) {
         let min = dropQbit;
@@ -343,6 +418,23 @@ export default {
       } else {
         // not strictly needed, this is defensive coding
         return;
+      }
+
+      if (event.dataTransfer.types.includes("circuit_id")) {
+        let circuitId = event.dataTransfer.getData("circuit_id");
+        dto["circuit_id"] = circuitId;
+      }
+      if (event.dataTransfer.types.includes("circuit_abbreviation")) {
+        let circuitAbbreviation = event.dataTransfer.getData("circuit_abbreviation");
+        dto["circuit_abbreviation"] = circuitAbbreviation;
+      }
+      if (event.dataTransfer.types.includes("circuit_power")) {
+        let circuitPower = event.dataTransfer.getData("circuit_power");
+        dto["circuit_power"] = circuitPower;
+      }
+      if (event.dataTransfer.types.includes("targets_expression")) {
+        let targetsExpression = event.dataTransfer.getData("targets_expression");
+        dto["targets_expression"] = targetsExpression;
       }
 
       // step1 - remove original gate if drag event started from a cell
@@ -371,7 +463,7 @@ export default {
       let existingQbits = [...this.targets, ...this.controls];
       let proposedQbits = [...proposedTargets, ...proposedControls];
 
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
+      if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, this.step, existingQbits)) {
         alert("There are no free seats to move control upwards!");
       } else {
         this.$data.targetsNew = proposedTargets;
@@ -395,7 +487,7 @@ export default {
       let existingQbits = [...this.targets, ...this.controls];
       let proposedQbits = [...proposedTargets, ...proposedControls];
 
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
+      if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, this.step, existingQbits)) {
         alert("There are no free seats to move control downwards!");
       } else {
         this.$data.targetsNew = proposedTargets;
@@ -415,6 +507,7 @@ export default {
       event.dataTransfer.setData("originalStep", this.step);
       event.dataTransfer.setData("originalControls", [...this.controls]);
       event.dataTransfer.setData("controlstates", [...this.controlstates]);
+      event.dataTransfer.setData("targets_expression", this.targets_expression);
       let dragImageGhost = createDragImageGhost(target);
       event.dataTransfer.setDragImage(dragImageGhost, target.width/2.0, target.height/2.0);
     },

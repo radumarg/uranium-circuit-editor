@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg width="46" height="72" xmlns="http://www.w3.org/2000/svg">
   <g>
-    <circle cx="23" cy="13" r="12.1" style="stroke:cornflowerblue;stroke-width:1.5;" fill="transparent" />
-    <text x="17" y="19.3" style="font-size: 19px; font-weight: bold; fill: cornflowerblue; white-space: pre;">B</text>
-    <line x1="23" y1="25" x2="23" y2="47" style="stroke:cornflowerblue;stroke-width:1.5; stroke-opacity:1;" />
-    <text x="17" y="65.3" style="font-size: 19px; font-weight: bold; fill: cornflowerblue; white-space: pre;">B</text>
-    <circle cx="23" cy="59" r="12.1" style="stroke:cornflowerblue;stroke-width:1.5;" fill="transparent" />
+    <circle cx="23" cy="13" r="12.1" style="stroke:#678efa;stroke-width:1.5;" fill="transparent" />
+    <text x="17" y="19.3" style="font-size: 19px; font-weight: bold; fill: #678efa; white-space: pre;">B</text>
+    <line x1="23" y1="25" x2="23" y2="47" style="stroke:#678efa;stroke-width:1.5; stroke-opacity:1;" />
+    <text x="17" y="65.3" style="font-size: 19px; font-weight: bold; fill: #678efa; white-space: pre;">B</text>
+    <circle cx="23" cy="59" r="12.1" style="stroke:#678efa;stroke-width:1.5;" fill="transparent" />
   </g>
 </svg>

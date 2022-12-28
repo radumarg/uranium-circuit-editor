@@ -3,7 +3,7 @@
     
     <img :src="gateImageSource" :id="id" @dragend="dragEnd" @dragstart="dragStart" alt="Controlled Gates Stubs" style="width:100%;height:100%;max-width:40px;max-height:40px;min-width:40px;min-height:40px;" />
   
-    <b-modal ref="modal-dialog" size="sm"  centered hide-footer hide-header>
+    <b-modal ref="modal-dialog" size="sm" modal-class="help-sidebar" centered hide-footer hide-header>
 
       <table style="table-layout:fixed;">
         <tr>
@@ -115,6 +115,10 @@ export default {
     'lambda': Number,
     'root': String,
     'id': String,
+    'circuit_id': Number,
+    'circuit_abbreviation': String,
+    'circuit_power': String,
+    'targets_expression': String,
   },
   data() {
     return {
@@ -201,6 +205,18 @@ export default {
       if (isDefined(this.root)) {
         dto['rootNew'] = this.root;
       }
+      if (isDefined(this.circuit_id)){
+        dto['circuit_id'] = this.circuit_id;
+      }
+      if (isDefined(this.circuit_abbreviation)){
+        dto['circuit_abbreviation'] = this.circuit_abbreviation;
+      }
+      if (this.circuit_power != null && this.circuit_power != undefined) {
+        dto['circuit_power'] = this.circuit_power;
+      }
+      if (isDefined(this.targets_expression)){
+        dto['targets_expression'] = this.targets_expression;
+      }
       let promise = this.repositionGateInCircuit(dto);
       promise.then(
         // eslint-disable-next-line no-unused-vars
@@ -240,10 +256,85 @@ export default {
       if (isDefined(this.root)) {
         dto['rootNew'] = this.root;
       }
+      if (isDefined(this.circuit_id)){
+        dto['circuit_id'] = this.circuit_id;
+      }
+      if (isDefined(this.circuit_abbreviation)){
+        dto['circuit_abbreviation'] = this.circuit_abbreviation;
+      }
+      if (this.circuit_power != null && this.circuit_power != undefined){
+        dto['circuit_power'] = this.circuit_power;
+      }
+      if (isDefined(this.targets_expression)){
+        dto['targets_expression'] = this.targets_expression;
+      }
       let promise = this.repositionGateInCircuit(dto);
       promise.then(
         // eslint-disable-next-line no-unused-vars
         result => {}, 
+        // eslint-disable-next-line no-unused-vars
+        error => {}
+      );
+      this.$refs['modal-dialog'].hide();
+    },
+    handleToggleControl: function(){
+      let controlStatesNew = [...this.controlstates]
+      let controlsNew = [...this.controls];
+      let controlIndex = this.controls.indexOf(this.control);
+      let controlState = controlStatesNew[controlIndex];
+      if (controlState == '1') {
+        controlStatesNew[controlIndex] = '0';
+      } else if (controlState == '0') {
+        controlStatesNew[controlIndex] = '1';
+      } else if (controlState == '+') {
+        controlStatesNew[controlIndex] = '-';
+      } else if (controlState == '-') {
+        controlStatesNew[controlIndex] = '+';
+      } else if (controlState == '+i') {
+        controlStatesNew[controlIndex] = '-i';
+      } else if (controlState == '-i') {
+        controlStatesNew[controlIndex] = '+i';
+      }
+      let dto = {
+        'name': this.gate,
+        'step': this.step,
+        'targets': [...this.targets],
+        'controls': [...this.controls],
+        'targetsNew': [...this.targets],
+        'controlsNew': [...controlsNew],
+        'controlstatesNew': [...controlStatesNew],
+      }
+      if (this.gates){
+        dto['gates'] = [...this.gates];
+      }
+      if (isDefined(this.phi)) {
+        dto['phiNew'] = this.phi;
+      }
+      if (isDefined(this.theta)) {
+        dto['thetaNew'] = this.theta;
+      }
+      if (isDefined(this.lambda)) {
+        dto['lambdaNew'] = this.lambda;
+      }
+      if (isDefined(this.root)) {
+        dto['rootNew'] = this.root;
+      }
+      if (isDefined(this.circuit_id)){
+        dto['circuit_id'] = this.circuit_id;
+      }
+      if (isDefined(this.circuit_abbreviation)){
+        dto['circuit_abbreviation'] = this.circuit_abbreviation;
+      }
+      if (this.circuit_power != null && this.circuit_power != undefined){
+        dto['circuit_power'] = this.circuit_power;
+      }
+      if (isDefined(this.targets_expression)){
+        dto['targets_expression'] = this.targets_expression;
+      }
+      let promise = this.repositionGateInCircuit(dto);
+      promise.then(
+        // eslint-disable-next-line no-unused-vars
+        result => {},
         // eslint-disable-next-line no-unused-vars
         error => {}
       );
@@ -262,7 +353,7 @@ export default {
       this.expandDownIsHovered = hovered;
     },
     expandCircuitLeft: function(){
-      if (window.gatesTable.columns/2 == this.getMaximumStepIndex() + 2){
+      if (window.gatesTable.columns/2 == this.getMaximumStepIndex()(window.currentCircuitId) + 2){
         alert("Please increase the number of steps in the circuit first.");
         return;
       }
@@ -270,7 +361,7 @@ export default {
       this.insertStepInCircuit(this.step);
     },
     expandCircuitRight: function(){
-      if (window.gatesTable.columns/2 == this.getMaximumStepIndex() + 2){
+      if (window.gatesTable.columns/2 == this.getMaximumStepIndex()(window.currentCircuitId) + 2){
         alert("Please increase the number of steps in the circuit first.");
         return;
       }
@@ -278,7 +369,7 @@ export default {
       this.insertStepInCircuit(this.step + 1);
     },
     expandCircuitUp: function () {
-      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex() + 1) {
+      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex()(window.currentCircuitId) + 1) {
         alert("Please increase the number qubits in the circuit first.");
         return;
       }
@@ -286,7 +377,7 @@ export default {
       this.insertQbitInCircuit(this.control);
     },
     expandCircuitDown: function () {
-      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex() + 1) {
+      if (window.gatesTable.rows / 2 == this.getMaximumQbitIndex()(window.currentCircuitId) + 1) {
         alert("Please increase the number qubits in the circuit first.");
         return;
       }
@@ -309,6 +400,8 @@ export default {
         this.selectImage();
       } else if (window.currKey == 'd' || window.currKey == 'D') {
         this.handleDeleteControl();
+      } else if (window.currKey == 's' || window.currKey == 'S') {
+        this.handleToggleControl();
       }  else {
         this.showModal();
       }
@@ -339,6 +432,18 @@ export default {
       }
       if (isDefined(this.root)){
         event.dataTransfer.setData("root", this.root);
+      }
+      if (isDefined(this.circuit_id)){
+        event.dataTransfer.setData("circuit_id", this.circuit_id);
+      }
+      if (isDefined(this.circuit_abbreviation)){
+        event.dataTransfer.setData("circuit_abbreviation", this.circuit_abbreviation);
+      }
+      if (this.circuit_power != null && this.circuit_power != undefined){
+        event.dataTransfer.setData("circuit_power", this.circuit_power);
+      }
+      if (isDefined(this.targets_expression)){
+        event.dataTransfer.setData("targets_expression", this.targets_expression);
       }
       const target = event.target;
       let dragImageGhost = createDragImageGhost(target);  

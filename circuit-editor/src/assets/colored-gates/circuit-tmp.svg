@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg">
+
+  <g>
+    <rect x="0" y="0" width="40" height="40" style="opacity:1; fill:none; stroke:MediumSlateBlue; stroke-width:3.8; stroke-opacity:1;"/>
+    <text x="8" y="27" style="font-size: 30px; font-style: italic; font-weight: bold; fill: MediumSlateBlue; white-space: pre;">C<tspan baseline-shift="sub" style="font-size: 14px;" content-value="param(abbreviation)">?</tspan></text>
+  </g>
+
+</svg>

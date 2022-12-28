@@ -1,5 +1,7 @@
 import Vue from 'vue';
 import { getUserInterfaceSetting } from "./applicationWideReusableUnits.js";
+import { range } from "./javaScriptUtils.js";
+import { gateCanHaveMultipleTargets, getNumericValueOfCircuitPower } from "./editorHelper.js";
 
 /* Holds information necessary to diplay a cell in gates table */
 class GatesTableCell {
@@ -47,6 +49,14 @@ class GatesTableCell {
     this.controlstates = [];
     /* single qubit gates attached to an aggregate gate */
     this.gates = [];
+    /* id of the circuit for a circuit gate */
+    this.circuit_id = null;
+    /* abbrevation used to distinguish different circuit gates */
+    this.circuit_abbreviation = null;
+    /* power for a circuit gate: pozitive or negative integer */
+    this.circuit_power = null;
+    /* i-based javascript target expression */
+    this.targets_expression = null;
     /* the circle in parametric swap gates is not being refreshed by vue when draging the upper qbit, 
        upwards to a new position so we need to update this key to force vue to re-render that cell 
     */
@@ -134,19 +144,26 @@ export function classicBitsAreValid(circuitState){
 }
 
 // make sure that no non-measure gate is placed after a measure gate on any given qubit
-export function measureGatesArePositionedLast(circuitState){
-  let measureGates = [];
+export function measureGatesArePositionedLast(circuitStates, currentCircuitId, collectedMeasureGates, qubitStart){
+  let circuitState = circuitStates[currentCircuitId];
   for (let i = 0; i < circuitState.steps.length; i++) {
     let gates = circuitState.steps[i]["gates"];
     for (let j = 0; j < gates.length; j++) {
       let gate = gates[j];
       if (gate.name.includes("measure-")){
-        measureGates.push(gate.targets[0]);
+        collectedMeasureGates.push(gate.targets[0] + qubitStart);
+      } else if (gate.name == "circuit"){
+        let power = getNumericValueOfCircuitPower(gate.circuit_power);
+        for (let k = 0; k < Math.abs(power); k++) {
+          if (!measureGatesArePositionedLast(circuitStates, gate.circuit_id, collectedMeasureGates, gate.targets[0] + qubitStart)) {
+            return false;
+          }
+        }
       } else {
         if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
           let targets = gate.targets;
           for (let j = 0; j < targets.length; j++){
-            if (measureGates.includes(targets[j])) {
+            if (collectedMeasureGates.includes(targets[j] + qubitStart)) {
               return false;
             }
           }
@@ -155,7 +172,7 @@ export function measureGatesArePositionedLast(circuitState){
           for (let i = 0; i < gate["controls"].length; i++) {
             let controlInfo = gate["controls"][i];
             let target = controlInfo["target"];
-            if (measureGates.includes(target)) {
+            if (collectedMeasureGates.includes(target + qubitStart)) {
               return false;
             }
           }
@@ -165,7 +182,7 @@ export function measureGatesArePositionedLast(circuitState){
             let aggregatedGate = gate["gates"][i];
             for (let j = 0; j < aggregatedGate.targets.length; j++) {
               let target = aggregatedGate.targets[j];
-              if (measureGates.includes(target)) {
+              if (collectedMeasureGates.includes(target + qubitStart)) {
                 return false;
               }
             }
@@ -175,16 +192,6 @@ export function measureGatesArePositionedLast(circuitState){
     }
   }
   return true;
-}
-
-//TODO: this might not be neeeded anymore
-export function getProximFreeSeat(circuitState, qbit, step) {
-  if (!seatIsTaken(circuitState, qbit + 1, step)) {
-    return qbit + 1;
-  } else if (!seatIsTaken(circuitState, qbit - 1, step)) {
-    return qbit - 1;
-  }
-  return null;
 }
 
 // Verifiy if position is filled
@@ -198,7 +205,9 @@ export function positionIsFilled(circuitState, step, qubit) {
           for (let j = 0; j < gates.length; j++) {
             let gate = gates[j];
             if (Object.prototype.hasOwnProperty.call(gate, "targets")) {
-              if (gate.targets.includes(qubit)) {
+              let targets = gate.targets;
+              let takenQubits = range(targets[0], targets[targets.length - 1]);
+              if (takenQubits.includes(qubit)) {
                 return true;
               }
             }
@@ -276,6 +285,15 @@ export function seatIsTaken(circuitState, qbit, step) {
     }
   }
   return false;
+}
+
+export function getProximFreeSeat(circuitState, qbit, step) {
+  if (!seatIsTaken(circuitState, qbit + 1, step)) {
+    return qbit + 1;
+  } else if (!seatIsTaken(circuitState, qbit - 1, step)) {
+    return qbit - 1;
+  }
+  return null;
 }
 
 export function qbitIsTaken(circuitState, qbit, step) {
@@ -393,7 +411,8 @@ export function seatsInArrayAreAlreadyTaken(circuitState, dtos, ignoreStep = nul
     let step = dtos[i]["step"];
 
     if (Object.prototype.hasOwnProperty.call(dtos[i], "targets")) {
-      let qbits = dtos[i]["targets"];
+      let targets = dtos[i]["targets"];
+      let qbits = range(targets[0], targets[targets.length - 1]);
       for (let j = 0; j < qbits.length; j++){
         let qbit = qbits[j];
         if (ignoreStep == step && ignoreQubits.includes(qbit)) continue;
@@ -563,6 +582,7 @@ var canonicalGates = ["canonical"];
 var crossResonanceGates = ["cross-resonance", "cross-resonance-dagger"];
 var qftGates = ["qft", "qft-dagger"];
 var phaseShiftGates = ["p"];
+var circuitGates = ["circuit"];
 
 
 function getSwapIntermediateLineName(thisRowHoldsGates, qmin, qrow, gateName) {
@@ -614,7 +634,9 @@ function getCtrlStubDownName(gate, controlstate) {
     return "ctrl-qft-stub-down-" + controlstate;
   } else if (phaseShiftGates.includes(gate.name)) {
     return "ctrl-p-stub-down-" + controlstate;
-  } 
+  } else if (circuitGates.includes(gate.name)) {
+    return "ctrl-circuit-stub-down-" + controlstate;
+  }
 }
 
 function getCtrlStubUpName(gate, controlstate) {
@@ -654,6 +676,8 @@ function getCtrlStubUpName(gate, controlstate) {
     return "ctrl-qft-stub-up-" + controlstate;
   } else if (phaseShiftGates.includes(gate.name)) {
     return "ctrl-p-stub-up-" + controlstate;
+  } else if (circuitGates.includes(gate.name)) {
+    return "ctrl-circuit-stub-up-" + controlstate;
   }
 }
 
@@ -694,6 +718,8 @@ function getCtrlStubMidName(gate, controlstate) {
     return "ctrl-qft-stub-mid-" + controlstate;
   } else if (phaseShiftGates.includes(gate.name)) {
     return "ctrl-p-stub-mid-" + controlstate;
+  } else if (circuitGates.includes(gate.name)) {
+    return "ctrl-circuit-stub-mid-" + controlstate;
   }
 }
 
@@ -806,6 +832,34 @@ function getIntermediateLineName(gateName, thisRowHoldsGates) {
     } else {
       return "p-line-short";
     }
+  } else if (circuitGates.includes(gateName)) {
+    if (thisRowHoldsGates) {
+      return "circuit-line-long";
+    } else {
+      return "circuit-line-short";
+    }
+  }
+}
+
+function getIntermediateImageForManyTargetsGates(inputRow, rowTargetMin, rowTargetMax, rowQbit, qubitsTakenByGate, gateName) {
+  let noQubitsTakenByGate =  qubitsTakenByGate.length;
+  if (inputRow == rowTargetMin) {
+    if (noQubitsTakenByGate == 1) {
+      return gateName;
+    } else if (noQubitsTakenByGate == 2) {
+      return `_${gateName}-up_`;
+    } else {
+      return "box-up";
+    }
+  } else if (inputRow == rowTargetMax) {
+    return "box-down";
+  } else {
+    let middleTakenQubit = qubitsTakenByGate[Math.floor((noQubitsTakenByGate - 1) / 2)];
+    if (rowQbit == middleTakenQubit) {
+      return `_${gateName}_`;
+    } else {
+      return "box-middle-long";
+    }
   }
 }
 
@@ -896,6 +950,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
   if (Object.prototype.hasOwnProperty.call(circuitState, "steps")) {
     for (let i = 0; i < circuitState.steps.length; i++) {
       let column = getColumnFromStep(circuitState.steps[i].index);
+      if (column > gatesTableRowState.cells.length - 1) break;
       if (Object.prototype.hasOwnProperty.call(circuitState.steps[i], "gates")) {
         let gates = circuitState.steps[i]["gates"];
         for (let j = 0; j < gates.length; j++) {
@@ -1059,6 +1114,18 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             gatesTableRowState.cells[column].bit = parseFloat(gate.bit);
             gatesTableRowState.cells[column].tooltip += `bit=${gate.bit} `;
           }
+          if (Object.prototype.hasOwnProperty.call(gate, "circuit_id")) {
+            gatesTableRowState.cells[column].circuit_id = parseInt(gate.circuit_id);
+          }
+          if (Object.prototype.hasOwnProperty.call(gate, "circuit_abbreviation")) {
+            gatesTableRowState.cells[column].circuit_abbreviation = gate.circuit_abbreviation;
+          }
+          if (Object.prototype.hasOwnProperty.call(gate, "circuit_power")) {
+            gatesTableRowState.cells[column].circuit_power = gate.circuit_power;
+          }
+          if (Object.prototype.hasOwnProperty.call(gate, "targets_expression")) {
+            gatesTableRowState.cells[column].targets_expression = gate.targets_expression;
+          }
 
           // if this is not a multiple bit gate we are done
           if (qmin == qmax) {
@@ -1078,6 +1145,9 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
             gatesTableRowState.cells[column].control = rowQbit;
             gatesTableRowState.cells[column].controlstate = controlstate;
           }
+
+          let qubitsTakenByGate =  range(targets[0], targets[targets.length - 1]);
+          let noQubitsTakenByGate = qubitsTakenByGate.length;
 
           if (rowMin == inputRow) {
             if (controls.includes(qmin)){
@@ -1122,26 +1192,37 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
               }  else if (gate.name == "xy") {
                 gatesTableRowState.cells[column].img = "_xy_";
               } else if (gate.name == "qft") {
-                if (targets.length == 1) {
+                if (noQubitsTakenByGate == 1) {
                   gatesTableRowState.cells[column].img = "qft";
-                } else if (targets.length == 2) {
+                } else if (noQubitsTakenByGate == 2) {
                   gatesTableRowState.cells[column].img = "_qft-up_";
                 } else {
                   gatesTableRowState.cells[column].img = "box-up";
                 }
               } else if (gate.name == "qft-dagger") {
-                if (targets.length == 1) {
+                if (noQubitsTakenByGate == 1) {
                   gatesTableRowState.cells[column].img = "qft-dagger";
-                } else if (targets.length == 2) {
+                } else if (noQubitsTakenByGate == 2) {
                   gatesTableRowState.cells[column].img = "_qft-dagger-up_";
                 } else {
                   gatesTableRowState.cells[column].img = "box-up";
                 }
+              } else if (gate.name == "circuit") {
+                if (noQubitsTakenByGate == 1) {
+                  gatesTableRowState.cells[column].img = "circuit";
+                } else if (noQubitsTakenByGate == 2) {
+                  gatesTableRowState.cells[column].img = "_circuit-up_";
+                } else {
+                  gatesTableRowState.cells[column].img = "box-up";
+                }
               }
-            }
+            } 
           } else if (rowMin < inputRow && inputRow < rowMax) {
             if (controls.includes(rowQbit)){
               gatesTableRowState.cells[column].name = getCtrlStubMidName(gate, controlstate);
+            } else if (gateCanHaveMultipleTargets(gate.name) && qubitsTakenByGate.includes(rowQbit)) {
+              let image = getIntermediateImageForManyTargetsGates(inputRow, rowTargetMin, rowTargetMax, rowQbit, qubitsTakenByGate, gate.name);
+              gatesTableRowState.cells[column].img = image;
             } else if (targets.includes(rowQbit)) {
               if (gate.name == "xx"){
                 gatesTableRowState.cells[column].img = "x";
@@ -1181,44 +1262,6 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
                 gatesTableRowState.cells[column].img = "_w_";
               }  else if (gate.name == "xy") {
                 gatesTableRowState.cells[column].img = "_xy_";
-              } else if (gate.name == "qft") {
-                if (inputRow == rowTargetMin) {
-                  if (targets.length == 1) {
-                    gatesTableRowState.cells[column].img = "qft";
-                  } else if (targets.length == 2) {
-                    gatesTableRowState.cells[column].img = "_qft-up_";
-                  } else {
-                    gatesTableRowState.cells[column].img = "box-up";
-                  }
-                } else if (inputRow == rowTargetMax) {
-                  gatesTableRowState.cells[column].img = "box-down";
-                } else {
-                  let middleTarget = targets[Math.floor((targets.length - 1) / 2)];
-                  if (rowQbit == middleTarget) {
-                    gatesTableRowState.cells[column].img = "_qft_";
-                  } else {
-                    gatesTableRowState.cells[column].img = "box-middle-long";
-                  }
-                }
-              } else if (gate.name == "qft-dagger") {
-                if (inputRow == rowTargetMin) {
-                  if (targets.length == 1) {
-                    gatesTableRowState.cells[column].img = "qft-dagger";
-                  } else if (targets.length == 2) {
-                    gatesTableRowState.cells[column].img = "_qft-dagger-up_";
-                  } else {
-                    gatesTableRowState.cells[column].img = "box-up";
-                  }
-                } else if (inputRow == rowTargetMax) {
-                  gatesTableRowState.cells[column].img = "box-down";
-                } else {
-                  let middleTarget = targets[Math.floor((targets.length - 1) / 2)];
-                  if (rowQbit == middleTarget) {
-                    gatesTableRowState.cells[column].img = "_qft-dagger_";
-                  } else {
-                    gatesTableRowState.cells[column].img = "box-middle-long";
-                  }
-                }
               }
             } else {
               let thisRowHoldsGates = rowHoldsGates(inputRow);
@@ -1231,7 +1274,7 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
                   gatesTableRowState.cells[column].key = timestamp;
                 }
               } else if (
-                  (gate.name == "qft" || gate.name == "qft-dagger") &&
+                  (gate.name == "qft" || gate.name == "qft-dagger" || gate.name == "circuit") &&
                   (inputRow > rowTargetMin && inputRow < rowTargetMax)
               ) {
                 gatesTableRowState.cells[column].name = "box-middle-short";
@@ -1282,14 +1325,20 @@ function setupNonEmptyCells(gatesTableRowState, inputRow, circuitState, timestam
               }  else if (gate.name == "xy") {
                 gatesTableRowState.cells[column].img = "_xy_";
               } else if (gate.name == "qft") {
-                if (targets.length == 1) {
+                if (noQubitsTakenByGate == 1) {
                   gatesTableRowState.cells[column].img = "qft";
                 } else {
                   gatesTableRowState.cells[column].img = "box-down";
                 }
               } else if (gate.name == "qft-dagger") {
-                if (targets.length == 1) {
+                if (noQubitsTakenByGate == 1) {
                   gatesTableRowState.cells[column].img = "qft-dagger";
+                } else {
+                  gatesTableRowState.cells[column].img = "box-down";
+                }
+              } else if (gate.name == "circuit") {
+                if (noQubitsTakenByGate == 1) {
+                  gatesTableRowState.cells[column].img = "circuit";
                 } else {
                   gatesTableRowState.cells[column].img = "box-down";
                 }

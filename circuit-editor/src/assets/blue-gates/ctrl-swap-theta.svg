@@ -2,22 +2,22 @@
 <svg width="46" height="92" xmlns="http://www.w3.org/2000/svg">
   <g>
 
-   <circle cx="23" cy="6" r="5" stroke="cornflowerblue" fill="cornflowerblue" />
+   <circle cx="23" cy="6" r="5" stroke="#678efa" fill="#678efa" />
 
-    <line x1="23" y1="10" x2="23" y2="30" style="stroke:cornflowerblue;stroke-width:2; stroke-opacity:1;" />
+    <line x1="23" y1="10" x2="23" y2="30" style="stroke:#678efa;stroke-width:2; stroke-opacity:1;" />
 
-    <line x1="17" y1="24" x2="29" y2="34" style="stroke:cornflowerblue;stroke-width:2; stroke-opacity:1;" />
-    <line x1="17" y1="34" x2="29" y2="24" style="stroke:cornflowerblue;stroke-width:2; stroke-opacity:1;" />
+    <line x1="17" y1="24" x2="29" y2="34" style="stroke:#678efa;stroke-width:2; stroke-opacity:1;" />
+    <line x1="17" y1="34" x2="29" y2="24" style="stroke:#678efa;stroke-width:2; stroke-opacity:1;" />
 
-    <line x1="23" y1="29" x2="23" y2="46" style="stroke:cornflowerblue;stroke-width:2; stroke-opacity:1;" />
+    <line x1="23" y1="29" x2="23" y2="46" style="stroke:#678efa;stroke-width:2; stroke-opacity:1;" />
 
-    <circle cx="23" cy="57" r="11" style="stroke:cornflowerblue;stroke-width:2;stroke-opacity:1;fill:none;" />
-    <text x="16" y="63.5" style="fill: cornflowerblue; font-size: 12px;"><tspan style="font-size: 20px;">ϴ</tspan></text>
+    <circle cx="23" cy="57" r="11" style="stroke:#678efa;stroke-width:2;stroke-opacity:1;fill:none;" />
+    <text x="16" y="63.5" style="fill: #678efa; font-size: 12px;"><tspan style="font-size: 20px;">ϴ</tspan></text>
 
-    <line x1="23" y1="67" x2="23" y2="85" style="stroke:cornflowerblue;stroke-width:2; stroke-opacity:1;" />
+    <line x1="23" y1="67" x2="23" y2="85" style="stroke:#678efa;stroke-width:2; stroke-opacity:1;" />
 
-    <line x1="17" y1="80" x2="29" y2="90" style="stroke:cornflowerblue;stroke-width:2; stroke-opacity:1;" />
-    <line x1="17" y1="90" x2="29" y2="80" style="stroke:cornflowerblue;stroke-width:2; stroke-opacity:1;" />
+    <line x1="17" y1="80" x2="29" y2="90" style="stroke:#678efa;stroke-width:2; stroke-opacity:1;" />
+    <line x1="17" y1="90" x2="29" y2="80" style="stroke:#678efa;stroke-width:2; stroke-opacity:1;" />
 
   </g>
 </svg>

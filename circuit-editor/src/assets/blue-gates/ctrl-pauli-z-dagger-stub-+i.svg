@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <svg width="20" height="20" xmlns="http://www.w3.org/2000/svg">
   <g>
-    <circle cx="10" cy="10" r="6" style="stroke:cornflowerblue;stroke-width:1.5;" fill="transparent" />
-    <path d="M10 16 L10 4 A4,4 0 0,0 10 16" style="stroke:cornflowerblue; stroke-width:0.1;" fill="cornflowerblue" />
+    <circle cx="10" cy="10" r="6" style="stroke:#678efa;stroke-width:1.5;" fill="transparent" />
+    <path d="M10 16 L10 4 A4,4 0 0,0 10 16" style="stroke:#678efa; stroke-width:0.1;" fill="#678efa" />
   </g>
 </svg>

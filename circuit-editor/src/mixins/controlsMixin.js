@@ -175,7 +175,7 @@ export const controlsMixin = {
       let minQubit = Math.min(...this.$data.targetsNew, ...this.$data.controlsNew, ...aggregatedGatesTargets);
       let maxQubit = Math.max(...this.$data.targetsNew, ...this.$data.controlsNew, ...aggregatedGatesTargets);
 
-      if (minQubit > 0 && !seatIsTaken(this.$store.state.circuitEditorModule, minQubit - 1, this.step)) {
+      if (minQubit > 0 && !seatIsTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], minQubit - 1, this.step)) {
         newControl = minQubit - 1;
       } else {
         let currentQubit = minQubit;
@@ -190,14 +190,14 @@ export const controlsMixin = {
           if (getAggregatedGatesNewTargets(this).includes(currentQubit)) {
             continue;
           }
-          if (!qbitIsTaken(this.$store.state.circuitEditorModule, currentQubit, this.step)) {
+          if (!qbitIsTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], currentQubit, this.step)) {
             newControl = currentQubit;
             break;
           }
         }
       }
 
-      if (newControl == null && !seatIsTaken(this.$store.state.circuitEditorModule, maxQubit + 1, this.step)){
+      if (newControl == null && !seatIsTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], maxQubit + 1, this.step)){
         newControl = maxQubit + 1;
       }
 
@@ -235,7 +235,7 @@ export const controlsMixin = {
       let existingQbits = [...this.targets, ...this.controls];
       let proposedQbits = [...proposedTargets, ...proposedControls];
 
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
+      if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, this.step, existingQbits)) {
         alert("There are no free seats to move control upwards!");
       } else {
         this.$data.targetsNew = proposedTargets;
@@ -260,7 +260,7 @@ export const controlsMixin = {
       let existingQbits = [...this.targets, ...this.controls];
       let proposedQbits = [...proposedTargets, ...proposedControls];
 
-      if (seatsAreTaken(this.$store.state.circuitEditorModule, proposedQbits, this.step, existingQbits)) {
+      if (seatsAreTaken(this.$store.state.circuitEditorModule[window.currentCircuitId], proposedQbits, this.step, existingQbits)) {
         alert("There are no free seats to move control downwards!");
       } else {
         this.$data.targetsNew = proposedTargets;

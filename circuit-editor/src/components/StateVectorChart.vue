@@ -125,20 +125,20 @@ export default {
           ],
         }
       },
-      runSimulation: async function (circuitState, forceReRender = false) {
+      runSimulation: async function (circuitStates, forceReRender = false) {
         if (this.$data.liveSimulation == true && this.$data.activated) {
-          let qubits = this.getMaximumQbitIndex() + 1;
-          if (qubits == -1){
-            this.updateData([], [], 1.0);
+          let qubits = this.getMaximumQbitIndex()(window.currentCircuitId) + 1;
+          if (qubits <= 0){
+            this.updateData([{ x: '0', y: 0 }, { x: '1', y: 0 }], [{ x: '0', y: 0 }, { x: '1', y: 0 }], 1.0);
           } else if (qubits <= 8){
-            let stateVectorEntries = await getStateVectorEntries(circuitState, qubits);
+            let stateVectorEntries = await getStateVectorEntries(circuitStates, qubits);
             let stateVectorRealEntries = stateVectorEntries["real"];
             let stateVectorImaginaryEntries = stateVectorEntries["imaginary"];
             let maxScale = 1.1 * stateVectorEntries["max"];
             this.updateData([], [], maxScale);
             this.updateData(stateVectorRealEntries, stateVectorImaginaryEntries, maxScale);
           } else {
-            this.updateData([], [], 1.0);
+            this.updateData([{ x: '0', y: 0 }, { x: '1', y: 0 }], [{ x: '0', y: 0 }, { x: '1', y: 0 }], 1.0);
           }
           if (forceReRender) {
             this.forceRerender();
@@ -154,7 +154,8 @@ export default {
         this.runSimulation(this.$store.state.circuitEditorModule, true);
       },
       forceRerender() {
-        // this creates a memory leak
+        // this creates a memory leak, however removing this will cause both StateVectorChart and
+        // HorizontalColumnChart to not update correctly when swicthing between the two tabs.
         this.updateKey += 1;
       }
    },
@@ -167,11 +168,12 @@ export default {
       JSCharting
    },
    created() {
-      this.$root.$on('triggerSimulationRun', (circuitState) => {this.runSimulation(circuitState)});
+      this.$root.$on('triggerSimulationRun', (circuitStates) => {this.runSimulation(circuitStates)});
       this.$root.$on('switchLegendBase', () => {this.runSimulation(this.$store.state.circuitEditorModule)});
       this.$root.$on('switchToLiveSimulationMode', (simulatingLive) => {this.updateView(simulatingLive)});
       this.$root.$on('statevectorTabActivated', (activated) => {this.tabActivated(activated)});
       this.$root.$on('switchEndianess', () => {this.runSimulation(this.$store.state.circuitEditorModule, false)});
+      this.$root.$on('currentCircuitSwitch', () => {this.runSimulation(this.$store.state.circuitEditorModule, true)});
    },
 }
 </script>

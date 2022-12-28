@@ -3,7 +3,7 @@
   <b-container fluid="xs" class="h-100" style="background-color: #374048; overflow: hidden; ">
     <b-row>
       <div class="help">
-        <b-sidebar id="sidebar-right" :title="gateName" width="360px" right shadow>
+        <b-sidebar id="sidebar-right" :title="gateName" width="360px" class="help-sidebar" right shadow>
           <div class="px-3 py-2" id="sidebar-right-div">
             <b-img :src="gateImage" width="280px" height="auto" fluid thumbnail></b-img>
             <br/><br/>
@@ -67,15 +67,31 @@
               </td>
             </tr>
           </table>
+          <table style="width:286px; max-width: 286px; min-width: 286px; table-layout: fixed;">
+            <tr>
+              <td class="project-details" style="width: 15%; text-align: left">Proj:</td>
+              <td style="color: slategray; text-align: left; overflow: hidden; white-space: nowrap;"> &nbsp;{{ projectName }} </td>
+            </tr>
+            <tr>
+              <td colspan="2" class="project-details">
+                <b-form-select style="width:264px; max-width: 264px; min-width: 264px;" v-model="circuitName" v-on:change="switchCircuit()" :options="circuitNames" class="mt-1"></b-form-select>
+              </td>
+            </tr>
+            <tr style="height: 10px;">
+            </tr>
+          </table>
           <b-tabs>
             <b-tab title="1-Q">
-              <GatesPallete-1Q /> 
+              <GatesPallete1Q /> 
             </b-tab>
             <b-tab title="2-Q">
-              <GatesPallete-2Q /> 
+              <GatesPallete2Q /> 
             </b-tab>
             <b-tab title="n-Q">
-              <GatesPallete-nQ />
+              <GatesPalleteNQ />
+            </b-tab>
+            <b-tab title="Circuits">
+              <GatesPalleteCircuits />
             </b-tab>
           </b-tabs>
         </b-col>
@@ -92,9 +108,11 @@ import Circuit from "./components/Circuit";
 import GatesPallete1Q from "./components/GatesPallete1Q";
 import GatesPallete2Q from "./components/GatesPallete2Q";
 import GatesPalleteNQ from "./components/GatesPalleteNQ";
+import GatesPalleteCircuits from "./components/GatesPalleteCircuits";
 import Logo from "./components/Logo";
 import ToolBar from "./components/ToolBar";
 import { mapActions} from 'vuex';
+import { undoGatesSelection } from "./store/modules/editorHelper.js";
 import { retriveNoteHtml, retriveSimpleGateHelpHtml, retriveControlledGateHelpHtml, retriveGateMatrixHtml, retriveControlledGateMatrixHtml } from "./help/help.js";
 import { createDragImageGhost, hideTooltips, getUserInterfaceSetting } from "./store/modules/applicationWideReusableUnits.js";
 
@@ -106,6 +124,7 @@ export default {
     GatesPallete1Q,
     GatesPallete2Q,
     GatesPalleteNQ,
+    GatesPalleteCircuits,
     ToolBar,
   },
   data() {
@@ -117,10 +136,18 @@ export default {
       gateMatrixHtml: retriveGateMatrixHtml(""),
       controlledGateMatrixHtml: retriveControlledGateMatrixHtml(""),
       gateName: "",
+      projectName: "",
+      circuitName: "",
+      circuitNames: [],
     };
   },
   methods: {
-    ...mapActions('circuitEditorModule/', ['removeGateFromCircuitByUser']),
+    ...mapActions('circuitEditorModule/', ['asynchronouslyLoadProject', 'removeGateFromCircuitByUser', 'updateCircuit']),
+    projectLoaded: function () {
+      this.$data.projectName = this.$store.state.circuitEditorModule[window.currentCircuitId]["project_name"];
+      this.$data.circuitName = this.$store.state.circuitEditorModule[window.currentCircuitId]["circuit_name"];
+      this.$data.circuitNames = this.getCircuitNameOptions();
+    },
     updateHelpContents: function (gateName) {
 
       var note = document.getElementById("on-gates");
@@ -171,10 +198,32 @@ export default {
         let dto = { step: step, targets: targets };
         this.removeGateFromCircuitByUser(dto);
       }
-    }
+    },
+    switchCircuit: function(){
+      undoGatesSelection();
+      for (let i = 0; i < window.circuitIds.length; i++) {
+        let id = window.circuitIds[i];
+        if (this.$store.state.circuitEditorModule[id]["circuit_name"] == this.circuitName) {
+          window.currentCircuitId = id;
+          this.$root.$emit("currentCircuitSwitch");
+          break;
+        }
+      }
+    },
+    getCircuitNameOptions: function() {
+      let circuitNameOptions = [];
+      for (let i = 0; i < window.circuitIds.length; i++) {
+        let id = window.circuitIds[i];
+        let circuitName = this.$store.state.circuitEditorModule[id]["circuit_name"];
+        circuitNameOptions.push({ value: circuitName, text: circuitName })
+      }
+      return circuitNameOptions;
+    },
   },
   created() {
     this.$root.$on('updateHelpEvent', (selectedGate) => {this.updateHelpContents(selectedGate)});
+    this.$root.$on("projectLoaded", () => { this.projectLoaded(); });
+    this.asynchronouslyLoadProject();
   },
 };
 </script>
@@ -183,12 +232,11 @@ export default {
 
 table {
   /* disable selection on mouse drag over */
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  user-select: none; /* supported by Chrome and Opera */
+  -webkit-user-select: none; /* Safari */
+  -khtml-user-select: none; /* Konqueror HTML */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* Internet Explorer/Edge */
 }
 
 .top-row {
@@ -201,6 +249,10 @@ table {
 .help {
   font-family: Arial, Helvetica, sans-serif;
   font-size: 15px;
+}
+
+.help-sidebar {
+  zoom: calc(var(--help-sidebar-zoom));
 }
 
 .bordered-box {
@@ -248,6 +300,12 @@ table {
 .stub-image {
   width: 17px;
   height: 17px;
+}
+
+.project-details {
+  padding-left: 10px;
+  padding-right: 10px;
+  color: slategray;
 }
 
 .tooltip-inner {

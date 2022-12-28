@@ -80,6 +80,12 @@
             <div v-else-if="cell.name === 'qft-line-long'">
               <VerticalTransitionCellLong :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
             </div>
+            <div v-else-if="cell.name === 'circuit-line-short'">
+              <VerticalTransitionCellShort :name="cell.name" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'circuit-line-long'">
+              <VerticalTransitionCellLong :id="cell.id" :qrow="cell.qrow" :step="cell.step" :name="cell.name" :key="cell.key"/>
+            </div>
             <div v-else-if="cell.name === 'swap-circle-small'" :key="cell.key">
               <SwapCircle />
             </div>
@@ -294,13 +300,16 @@
               <ParametricTwoTargetQubitsGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :theta="cell.theta" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'qft' || cell.name === 'qft-dagger'">
-              <QftGate :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <QftGate :id="cell.id" :targets_expression="cell.targets_expression" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name.includes('stub')">
-              <ControlledGateStub :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :gates="[...cell.gates]" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+              <ControlledGateStub :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :gates="[...cell.gates]" :control="cell.control" :controlstate="cell.controlstate" :step="cell.step" :gate="cell.gate" :name="cell.name" :root="cell.root" :theta="cell.theta" :phi="cell.phi" :lambda="cell.lambda" :circuit_id="cell.circuit_id" :circuit_abbreviation="cell.circuit_abbreviation" :circuit_power="cell.circuit_power" :targets_expression="cell.targets_expression" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'box-middle-short'">
               <BoxVerticalTransitionCellShort :id="cell.id" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
+            </div>
+            <div v-else-if="cell.name === 'circuit'">
+              <CircuitGate :id="cell.id" :circuit_id="cell.circuit_id" :circuit_abbreviation="cell.circuit_abbreviation" :circuit_power="cell.circuit_power" :targets="[...cell.targets]" :qrow="cell.qrow" :controls="[...cell.controls]" :controlstates="[...cell.controlstates]" :step="cell.step" :gate="cell.gate" :name="cell.name" :title="cell.tooltip" :img="cell.img" :key="cell.key"/>
             </div>
             <div v-else-if="cell.name === 'barrier'">
               <Barrier :id="cell.id" :step="cell.step" :name="cell.name" :key="cell.key"/>
@@ -327,6 +336,7 @@ import BoxVerticalTransitionCellShort from "./BoxVerticalTransitionCellShort";
 import AggregateGate from "./AggregateGate";
 import Barrier from "./Barrier";
 import BarrierVerticalTransitionCell from "./BarrierVerticalTransitionCell";
+import CircuitGate from "./CircuitGate";
 import ElementaryGate from "./ElementaryGate";
 import SingleQbitGate from "./SingleQbitGate";
 import PauliRootGate from "./PauliRootGate";
@@ -353,6 +363,7 @@ export default {
     BarrierVerticalTransitionCell,
     BiParametricTwoTargetQubitsGate,
     BoxVerticalTransitionCellShort,
+    CircuitGate,
     ControlledGateStub,
     EmptyCellRectangle,
     EmptyCellSquare,
@@ -380,26 +391,39 @@ export default {
     "getRowsInGatesTable"
   ]),
   created() {
-    this.$root.$on("switchThemeDark", boolFlag => {
-      if (boolFlag) {
-        this.$refs["gatesTable"].style.backgroundColor = window.darkBackgroundColor;
-        this.$refs["gatesTable"].style.borderTopColor = window.darkBackgroundColor;
-        this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.darkBackgroundColor}`;
-      } else {
-        if(getUserInterfaceSetting('colored-gates') === 'true'){
-          this.$refs["gatesTable"].style.backgroundColor = window.lightBackgroundColor;
-          this.$refs["gatesTable"].style.borderTopColor = window.lightBackgroundColor;
-          this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.lightBackgroundColor}`;
-        } else {
-          this.$refs["gatesTable"].style.backgroundColor = window.whiteBackgroundColor;
-          this.$refs["gatesTable"].style.borderTopColor = window.whiteBackgroundColor;
-          this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.whiteBackgroundColor}`;
-        }
-      }
+    this.$root.$on('currentCircuitSwitch', () => { this.$forceUpdate(); });
+    this.$root.$on('circuitAbbreviationChanged', () => { this.$forceUpdate(); });
+    this.$root.$on("switchThemeDark", darkTheme => {
+      this.setTheme(darkTheme);
       if (window.selectBackgroundColor)
         undoGatesSelection(true, true);
     });
   },
+  mounted() {
+    let darkTheme = (getUserInterfaceSetting("dark-theme") === 'true');
+    this.setTheme(darkTheme);
+  },
+  methods: {
+    setTheme: function (darkTheme) {
+      if (this.$refs["gatesTable"] != null) {
+        if (darkTheme) {
+          this.$refs["gatesTable"].style.backgroundColor = window.darkBackgroundColor;
+          this.$refs["gatesTable"].style.borderTopColor = window.darkBackgroundColor;
+          this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.darkBackgroundColor}`;
+        } else {
+          if(getUserInterfaceSetting('colored-gates') === 'true'){
+            this.$refs["gatesTable"].style.backgroundColor = window.lightBackgroundColor;
+            this.$refs["gatesTable"].style.borderTopColor = window.lightBackgroundColor;
+            this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.lightBackgroundColor}`;
+          } else {
+            this.$refs["gatesTable"].style.backgroundColor = window.whiteBackgroundColor;
+            this.$refs["gatesTable"].style.borderTopColor = window.whiteBackgroundColor;
+            this.$refs["gatesTable"].style.borderBottom = `solid 0.45em ${window.whiteBackgroundColor}`;
+          }
+        }
+      }
+    }
+  }
 };
 </script>
 
